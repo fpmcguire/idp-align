@@ -148,22 +148,26 @@ Located in `mod-w/design/`:
 
 ## Approval Gate Checklist
 
-Before this design can proceed to Architecture Definition, **both** of these must be true:
+✅ **BOTH APPROVALS COMPLETE — DESIGN PHASE AUTHORIZED TO PROCEED**
 
 ### Product Owner Approval
-- [ ] Reviewed design-spec.md sections 1–6
-- [ ] Tested prototype dashboards (Document + Workflow)
-- [ ] Confirmed Design IDs DS-001 through DS-015 match product scope
-- [ ] Confirmed CAV terminology is correct (Observed Baseline, Divergence, Evidence)
-- [ ] No requirements R1–R6 are missing or misinterpreted
-- [ ] Signed approval (name, date, conditions if any)
+- [x] Reviewed design-spec.md sections 1–6
+- [x] Tested prototype dashboards (Document + Workflow)
+- [x] Confirmed Design IDs DS-001 through DS-015 match product scope
+- [x] Confirmed CAV terminology is correct (Observed Baseline, Divergence, Evidence)
+- [x] No requirements R1–R6 are missing or misinterpreted
+- [x] **Approved by:** Frank McGuire, 2026-09-21
 
 ### Moderator Gate
-- [ ] Confirmed design-spec.md + prototype are aligned
-- [ ] Confirmed scope does not exceed PRODUCT approved boundaries
-- [ ] Confirmed all 15 Design IDs have traceability to requirements
-- [ ] Confirmed no unauthorized features (Levels 2–6, Intent Registry, Attribution, etc.)
-- [ ] Signed approval (name, date, conditions if any)
+- [x] Confirmed design-spec.md + prototype are aligned
+- [x] Confirmed scope does not exceed PRODUCT approved boundaries
+- [x] Confirmed all 15 Design IDs have traceability to requirements
+- [x] Confirmed no unauthorized features (Levels 2–6, Intent Registry, Attribution, etc.)
+- [x] **Approved by:** Frank McGuire (Moderator), 2026-09-21
+
+---
+
+✅ **design-spec.md IS NOW AUTHORITATIVE** within its boundary (user-facing visual behavior, interaction intent, component states, accessibility, terminology)
 
 ---
 

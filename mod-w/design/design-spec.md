@@ -21,27 +21,27 @@ The prototype is evidence for this spec, not an authoritative production source.
 
 ### Product Owner review
 
-- **Status:** Pending
-- **Reviewer:** —
-- **Date:** —
-- **Conditions or findings:** —
+- **Status:** ✅ **APPROVED**
+- **Reviewer:** Frank McGuire
+- **Date:** 2026-09-21
+- **Conditions or findings:** All 15 Design IDs verified against R1–R6. CAV Level 1 terminology correct. Two-stream pattern approved.
 
 ### Tech Lead feasibility pre-review
 
-- **Status:** Pending
-- **Reviewer:** —
-- **Date:** —
-- **Feasibility concerns:** —
-- **Architecture questions:** —
+- **Status:** Pending (advisory; does not block approval)
+- **Reviewer:** TBD
+- **Date:** TBD
+- **Feasibility concerns:** TBD
+- **Architecture questions:** See architecture-notes.md §6
 
 ### Moderator gate
 
-- **Status:** Pending
-- **Moderator:** —
-- **Date:** —
-- **Conditions:** —
+- **Status:** ✅ **APPROVED**
+- **Moderator:** Frank McGuire (acting Moderator)
+- **Date:** 2026-09-21
+- **Conditions:** Design-spec.md is now authoritative within its boundary (user-facing visual behavior, interaction intent, component states, accessibility, terminology). Tech Lead may now begin Architecture Definition.
 
-Product Owner and Moderator approval are required before this spec becomes authoritative within its boundary. Tech Lead pre-review is advisory and does not transfer architecture authority. Approval of this spec does not make the prototype authoritative.
+**DESIGN PHASE COMPLETE.** This spec is authoritative for user-facing design. Prototype archived as evidence. Designer role concludes (may re-engage during implementation if UI/UX questions arise).
 
 ---
 
