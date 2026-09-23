@@ -113,4 +113,48 @@ The Moderator and Product Owner approve `mod-w/step-01.md` as the active impleme
 
 ---
 
+### A-003 - STEP-01 Development Team Implementation Plan Approval
+
+**Status:** Approved  
+**Date:** 2026-09-23  
+**Moderator:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** Implementation-plan approval before code changes  
+**Step:** `mod-w/step-01.md`  
+**Next authorized action:** Development Team may now write code to implement STEP-01.
+
+#### Approved Plan
+
+Development Team implementation plan for STEP-01, as outlined in Development Team kickoff response:
+
+1. Setup: Remove starter content, scaffold dashboard and about directories
+2. Styling & Tokens: Add global design tokens to `src/styles.scss`, component SCSS
+3. Routing: Add dashboard and about routes with top-navigation About link
+4. Dashboard Shell & Streams: Signal-backed stream tabs, placeholder regions (summary, filter bar, list, detail)
+5. About Page: One-page project brief for reviewers explaining intent, UI, architecture, MOD-W, CAV Level 1, scope, and MOD-W assessment angle
+6. Tests: Unit tests for shell rendering, stream switching, About route, forbidden-name absence
+7. Build & Test: Verify `npm run build` and `npm test` pass
+
+#### Affected Files
+
+- `src/app/app.ts`, `src/app/app.html`, `src/app/app.scss`, `src/app/app.routes.ts`, `src/styles.scss`
+- `src/app/features/dashboard/` (new feature)
+- `src/app/features/about/` (new feature)
+- `src/app/shared/ui/` (as needed)
+- `src/app/app.spec.ts` or per-feature spec files
+
+#### Approval Summary
+
+The Moderator approves the Development Team implementation plan and authorizes code changes for STEP-01.
+
+#### Conditions
+
+- Preserve all approved design intent from `design-spec.md` (visual hierarchy, interaction patterns, color palette, accessibility baseline).
+- Use canonical CAV v1.0 terminology from `domain-language.md` in all user-facing copy.
+- Ensure About page does not mention target organization or company-specific product/API names.
+- After implementation, run `npm run build` and `npm test` before Tech Lead review.
+- Code changes must remain within STEP-01 scope as defined in `mod-w/step-01.md`.
+
+---
+
 MOD-W v5.0.1

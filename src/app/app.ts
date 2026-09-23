@@ -1,12 +1,11 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AppShellComponent } from './shared/ui/app-shell/app-shell.component';
 
 @Component({
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, AppShellComponent],
   selector: 'app-root',
   styleUrl: './app.scss',
   templateUrl: './app.html',
 })
-export class App {
-  protected readonly title = signal('idp-align');
-}
+export class App {}
