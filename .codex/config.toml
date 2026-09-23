@@ -1,0 +1,8 @@
+[project]
+name = "idp-align"
+workflow = "MOD-W v5.0.1"
+role = "Tech Lead"
+
+[commands]
+build = "npm run build"
+test = "npm test"

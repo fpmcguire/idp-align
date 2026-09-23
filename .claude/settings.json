@@ -1,0 +1,7 @@
+{
+  "project": "idp-align",
+  "workflow": "MOD-W v5.0.1",
+  "role": "Development Team",
+  "buildCommand": "npm run build",
+  "testCommand": "npm test"
+}
