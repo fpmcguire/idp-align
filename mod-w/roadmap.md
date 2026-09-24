@@ -17,7 +17,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 
 | Step | Title | Requirement(s) | Agent | Status | Notes |
 | --- | --- | --- | --- | --- | --- |
-| STEP-01 | Dashboard Foundation, Stream Shell, And About View | R6, R9, R10, R13 | Claude Code | Planned | Replace Angular starter with routed dashboard foundation, shared layout components, and DocuWare-specific reviewer-facing About route. |
+| STEP-01 | Dashboard Foundation, Stream Shell, And About View | R6, R9, R10, R13 | Claude Code | Complete (A-016, tag `step-01`) | Replace Angular starter with routed dashboard foundation, shared layout components, and DocuWare-specific reviewer-facing About route. |
 | STEP-02 | CAV Domain Model, Repositories, And Replay Fixtures | R1, R3, R8, R9 | Claude Code | Planned | Add typed document/workflow observations, repository interfaces, and replay adapters. |
 | STEP-03 | Observed Baseline And Sustained Divergence Logic | R2, R4, R5, R12 | Claude Code | Planned | Pure domain helpers plus unit tests. |
 | STEP-04 | Divergence List, Detail, Baseline, And Evidence Trace | R5, R6, R12 | Claude Code | Planned | Implement shared CAV UI components and selection state. |
@@ -112,7 +112,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | R10 | STEP-01, STEP-08 | Planned |
 | R11 | STEP-03, STEP-05, STEP-08 | Planned |
 | R12 | STEP-03, STEP-04 | Planned |
-| R13 | STEP-01 | Planned - updated for DocuWare-specific v1 interview research/demo framing. |
+| R13 | STEP-01 | Complete (A-016) - DocuWare-specific v1 interview research/demo framing. |
 
 ---
 
@@ -121,6 +121,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | Date | Change | Reason |
 | --- | --- | --- |
 | 2026-09-24 | Updated STEP-01 roadmap language for DocuWare-specific interview research/demo framing. | Align roadmap with Product v1.2, STEP-01 update, language matrix, and Moderator approval A-004. |
+| 2026-09-24 | Set STEP-01 and R13 to Complete. | Moderator final gate A-016. Carried conditions PO-1 (About References before 2026-09-28), PO-2, PO-4, QA-006 to QA-008 are recorded in A-016. |
 
 ---
 

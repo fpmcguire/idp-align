@@ -599,4 +599,56 @@ This approval records infrastructure/tooling support only. It does not complete 
 
 ---
 
+### A-016 - STEP-01 Moderator Final Gate
+
+**Status:** Approved  
+**Date:** 2026-09-24  
+**Moderator:** Frank McGuire  
+**Gate:** Moderator final gate (4a)  
+**Step:** `mod-w/step-01.md`  
+**Next authorized action:** Create the annotated tag `step-01` on the commit that contains this entry, set STEP-01 to Complete in `mod-w/roadmap.md`, and start the PO-1 About-only References change.
+
+#### Approved Scope
+
+`STEP-01 - Dashboard Foundation, Stream Shell, And About View`, as implemented through Development Team commit `b15688d`, together with the tooling update approved in A-015 (`f7fe019`).
+
+#### Gate Evidence
+
+| Gate | Record | Result |
+| --- | --- | --- |
+| Step approval | A-002 | Approved |
+| Implementation-plan approval | A-003; rework plans A-005 and A-011 | Approved |
+| Tech Lead review acceptance | A-006; post-QA re-review A-012 (`review.md` Re-Review Result) | Pass |
+| QA acceptance | A-013 (`qa.md` Re-Check, verdict Pass) | Pass |
+| Product Owner sign-off | A-014 | Accepted with notes |
+| Tooling update | A-015 | Approved; committed before this gate as A-015 required |
+| Manual verification | Moderator manual check, 2026-09-24 | Passed |
+
+- `npm run build` passed and `npm test -- --watch=false` passed with 4 files and 62/62 tests, under Node.js v26.0.0 at `f7fe019`.
+- `npm run lint` passed under Node.js v26.0.0 (A-015).
+- All 17 STEP-01 acceptance checks are met (A-013, A-014).
+
+#### Approval Summary
+
+The Moderator approves STEP-01 as complete. The dashboard foundation, the Document and Workflow stream shell, and the About / Project Context view meet the STEP-01 acceptance checks and stay within CAV Level 1 and the bounded DocuWare research/demo guardrails.
+
+#### Open Conditions Carried Forward
+
+| Item | Condition | Owner |
+| --- | --- | --- |
+| PO-1 | The Moderator confirmed that the About page will be demoed on 2026-09-28. Add an About References section linking the public DocuWare Platform REST API and Workflow Analytics API documentation before that date. This is a separately approved About-only change: Tech Lead defines it, Development Team plans it, the Moderator approves the plan, the Development Team implements it, then Tech Lead and QA check it. It does not reopen STEP-01 or move the `step-01` tag. | Tech Lead, then Development Team |
+| PO-2 | After 2026-09-28, the Product Owner proposes `mod-w/product.md` v1.4 with past-tense interview framing. The approved copy and test update go into the next active Step. | Product Owner |
+| PO-4 | Before STEP-04 authoring, choose the nav/tab active-indicator token (currently `--color-divergence-ongoing`) together with the QA-007 tablet breakpoint. | Tech Lead |
+| QA-006 | Dashboard guardrail test pattern gap goes into STEP-02 test scope. | Tech Lead (STEP-02 planning) |
+| QA-007 | Resolve the tablet breakpoint contradiction before STEP-04/05 authoring. | Tech Lead |
+| QA-008 | Replace the Playwright starter spec in STEP-08. | Tech Lead (future Step planning) |
+| A-013 follow-ups | Pin the project Node.js version; the role completing a phase requests its register entry before handoff. Each needs its own proposal and Moderator approval. | Tech Lead |
+
+#### Conditions
+
+- Tag the commit that contains this entry, not `b15688d` or `f7fe019`.
+- `.claude/settings.json` remains outside STEP-01 (A-009).
+
+---
+
 MOD-W v5.0.1
