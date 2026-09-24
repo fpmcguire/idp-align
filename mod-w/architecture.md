@@ -13,7 +13,7 @@ IDP-Align is a standalone Angular dashboard that demonstrates CAV Level 1 - Obse
 
 The implementation is mock/replay-first. It must model Observed Truth, Identity Slices, Observed Baselines, Divergences, and Evidence explicitly, then render both streams through shared UI and domain structures. Live external-platform access is a later adapter, not a dependency for the reference implementation.
 
-The app must also include a routed About / Project Context view that explains the project's intent, UI, architecture, MOD-W workflow, CAV Level 1 framing, and scope boundaries for interview reviewers. It may state that IDP-Align is itself a MOD-W project and that part of the project purpose is to assess the current MOD-W version in a realistic build. This view must not name or directly identify any target vendor or interview organization.
+The app must also include a routed About / Project Context view that explains the project's intent, UI, architecture, MOD-W workflow, CAV Level 1 framing, and scope boundaries for interview reviewers. For v1, this view should explicitly identify DocuWare as the research/demo domain for Frank McGuire's September 28, 2026 interview and explain the public DocuWare API/domain-learning intent. It may state that IDP-Align is itself a MOD-W project and that part of the project purpose is to assess the current MOD-W version in a realistic build. It must not imply DocuWare endorsement, private-system access, confidential interview content, production readiness, or a DocuWare product defect/gap claim.
 
 ---
 
@@ -30,10 +30,10 @@ The app must also include a routed About / Project Context view that explains th
 | R7 | D8, D13 | Thin backend/proxy remains an adapter option; not required for early mock steps. |
 | R8 | D4, D13 | Mock/replay data is the primary implementation path and must be swappable through repository interfaces. |
 | R9 | D3, D9 | Canonical CAV v1.0 terms are enforced through domain-language.md. |
-| R10 | D10, D12 | Domain research remains documented outside runtime code; public About copy summarizes intent without vendor naming. |
+| R10 | D10, D12 | Domain research remains documented outside runtime code; public About copy summarizes the bounded DocuWare research/demo context. |
 | R11 | D11 | Unit and E2E checks cover CAV logic and dashboard behavior by step. |
 | R12 | D6 | Evidence persistence is represented in replay data and divergence records. |
-| R13 | D12, D13 | Routed About / Project Context view explains project intent, UI, architecture, repository/adapter boundary, MOD-W, CAV Level 1 scope, and MOD-W assessment boundary without target-organization naming. |
+| R13 | D12, D13 | Routed About / Project Context view explains project intent, DocuWare interview research/demo framing, UI, architecture, repository/adapter boundary, MOD-W, CAV Level 1 scope, and scope boundaries. |
 
 ---
 
@@ -168,9 +168,9 @@ Every implementation Step must define test expectations. Domain logic requires u
 **Status:** Active
 **Related Requirements:** R6, R9, R10, R13
 
-Provide a dedicated routed About / Project Context page rather than a modal. It must be reachable from top navigation and written as a one-page project brief for interview reviewers. It must explain IDP-Align's intent, dashboard UI, architecture, MOD-W workflow, CAV Level 1 scope, and non-goals in concise reviewer-facing language. It may explicitly describe IDP-Align as a MOD-W project and as a practical assessment of the current MOD-W version. It must include a short architecture summary that names the feature-sliced/layered shape and the repository/adapter boundary between business/domain code and data sources.
+Provide a dedicated routed About / Project Context page rather than a modal. It must be reachable from top navigation and written as a one-page project brief for interview reviewers. It must explain IDP-Align's intent, DocuWare interview research/demo framing, dashboard UI, architecture, MOD-W workflow, CAV Level 1 scope, and non-goals in concise reviewer-facing language. It may explicitly describe IDP-Align as a MOD-W project and as a practical assessment of the current MOD-W version. It must include a short architecture summary that names the feature-sliced/layered shape and the repository/adapter boundary between business/domain code and data sources.
 
-The About view must not mention the target vendor, the interview organization, or company-specific API/product names. Use neutral descriptions such as "enterprise document-processing and workflow systems."
+The About view may mention DocuWare, DocuWare Platform REST API, Workflow Analytics API, AI Hub, and the September 28, 2026 interview context when those references explain why the project exists and what domain is being learned. The About view must not imply DocuWare endorsement, private access, confidential interview details, production readiness, or that IDP-Align is a DocuWare product.
 
 ### D13 - Repository And Adapter Boundary
 
@@ -247,7 +247,7 @@ Divergence lifecycle for MVP: `ongoing`, `reviewed`, `resolved`, `muted`. `revie
 - No claim beyond CAV Level 1.
 - No Declared Intention or business-rule conformance engine in MVP.
 - No attribution/root-cause claim.
-- No vendor or interview-organization name in the About view or dashboard explanatory copy.
+- DocuWare references are allowed in bounded v1 research/demo context. Do not imply endorsement, private-system access, confidential interview details, production readiness, or a DocuWare product defect/gap claim.
 - No direct import or copy of design-tool prototype code into production.
 - Design-spec is authoritative for approved user-facing design only; this file controls technical decomposition.
 
@@ -290,6 +290,7 @@ Divergence lifecycle for MVP: `ongoing`, `reviewed`, `resolved`, `muted`. `revie
 | 2026-09-23 | Added MOD-W assessment explanation to About scope | D12 | Moderator clarified that the About view may present IDP-Align as a MOD-W project assessing the current MOD-W version. |
 | 2026-09-23 | Made repository/adapter boundary explicit | D13 | Moderator requested clear separation between business/domain code and mock, live, BFF, or future database data sources. |
 | 2026-09-23 | Clarified About placement and depth | D12 | Moderator approved one-page project brief in top navigation for STEP-01. |
+| 2026-09-24 | Updated About guardrails for DocuWare-specific v1 positioning | D12, D13 | Product Owner requested explicit DocuWare interview research/demo framing rather than hiding DocuWare references. |
 
 ---
 

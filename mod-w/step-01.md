@@ -15,7 +15,7 @@ This Step establishes structure and approved terminology only. It does not imple
 - R6 - Angular signals-only dashboard presenting document and workflow streams as separate but consistently modeled Level 1 views.
 - R9 - Use canonical CAV v1.0 vocabulary and preserve MOD-W artifact structure.
 - R10 - Maintain Domain Research and References documenting the sources that shaped scope.
-- R13 - Provide a routed About / Project Context view explaining IDP-Align's intent, dashboard UI, architecture, MOD-W workflow, CAV Level 1 scope, project boundaries, and current-version MOD-W assessment without target-organization naming or formal certification claims.
+- R13 - Provide a routed About / Project Context view explaining IDP-Align's intent, DocuWare interview research/demo framing, dashboard UI, architecture, MOD-W workflow, CAV Level 1 scope, DocuWare API research intent, project boundaries, and current-version MOD-W assessment without endorsement, private-access, confidential-information, production-readiness, or formal certification claims.
 
 ---
 
@@ -58,12 +58,12 @@ Development Team may not write code until the Moderator approves its implementat
 - Add design tokens matching approved palette, spacing, border, and typography direction.
 - Add Document and Workflow stream tabs with accessible button/tab behavior.
 - Add placeholder summary KPI, filter bar, divergence list, and detail regions using canonical CAV wording.
-- Add About copy as a one-page project brief geared toward interview reviewers, explaining project intent, dashboard UI, architecture, MOD-W, CAV Level 1, and scope boundaries.
+- Add About copy as a one-page project brief geared toward interview reviewers, explaining project intent, DocuWare interview research/demo framing, dashboard UI, architecture, MOD-W, CAV Level 1, DocuWare API research intent, and scope boundaries.
 - Include a short architecture summary that describes the app as a feature-sliced/layered Angular app with a repository/adapter boundary between business/domain code and replay, live BFF/API, or future database-backed data sources.
 - Include that IDP-Align is a MOD-W project and that the build assesses the current MOD-W version in a realistic project setting.
-- Ensure About copy and new STEP-01 user-facing explanatory copy do not mention the target organization or company-specific product/API names.
+- Ensure About copy and new STEP-01 user-facing explanatory copy use bounded DocuWare references only for research/demo context and do not imply endorsement, private access, confidential interview details, production readiness, or DocuWare defect/gap claims.
 - Add focused unit tests for shell rendering and stream switching.
-- Add focused tests for About route rendering and forbidden-name absence in visible copy.
+- Add focused tests for About route rendering, required DocuWare research/demo context, and prohibited overclaim absence in visible copy.
 - Keep all visible copy within CAV Level 1 terminology.
 
 ---
@@ -78,7 +78,7 @@ Development Team may not write code until the Moderator approves its implementat
 - Divergence actions such as mute, copy, or mark reviewed.
 - Chart.js analysis screen.
 - Authentication, settings, export, notifications, or bulk actions.
-- Company-specific or vendor-specific naming in the About view, app navigation, new user-facing explanatory copy, test fixture labels, or code comments introduced by STEP-01.
+- DocuWare endorsement, private-system access claims, confidential interview details, production-readiness claims, or claims that DocuWare has a product defect/gap addressed by IDP-Align.
 
 ---
 
@@ -138,15 +138,16 @@ Development Team may not write code until the Moderator approves its implementat
 - [ ] The first screen is the IDP-Align dashboard shell, not a landing page.
 - [ ] `mod-w/validation/moderator-register.md` contains Step approval entry `A-002`.
 - [ ] A routed About / Project Context view is reachable from top navigation in the app shell.
-- [ ] About view is a one-page project brief geared toward interview reviewers and explains project intent, dashboard UI, architecture, MOD-W workflow, CAV Level 1, and scope boundaries.
+- [ ] About view is a one-page project brief geared toward interview reviewers and explains project intent, DocuWare interview research/demo framing, dashboard UI, architecture, MOD-W workflow, CAV Level 1, DocuWare API research intent, and scope boundaries.
 - [ ] About view includes an architecture summary explaining the repository/adapter boundary and how replay data can later be replaced by live BFF/API or future database-backed data sources without rewriting the dashboard.
 - [ ] About view states that IDP-Align is a MOD-W project assessing the current MOD-W version without claiming formal certification or benchmark status.
-- [ ] About view, app navigation, new user-facing explanatory copy, test fixture labels, and code comments introduced by STEP-01 do not mention the target organization or company-specific product/API names.
+- [ ] About view, app navigation, new user-facing explanatory copy, test fixture labels, and code comments introduced by STEP-01 use DocuWare references only in bounded research/demo context.
+- [ ] About view and new STEP-01 copy do not imply DocuWare endorsement, private access, confidential interview details, production readiness, or DocuWare defect/gap claims.
 - [ ] Document and Workflow stream tabs are visible, accessible, and switch active shell content using signals.
 - [ ] Shell includes summary, filter/sort, list, and detail regions aligned with DS-001, DS-002, DS-003, DS-008, DS-011, and DS-012.
 - [ ] UI copy uses Observed Truth, Identity Slice, Observed Baseline, Divergence, Evidence, and Stream correctly where those concepts appear.
 - [ ] No current feature is labeled as Declared Intention, Alignment Delta, Envelope, Breach, Drift Velocity, Convergence, or Attribution.
-- [ ] Unit tests cover app/dashboard shell rendering, stream switching, About route rendering, and forbidden-name absence in visible copy.
+- [ ] Unit tests cover app/dashboard shell rendering, stream switching, About route rendering, required DocuWare research/demo context, and prohibited overclaim absence in visible copy.
 - [ ] `npm run build` passes.
 - [ ] `npm test` passes, or any test-run limitation is documented for Tech Lead review.
 
@@ -158,8 +159,8 @@ Development Team may not write code until the Moderator approves its implementat
 2. Create dashboard and About feature routes from the Angular app shell, exposing About in top navigation.
 3. Add global design tokens and scoped styles matching the approved dark palette.
 4. Implement signal-backed active stream state and layout placeholders.
-5. Write the About page as a neutral one-page project brief for interview reviewers; include the MOD-W project/current-version assessment angle and the architecture summary.
-6. Update tests for starter removal, stream switching, About rendering, top-navigation access, and forbidden-name absence.
+5. Write the About page as a DocuWare-specific one-page research/demo project brief for interview reviewers; include the MOD-W project/current-version assessment angle and the architecture summary.
+6. Update tests for starter removal, stream switching, About rendering, top-navigation access, required DocuWare research/demo context, and prohibited overclaim absence.
 7. Run build and test commands.
 
 ---
@@ -173,6 +174,7 @@ Development Team may not write code until the Moderator approves its implementat
 | 2026-09-23 | Added MOD-W assessment angle to About scope | Moderator clarified acceptable About content. |
 | 2026-09-23 | Added architecture summary requirement | Moderator requested explicit repository/adapter boundary and About-page architecture explanation. |
 | 2026-09-23 | Added Moderator Register approval reference and About placement/depth decisions | Moderator approved A-002 and clarified pre-briefing decisions. |
+| 2026-09-24 | Updated STEP-01 About scope for DocuWare-specific interview research/demo framing | Product Owner requested that v1 not hide DocuWare references and should surface the September 28, 2026 interview research/demo purpose. |
 
 ---
 

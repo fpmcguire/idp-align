@@ -1,15 +1,17 @@
 # PRODUCT — IDP-Align
 
 **Project:** IDP-Align  
-**Version:** 1.1  
-**Date:** 2026-09-20  
+**Version:** 1.2  
+**Date:** 2026-09-24  
 **Owner:** Frank McGuire  
 **Status:** Product Definition  
 **Canonical CAV reference:** The CAV Manifesto v1.0 (cav/CAV-MANIFESTO.md)
 
 ## Problem Statement
 
-IDP-Align is a domain-exploration and methodology-proof project. Its purpose is to apply Continuous Alignment Verification (CAV) to a domain outside those in which it has already been explored — industrial telemetry (MQTT-Align) and bioprocess monitoring (Bio-Align) — using a real, external, unfamiliar system: DocuWare's enterprise document-processing and workflow-automation domain.
+IDP-Align is a domain-exploration, interview-preparation, and methodology-proof project. Its purpose is to apply Continuous Alignment Verification (CAV) to a domain outside those in which it has already been explored — industrial telemetry (MQTT-Align) and bioprocess monitoring (Bio-Align) — using a real, external, unfamiliar system: DocuWare's enterprise document-processing and workflow-automation domain.
+
+For v1, IDP-Align should surface itself as a personal research and demo project for Frank McGuire's DocuWare Software Engineer interview scheduled for September 28, 2026. The app may name DocuWare and describe the public DocuWare API and workflow/document-processing domain as the research context. It must not imply DocuWare endorsement, access to private DocuWare systems, confidential interview information, production readiness, or a claim that DocuWare has a product gap or defect.
 
 The project observes two distinct data surfaces exposed by DocuWare:
 
@@ -79,6 +81,7 @@ These are scenario personas used to ground the exploration. They are not a claim
 6. Make every divergence finding explainable: identity slice, observed baseline reference, dimension, observed value/behavior, magnitude or distance, onset, duration, and supporting evidence.
 7. Use the project to learn the DocuWare domain by building against documented API shapes rather than only reading product material.
 8. Demonstrate MOD-W as the development methodology used to research, specify, design, implement, test, review, and approve the reference implementation.
+9. Present IDP-Align v1 as a focused DocuWare interview research/demo artifact that explains why the domain is being explored, what public APIs and concepts shaped the implementation, and what the project intentionally does not claim.
 
 ## Non-Goals
 
@@ -110,6 +113,7 @@ Stable R-IDs are required for traceability.
 | R10 | Maintain Domain Research and References documenting the public DocuWare and adjacent-industry sources that shaped the scope                                                                              | Should have |
 | R11 | Automated unit and E2E coverage for baseline/divergence logic and dashboard behavior, consistent with MOD-W quality gates                                                                                | Should have |
 | R12 | Persist enough evidence to reconstruct a divergence finding from its source observations and baseline context                                                                                            | Should have |
+| R13 | Provide a routed About / Project Context view that names DocuWare as the v1 research/demo domain for the September 28, 2026 interview, explains project intent, dashboard UI, architecture, MOD-W workflow, CAV Level 1 scope, DocuWare API research intent, and project boundaries without endorsement, private-access, confidential-information, or certification claims | Must have |
 
 ## Key User Scenarios
 
@@ -165,6 +169,7 @@ This scenario documents the architectural direction only; it is not part of the 
 | OAuth2/proxy work consumes the build window                                | Less time for the actual CAV demonstration                  | Medium      | Keep proxy thin; do not build general backend infrastructure                                     |
 | Two-stream scope is too broad                                              | Neither stream reaches convincing depth                     | Medium–High | Use the same Level 1 conceptual model for both; keep dimensions and identity slices narrow       |
 | Audience interprets the project as a proposed DocuWare product or critique | Undermines its purpose as learning/reference implementation | Low–Medium  | Frame it explicitly as domain exploration using public interfaces and realistic scenarios        |
+| DocuWare interview/demo framing is mistaken for endorsement or private access | Creates reputational and accuracy risk | Medium | State that IDP-Align is a personal research/demo project based on public information and optional sandbox access only |
 | Synthetic data makes divergence feel contrived                             | Weakens credibility                                         | Medium      | Derive scenarios from documented Purchase-to-Pay shapes and plausible historical variation       |
 | Legacy CAV terminology leaks into code/docs                                | Level claims become internally inconsistent                 | Medium      | Treat CAV Manifesto v1.0 as canonical; reject "Level 1 declared / Level 2+ inferred" terminology |
 | Observed baseline is mistaken for business truth                           | System overstates what it knows                             | Medium      | UI and evidence detail explicitly label baselines as observed/historical, not intended/required  |
@@ -173,6 +178,8 @@ This scenario documents the architectural direction only; it is not part of the 
 ## Assumptions and Constraints
 
 IDP-Align is a scoped, time-boxed personal reference implementation, not a commercial DocuWare product and not a claim of engagement with DocuWare beyond use of public information and interfaces.
+
+IDP-Align v1 is allowed to identify DocuWare by name in the About / Project Context view, navigation-adjacent project context, documentation, tests, and demo copy where doing so clarifies the interview research context. Such references must remain factual, bounded, and non-confidential.
 
 The project follows a lightweight MOD-W v5 pass. PRODUCT is authoritative for product scope. Architecture Definition may be scaled down, while small implementation steps, build gates, annotated Git tags, testing, review, and Moderator sign-off remain part of the build discipline.
 
@@ -253,3 +260,4 @@ Development documentation should cite the specific public sources used for:
 | 2026-09-16 | 1.0     | Initial Product Definition established through pre-build domain and market research                                                                                                                                                                                                                                   |
 | 2026-09-17 | 1.0.x   | Expanded adjacent-tooling research and corrected vendor/status notes                                                                                                                                                                                                                                                  |
 | 2026-09-20 | 1.1     | Reconciled PRODUCT with canonical CAV Manifesto v1.0: replaced obsolete "Level 1 declared / Level 2+ inferred" model with Level 1 Observed-State Divergence; separated Observed Baseline from Declared Intention; moved intent/delta concepts to Levels 3/4; added explicit Attribution boundary and claim guardrails |
+| 2026-09-24 | 1.2     | Product Owner updated v1 positioning to explicitly surface IDP-Align as a DocuWare interview research/demo project for September 28, 2026, allowing bounded DocuWare references in project context and demo copy. |

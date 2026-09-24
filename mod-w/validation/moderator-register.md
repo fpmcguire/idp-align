@@ -157,4 +157,40 @@ The Moderator approves the Development Team implementation plan and authorizes c
 
 ---
 
+### A-004 - STEP-01 Product Direction Change Approval
+
+**Status:** Approved  
+**Date:** 2026-09-24  
+**Moderator:** Frank McGuire  
+**Product Owner:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Product / Architecture / Step scope-change override during Tech Lead review  
+**Step:** `mod-w/step-01.md`  
+**Next authorized action:** Development Team may revise the existing STEP-01 implementation package in place to align with the updated DocuWare-specific v1 research/demo direction, then resubmit for Tech Lead review.
+
+#### Approved Artifacts
+
+- `mod-w/product.md` v1.2
+- `mod-w/architecture.md` D12/D13 guardrail update
+- `mod-w/domain-language.md` DocuWare research-context guardrail update
+- `mod-w/language-matrix.md`
+- `mod-w/step-01.md` updated STEP-01 acceptance checks
+- `review.md` F-000 process finding
+
+#### Approval Summary
+
+The Product Owner updates IDP-Align v1 positioning: the app should surface itself as a personal DocuWare interview research/demo project for the September 28, 2026 Software Engineer interview. DocuWare references should not be hidden when they explain the domain, public API research intent, and demo purpose.
+
+This approval overrides the earlier STEP-01 condition that the About / Project Context view and new STEP-01 copy must avoid target-organization or company-specific product/API naming.
+
+#### Conditions
+
+- DocuWare references are allowed only in bounded research/demo context.
+- The app must not imply DocuWare endorsement, private DocuWare access, confidential interview content, production readiness, or a DocuWare product defect/gap claim.
+- CAV Level 1 terminology and claim guardrails remain active.
+- The existing STEP-01 implementation remains unaccepted until Development Team revises it and Tech Lead review acceptance is recorded.
+- QA may not proceed until Tech Lead review acceptance is recorded in this register.
+
+---
+
 MOD-W v5.0.1

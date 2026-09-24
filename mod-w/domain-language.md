@@ -34,6 +34,7 @@ This file is authoritative for canonical product, architecture, code, and review
 | About view | Routed project context page explaining IDP-Align intent, UI, architecture, MOD-W, CAV, and scope for reviewers. | `AboutPageComponent` | About, Project Context | Modal-only explanation, vendor pitch |
 | Reviewer | Neutral audience term for people evaluating the project. | `Reviewer` when needed | Reviewer | Interviewer name, target company name |
 | MOD-W assessment | Explanation that IDP-Align is also exercising and evaluating the current MOD-W version through a realistic build. | `modWAssessment` if needed | MOD-W assessment | Methodology certification, formal benchmark |
+| DocuWare research context | v1 explanation that IDP-Align is a personal research/demo project for learning DocuWare's document-processing and workflow domains ahead of the September 28, 2026 interview. | `docuWareResearchContext` if needed | DocuWare research context, interview research/demo | DocuWare endorsement, confidential interview content, private access claim |
 
 ---
 
@@ -71,7 +72,8 @@ These terms are canonical CAV terms but are reserved for future levels and must 
 - Do not label Observed Baselines as intent, targets, policy, or requirements.
 - Do not call Divergences alerts, anomalies, violations, or breaches in code or user-facing copy.
 - If a field comes from a workflow event, it may be Evidence context; do not imply root-cause Attribution.
-- Do not mention the target vendor, interview organization, or company-specific product/API names in the About view or general explanatory dashboard copy.
+- For v1, bounded DocuWare references are allowed in the About view, project-context copy, documentation, tests, and demo framing when they explain the research/demo domain and September 28, 2026 interview context.
+- Do not imply DocuWare endorsement, private DocuWare access, confidential interview content, production readiness, formal certification, or a DocuWare product defect/gap claim.
 - It is acceptable for the About view to state that IDP-Align is a MOD-W project assessing the current MOD-W version, as long as it does not claim formal certification or benchmark status.
 - Review must flag terminology drift in code, docs, tests, and UI copy.
 
