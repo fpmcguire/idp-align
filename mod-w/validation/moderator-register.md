@@ -517,4 +517,52 @@ These items are outside STEP-01 scope. Each needs its own proposal and Moderator
 
 ---
 
+### A-014 - STEP-01 Product Owner Sign-off (Phase 3c)
+
+**Status:** Accepted with notes  
+**Date:** 2026-09-24  
+**Moderator:** Frank McGuire  
+**Product Owner:** Frank McGuire  
+**Role approved:** Product Owner  
+**Gate:** Product Owner sign-off before Moderator final gate (Phase 3c)  
+**Step:** `mod-w/step-01.md`  
+**Next authorized action:** Moderator final gate (4a) for STEP-01.
+
+#### Verdict
+
+Accepted with notes. The notes do not block the final gate.
+
+#### Acceptance Check Review
+
+The Product Owner reviewed the rendered copy against `mod-w/product.md` v1.3 directly, using `qa.md` and `review.md` as supporting evidence.
+
+- All 17 STEP-01 acceptance checks are met.
+- About covers every required topic: project intent, DocuWare interview research/demo framing, DocuWare API research intent, dashboard UI, CAV Level 1, architecture, MOD-W workflow, and scope boundaries.
+- The surfacing-boundary copy denies failure, defect, non-conformance, and business-intent violation. Every overclaim (endorsement, private access, confidential information, production readiness, a defect or gap claim, certification) appears only inside a negated boundary statement.
+- The dashboard shows only placeholders ("—", "Pending replay data"), so it does not imply that replay data, Observed Baseline calculation, or sustained Divergence detection exist yet.
+- The "Ongoing" KPI label matches the canonical Divergence status in `mod-w/domain-language.md`.
+- Product Goal 9 (present v1 as a bounded DocuWare interview research/demo artifact) is served.
+
+#### Evidence
+
+- Product Owner re-run at `3c91884`, with a clean working tree, under Node.js v26.0.0: `npm run build` passed, and `npm test -- --watch=false` passed with 4 files and 62/62 tests.
+- `qa.md` re-check verdict Pass (A-013); `review.md` Re-Review Result Pass (A-012).
+
+#### Notes And Dispositions
+
+| Note | Disposition | Owner |
+| --- | --- | --- |
+| PO-1 - R10 is only partly met: About names the public DocuWare APIs but cites no sources. | Not STEP-01 rework. When authoring STEP-08, the Tech Lead adds an acceptance check that About includes a References section linking the public DocuWare Platform REST API and Workflow Analytics API documentation. If About will be demoed on 2026-09-28, the Moderator may instead approve a separately recorded About-only change before that date, following the full MOD-W route. | Tech Lead (STEP-08 authoring), or the Moderator's decision on an earlier change |
+| PO-2 - The interview-date framing ("on September 28, 2026") goes stale after the interview. | No change before the interview. After 2026-09-28, the Product Owner proposes `mod-w/product.md` v1.4 with past-tense framing. After Moderator approval, the copy and test update go into the next active Step. | Product Owner |
+| PO-3 - About omits Product v1.3's sentence "an Observed Baseline describes what has happened, not what should happen." | Closed. The meaning is already present; no action. | Closed |
+| PO-4 - QA-007's orange accent is not named in A-013, which names only the tablet breakpoint. | The Tech Lead chooses the nav/tab active-indicator token (currently `--color-divergence-ongoing`) alongside the tablet breakpoint, before STEP-04 authoring, so the active tab and Ongoing Divergence status don't share one signal colour. The A-013 dispositions for QA-006, QA-007 (breakpoint), and QA-008 stand. | Tech Lead |
+
+#### Conditions
+
+- The STEP-01 final gate, tag, and `mod-w/roadmap.md` status advancement remain Moderator actions.
+- The final-gate entry should carry PO-1, PO-2, and PO-4 forward as open conditions.
+- `.claude/settings.json` remains outside STEP-01 (A-009).
+
+---
+
 MOD-W v5.0.1
