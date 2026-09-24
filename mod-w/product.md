@@ -1,7 +1,7 @@
 # PRODUCT — IDP-Align
 
 **Project:** IDP-Align  
-**Version:** 1.2  
+**Version:** 1.3  
 **Date:** 2026-09-24  
 **Owner:** Frank McGuire  
 **Status:** Product Definition  
@@ -48,6 +48,14 @@ IDP-Align must demonstrate:
 - sustained-divergence detection rather than one-off anomaly flagging;
 - evidence persistence;
 - explainable divergence findings.
+
+### Detection, surfacing, and interpretation boundary
+
+IDP-Align computationally detects sustained Divergence from Observed Baselines. Its product responsibility is to surface that Divergence early with enough reconstructable Evidence for informed interpretation.
+
+**Divergence is evidence of change, not a judgment of failure, defect, or non-conformance.**
+
+An Observed Baseline describes what has happened in observed history; it does not automatically describe what should happen. A surfaced Divergence does not by itself establish that document data or workflow behavior is bad, defective, non-conformant, or contrary to business intent. Business-intent comparison belongs to later CAV capabilities where explicit Intent exists.
 
 ### Explicitly not implemented
 
@@ -105,7 +113,7 @@ Stable R-IDs are required for traceability.
 | R2  | Build Observed Truth and an observed per-vendor/document-type baseline from historical document observations; detect sustained divergence from that observed baseline                                    | Must have   |
 | R3  | Ingest or replay workflow event observations shaped from the Workflow Analytics API, including task duration, decision agent, response time, error/route, and total runtime where available              | Must have   |
 | R4  | Build Observed Truth and observed behavioral baselines from historical workflow runs; detect sustained divergence by relevant identity slice such as step, route, or decision agent                      | Must have   |
-| R5  | Every divergence finding carries an explainable evidence trace: identity slice, baseline reference, dimension, observed behavior/value, magnitude/distance, onset, duration, and supporting observations | Must have   |
+| R5  | Every detected sustained Divergence is surfaced with an explainable and reconstructable Evidence trace: identity slice, baseline reference/context, dimension, observed behavior/value, magnitude/distance, onset, duration, and supporting observations as applicable. The surfaced finding does not itself classify the behavior as failure, defect, non-conformance, or violation of business intent. | Must have   |
 | R6  | Angular v21, signals-only dashboard presenting the document and workflow streams as separate but consistently modeled Level 1 views                                                                      | Must have   |
 | R7  | Thin backend/proxy service capable of brokering DocuWare OAuth2/API calls if live access becomes available; credentials never reside in the browser                                                      | Must have   |
 | R8  | Build primarily against realistic mock/replay data derived from documented DocuWare API shapes; live DocuWare Cloud access is an opportunistic upgrade, not a dependency                                 | Must have   |
@@ -121,7 +129,7 @@ Stable R-IDs are required for traceability.
 
 Historical invoice observations for a vendor establish an observed pattern for selected index fields. New invoices begin producing a materially different vendor representation, currency/amount pattern, date representation, or other selected field behavior.
 
-IDP-Align groups the observations by identity slice, distinguishes one-off variation from sustained change, confirms divergence, and shows the evidence supporting the finding.
+IDP-Align groups the observations by identity slice, distinguishes one-off variation from sustained change, detects sustained Divergence, and surfaces the Evidence supporting the finding for informed interpretation.
 
 The system does **not** claim the new value violates declared business intent unless such intent is separately introduced in a future Level 3/4 implementation.
 
@@ -131,7 +139,7 @@ Historical Purchase-to-Pay workflow runs establish observed behavior for a selec
 
 Task duration, routing, response time, or error behavior begins to differ persistently from the established observed baseline.
 
-IDP-Align confirms sustained divergence and presents the affected identity slice, baseline context, onset, duration, magnitude/distance, and evidence.
+IDP-Align detects sustained Divergence and presents the affected identity slice, baseline context, onset, duration, magnitude/distance, and Evidence.
 
 ### Scenario 3 — Cross-stream review without cross-stream CAV claim
 
@@ -152,6 +160,7 @@ This scenario documents the architectural direction only; it is not part of the 
 - [ ] Both streams use observed baselines; no observed baseline is mislabeled as Declared Intention.
 - [ ] Sustained divergence is distinguishable from one-off variation.
 - [ ] Every surfaced divergence has reconstructable evidence.
+- [ ] No surfaced divergence is presented as inherently bad, defective, non-conformant, or in violation of business intent solely because it differs from an observed baseline.
 - [ ] UI and code use canonical CAV v1.0 terminology.
 - [ ] No feature or documentation claims CAV Level 2–6 capability without satisfying the canonical level definition.
 - [ ] No Attribution capability is claimed as implemented.
@@ -173,6 +182,7 @@ This scenario documents the architectural direction only; it is not part of the 
 | Synthetic data makes divergence feel contrived                             | Weakens credibility                                         | Medium      | Derive scenarios from documented Purchase-to-Pay shapes and plausible historical variation       |
 | Legacy CAV terminology leaks into code/docs                                | Level claims become internally inconsistent                 | Medium      | Treat CAV Manifesto v1.0 as canonical; reject "Level 1 declared / Level 2+ inferred" terminology |
 | Observed baseline is mistaken for business truth                           | System overstates what it knows                             | Medium      | UI and evidence detail explicitly label baselines as observed/historical, not intended/required  |
+| Surfaced divergence is interpreted as failure or bad data                  | Users may over-read evidence of sustained change as business judgment | Medium | Present Divergence as evidence of sustained change with baseline/context, magnitude/distance, duration/onset, and supporting observations; do not assign business correctness unless explicit Intent is available |
 | Attribution is accidentally implied by showing decision-agent context      | Scope creep / false capability claim                        | Low–Medium  | Treat agent/version fields as evidence context only; do not call them root-cause attribution     |
 
 ## Assumptions and Constraints
@@ -200,6 +210,7 @@ Use these terms consistently:
 - **Observed Baseline** — reference derived from historical or continuously inferred observed behavior.
 - **Divergence** — sustained, meaningful departure from an observed baseline or relevant observed comparison.
 - **Evidence** — persisted observations and relationships supporting a divergence finding.
+- **Surfacing** — making detected Divergence and supporting Evidence visible for interpretation without assigning business correctness, failure, defect, non-conformance, or causal meaning.
 
 Reserved for future CAV levels and **not** to be used as descriptions of current IDP-Align behavior:
 
@@ -261,3 +272,4 @@ Development documentation should cite the specific public sources used for:
 | 2026-09-17 | 1.0.x   | Expanded adjacent-tooling research and corrected vendor/status notes                                                                                                                                                                                                                                                  |
 | 2026-09-20 | 1.1     | Reconciled PRODUCT with canonical CAV Manifesto v1.0: replaced obsolete "Level 1 declared / Level 2+ inferred" model with Level 1 Observed-State Divergence; separated Observed Baseline from Declared Intention; moved intent/delta concepts to Levels 3/4; added explicit Attribution boundary and claim guardrails |
 | 2026-09-24 | 1.2     | Product Owner updated v1 positioning to explicitly surface IDP-Align as a DocuWare interview research/demo project for September 28, 2026, allowing bounded DocuWare references in project context and demo copy. |
+| 2026-09-24 | 1.3     | Clarified the CAV surfacing boundary: divergence detection is computational, while IDP-Align's product responsibility is to surface sustained change with reconstructable evidence rather than judge the change as bad, defective, non-conformant, or contrary to business intent. Added corresponding requirement, acceptance, risk, scenario, and domain-language guardrails. No implementation scope change. |

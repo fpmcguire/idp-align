@@ -59,6 +59,7 @@ Development Team may not write code until the Moderator approves its implementat
 - Add Document and Workflow stream tabs with accessible button/tab behavior.
 - Add placeholder summary KPI, filter bar, divergence list, and detail regions using canonical CAV wording.
 - Add About copy as a one-page project brief geared toward interview reviewers, explaining project intent, DocuWare interview research/demo framing, dashboard UI, architecture, MOD-W, CAV Level 1, DocuWare API research intent, and scope boundaries.
+- Include the CAV Level 1 surfacing boundary in About copy: detected Divergence is surfaced with Evidence for interpretation, not presented as failure, defect, non-conformance, or business-intent violation.
 - Include a short architecture summary that describes the app as a feature-sliced/layered Angular app with a repository/adapter boundary between business/domain code and replay, live BFF/API, or future database-backed data sources.
 - Include that IDP-Align is a MOD-W project and that the build assesses the current MOD-W version in a realistic project setting.
 - Ensure About copy and new STEP-01 user-facing explanatory copy use bounded DocuWare references only for research/demo context and do not imply endorsement, private access, confidential interview details, production readiness, or DocuWare defect/gap claims.
@@ -139,6 +140,7 @@ Development Team may not write code until the Moderator approves its implementat
 - [ ] `mod-w/validation/moderator-register.md` contains Step approval entry `A-002`.
 - [ ] A routed About / Project Context view is reachable from top navigation in the app shell.
 - [ ] About view is a one-page project brief geared toward interview reviewers and explains project intent, DocuWare interview research/demo framing, dashboard UI, architecture, MOD-W workflow, CAV Level 1, DocuWare API research intent, and scope boundaries.
+- [ ] About view explains that Divergence is evidence of sustained change, not a judgment of failure, defect, non-conformance, or business-intent violation.
 - [ ] About view includes an architecture summary explaining the repository/adapter boundary and how replay data can later be replaced by live BFF/API or future database-backed data sources without rewriting the dashboard.
 - [ ] About view states that IDP-Align is a MOD-W project assessing the current MOD-W version without claiming formal certification or benchmark status.
 - [ ] About view, app navigation, new user-facing explanatory copy, test fixture labels, and code comments introduced by STEP-01 use DocuWare references only in bounded research/demo context.
@@ -175,6 +177,7 @@ Development Team may not write code until the Moderator approves its implementat
 | 2026-09-23 | Added architecture summary requirement | Moderator requested explicit repository/adapter boundary and About-page architecture explanation. |
 | 2026-09-23 | Added Moderator Register approval reference and About placement/depth decisions | Moderator approved A-002 and clarified pre-briefing decisions. |
 | 2026-09-24 | Updated STEP-01 About scope for DocuWare-specific interview research/demo framing | Product Owner requested that v1 not hide DocuWare references and should surface the September 28, 2026 interview research/demo purpose. |
+| 2026-09-24 | Added Product v1.3 surfacing-boundary check to About scope | Product Owner clarified that CAV Level 1 surfaces detected sustained change with Evidence, but does not judge failure, defect, non-conformance, or business intent. |
 
 ---
 

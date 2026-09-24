@@ -270,4 +270,84 @@ Tech Lead review for STEP-01 passes. The reworked implementation resolves prior 
 
 ---
 
+### A-007 - Product Definition v1.3 Surfacing Boundary Clarification
+
+**Status:** Approved  
+**Date:** 2026-09-24  
+**Moderator:** Frank McGuire  
+**Product Owner:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Product semantic clarification during Tech Lead to QA handoff  
+**Step:** `mod-w/step-01.md` impact check  
+**Next authorized action:** QA may review STEP-01 using Product Definition v1.3, updated `review.md`, and the passing build/test evidence.
+
+#### Approved Artifacts
+
+- `mod-w/product.md` v1.3
+- `mod-w/domain-language.md`
+- `mod-w/step-01.md`
+- `src/app/features/about/about.component.html`
+- `src/app/features/about/about.component.spec.ts`
+- `review.md`
+
+#### Approval Summary
+
+The Moderator authorizes Product Definition v1.3 to clarify the CAV Level 1 surfacing boundary:
+
+`Observe -> Establish Baseline -> Detect Divergence -> Surface Evidence -> Interpret`
+
+IDP-Align is responsible through Surface Evidence. Divergence detection is computational, while IDP-Align's product responsibility is to surface sustained change with reconstructable Evidence rather than judge the change as bad, defective, non-conformant, or contrary to business intent.
+
+This is a semantic/product-contract clarification. It does not expand implementation scope, reinterpret CAV levels, add new product capability, or reopen STEP-01 beyond checking and minimally aligning user-facing wording.
+
+#### STEP-01 Impact
+
+- STEP-01 remains dashboard foundation scope only.
+- Replay ingestion, Observed Baseline calculation, sustained Divergence detection, Evidence Trace implementation, and Chart.js analysis remain out of scope.
+- About copy was minimally updated to state the surfacing boundary.
+- About tests were updated to verify the surfacing boundary and reject business-judgment overclaims in claim copy.
+- A-006 remains the historical Tech Lead acceptance record; `review.md` now records the Product v1.3 re-review result.
+
+#### Conditions
+
+- `.claude/settings.json` remains outside this authorization and outside STEP-01.
+- QA must verify that no STEP-01 UI wording presents Divergence as inherently bad, defective, non-conformant, or in violation of business intent.
+
+---
+
+### A-008 - STEP-01 CAV Reference Link And README Alignment
+
+**Status:** Approved  
+**Date:** 2026-09-24  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Documentation and About-page clarification before QA  
+**Step:** `mod-w/step-01.md` impact check  
+**Next authorized action:** QA may review STEP-01 using the updated About page, README, `review.md`, and the passing build/test evidence.
+
+#### Approved Artifacts
+
+- `src/app/features/about/about.component.html`
+- `src/app/features/about/about.component.scss`
+- `src/app/features/about/about.component.spec.ts`
+- `README.md`
+- `review.md`
+
+#### Approval Summary
+
+The Moderator requested a link to the CAV repository/reference on the About page and a README review for Product Definition v1.3 alignment.
+
+The About page now links to the canonical CAV repository:
+
+`https://github.com/fpmcguire/continuous-alignment-verification`
+
+The README was replaced with project-specific content covering IDP-Align's DocuWare research/demo framing, Product v1.3 CAV surfacing boundary, current STEP-01 scope, and compatible Node.js verification note.
+
+#### Conditions
+
+- This does not expand STEP-01 implementation scope.
+- `.claude/settings.json` remains outside this authorization and outside STEP-01.
+
+---
+
 MOD-W v5.0.1

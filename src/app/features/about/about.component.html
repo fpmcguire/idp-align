@@ -42,6 +42,17 @@
     <section data-testid="about-api-research">
       <h2>DocuWare API Research Intent</h2>
       <p>Two public DocuWare APIs shape the research and demo direction:</p>
+      <p>
+        Canonical CAV terminology comes from the
+        <a
+          href="https://github.com/fpmcguire/continuous-alignment-verification"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-testid="cav-repo-link"
+        >
+          Continuous Alignment Verification repository
+        </a>.
+      </p>
       <ul>
         <li>
           <strong>DocuWare Platform REST API</strong> — document and index-field data, which informs the
@@ -97,6 +108,11 @@
       <p data-boundary>
         IDP-Align does not implement CAV Levels 2–6, and it does not implement Attribution (root-cause
         lineage). Showing two streams side by side is not a claim of cross-stream alignment analysis.
+      </p>
+      <p data-boundary data-testid="surfacing-boundary">
+        Divergence is evidence of change, not a judgment of failure, defect, or non-conformance.
+        IDP-Align detects sustained Divergence and surfaces Evidence for interpretation; it does not
+        decide what the behavior should have been.
       </p>
     </section>
 

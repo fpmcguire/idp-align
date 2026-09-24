@@ -11,6 +11,7 @@ const OVERCLAIM_PATTERNS: Record<string, RegExp> = {
   higherCavLevels: /Levels? [2-6]\b|Levels? 2[–-]6/i,
   attribution: /Attribution|root[- ]cause/i,
   certification: /certif|benchmark/i,
+  businessJudgment: /bad data|failure|defect|non[- ]conform|violation of business intent/i,
   reservedTerms: /Declared Intention|Alignment Delta|Envelope|Breach|Drift Velocity|Convergence/i,
   nonCanonicalFindingNames: /\balert|\banomal/i,
 };
@@ -100,6 +101,23 @@ describe('AboutComponent', () => {
       }
     });
 
+    it('should link to the canonical CAV manifesto repository reference', () => {
+      const link = el.querySelector<HTMLAnchorElement>('[data-testid="cav-repo-link"]');
+      expect(link?.textContent).toContain('Continuous Alignment Verification repository');
+      expect(link?.href).toBe('https://github.com/fpmcguire/continuous-alignment-verification');
+      expect(link?.target).toBe('_blank');
+      expect(link?.rel).toContain('noopener');
+      expect(link?.rel).toContain('noreferrer');
+    });
+
+    it('should explain the CAV surfacing boundary', () => {
+      const boundary = section('surfacing-boundary');
+      expect(boundary).toContain('Divergence is evidence of change');
+      expect(boundary).toContain('not a judgment of failure, defect, or non-conformance');
+      expect(boundary).toContain('surfaces Evidence for interpretation');
+      expect(boundary).toContain('does not decide what the behavior should have been');
+    });
+
     it('should explain the architecture and repository/adapter boundary', () => {
       const arch = section('about-architecture');
       expect(arch).toContain('feature-sliced');
@@ -135,6 +153,7 @@ describe('AboutComponent', () => {
       expect(boundaries).toMatch(/product defect or gap/);
       expect(boundaries).toMatch(/does not implement CAV Levels 2–6/);
       expect(boundaries).toMatch(/does not implement Attribution/);
+      expect(boundaries).toMatch(/not a judgment of failure, defect, or non-conformance/);
       expect(boundaries).toMatch(/not a formal certification/);
     });
   });

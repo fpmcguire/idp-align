@@ -1,59 +1,60 @@
-# IdpAlign
+# IDP-Align
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.8.
+IDP-Align is an Angular dashboard foundation for exploring Continuous Alignment Verification (CAV) Level 1 in DocuWare's document-processing and workflow-automation domain.
 
-## Development server
+For v1, the project is a personal research/demo artifact for Frank McGuire's DocuWare Software Engineer interview on September 28, 2026. It is based on public DocuWare domain/API information and local replay-first architecture. It is not affiliated with, reviewed by, or endorsed by DocuWare.
 
-To start a local development server, run:
+## Product Framing
 
-```bash
-ng serve
+IDP-Align applies CAV Level 1 - Observed-State Divergence to two planned streams:
+
+- Document stream: extracted document/index-field behavior shaped by public DocuWare Platform REST API concepts.
+- Workflow stream: workflow execution behavior shaped by public DocuWare Workflow Analytics API concepts.
+
+The Product Definition is in `mod-w/product.md`.
+
+## CAV Boundary
+
+Product v1.3 clarifies the responsibility chain:
+
+```text
+Observe -> Establish Baseline -> Detect Divergence -> Surface Evidence -> Interpret
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+IDP-Align is responsible through Surface Evidence.
 
-## Code scaffolding
+Divergence is evidence of change, not a judgment of failure, defect, or non-conformance. An Observed Baseline describes what has happened in observed history; it does not automatically describe what should happen. Business-intent comparison belongs to later CAV capabilities where explicit Intent exists.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Canonical CAV reference:
 
-```bash
-ng generate component component-name
-```
+- Local: `cav/CAV-MANIFESTO.md`
+- GitHub: https://github.com/fpmcguire/continuous-alignment-verification
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Current Step
 
-```bash
-ng generate --help
-```
+STEP-01 establishes the dashboard shell, stream tabs, placeholder dashboard regions, and routed About / Project Context view. It does not implement replay ingestion, Observed Baseline calculation, sustained Divergence detection, Evidence Trace implementation, or chart analysis.
 
-## Building
+MOD-W artifacts:
 
-To build the project run:
+- `mod-w/step-01.md`
+- `review.md`
+- `mod-w/validation/moderator-register.md`
 
-```bash
-ng build
-```
+## Development
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Install dependencies, then run:
 
 ```bash
-ng test
+npm run build
+npm test -- --watch=false
 ```
 
-## Running end-to-end tests
+Angular CLI requires Node.js `v24.15.0+` on the v24 line, or another compatible version such as `v26.0.0`. The current verified commands were run with Node.js `v26.0.0`.
 
-For end-to-end (e2e) testing, run:
+To start a local development server:
 
 ```bash
-ng e2e
+npm run start
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Then open `http://localhost:4200/`.

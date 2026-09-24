@@ -20,6 +20,7 @@ This file is authoritative for canonical product, architecture, code, and review
 | Observed Baseline | Reference derived from historical or continuously inferred observed behavior. | `ObservedBaseline` | Observed Baseline | Target, intended value, policy |
 | Divergence | Sustained, meaningful departure from an Observed Baseline or observed comparison. | `Divergence` | Divergence | Alert, anomaly, violation, breach |
 | Evidence | Persisted observations and relationships supporting a Divergence. | `Evidence`, `EvidenceTraceItem` | Evidence, Evidence trace | Proof without trace, log blob |
+| Surfacing | Making detected Divergence and supporting Evidence visible for interpretation without assigning business correctness, failure, defect, non-conformance, or causal meaning. | `surfaceDivergence` if needed | Surface, surfaced Divergence | Judging, validating, proving failure |
 | Stream | One independent CAV Level 1 view: document stream or workflow stream. | `StreamKind`, `StreamConfig` | Document stream, Workflow stream | Pipeline unless referring to implementation |
 | Document stream | Stream observing document/index-field behavior. | `StreamKind.Document` or `'document'` | Document stream | Invoice stream when the scope is broader |
 | Workflow stream | Stream observing workflow execution behavior. | `StreamKind.Workflow` or `'workflow'` | Workflow stream | Process stream unless product copy changes |
@@ -71,6 +72,7 @@ These terms are canonical CAV terms but are reserved for future levels and must 
 - Use canonical CAV v1.0 vocabulary from `cav/CAV-MANIFESTO.md`.
 - Do not label Observed Baselines as intent, targets, policy, or requirements.
 - Do not call Divergences alerts, anomalies, violations, or breaches in code or user-facing copy.
+- Do not present a surfaced Divergence as inherently bad, defective, non-conformant, or contrary to business intent solely because it differs from an Observed Baseline.
 - If a field comes from a workflow event, it may be Evidence context; do not imply root-cause Attribution.
 - For v1, bounded DocuWare references are allowed in the About view, project-context copy, documentation, tests, and demo framing when they explain the research/demo domain and September 28, 2026 interview context.
 - Do not imply DocuWare endorsement, private DocuWare access, confidential interview content, production readiness, formal certification, or a DocuWare product defect/gap claim.

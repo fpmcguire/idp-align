@@ -87,6 +87,17 @@ code {
   color: var(--color-baseline);
 }
 
+a {
+  color: var(--color-baseline);
+  text-underline-offset: 3px;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-baseline);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+}
+
 @media (max-width: 768px) {
   .about-container {
     padding: var(--space-md);
