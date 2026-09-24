@@ -1,7 +1,7 @@
 # Roadmap - IDP-Align
 
 **Project:** IDP-Align
-**Date:** 2026-09-21
+**Date:** 2026-09-24
 **Tech Lead:** Codex
 **Status:** Planned
 
@@ -9,7 +9,7 @@
 
 ## Summary
 
-Build IDP-Align in small, reviewable Steps that first establish the Angular dashboard shell and canonical domain language, then add replay data, Level 1 baseline/divergence logic, evidence detail, chart analysis, and quality gates.
+Build IDP-Align in small, reviewable Steps that first establish the Angular dashboard shell, canonical domain language, and DocuWare-specific interview research/demo framing, then add replay data, Level 1 baseline/divergence logic, evidence detail, chart analysis, and quality gates.
 
 ---
 
@@ -17,7 +17,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 
 | Step | Title | Requirement(s) | Agent | Status | Notes |
 | --- | --- | --- | --- | --- | --- |
-| STEP-01 | Dashboard Foundation, Stream Shell, And About View | R6, R9, R10, R13 | Claude Code | Planned | Replace Angular starter with routed dashboard foundation, shared layout components, and reviewer-facing About route. |
+| STEP-01 | Dashboard Foundation, Stream Shell, And About View | R6, R9, R10, R13 | Claude Code | Planned | Replace Angular starter with routed dashboard foundation, shared layout components, and DocuWare-specific reviewer-facing About route. |
 | STEP-02 | CAV Domain Model, Repositories, And Replay Fixtures | R1, R3, R8, R9 | Claude Code | Planned | Add typed document/workflow observations, repository interfaces, and replay adapters. |
 | STEP-03 | Observed Baseline And Sustained Divergence Logic | R2, R4, R5, R12 | Claude Code | Planned | Pure domain helpers plus unit tests. |
 | STEP-04 | Divergence List, Detail, Baseline, And Evidence Trace | R5, R6, R12 | Claude Code | Planned | Implement shared CAV UI components and selection state. |
@@ -32,11 +32,11 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 
 ### STEP-01 - Dashboard Foundation, Stream Shell, And About View
 
-**Goal:** Establish the Angular application shell, dashboard route, About route, design tokens, and shared stream layout without implementing full CAV calculations.
+**Goal:** Establish the Angular application shell, dashboard route, DocuWare-specific About / Project Context route, design tokens, and shared stream layout without implementing full CAV calculations.
 
 **Requirements:** R6, R9, R10, R13
 
-**Output:** Routed dashboard frame with Document/Workflow stream tabs, placeholder KPI/list/detail regions, routed About / Project Context view, approved terminology, responsive layout baseline, and initial tests.
+**Output:** Routed dashboard frame with Document/Workflow stream tabs, placeholder KPI/list/detail regions, routed About / Project Context view that names the DocuWare interview research/demo context, approved terminology, responsive layout baseline, and initial tests.
 
 ### STEP-02 - CAV Domain Model, Repositories, And Replay Fixtures
 
@@ -112,7 +112,15 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | R10 | STEP-01, STEP-08 | Planned |
 | R11 | STEP-03, STEP-05, STEP-08 | Planned |
 | R12 | STEP-03, STEP-04 | Planned |
-| R13 | STEP-01 | Planned |
+| R13 | STEP-01 | Planned - updated for DocuWare-specific v1 interview research/demo framing. |
+
+---
+
+## Change Log
+
+| Date | Change | Reason |
+| --- | --- | --- |
+| 2026-09-24 | Updated STEP-01 roadmap language for DocuWare-specific interview research/demo framing. | Align roadmap with Product v1.2, STEP-01 update, language matrix, and Moderator approval A-004. |
 
 ---
 
