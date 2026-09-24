@@ -9,8 +9,9 @@
   padding-bottom: var(--space-md);
 }
 
-.dashboard-header h2 {
+.dashboard-header h1 {
   margin: 0 0 var(--space-sm) 0;
+  font-size: var(--font-size-heading);
 }
 
 .stream-subtitle {
@@ -59,6 +60,12 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
+  border-radius: var(--radius-sm);
+
+  &:focus-visible {
+    outline: 2px solid var(--color-baseline);
+    outline-offset: 4px;
+  }
 }
 
 .stream-heading {

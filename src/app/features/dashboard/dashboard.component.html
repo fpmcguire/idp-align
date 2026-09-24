@@ -1,6 +1,6 @@
 <div class="dashboard-container">
   <div class="dashboard-header">
-    <h2>IDP-Align Dashboard</h2>
+    <h1>IDP-Align Dashboard</h1>
     <div class="stream-subtitle">CAV Level 1 — Observed-State Divergence</div>
     <p class="foundation-note" data-testid="foundation-note">
       Dashboard foundation: no replay data is loaded yet, so no Divergences are shown.
@@ -31,12 +31,13 @@
   <div
     class="dashboard-content"
     role="tabpanel"
+    tabindex="0"
     [id]="'stream-panel-' + activeConfig().kind"
     [attr.aria-labelledby]="'stream-tab-' + activeConfig().kind"
     data-testid="stream-panel"
   >
     <div class="stream-context">
-      <h3 class="stream-heading" data-testid="stream-heading">{{ activeConfig().label }}</h3>
+      <h2 class="stream-heading" data-testid="stream-heading">{{ activeConfig().label }}</h2>
       <p class="stream-source-note" data-testid="stream-source-note">{{ activeConfig().sourceNote }}</p>
     </div>
 

@@ -25,6 +25,15 @@ describe('AppShellComponent', () => {
     expect(titleElement?.textContent).toContain('IDP-Align');
   });
 
+  it('should give the navigation an accessible name', () => {
+    const nav = fixture.nativeElement.querySelector('nav');
+    expect(nav?.getAttribute('aria-label')).toBe('Primary');
+  });
+
+  it('should not render a heading in the shell, leaving the h1 to each routed view', () => {
+    expect(fixture.nativeElement.querySelector('h1, h2, h3, h4, h5, h6')).toBeNull();
+  });
+
   it('should have navigation links', () => {
     const navLinks = fixture.nativeElement.querySelectorAll('.nav-link');
     expect(navLinks.length).toBe(2);

@@ -1,16 +1,23 @@
 <header class="app-header">
   <div class="app-header-content">
-    <h1 class="app-title">IDP-Align</h1>
-    <nav class="app-nav">
+    <span class="app-title">IDP-Align</span>
+    <nav class="app-nav" aria-label="Primary">
       <a
         routerLink="/dashboard"
         routerLinkActive="active"
+        ariaCurrentWhenActive="page"
         class="nav-link"
         data-testid="nav-dashboard"
       >
         Dashboard
       </a>
-      <a routerLink="/about" routerLinkActive="active" class="nav-link" data-testid="nav-about">
+      <a
+        routerLink="/about"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        class="nav-link"
+        data-testid="nav-about"
+      >
         About
       </a>
     </nav>

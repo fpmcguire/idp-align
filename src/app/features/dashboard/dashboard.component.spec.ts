@@ -29,7 +29,7 @@ describe('DashboardComponent', () => {
   });
 
   it('should render dashboard header with CAV Level 1 framing', () => {
-    expect(el.querySelector('.dashboard-header h2')?.textContent).toContain('IDP-Align Dashboard');
+    expect(el.querySelector('.dashboard-header h1')?.textContent).toContain('IDP-Align Dashboard');
     expect(el.querySelector('.stream-subtitle')?.textContent).toContain('CAV Level 1');
   });
 
@@ -51,6 +51,23 @@ describe('DashboardComponent', () => {
       const panel = el.querySelector('[role="tabpanel"]')!;
       expect(tab('document').getAttribute('aria-controls')).toBe(panel.id);
       expect(panel.getAttribute('aria-labelledby')).toBe(tab('document').id);
+    });
+
+    it('should make the tab panel keyboard-focusable while it has no focusable content', () => {
+      const panel = el.querySelector<HTMLElement>('[role="tabpanel"]')!;
+      const focusable = panel.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]'
+      );
+      expect(focusable.length).toBe(0);
+      expect(panel.tabIndex).toBe(0);
+
+      panel.focus();
+      expect(document.activeElement).toBe(panel);
+    });
+
+    it('should keep heading hierarchy under the view heading', () => {
+      expect(el.querySelectorAll('h1').length).toBe(1);
+      expect(el.querySelector('[data-testid="stream-heading"]')?.tagName).toBe('H2');
     });
 
     it('should switch to workflow stream on click and update aria-selected', () => {
