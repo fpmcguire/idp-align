@@ -407,4 +407,41 @@ The Moderator first instructed QA to implement QA-003, QA-004, and QA-005 direct
 
 ---
 
+### A-011 - STEP-01 Development Team QA Rework Plan Approval
+
+**Status:** Approved  
+**Date:** 2026-09-24  
+**Moderator:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** Implementation-plan approval before code changes (post-QA rework)  
+**Step:** `mod-w/step-01.md`  
+**Next authorized action:** Tech Lead re-review of the QA-002 to QA-005 rework (Phase 3a).
+
+#### Approved Rework Plan
+
+Development Team rework plan for QA-002 through QA-005, as defined in `review.md` (Post-QA Rework) and A-010:
+
+1. QA-002: extend the About surfacing-boundary sentence with "…or whether it violates business intent." inside `[data-boundary]`, and assert the phrase in About tests.
+2. QA-003: move the CAV repository sentence to the first paragraph of "CAV Level 1 Scope", before the Level 1 model lead-in and list; remove the stray space before the period; keep the canonical URL and `target`/`rel` attributes; test the rendered sentence and placement.
+3. QA-004: set the document title to `IDP-Align`; replace the Angular default `favicon.ico` with an original SVG project icon; no DocuWare or third-party branding.
+4. QA-005: add nav `aria-label`, `aria-current="page"` on the active link only, exactly one `h1` per routed view, a keyboard-focusable tab panel, and a visible 2px focus indicator; add tests for these semantics.
+
+Moderator decisions on the plan:
+
+- QA-003 placement: first paragraph of the CAV Level 1 Scope section.
+- QA-004 favicon: SVG only; `favicon.ico` removed.
+- QA-005: 2px `:focus-visible` outline also applied to nav links (design-spec section 2).
+
+#### Implementation Record
+
+The approval was given in the Development Team session before code changes and is recorded here after implementation. Commits: `9fe46fd` (QA-002, QA-003), `2cfbddd` (QA-004), `b15688d` (QA-005). Under Node.js v26.0.0, `npm run build` passed and `npm test -- --watch=false` passed with 4 files and 62/62 tests.
+
+#### Conditions
+
+- Rework stays within STEP-01 and changes no product copy beyond QA-002 and QA-003.
+- QA-006, QA-007, and QA-008 are not addressed; dispositions in A-010 stand.
+- Tech Lead re-review (Phase 3a) is required, then a fresh QA re-check (Phase 3b) by a session that did not implement these fixes.
+
+---
+
 MOD-W v5.0.1
