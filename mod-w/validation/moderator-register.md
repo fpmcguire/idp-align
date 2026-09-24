@@ -565,4 +565,38 @@ The Product Owner reviewed the rendered copy against `mod-w/product.md` v1.3 dir
 
 ---
 
+### A-015 - Test Dependency And Convenience Script Update
+
+**Status:** Approved  
+**Date:** 2026-09-24  
+**Moderator:** Frank McGuire  
+**Gate:** Tooling update before STEP-01 final commit consideration  
+**Step:** `mod-w/step-01.md` support tooling  
+**Next authorized action:** Commit this tooling update separately before any commit that records STEP-01 completion or advances the roadmap.
+
+#### Approved Artifacts
+
+- `package.json`
+- `package-lock.json`
+- `angular.json`
+- `eslint.config.js`
+
+#### Approval Summary
+
+The Moderator added test dependencies and convenience scripts for linting, coverage, Playwright e2e commands, and the InMotion base-href build. The Angular workspace now has an ESLint target backed by `angular-eslint`, and the new ESLint flat config covers Angular TypeScript and template files.
+
+This approval records infrastructure/tooling support only. It does not complete STEP-01, advance `mod-w/roadmap.md`, or replace the pending Moderator final gate.
+
+#### Evidence
+
+- `npm run lint` passed under Node.js v26.0.0.
+- `npm test -- --watch=false` passed under Node.js v26.0.0 with 4 files and 62/62 tests.
+
+#### Conditions
+
+- Continue using Node.js v26.0.0 or another Angular CLI-compatible version for verification.
+- Commit this update before committing any STEP-01 completion/final-gate changes.
+
+---
+
 MOD-W v5.0.1
