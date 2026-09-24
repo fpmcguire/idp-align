@@ -110,12 +110,29 @@ describe('AboutComponent', () => {
       expect(link?.rel).toContain('noreferrer');
     });
 
+    it('should render the CAV reference as one sentence without a space before the period', () => {
+      expect(section('cav-reference')).toBe(
+        'Canonical CAV terminology comes from the Continuous Alignment Verification repository.'
+      );
+    });
+
+    it('should place the CAV reference in the CAV Level 1 section, before the model list', () => {
+      const cav = el.querySelector('[data-testid="about-cav"]')!;
+      const reference = cav.querySelector('[data-testid="cav-reference"]');
+      const modelList = cav.querySelector('ul')!;
+      expect(reference?.querySelector('[data-testid="cav-repo-link"]')).toBeTruthy();
+      expect(reference!.compareDocumentPosition(modelList) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      expect(el.querySelector('[data-testid="about-api-research"] [data-testid="cav-repo-link"]')).toBeNull();
+    });
+
     it('should explain the CAV surfacing boundary', () => {
       const boundary = section('surfacing-boundary');
       expect(boundary).toContain('Divergence is evidence of change');
       expect(boundary).toContain('not a judgment of failure, defect, or non-conformance');
       expect(boundary).toContain('surfaces Evidence for interpretation');
-      expect(boundary).toContain('does not decide what the behavior should have been');
+      expect(boundary).toContain(
+        'does not decide what the behavior should have been, or whether it violates business intent.'
+      );
     });
 
     it('should explain the architecture and repository/adapter boundary', () => {

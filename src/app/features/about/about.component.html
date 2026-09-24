@@ -42,17 +42,6 @@
     <section data-testid="about-api-research">
       <h2>DocuWare API Research Intent</h2>
       <p>Two public DocuWare APIs shape the research and demo direction:</p>
-      <p>
-        Canonical CAV terminology comes from the
-        <a
-          href="https://github.com/fpmcguire/continuous-alignment-verification"
-          target="_blank"
-          rel="noopener noreferrer"
-          data-testid="cav-repo-link"
-        >
-          Continuous Alignment Verification repository
-        </a>.
-      </p>
       <ul>
         <li>
           <strong>DocuWare Platform REST API</strong> — document and index-field data, which informs the
@@ -94,6 +83,16 @@
 
     <section data-testid="about-cav">
       <h2>CAV Level 1 Scope</h2>
+      <p data-testid="cav-reference">
+        Canonical CAV terminology comes from the
+        <a
+          href="https://github.com/fpmcguire/continuous-alignment-verification"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-testid="cav-repo-link"
+          >Continuous Alignment Verification repository</a
+        >.
+      </p>
       <p>
         IDP-Align targets <strong>Continuous Alignment Verification (CAV) Level 1 — Observed-State
         Divergence</strong>. For both streams the model is the same:
@@ -112,7 +111,7 @@
       <p data-boundary data-testid="surfacing-boundary">
         Divergence is evidence of change, not a judgment of failure, defect, or non-conformance.
         IDP-Align detects sustained Divergence and surfaces Evidence for interpretation; it does not
-        decide what the behavior should have been.
+        decide what the behavior should have been, or whether it violates business intent.
       </p>
     </section>
 
