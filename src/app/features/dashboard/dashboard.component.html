@@ -1,0 +1,91 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h2>IDP-Align Dashboard</h2>
+    <div class="stream-subtitle">CAV Level 1 — Observed-State Divergence</div>
+    <p class="foundation-note" data-testid="foundation-note">
+      Dashboard foundation: no replay data is loaded yet, so no Divergences are shown.
+    </p>
+  </div>
+
+  <div class="stream-tabs" role="tablist" aria-label="Streams">
+    @for (stream of streams; track stream.kind; let i = $index) {
+      <button
+        #streamTab
+        type="button"
+        role="tab"
+        class="stream-tab"
+        [id]="'stream-tab-' + stream.kind"
+        [attr.data-testid]="'stream-tab-' + stream.kind"
+        [attr.aria-selected]="activeStream() === stream.kind"
+        [attr.aria-controls]="'stream-panel-' + stream.kind"
+        [attr.tabindex]="activeStream() === stream.kind ? 0 : -1"
+        [class.active]="activeStream() === stream.kind"
+        (click)="selectStream(stream.kind)"
+        (keydown)="onTabKeydown($event, i)"
+      >
+        {{ stream.label }}
+      </button>
+    }
+  </div>
+
+  <div
+    class="dashboard-content"
+    role="tabpanel"
+    [id]="'stream-panel-' + activeConfig().kind"
+    [attr.aria-labelledby]="'stream-tab-' + activeConfig().kind"
+    data-testid="stream-panel"
+  >
+    <div class="stream-context">
+      <h3 class="stream-heading" data-testid="stream-heading">{{ activeConfig().label }}</h3>
+      <p class="stream-source-note" data-testid="stream-source-note">{{ activeConfig().sourceNote }}</p>
+    </div>
+
+    <div class="kpi-section" data-testid="kpi-section">
+      @for (label of kpiLabels; track label) {
+        <div class="kpi-card">
+          <div class="kpi-label">{{ label }}</div>
+          <div class="kpi-value" aria-hidden="true">—</div>
+          <div class="kpi-note">Pending replay data</div>
+        </div>
+      }
+    </div>
+
+    <div class="filter-bar" data-testid="filter-bar">
+      <label class="filter-field">
+        <span class="filter-label">{{ activeConfig().identitySliceLabel }}</span>
+        <select class="filter-select" data-testid="filter-identity-slice" disabled>
+          <option>All identity slices</option>
+        </select>
+      </label>
+      <label class="filter-field">
+        <span class="filter-label">Time range</span>
+        <select class="filter-select" data-testid="filter-timerange" disabled>
+          <option>Last 7 days</option>
+        </select>
+      </label>
+      <label class="filter-field">
+        <span class="filter-label">Status</span>
+        <select class="filter-select" data-testid="filter-status" disabled>
+          <option>All statuses</option>
+        </select>
+      </label>
+      <p class="filter-note">Filters become available once replay data is loaded.</p>
+    </div>
+
+    <div class="list-detail-container">
+      <section class="divergence-list" aria-label="Divergence list" data-testid="divergence-list">
+        <div class="empty-state" data-testid="empty-state">
+          <p class="empty-title">No Divergences to show yet</p>
+          <p class="placeholder-text">
+            Replay data, Observed Baselines, and sustained Divergence detection are added in later Steps.
+          </p>
+        </div>
+      </section>
+      <section class="detail-pane" aria-label="Divergence detail" data-testid="detail-pane">
+        <p class="placeholder-text">
+          Divergence detail, including its Observed Baseline and Evidence trace, will appear here.
+        </p>
+      </section>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,156 @@
+<div class="about-container">
+  <article class="about-content">
+    <h1>About IDP-Align</h1>
+    <p class="lead">
+      A one-page project brief for reviewers: what IDP-Align is, why it exists, how it is built,
+      and what it intentionally does not do.
+    </p>
+
+    <section data-testid="about-project-context">
+      <h2>Project Context</h2>
+      <p>
+        IDP-Align v1 is a personal research and demo project by Frank McGuire, built in preparation
+        for a DocuWare Software Engineer interview on September 28, 2026. Building a working dashboard
+        against a publicly documented domain is a more concrete way to learn that domain than reading
+        product material alone.
+      </p>
+      <p class="independence-notice" data-boundary data-testid="independence-notice">
+        IDP-Align is an independent personal project. It is not affiliated with, reviewed by, or
+        endorsed by DocuWare. It is based only on public information and does not use private DocuWare
+        systems, customer data, or confidential interview information.
+      </p>
+    </section>
+
+    <section data-testid="about-why-docuware">
+      <h2>Why DocuWare</h2>
+      <p>
+        DocuWare works in document processing and workflow automation: capturing and indexing business
+        documents, routing them through approval workflows, and applying AI-assisted processing through
+        its AI Hub. Those two surfaces — extracted document data and workflow execution — are a natural
+        fit for observing how system behavior changes over time.
+      </p>
+      <p>
+        The Purchase-to-Pay / invoice-processing use case provides realistic scenario framing for both
+        streams.
+      </p>
+      <p data-boundary>
+        The project does not claim that DocuWare has a product defect or gap in these areas. It is an
+        outside learning exercise in applying an observation model to this domain.
+      </p>
+    </section>
+
+    <section data-testid="about-api-research">
+      <h2>DocuWare API Research Intent</h2>
+      <p>Two public DocuWare APIs shape the research and demo direction:</p>
+      <ul>
+        <li>
+          <strong>DocuWare Platform REST API</strong> — document and index-field data, which informs the
+          Document stream.
+        </li>
+        <li>
+          <strong>Workflow Analytics API</strong> — workflow execution data such as task duration,
+          routing, and decision outcomes, which informs the Workflow stream.
+        </li>
+      </ul>
+      <p>
+        Replay data will be modeled on these publicly documented API shapes. If sandbox access becomes
+        available, live calls would go through a thin server-side adapter so that credentials never
+        reside in the browser.
+      </p>
+      <p data-boundary>IDP-Align does not currently connect to any DocuWare system.</p>
+    </section>
+
+    <section data-testid="about-dashboard">
+      <h2>Dashboard</h2>
+      <p>The dashboard presents two independent streams:</p>
+      <ul>
+        <li>
+          <strong>Document stream:</strong> observes extracted index-field behavior — vendor
+          representation, amount and currency, dates — per Identity Slice such as vendor and document
+          type.
+        </li>
+        <li>
+          <strong>Workflow stream:</strong> observes workflow execution behavior — task duration,
+          routing, response time, and error routes — per Identity Slice such as workflow step or route.
+        </li>
+      </ul>
+      <p>
+        This build is the STEP-01 foundation: stream tabs plus reserved regions for summary metrics,
+        filters, the Divergence list, and Divergence detail. Replay data, Observed Baseline calculation,
+        sustained Divergence detection, Evidence traces, and chart analysis are added in later Steps.
+      </p>
+    </section>
+
+    <section data-testid="about-cav">
+      <h2>CAV Level 1 Scope</h2>
+      <p>
+        IDP-Align targets <strong>Continuous Alignment Verification (CAV) Level 1 — Observed-State
+        Divergence</strong>. For both streams the model is the same:
+      </p>
+      <ul>
+        <li>Observed Truth built from continuous or replayed observations</li>
+        <li>Identity Slices that group observations into meaningful cohorts</li>
+        <li>Observed Baselines derived from historical behavior</li>
+        <li>Divergence surfaced only when a departure from the Observed Baseline is sustained</li>
+        <li>Evidence persisted so every Divergence finding is explainable</li>
+      </ul>
+      <p data-boundary>
+        IDP-Align does not implement CAV Levels 2–6, and it does not implement Attribution (root-cause
+        lineage). Showing two streams side by side is not a claim of cross-stream alignment analysis.
+      </p>
+    </section>
+
+    <section data-testid="about-architecture">
+      <h2>Architecture</h2>
+      <p>
+        IDP-Align is a feature-sliced, layered Angular application built with standalone components and
+        signals. Business and domain code are separated from data sources by a repository/adapter
+        boundary:
+      </p>
+      <p class="flow" data-testid="architecture-flow">
+        UI components → feature facade → domain logic → repository interface → replay adapter | BFF/API
+        adapter | future database-backed adapter
+      </p>
+      <ul>
+        <li><strong>Features:</strong> the Dashboard and About routes.</li>
+        <li><strong>Shared UI:</strong> presentational components reused by both streams.</li>
+        <li>
+          <strong>Domain (planned):</strong> pure functions for Observed Truth, Identity Slices, Observed
+          Baselines, and Divergence.
+        </li>
+        <li>
+          <strong>Data (planned):</strong> repository interfaces with a local replay adapter first.
+        </li>
+      </ul>
+      <p>
+        Because the dashboard depends only on repository interfaces, replay data can later be replaced by
+        a live BFF/API adapter or a future database-backed source without rewriting the dashboard.
+      </p>
+    </section>
+
+    <section data-testid="about-mod-w">
+      <h2>MOD-W Workflow</h2>
+      <p>
+        IDP-Align is a MOD-W (Moderated AI Development Workflow) project. Work moves through Product
+        Definition, Design, and Architecture Definition, then small implementation Steps. Each Step is
+        reviewed by a Tech Lead, checked by QA, and approved by a Moderator before the next begins.
+      </p>
+      <p>
+        The build also serves as a practical assessment of the current MOD-W version in a realistic,
+        time-boxed project.
+      </p>
+      <p data-boundary>It is not a formal certification or benchmark of MOD-W.</p>
+    </section>
+
+    <section data-testid="about-scope">
+      <h2>Scope Boundaries &amp; Non-Goals</h2>
+      <ul data-boundary>
+        <li>Not production software, and not a multi-tenant SaaS product.</li>
+        <li>Not a DocuWare product, and not a reimplementation of DocuWare APIs, OCR, or workflow engine.</li>
+        <li>Not a general-purpose IDP or workflow-orchestration engine.</li>
+        <li>Not a claim of market novelty; drift detection and data observability have mature prior art.</li>
+        <li>No real customer data; replay data is synthetic and modeled on public API documentation.</li>
+      </ul>
+    </section>
+  </article>
+</div>

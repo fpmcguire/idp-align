@@ -193,4 +193,81 @@ This approval overrides the earlier STEP-01 condition that the About / Project C
 
 ---
 
+### A-005 - STEP-01 Development Team Rework Plan Approval
+
+**Status:** Approved  
+**Date:** 2026-09-24  
+**Moderator:** Frank McGuire  
+**Product Owner:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** Development Team rework-plan approval before STEP-01 rework review  
+**Step:** `mod-w/step-01.md`  
+**Next authorized action:** Tech Lead may re-review the revised STEP-01 implementation package against the updated DocuWare-specific v1 direction.
+
+#### Approved Rework Plan
+
+The Development Team is approved to revise the existing STEP-01 implementation in place after A-004, without rolling back the original committed implementation or the uncommitted Angular file split.
+
+Approved rework scope:
+
+1. Update the About / Project Context view to present IDP-Align v1 as a bounded DocuWare interview research/demo project for the September 28, 2026 Software Engineer interview.
+2. Update About tests to require the DocuWare research/demo context and reject prohibited overclaims.
+3. Remove or neutralize hard-coded dashboard KPI counts and vendor filter values that imply completed replay/domain logic before later Steps.
+4. Add semantic active state to the stream tabs.
+5. Preserve separate Angular `.ts`, `.html`, and `.scss` component files.
+6. Run build and tests with a compatible Node version, documenting any environment limitation.
+
+#### Conditions
+
+- Rework must stay within the updated STEP-01 scope.
+- DocuWare references remain bounded by A-004 and `mod-w/language-matrix.md`.
+- `.claude/settings.json` is not part of STEP-01 and is not approved as part of this implementation package.
+- QA may proceed only after Tech Lead review acceptance is recorded.
+
+---
+
+### A-006 - STEP-01 Tech Lead Review Acceptance
+
+**Status:** Approved  
+**Date:** 2026-09-24  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Tech Lead review acceptance before QA  
+**Step:** `mod-w/step-01.md`  
+**Next authorized action:** QA may review STEP-01 against `mod-w/step-01.md`, `review.md`, the updated DocuWare-specific source-of-truth artifacts, and the passing build/test evidence.
+
+#### Accepted Artifacts
+
+- `review.md`
+- Revised STEP-01 implementation package in the current working tree, excluding `.claude/settings.json`
+- `mod-w/product.md` v1.2
+- `mod-w/architecture.md`
+- `mod-w/domain-language.md`
+- `mod-w/language-matrix.md`
+- `mod-w/roadmap.md`
+- `mod-w/step-01.md`
+
+#### Acceptance Summary
+
+Tech Lead review for STEP-01 passes. The reworked implementation resolves prior findings:
+
+1. About copy and tests now align with the updated DocuWare-specific research/demo scope.
+2. Dashboard placeholders no longer imply completed replay data, Observed Baseline calculation, or sustained Divergence detection.
+3. Stream tabs expose semantic active state and keyboard behavior.
+
+#### Evidence
+
+- `review.md` verdict: Pass.
+- `npm run build` passed under Node.js v26.0.0.
+- `npm test -- --watch=false` passed under Node.js v26.0.0.
+- Test result: 4 test files passed, 49 tests passed.
+
+#### Conditions
+
+- `.claude/settings.json` is modified in the working tree but is not part of STEP-01 and is not approved by this gate.
+- The default Node.js version remains v24.13.0, below Angular CLI's minimum v24.15.0 on the v24 line; QA should use Node.js v26.0.0 or another compatible version.
+- QA must verify that STEP-01 remains within CAV Level 1 and the bounded DocuWare research/demo guardrails.
+
+---
+
 MOD-W v5.0.1

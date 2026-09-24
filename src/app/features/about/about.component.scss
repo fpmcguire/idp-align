@@ -1,0 +1,102 @@
+.about-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+}
+
+.about-content {
+  color: var(--color-text-primary);
+  line-height: var(--line-height-relaxed);
+}
+
+h1 {
+  font-size: var(--font-size-display);
+  margin-bottom: var(--space-lg);
+  color: var(--color-text-primary);
+}
+
+h2 {
+  font-size: var(--font-size-heading);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-md);
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-sm);
+}
+
+section {
+  margin-bottom: var(--space-lg);
+}
+
+.lead {
+  color: var(--color-text-secondary);
+}
+
+.independence-notice {
+  background: var(--color-bg-surface);
+  border-left: 3px solid var(--color-baseline);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+}
+
+.flow {
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-family: 'Courier New', monospace;
+  font-size: var(--font-size-caption);
+  color: var(--color-baseline);
+}
+
+p {
+  margin-bottom: var(--space-md);
+  color: var(--color-text-primary);
+}
+
+ul {
+  margin-left: var(--space-lg);
+  margin-bottom: var(--space-md);
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: var(--space-sm);
+  padding-left: var(--space-md);
+  position: relative;
+
+  &::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: var(--color-divergence-ongoing);
+  }
+}
+
+strong {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+code {
+  background: var(--color-bg-surface);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-family: 'Courier New', monospace;
+  font-size: var(--font-size-caption);
+  color: var(--color-baseline);
+}
+
+@media (max-width: 768px) {
+  .about-container {
+    padding: var(--space-md);
+  }
+
+  h1 {
+    font-size: var(--font-size-heading);
+  }
+
+  h2 {
+    font-size: var(--font-size-body);
+  }
+}

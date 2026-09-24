@@ -47,9 +47,10 @@ describe('AppShellComponent', () => {
     expect(routerOutlet).toBeTruthy();
   });
 
-  it('should not mention target organization or company-specific product names', () => {
+  it('should not imply endorsement, private access, or production readiness in navigation', () => {
     const headerText = fixture.nativeElement.textContent;
-    // Check for neutral language only
-    expect(headerText).not.toMatch(/\b(AcmeCorp|Global\s*Supplies|TechParts|Invoice|Purchase)\b/i);
+    expect(headerText).not.toMatch(
+      /endors|official|partner|affiliat|private|confidential|production[- ]?(ready|grade)|Level [2-6]\b|Attribution/i
+    );
   });
 });

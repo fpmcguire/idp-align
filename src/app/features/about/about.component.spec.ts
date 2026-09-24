@@ -1,9 +1,33 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AboutComponent } from './about.component';
 
+// Boundary statements (non-goals, disclaimers) are marked with [data-boundary]. Overclaim checks
+// scan only the remaining claim copy, so legitimate "does not implement X" language is allowed.
+const OVERCLAIM_PATTERNS: Record<string, RegExp> = {
+  endorsement: /endors|sponsor|partner|affiliat|official|on behalf of|(approved|reviewed|requested) by DocuWare/i,
+  privateAccess: /private|internal DocuWare|customer data|confidential|proprietary|insider/i,
+  productionReadiness: /production[- ]?(ready|grade)|ready for production|in production|enterprise[- ]grade/i,
+  defectOrGap: /\bdefect|\bflaw|shortcoming|product gap|fills? (a|the) gap|fix(es)? DocuWare/i,
+  higherCavLevels: /Levels? [2-6]\b|Levels? 2[–-]6/i,
+  attribution: /Attribution|root[- ]cause/i,
+  certification: /certif|benchmark/i,
+  reservedTerms: /Declared Intention|Alignment Delta|Envelope|Breach|Drift Velocity|Convergence/i,
+  nonCanonicalFindingNames: /\balert|\banomal/i,
+};
+
 describe('AboutComponent', () => {
-  let component: AboutComponent;
   let fixture: ComponentFixture<AboutComponent>;
+  let el: HTMLElement;
+  let content: string;
+
+  const text = (node: Element | null | undefined) => (node?.textContent ?? '').replace(/\s+/g, ' ').trim();
+  const claimText = () => {
+    const clone = el.cloneNode(true) as HTMLElement;
+    clone.querySelectorAll('[data-boundary]').forEach(b => b.remove());
+    return text(clone);
+  };
+  const boundaryElements = () => Array.from(el.querySelectorAll<HTMLElement>('[data-boundary]'));
+  const section = (id: string) => text(el.querySelector(`[data-testid="${id}"]`));
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -11,88 +35,120 @@ describe('AboutComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(AboutComponent);
-    component = fixture.componentInstance;
+    el = fixture.nativeElement;
     fixture.detectChanges();
+    content = text(el);
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('should render About page title', () => {
-    const heading = fixture.nativeElement.querySelector('h1');
-    expect(heading?.textContent).toContain('About IDP-Align');
+  it('should render About page title as a one-page brief', () => {
+    expect(el.querySelector('h1')?.textContent).toContain('About IDP-Align');
+    expect(el.querySelectorAll('article section').length).toBeGreaterThanOrEqual(7);
   });
 
-  it('should have multiple sections', () => {
-    const sections = fixture.nativeElement.querySelectorAll('section');
-    expect(sections.length).toBeGreaterThan(3);
+  describe('required DocuWare research/demo framing', () => {
+    it('should identify the project as a personal DocuWare interview research/demo project', () => {
+      const context = section('about-project-context');
+      expect(context).toContain('DocuWare');
+      expect(context).toContain('September 28, 2026');
+      expect(context).toMatch(/interview/i);
+      expect(context).toMatch(/personal research and demo project/i);
+      expect(context).toContain('Frank McGuire');
+    });
+
+    it('should explain why DocuWare is the research domain', () => {
+      const why = section('about-why-docuware');
+      expect(why).toMatch(/document processing/i);
+      expect(why).toMatch(/workflow automation/i);
+      expect(why).toContain('AI Hub');
+    });
+
+    it('should explain DocuWare API research intent', () => {
+      const api = section('about-api-research');
+      expect(api).toContain('DocuWare Platform REST API');
+      expect(api).toContain('Workflow Analytics API');
+      expect(api).toMatch(/publicly documented/i);
+      expect(api).toMatch(/credentials never reside in the browser/i);
+    });
+
+    it('should show an independence notice covering endorsement, private access, and confidentiality', () => {
+      const notice = section('independence-notice');
+      expect(notice).toContain('not affiliated with, reviewed by, or endorsed by DocuWare');
+      expect(notice).toContain('does not use private DocuWare systems');
+      expect(notice).toMatch(/confidential interview information/);
+    });
   });
 
-  it('should explain project intent', () => {
-    const content = fixture.nativeElement.textContent;
-    expect(content).toContain('Continuous Alignment Verification');
-    expect(content).toContain('CAV');
+  describe('required project content', () => {
+    it('should describe the dashboard and both streams', () => {
+      const dashboard = section('about-dashboard');
+      expect(dashboard).toContain('Document stream');
+      expect(dashboard).toContain('Workflow stream');
+      expect(dashboard).toContain('STEP-01 foundation');
+    });
+
+    it('should explain CAV Level 1 with canonical terminology', () => {
+      const cav = section('about-cav');
+      expect(cav).toContain('Continuous Alignment Verification');
+      expect(cav).toContain('Level 1');
+      expect(cav).toContain('Observed-State');
+      for (const term of ['Observed Truth', 'Identity Slice', 'Observed Baseline', 'Divergence', 'Evidence']) {
+        expect(cav).toContain(term);
+      }
+    });
+
+    it('should explain the architecture and repository/adapter boundary', () => {
+      const arch = section('about-architecture');
+      expect(arch).toContain('feature-sliced');
+      expect(arch).toContain('repository/adapter boundary');
+      expect(section('architecture-flow')).toMatch(/repository interface.*replay adapter.*BFF\/API/s);
+      expect(arch).toMatch(/without rewriting the dashboard/);
+    });
+
+    it('should describe MOD-W and the current-version assessment', () => {
+      const modW = section('about-mod-w');
+      expect(modW).toContain('Moderated AI Development Workflow');
+      expect(modW).toMatch(/assessment of the current MOD-W version/);
+    });
   });
 
-  it('should describe dashboard overview', () => {
-    const content = fixture.nativeElement.textContent;
-    expect(content).toContain('Document Stream');
-    expect(content).toContain('Workflow Stream');
+  describe('scope boundaries', () => {
+    it('should phrase every boundary statement as a negation', () => {
+      const statements = boundaryElements().flatMap(b =>
+        b.tagName === 'UL' ? Array.from(b.querySelectorAll('li')) : [b]
+      );
+      expect(statements.length).toBeGreaterThan(0);
+      for (const s of statements) {
+        expect(text(s)).toMatch(/\b(not|no|never)\b/i);
+      }
+    });
+
+    it('should state the required non-goals', () => {
+      const boundaries = boundaryElements().map(text).join(' ');
+      expect(boundaries).toMatch(/endorsed by DocuWare/);
+      expect(boundaries).toMatch(/private DocuWare/);
+      expect(boundaries).toMatch(/confidential interview/);
+      expect(boundaries).toMatch(/Not production software/);
+      expect(boundaries).toMatch(/product defect or gap/);
+      expect(boundaries).toMatch(/does not implement CAV Levels 2–6/);
+      expect(boundaries).toMatch(/does not implement Attribution/);
+      expect(boundaries).toMatch(/not a formal certification/);
+    });
   });
 
-  it('should explain architecture with repository/adapter boundary', () => {
-    const content = fixture.nativeElement.textContent;
-    expect(content).toContain('repository');
-    expect(content).toContain('adapter');
-    expect(content).toContain('Angular');
-  });
+  describe('prohibited overclaims in claim copy', () => {
+    for (const [name, pattern] of Object.entries(OVERCLAIM_PATTERNS)) {
+      it(`should not contain ${name} claims`, () => {
+        expect(claimText()).not.toMatch(pattern);
+      });
+    }
 
-  it('should mention MOD-W workflow', () => {
-    const content = fixture.nativeElement.textContent;
-    expect(content).toContain('MOD-W');
-    expect(content).toContain('Moderated AI Development Workflow');
-  });
-
-  it('should explain CAV Level 1 scope', () => {
-    const content = fixture.nativeElement.textContent;
-    expect(content).toContain('Level 1');
-    expect(content).toContain('Observed-State Divergence');
-  });
-
-  it('should state this is not a production implementation', () => {
-    const content = fixture.nativeElement.textContent;
-    expect(content).toMatch(/reference implementation|research|scoped/i);
-  });
-
-  it('should not mention target organization in visible copy', () => {
-    const content = fixture.nativeElement.textContent;
-    expect(content).not.toMatch(
-      /\b(AcmeCorp|Global\s*Supplies|TechParts|Purchase-to-Pay|DocuWare|Interview)\b/i
-    );
-  });
-
-  it('should not mention company-specific product names in visible copy', () => {
-    const content = fixture.nativeElement.textContent;
-    expect(content).not.toMatch(
-      /\b(DocuWare|Platform REST API|Workflow Analytics|Enterprise|SAP|Workiva)\b/i
-    );
-  });
-
-  it('should use canonical CAV terminology', () => {
-    const content = fixture.nativeElement.textContent;
-    expect(content).toContain('Observed Truth');
-    expect(content).toContain('Observed Baseline');
-    expect(content).toContain('Divergence');
-    expect(content).toContain('Evidence');
-    expect(content).toContain('Identity Slice');
-  });
-
-  it('should not claim Levels 2-6 or Attribution', () => {
-    const content = fixture.nativeElement.textContent;
-    expect(content).not.toContain('Level 2');
-    expect(content).not.toContain('Level 3');
-    expect(content).not.toContain('Attribution');
-    expect(content).not.toContain('root-cause');
+    it('should still contain the claim copy being checked', () => {
+      expect(claimText()).toContain('DocuWare');
+      expect(claimText().length).toBeGreaterThan(content.length / 2);
+    });
   });
 });
