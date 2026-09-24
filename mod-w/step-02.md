@@ -40,8 +40,8 @@ No new user-facing visual component is required in STEP-02. DS-004 through DS-01
 ## Moderator Approval
 
 **Register:** `mod-w/validation/moderator-register.md`  
-**Step approval entry needed:** STEP-02 approval before Development Team briefing.  
-**Status:** Pending Moderator approval.
+**Step approval entry:** A-017 - STEP-02 Step Approval Before Development Team Briefing  
+**Status:** Approved for Development Team briefing and implementation planning only.
 
 Development Team may not write code until the Moderator approves this Step for briefing and then approves the Development Team implementation plan in the Moderator Register.
 
@@ -111,6 +111,16 @@ Development Team may not write code until the Moderator approves this Step for b
   - `https://knowledgecenter.docuware.com/docs/default-web-service-docuware-platform-api`
   - `https://knowledgecenter.docuware.com/docs/workflow-analytics-api`
 
+### Source Conflict Resolution
+
+The public DocuWare documentation cited above is the controlling source for fixture shape. If advisory summaries or prototype notes conflict with the public documentation, follow the public documentation and record any approximated replay fields in fixture metadata.
+
+Known conflict disposition:
+
+- Public Platform REST API documentation represents index fields with a single `Item` value plus `FieldName` and `ItemElementName`; do not model that source shape as `Item: [{ Value }]` unless a cited public source supports it.
+- Public Workflow Analytics API documentation describes eight projection types under `/DocuWare/Workflow/Analytics/v1/{workflowId}/{ProjectionType}`. Do not invent a `WorkflowRuns` endpoint.
+- `WorkflowRuntimes` has a public example payload. Task projection fixture fields may be approximated from projection descriptions when no public example payload is available, but fixture metadata must mark those fields as approximated from public projection descriptions.
+
 ---
 
 ## Expected File Changes
@@ -130,22 +140,20 @@ Do not modify About copy or About tests for PO-1 as part of STEP-02.
 
 ## Reference Implementation
 
-**Location:** `mod-w/design/project/Dashboard.dc.html`, `mod-w/design/project/WorkflowDashboard.dc.html`, `mod-w/design/project/DocumentStreamSummary.dc.html`, `mod-w/design/project/WorkflowStreamSummary.dc.html`
+**Location:** No repo-local prototype reference implementation is available for STEP-02 data modeling. Use `mod-w/design/design-spec.md` DS-009 and DS-010 plus the cited public DocuWare documentation as scenario evidence.
 
 **Disposition:**
 
 - [ ] Adopt as-is
-- [x] Adopt with modifications
+- [ ] Adopt with modifications
 - [ ] Reject
-- [ ] None
+- [x] None - no Reference Implementation exists for this Step
 
-### Required Changes
+### Required Direction
 
-- Treat prototype mock data as scenario evidence only, not production structure.
 - Implement typed Angular/TypeScript domain and data-source boundaries rather than hardcoded component data.
 - Preserve the two-stream intent and summary-metric needs from DS-009 and DS-010.
-- Do not copy prototype inline scripts, inline styles, or ad hoc data shapes.
-- Do not implement prototype-visible Divergence cards, details, baselines, Evidence traces, or charts in this Step.
+- Do not implement Divergence cards, details, baselines, Evidence traces, or charts in this Step.
 - Keep all data synthetic and shaped from public documentation rather than real or private system exports.
 
 ### Prototype Assumption Disposition
@@ -197,6 +205,7 @@ Not applicable. Claude Code is assigned; Claude Design is not implementing this 
 | Date | Change | Reason |
 | --- | --- | --- |
 | 2026-09-24 | Initial STEP-02 authored | Begin post-STEP-01 domain/data foundation while carrying QA-006 guardrail coverage forward. |
+| 2026-09-24 | Updated approval status, Reference Implementation disposition, and source conflict handling | A-017 approved STEP-02 for briefing/planning; Development Team flagged missing prototype files and advisory-summary conflicts with public DocuWare docs. |
 
 ---
 
