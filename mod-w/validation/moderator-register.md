@@ -684,4 +684,74 @@ STEP-02 is limited to canonical CAV Level 1 domain types, source-agnostic reposi
 
 ---
 
+### A-018 - STEP-02 Development Team Implementation Plan Approval
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** Implementation-plan approval before Development Team writes code  
+**Step:** `mod-w/step-02.md`  
+**Next authorized action:** Development Team implements STEP-02 per the approved plan, runs the build gate, then hands off for Tech Lead review.
+
+#### Approved Plan
+
+Development Team STEP-02 plan (2026-09-24), with the Tech Lead dispositions below:
+
+- Canonical CAV Level 1 domain types in `src/app/domain/` (`StreamKind`, `IdentitySlice`, `SourceReference`, document/workflow `Observation`, `ObservedTruth` with a pure grouping helper).
+- Source-agnostic `StreamObservationRepository` interface and provider in `src/app/data/`.
+- Synthetic DocuWare-shaped `ReplayFixture` data and DTO mappers, shaped from the public Platform REST API and Workflow Analytics API documentation.
+- `ReplayStreamObservationRepository` local replay adapter with no HTTP, credentials, or live calls.
+- `DashboardFacade` and one neutral replay source line on the dashboard.
+- QA-006 dashboard guardrail expansion and focused unit tests.
+
+#### Tech Lead Dispositions Adopted
+
+| Item | Disposition |
+| --- | --- |
+| Dimension | Leave formal Dimension / `DivergenceDimension` out of STEP-02. |
+| Fixture behavior | Include one neutral change in behavior per stream, in one Identity Slice each, not labeled as Divergence or expected output. |
+| Dashboard (Option B) | Approved. Neutral replay source line with source facts only: replay source, observation count, Identity Slice count, date range, UTC. KPI cards stay "—", filters stay disabled, and list/detail placeholders stay intact. No Observed Baselines, Divergences, Evidence traces, rankings, severity, status, or "affected" language. Avoid "detected", "flagged", "changed", "issue", "anomaly", "alert", "violation", "bad", "defect", and "gap". Use "synthetic" and "replay" plainly. Browser code makes no live DocuWare calls, and credentials never live in browser code. |
+| QA-006 expansion | Approved as planned. `src/testing/claim-guardrail-patterns.ts` holds constants only and is imported by tests only. The dashboard visible-copy guardrail scans rendered dashboard text only. Fixture tests cover fixture safety and reserved/finding terminology, not ordinary source-domain values such as `state: "Failed"`. The shell route target and About boundary-scan limitation stay out of STEP-02. |
+| Naming | `responseTimeMs` approved, with a fixture metadata or test note mapping it to `TaskReactionTimes`. `StreamSourceInfo` approved as a data-layer name. Existing "Identity Slice" copy is unchanged. No artifact updates needed before implementation. |
+
+#### Conditions
+
+- Verification uses Node.js v26.0.0: `npm run lint`, `npm run build`, `npm test -- --watch=false`.
+- No About copy or About test changes (PO-1 excluded).
+- The status text in `step-02.md` and `roadmap.md` still says "pending approval". Correcting it is a Moderator or Tech Lead action, not Development Team scope.
+
+---
+
+### A-019 - Sass Command Line Tool Dependency
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Gate:** Tooling dependency update outside STEP-02 implementation review  
+**Next authorized action:** Tech Lead and Development Team leave `package.json` and `package-lock.json` from commit `839f9e0` out of the STEP-02 implementation review scope.
+
+#### Approved Artifacts
+
+- `package.json`
+- `package-lock.json`
+
+#### Approval Summary
+
+The Moderator approves adding the Sass command line tool as a project dev dependency. This update provides the local `sass` CLI through npm scripts or `npx sass` without relying on a global machine install.
+
+This is a tooling chore only. It is not part of STEP-02 implementation scope and must be reviewed separately from the STEP-02 code changes.
+
+#### Evidence
+
+- `npx sass --version` returned `1.105.0 compiled with dart2js 3.13.4`.
+- Dependency commit: `839f9e0` (`chore: add sass cli dependency`).
+
+#### Conditions
+
+- Tech Lead review for STEP-02 excludes `package.json` and `package-lock.json` changes from commit `839f9e0`.
+- Development Team should not include the Sass dependency commit in the STEP-02 implementation diff summary.
+
+---
+
 MOD-W v5.0.1
