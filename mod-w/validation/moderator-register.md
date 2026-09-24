@@ -350,4 +350,61 @@ The README was replaced with project-specific content covering IDP-Align's DocuW
 
 ---
 
+### A-009 - `.claude/settings.json` Separate Approval
+
+**Status:** Approved  
+**Date:** 2026-09-24  
+**Moderator:** Frank McGuire  
+**Gate:** Disposition of QA finding QA-001  
+**Next authorized action:** None required. STEP-01 final gate may cite this entry for QA-001.
+
+#### Approved Artifacts
+
+- `.claude/settings.json` as committed in `d6f77ac`
+
+#### Approval Summary
+
+The Moderator approves `.claude/settings.json` separately from STEP-01. It is committed on `master` in `d6f77ac`, whose commit message ("docs: clarify CAV surfacing boundary for QA") does not describe the change.
+
+#### Conditions
+
+- `.claude/settings.json` remains outside STEP-01 scope and outside STEP-01 acceptance.
+- This approval does not change STEP-01 acceptance checks or scope.
+
+---
+
+### A-010 - STEP-01 QA Finding Dispositions And Rework Routing
+
+**Status:** Approved  
+**Date:** 2026-09-24  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead (rework definition), Development Team (rework implementation)  
+**Gate:** QA finding dispositions before Moderator final gate  
+**Step:** `mod-w/step-01.md`  
+**Next authorized action:** Tech Lead records the required rework below in `review.md` and hands it to the Development Team. The Development Team proposes a rework plan and waits for Moderator approval before writing code.
+
+#### QA Finding Dispositions
+
+| Finding | Disposition | Owner |
+| --- | --- | --- |
+| QA-001 | Approved separately; see A-009. | Closed |
+| QA-002 | Option (b) chosen after the explanation in `qa.md`. Rework required: extend the About surfacing-boundary sentence to read "…it does not decide what the behavior should have been, or whether it violates business intent." and update the About test to assert the phrase. | Development Team |
+| QA-003 | Rework required: remove the stray space in "repository ." on the About page. | Development Team |
+| QA-004 | Rework required: browser tab title `IDP-Align` and an original project favicon. DocuWare or other third-party branding must not be used. | Development Team |
+| QA-005 | Rework required: nav `aria-current` and `aria-label`, a single `h1` per route, and a focusable tab panel. | Development Team |
+| QA-006 | Not actioned. | Open (low) |
+| QA-007, QA-008 | Informational; deferred to later Steps. | Tech Lead (future Step planning) |
+
+#### Process Record
+
+The Moderator first instructed QA to implement QA-003, QA-004, and QA-005 directly. QA did so, which conflicted with the QA role constraint in `mod-w/prompts/qa.md` ("Do not modify implementation files") and skipped MOD-W Phase 3d → 3a. On the same day, before any commit, the Moderator directed that the QA changes be reverted and the findings routed through the Tech Lead to the Development Team. The implementation files are back at the Tech Lead-accepted state (`36b52aa`): build passes and 52/52 tests pass under Node v26.0.0. The reverted QA changes are not a reference implementation for the rework.
+
+#### Conditions
+
+- Rework stays within STEP-01 scope and does not change product copy beyond QA-002 and QA-003.
+- After the rework, the Tech Lead re-reviews (Phase 3a) and a fresh QA session re-checks (Phase 3b). The re-check must not be done by the QA session that briefly implemented these fixes.
+- Product Owner sign-off (Phase 3c) and the Moderator final gate follow.
+
+---
+
 MOD-W v5.0.1
