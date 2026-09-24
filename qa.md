@@ -4,8 +4,106 @@
 **Step:** STEP-01 - Dashboard Foundation, Stream Shell, And About View  
 **QA date:** 2026-09-24  
 **QA role:** Claude Code, acting as QA (not Development Team, not Tech Lead)  
-**Repository state reviewed:** `master` at `36b52aa`, clean working tree  
-**Verdict:** **Pass with Conditions.** The condition is the rework cycle for QA-002 to QA-005; see [Moderator Dispositions And Follow-Up](#moderator-dispositions-and-follow-up) and [Recommendation](#recommendation).
+**Repository state reviewed:** original QA at `master` `36b52aa`; re-check (Phase 3b) at `master` `b23b719`, clean working tree  
+**Verdict (re-check):** **Pass.** QA-002 to QA-005 are resolved. See [Re-Check - QA-002 To QA-005 Rework](#re-check---qa-002-to-qa-005-rework).  
+**Original verdict (`36b52aa`):** Pass with Conditions (rework cycle for QA-002 to QA-005).
+
+---
+
+## Re-Check - QA-002 To QA-005 Rework
+
+**Re-check date:** 2026-09-24  
+**QA session:** A fresh Claude Code QA session. It did not implement or revert any STEP-01 fixes, as A-010 and A-011 require.  
+**Delta checked:** `bb07b6f..b15688d` (Development Team commits `9fe46fd`, `2cfbddd`, `b15688d`)  
+**Tech Lead input:** `review.md` "Re-Review Result", verdict "Pass for fresh QA re-check"
+
+### Gate check
+
+| Gate | Evidence | Result |
+| --- | --- | --- |
+| QA dispositions and rework routing | A-010 | Present |
+| Development Team rework-plan approval | A-011 (approval given before code; recorded after implementation, as the entry states) | Present |
+| Tech Lead re-review (Phase 3a) | `review.md` Re-Review Result: Pass, committed in `b23b719` | Present in `review.md` |
+| Tech Lead re-review acceptance in the register | No entry after A-011 at re-check time | **Missing at re-check (QA-009); recorded afterward as A-012** |
+
+The Moderator directed this re-check in session, so QA went ahead.
+
+### Delta integrity
+
+- Implementation files changed only in the three Development Team commits. `36b52aa..bb07b6f` and `b15688d..b23b719` touch only `qa.md`, `review.md`, and the register.
+- Product copy changes are limited to QA-002 (boundary clause) and QA-003 (sentence moved, and stray space removed). The dashboard heading changed element from `h2` to `h1`, but its text is unchanged.
+- Separate `.ts`, `.html`, and `.scss` component files are preserved.
+- `.claude/settings.json` is untouched by the delta and stays outside STEP-01 (A-009).
+
+### Automated results (Node v26.0.0 via fnm)
+
+| Command | Result |
+| --- | --- |
+| `npm run build` | **Passed.** Initial bundle 231.86 kB raw / 64.99 kB transfer; `about-component` 10.41 kB, `dashboard-component` 8.90 kB. No warnings. |
+| `npm test -- --watch=false` | **Passed.** Test Files 4 passed (4); Tests 62 passed (62). Vitest v4.1.11. Matches A-011 and `review.md`. |
+
+### Manual browser evidence
+
+Method: `ng serve` on port 4300 under Node v26.0.0, driven by headless Chromium through Playwright scripts. The scripts and screenshots stay in the QA session scratchpad and are not committed. The browser console showed no errors or warnings.
+
+| Finding | Check | Result |
+| --- | --- | --- |
+| QA-002 | Rendered `[data-testid="surfacing-boundary"]` (has `data-boundary`) reads: "Divergence is evidence of change, not a judgment of failure, defect, or non-conformance. IDP-Align detects sustained Divergence and surfaces Evidence for interpretation; it does not decide what the behavior should have been, or whether it violates business intent." The test at `about.component.spec.ts` asserts the full clause. | **Resolved** |
+| QA-003 | The CAV reference is the first paragraph of "CAV Level 1 Scope" and comes before the Level 1 model list. Rendered text: "Canonical CAV terminology comes from the Continuous Alignment Verification repository." The stray space is gone (screenshot checked). There is exactly one CAV link on the page, and it is no longer in the DocuWare API section, whose lead-in is now followed directly by its list. `href`, `target="_blank"`, and `rel="noopener noreferrer"` are unchanged. Clicking it opens the canonical URL in a new tab with `window.opener === null`, and the About page stays at `/about`. | **Resolved** |
+| QA-004 | The document title is `IDP-Align`. The only icon link is `favicon.svg` (`image/svg+xml`), served with HTTP 200. `favicon.ico` is removed from `public/` and returns 404, and nothing references it. The SVG is an original abstract mark (a blue baseline line and an orange line stepping away from it) on a dark rounded square. It has no text, wordmark, or third-party or DocuWare branding (rendered and inspected). | **Resolved** |
+| QA-005 | `<nav aria-label="Primary">`. On `/dashboard`, only Dashboard has `aria-current="page"`; on `/about`, only About has it. The attribute follows click navigation. Each route renders exactly one `h1` ("IDP-Align Dashboard" / "About IDP-Align"). The shell title is now a non-heading `span`. Heading order: Dashboard h1 → h2; About h1 → 8 × h2. Tab from the active stream tab lands on the tab panel (`tabindex="0"`, correct `id` and `aria-labelledby` for both streams), and Shift+Tab returns to the active tab. Panel focus shows a 2px solid `rgb(59, 130, 246)` outline with 4px offset. Nav link focus shows a 2px solid `rgb(59, 130, 246)` outline with 2px offset. Both match design-spec §2 (screenshots checked). | **Resolved** |
+
+### Regression spot-checks
+
+| Check | Result |
+| --- | --- |
+| `/` redirects to `/dashboard`; an unknown route redirects to `/dashboard` | Pass |
+| No starter content in the rendered body | Pass |
+| Stream tabs: click, ArrowRight, and Home switch the selection, the panel `id`, and the heading | Pass. One harness note: a DOM read taken in the same tick as the click sometimes showed the previous state. That is expected, because change detection renders on the next frame. After an 800 ms wait, 10 of 10 runs showed the correct state, and the click handler fired every time. This is not an app defect. |
+| No horizontal overflow at 1440, 1024, 768, 375, 320 px on either route; one `h1` at every width | Pass |
+| Visible-copy guardrail scan (same term set as the original QA) | The Dashboard (both streams) and the shell have no hits. The About page has 5 hits, and every one sits inside a negated boundary statement (not affiliated or endorsed; no defect or gap claim; Levels 2-6 and Attribution not implemented; not a judgment of failure, defect, or non-conformance, and no decision on business intent; not a certification or benchmark). |
+
+### Acceptance checks affected by the rework
+
+| Acceptance check | Original | Re-check |
+| --- | --- | --- |
+| Generated Angular starter content is gone from the rendered app | Pass (title leftover, QA-004) | **Pass.** The title and favicon are now project-specific. |
+| About explains Divergence as evidence of change, not a judgment of failure, defect, non-conformance, or business-intent violation | Pass with note (QA-002) | **Pass.** All four items are now stated. |
+| Document and Workflow tabs are visible, accessible, and signal-driven | Pass | **Pass.** The panel is now focusable and has a visible 2px focus indicator. |
+| Unit tests cover shell, stream switching, About route, DocuWare context, and overclaim absence | Pass (QA-006 gaps) | **Pass.** 10 new tests cover QA-002 to QA-005. The QA-006 gaps remain, as A-010 disposed. |
+| `npm run build` / `npm test` pass | Pass (52/52) | **Pass (62/62)** |
+
+All other STEP-01 acceptance checks are unaffected by the delta and keep their original Pass results below.
+
+### New finding
+
+#### QA-009 - Low (process / traceability): the register has no Tech Lead re-review acceptance entry before this re-check
+
+- **Evidence:** The register's Required Gate Types table requires a "Tech Lead review acceptance" gate before QA starts. After A-011 (whose next authorized action is "Tech Lead re-review … (Phase 3a)"), there is no register entry recording that the Moderator accepted the Tech Lead re-review. The re-review itself is in `review.md` (commit `b23b719`, "Pass for fresh QA re-check").
+- **Impact:** None on the implementation. The gate sequence is only incompletely recorded. Under the register's Usage rule, the Moderator should record the Tech Lead re-review acceptance, noting that QA started on in-session Moderator direction, before the final gate.
+- **Requested Moderator action:** Add a register entry for the Tech Lead re-review acceptance, citing `review.md` and commit `b23b719`.
+- **Status:** Resolved. The Moderator approved the recommendation, and the acceptance is recorded as A-012. QA acceptance of this re-check is recorded as A-013.
+
+### Re-check conclusion
+
+QA-002, QA-003, QA-004, and QA-005 are resolved. The rework introduces no regressions and stays within STEP-01 and within the A-010 and A-011 conditions. No blocking, major, or minor findings are open.
+
+Dispositions of the remaining items are recorded in A-013:
+
+- QA-006: accepted as known risk for STEP-01 and carried into STEP-02 test scope.
+- QA-007: the Tech Lead resolves the tablet breakpoint before STEP-04/05 authoring.
+- QA-008: deferred to STEP-08.
+- QA-009: resolved by A-012.
+
+**Next:** Product Owner sign-off (Phase 3c), then the Moderator final gate (4a).
+
+QA changed no implementation files. `qa.md` and the A-012 and A-013 register entries were recorded on the Moderator's in-session approval.
+
+---
+
+## Original QA Review (`36b52aa`)
+
+The sections below are the original QA record. They are kept unchanged for traceability, apart from the Recommendation status note.
 
 ---
 
@@ -306,6 +404,8 @@ The finding descriptions above (QA-003 to QA-005) say what the rework must achie
 ---
 
 ## Recommendation
+
+> **Status (2026-09-24 re-check):** Steps 1-4 below are complete. See [Re-Check - QA-002 To QA-005 Rework](#re-check---qa-002-to-qa-005-rework). Step 5 remains.
 
 **The Moderator final gate for STEP-01 should not proceed yet.** The steps below come first:
 

@@ -444,4 +444,77 @@ The approval was given in the Development Team session before code changes and i
 
 ---
 
+### A-012 - STEP-01 Tech Lead Re-Review Acceptance (Post-QA Rework)
+
+**Status:** Approved  
+**Date:** 2026-09-24  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Tech Lead review acceptance before QA (post-QA rework, Phase 3a)  
+**Step:** `mod-w/step-01.md`  
+**Next authorized action:** Fresh QA re-check of QA-002 to QA-005 (Phase 3b).
+
+#### Accepted Artifacts
+
+- `review.md` "Re-Review Result", verdict "Pass for fresh QA re-check", committed in `b23b719`
+- Development Team rework commits `9fe46fd`, `2cfbddd`, `b15688d` (delta `bb07b6f..b15688d`)
+
+#### Evidence
+
+- Tech Lead assessment: QA-002, QA-003, QA-004, and QA-005 pass review, with no remaining code, architecture, security, routing, terminology, maintainability, or scope findings.
+- `npm run build` passed and `npm test -- --watch=false` passed, 4 files and 62/62 tests, under Node.js v26.0.0.
+
+#### Process Record
+
+This entry closes QA finding QA-009. The fresh QA session started the re-check on the Moderator's in-session direction, before this acceptance was recorded. The Moderator accepted the re-review and QA-009's recommendation, and this entry is recorded after the QA re-check to keep the sequence traceable.
+
+#### Conditions
+
+- `.claude/settings.json` remains outside STEP-01 (A-009).
+
+---
+
+### A-013 - STEP-01 QA Acceptance (Post-Rework Re-Check)
+
+**Status:** Approved  
+**Date:** 2026-09-24  
+**Moderator:** Frank McGuire  
+**Role approved:** QA  
+**Gate:** QA acceptance before Moderator final gate (Phase 3b)  
+**Step:** `mod-w/step-01.md`  
+**Next authorized action:** Product Owner sign-off (Phase 3c), then the Moderator final gate (4a).
+
+#### Accepted Artifacts
+
+- `qa.md` section "Re-Check - QA-002 To QA-005 Rework", verdict Pass, reviewed at `b23b719`
+
+#### Acceptance Summary
+
+A fresh QA session, which did not implement or revert any STEP-01 fixes, re-checked the Development Team rework. QA-002, QA-003, QA-004, and QA-005 are resolved and there are no regressions. All STEP-01 acceptance checks pass. `npm run build` passed and `npm test -- --watch=false` passed with 62/62 tests under Node.js v26.0.0. The manual browser evidence is recorded in `qa.md`.
+
+#### Finding Dispositions
+
+| Finding | Disposition | Owner |
+| --- | --- | --- |
+| QA-002 to QA-005 | Resolved; verified in re-check. | Closed |
+| QA-006 | Accepted as known risk for STEP-01. The dashboard guardrail test pattern gap is carried into STEP-02 test scope. | Tech Lead (STEP-02 planning) |
+| QA-007 | Deferred. Tech Lead to resolve the STEP-01 tablet breakpoint contradiction (DS-001 "stacked below desktop" vs. Required Changes "single-column below tablet width") before STEP-04/05 authoring. | Tech Lead |
+| QA-008 | Deferred to STEP-08. | Tech Lead (future Step planning) |
+| QA-009 | Resolved by A-012. | Closed |
+
+#### Tech Lead Follow-Ups Outside STEP-01
+
+These items are outside STEP-01 scope. Each needs its own proposal and Moderator approval.
+
+- Pin the project Node.js version, for example with `.node-version`/`.nvmrc` set to 26.0.0 or a `package.json` `engines` field. The default v24.13.0 is below the Angular CLI minimum, and every role has had to switch Node versions manually.
+- Process: the role completing a phase requests the register entry before handoff. A-011 and A-012 were both recorded after the fact.
+
+#### Conditions
+
+- The STEP-01 final gate, tag, and `mod-w/roadmap.md` status advancement remain pending Product Owner sign-off and the Moderator final gate.
+- Tag the commit that contains this entry and the `qa.md` re-check record, not `b15688d`.
+- `.claude/settings.json` remains outside STEP-01 (A-009).
+
+---
+
 MOD-W v5.0.1
