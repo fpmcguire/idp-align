@@ -651,4 +651,37 @@ The Moderator approves STEP-01 as complete. The dashboard foundation, the Docume
 
 ---
 
+### A-017 - STEP-02 Step Approval Before Development Team Briefing
+
+**Status:** Approved  
+**Date:** 2026-09-24  
+**Moderator:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** Step approval before Development Team briefing  
+**Step:** `mod-w/step-02.md`  
+**Next authorized action:** Brief Development Team on `mod-w/step-02.md`; Development Team may read context and propose an implementation plan, but may not write code until the Moderator approves that plan and records the approval in this register.
+
+#### Approved Scope
+
+`STEP-02 - CAV Domain Model, Repositories, And Replay Fixtures`
+
+#### Approved Artifacts
+
+- `mod-w/step-02.md`
+- `mod-w/roadmap.md` STEP-02 status update
+
+#### Approval Summary
+
+The Moderator approves `mod-w/step-02.md` as the active STEP-02 definition and authorizes Development Team briefing/planning only.
+
+STEP-02 is limited to canonical CAV Level 1 domain types, source-agnostic repository interfaces, synthetic DocuWare-shaped replay fixtures, a local replay adapter, and the QA-006 dashboard guardrail test carry-over. It does not authorize Observed Baseline calculation, sustained Divergence detection, Evidence Trace implementation, completed CAV findings, live DocuWare integration, PO-1 About References work, or any CAV Level 3+ concepts.
+
+#### Conditions
+
+- Development Team must propose an implementation plan and wait for Moderator approval before writing code.
+- Verification for implementation must use Node.js v26.0.0 or another Angular CLI-compatible version.
+- Required verification after implementation includes `npm run lint`, `npm run build`, and `npm test -- --watch=false`.
+
+---
+
 MOD-W v5.0.1
