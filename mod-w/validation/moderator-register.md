@@ -947,4 +947,28 @@ QA-012 to QA-017 are dispositioned below so the remaining demo-facing and proces
 
 ---
 
+### A-025 - STEP-02 Development Team QA-012 Rework Plan Approval
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** Rework-plan approval before Development Team writes code  
+**Step:** `mod-w/step-02.md`  
+**Next authorized action:** Development Team implements the QA-012 copy-only rework, runs the build gate, then hands off for Tech Lead re-review.
+
+#### Approved Plan
+
+- Replace the KPI card note "Pending replay data" in `dashboard.component.html` with "Pending Divergence detection" (Moderator copy decision, 2026-09-25).
+- Update only the directly affected assertion in `dashboard.component.spec.ts`: expect the new copy, assert "Pending replay data" is absent, and keep the no-digits check.
+
+#### Conditions
+
+- KPI values remain "—". No calculations, Observed Baseline logic, sustained Divergence detection, filters, Evidence Trace behavior, live DocuWare calls, credentials, or new capability.
+- No About copy or About test changes (PO-1 excluded). QA-013 casing is not touched.
+- Verification uses Node.js v26.0.0: `npm run lint`, `npm run build`, `npm test -- --watch=false`.
+- After implementation, the Tech Lead re-reviews and a fresh QA session re-checks QA-012 before the STEP-02 final gate.
+
+---
+
 MOD-W v5.0.1
