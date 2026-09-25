@@ -795,4 +795,38 @@ The implementation does not add Observed Baseline calculation, sustained Diverge
 
 ---
 
+### A-021 - STEP-02 QA Finding Dispositions And Rework Routing
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead (rework definition and Step correction), Development Team (rework implementation)  
+**Gate:** QA finding dispositions before QA acceptance  
+**Step:** `mod-w/step-02.md`  
+**Next authorized action:** Tech Lead resolves the QA-010 source conflict in `mod-w/step-02.md`, records the required rework in `review.md`, and hands it to the Development Team. The Development Team proposes a rework plan and waits for Moderator approval before writing code.
+
+#### QA Result
+
+`qa.md` QA Review - STEP-02 at `ddcde42`: verdict **Fail**. AC8 is not met, and all other acceptance checks pass, some with notes. Lint, build, and tests (12 files, 154 tests) pass under Node.js v26.0.0.
+
+#### QA Finding Dispositions
+
+| Finding | Disposition | Owner |
+| --- | --- | --- |
+| QA-010 (Medium, AC8 Fail) | Rework required. The document fixture metadata claims a documented `FieldName` / `Item` / `ItemElementName` shape, but the cited Platform REST API page contains no `ItemElementName`, no `/Date(...)/` values, and no `DWSTOREDATETIME`, and its `DOCUMENT_DATE` sample is the ISO string `"2020-01-01"`. The Tech Lead corrects `step-02.md` Source Conflict Resolution (line 120), chooses the rework route (`qa.md` options a, b, or c), and records it in `review.md`. | Tech Lead, then Development Team |
+| QA-011 to QA-016 | Not dispositioned in this entry. They remain open for Moderator disposition. The Tech Lead may propose including QA-011, which is the same class of traceability issue as QA-010, but the proposal needs Moderator approval. | Open |
+
+#### Process Record
+
+QA drafted this entry on the Moderator's in-session instruction to route the failing finding to the Tech Lead. QA did not edit implementation files or Step artifacts.
+
+#### Conditions
+
+- The rework stays within STEP-02 scope. No About copy or About test changes (PO-1 is excluded).
+- The Development Team rework plan requires Moderator approval before code is written.
+- After the rework, the Tech Lead re-reviews and a fresh QA session re-checks AC8 against the cited public source.
+- QA acceptance and the STEP-02 final gate follow the re-check.
+
+---
+
 MOD-W v5.0.1
