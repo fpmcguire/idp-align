@@ -349,4 +349,132 @@ Per MOD-W, QA does not implement fixes. Proposed route:
 4. The Tech Lead re-reviews.
 5. A fresh QA session re-checks.
 
+---
+
+## Re-Check - QA-012 Rework
+
+**Re-check date:** 2026-09-25  
+**QA session:** A fresh Claude Code QA session. It did not plan, implement, or review the rework, and it edited only `qa.md`. It did not edit implementation files, `step-02.md`, `review.md`, or the register, and it did not commit.  
+**Repository state reviewed:** `master` `09adf09`, clean working tree.  
+**Delta checked:** `9ad49e1..09adf09`. The implementation change is Development Team commit `0fed7ba`. `2932e5d` is A-025, `02a80c3` is the Tech Lead re-review in `review.md`, and `09adf09` is A-026.  
+**Tech Lead input:** `review.md` "QA-012 Re-Review", verdict "Pass for fresh QA re-check" with no findings.  
+**Verdict:** **Pass.** QA-012 is resolved. No new findings.
+
+This record is appended at the end of the file, as A-026 directs. The file header verdict (line 9) and the earlier records are left unchanged.
+
+### Gate check
+
+| Gate | Evidence | Result |
+| --- | --- | --- |
+| QA-012 disposition and rework routing | A-024 (committed in `9ad49e1`) | Present |
+| Rework-plan approval before code | A-025 (`2932e5d`) | Present. `2932e5d` and `0fed7ba` share the commit time 08:11:51 +0200, the same pattern as QA-016. Commit order puts A-025 first. The timestamps alone cannot show that approval came before the code was written. |
+| Tech Lead re-review acceptance before QA re-check | A-026 (`09adf09`, 08:16:32), after `02a80c3` (08:13:45) | Present and committed |
+
+QA may proceed.
+
+### Delta integrity
+
+`git diff --stat 9ad49e1..HEAD` lists four files. Each commit touched only these files:
+
+| Commit | Role | Files |
+| --- | --- | --- |
+| `2932e5d` | Moderator | `mod-w/validation/moderator-register.md` (+24, A-025) |
+| `0fed7ba` | Development Team | `src/app/features/dashboard/dashboard.component.html` (1 line changed), `src/app/features/dashboard/dashboard.component.spec.ts` (+2 / −1) |
+| `02a80c3` | Tech Lead | `review.md` (+38 / −2: header lines and the new "QA-012 Re-Review" section) |
+| `09adf09` | Moderator | `mod-w/validation/moderator-register.md` (+36, A-026) |
+
+- `0fed7ba` changes only the text of the `.kpi-note` element (`dashboard.component.html` line 56) and the assertion block at `dashboard.component.spec.ts` lines 157–158. The approved plan is copy only, and the diff is copy only.
+- None of these paths changed in `9ad49e1..HEAD`: `src/app/features/about/`, `src/app/data/` (fixtures, mapper, repository), `src/app/domain/`, `src/testing/`, `app.ts`, `app.html`, `app.routes.ts`, the dashboard `.ts`, `.scss`, and facade. So there is no change to About files or About tests (PO-1), fixtures, calculations, Observed Baseline logic, sustained Divergence detection, filters, Evidence Trace, live DocuWare calls, or credentials.
+- QA-013 casing is untouched. The replay line "Identity Slices" (line 45) and the filter option "All identity slices" (line 65) are not in the diff.
+
+### Stale copy removal
+
+| Search | Result |
+| --- | --- |
+| `grep -rn "Pending replay data" src/` | 1 match: `dashboard.component.spec.ts` line 158, the new `not.toContain` guard. No match in any template, component, or other runtime source. |
+| Whole repo, excluding `node_modules`, `.git`, `.angular` | Also matches `qa.md`, `review.md`, the register (historical records), and `coverage/idp-align/app/features/dashboard/dashboard.component.html.html`. `coverage/` is generated, ignored by `.gitignore` line 36, and untracked, so it is not source. |
+| `grep -rni "pending"` in non-spec `src` `.html` / `.ts` | 1 match: `dashboard.component.html` line 56, `Pending Divergence detection` |
+
+### Copy accuracy of "Pending Divergence detection"
+
+| Surface (`dashboard.component.html`) | Copy | Agreement with the KPI note |
+| --- | --- | --- |
+| Header, line 6 | "Dashboard foundation: synthetic replay data is loaded, but no Divergences are shown yet." | Agrees. Replay data is loaded, and the Divergence-derived KPIs are pending. The QA-012 contradiction is gone. |
+| Replay source line, lines 44–46 | "… Observed Baselines and sustained Divergence detection are added in later Steps." | Agrees. It says detection is not yet present, and it sits directly above the KPI cards in the same panel. |
+| Empty state, lines 86–88 | "No Divergences to show yet … once sustained Divergence detection is added in a later Step." | Agrees |
+| KPI labels (`dashboard.component.ts` line 48) | "Total Divergences", "Ongoing", "Resolved", "Trend" | Each label depends on Divergence detection, so the note gives the correct dependency. |
+
+- The note says the KPI values wait on detection. It states no count, status, or result, and the values stay "—", so it does not claim that detection is complete.
+- "Divergence" matches the UI column in `mod-w/domain-language.md` line 21. The copy contains no avoid-term (alert, anomaly, violation, breach) and no reserved Level 3+ term. The copy also drops one user-facing use of "replay data", which the glossary marks "Not normally shown" (line 34).
+- The KPI note leaves out "sustained", which the replay line and empty state use. The glossary defines a Divergence as sustained, so the meaning does not change. QA records this as an observation, not a defect.
+
+### KPI placeholders and spec assertions
+
+- `dashboard.component.html` line 55 still renders `—` with `aria-hidden="true"`. No binding or computed value was added.
+- `dashboard.component.spec.ts` lines 151–160, "should not show computed-looking counts in either stream", loops over `document` and `workflow`. For each stream it asserts:
+  - `not.toMatch(/\d/)` on the KPI section text (line 156, kept);
+  - `toContain('Pending Divergence detection')` (line 157, new copy expected);
+  - `not.toContain('Pending replay data')` (line 158, stale-copy guard).
+- The digit check is also kept in "should keep the KPI placeholders and disabled filters alongside replay data" (line 206).
+- The QA-006 claim guardrails (lines 212–235) run every `CLAIM_GUARDRAIL_PATTERNS` entry against the full rendered text of both streams, so the new note is covered. They pass.
+
+### Automated results (Node.js v26.0.0 via fnm)
+
+The shell default is Node v24.13.0. QA ran each command with `fnm exec --using=v26.0.0 … npm.cmd`, and `fnm exec --using=v26.0.0 node --version` printed `v26.0.0`.
+
+| Command | Result |
+| --- | --- |
+| `npm run lint` | **Passed.** Exit 0. "All files pass linting." |
+| `npm run build` | **Passed.** Exit 0. Initial total 256.96 kB raw / 73.46 kB transfer (the previous re-check recorded 73.45 kB). `dashboard-component` 10.87 kB and `about-component` 10.41 kB are unchanged. No warnings. |
+| `npm test -- --watch=false` | **Passed.** Exit 0. Test Files 12 passed (12); Tests 158 passed (158). Vitest v4.1.11. The count is unchanged from the previous re-check because the rework adds an assertion, not a test. |
+
+These results match A-026 (12 files, 158 tests). QA did not hit the sandbox `spawn EPERM` issue that the Tech Lead reported. The working tree was still clean after the runs.
+
+### Acceptance checks affected by the rework
+
+| # | Check | Previous | Re-check | Notes |
+| --- | --- | --- | --- | --- |
+| AC3 | Canonical terms in user-visible labels | Pass with note | **Pass with note** | The new copy uses "Divergence" canonically. The QA-013 casing note is unchanged and carried per A-024. |
+| AC4 | No reserved Level 3+ terms | Pass | **Pass** | Guardrail specs pass on both streams. |
+| AC12 | Dashboard-visible data is neutral and implies no completed CAV logic | Pass | **Pass** | The KPIs stay "—" with no digits, and the note says detection is pending. |
+| AC13 | Dashboard guardrail tests | Pass | **Pass** | Unchanged patterns now cover the new copy. |
+| AC16 | STEP-01 dashboard and About behavior intact | Pass (QA-012 note) | **Pass** | The QA-012 note is resolved. About is unchanged, and only the approved KPI note text changed. |
+| AC17–AC19 | Lint / build / test under Node.js v26.0.0 | Pass | **Pass** | Re-run on `09adf09`; 12 files, 158 tests. |
+
+All other acceptance checks keep their earlier results, because the delta does not touch them.
+
+### Finding status
+
+| Finding | Status |
+| --- | --- |
+| QA-012 (Low) | **Resolved.** The stale note is gone from source, the new copy agrees with the header, the replay line, and the empty state, and a regression guard is in place. |
+| QA-013 to QA-016 | Unchanged. Dispositioned by A-024 and not touched by this rework. |
+
+### New findings
+
+None. The next free number is still QA-018.
+
+### Regressions or risks
+
+- No functional regressions. All 158 tests pass, and no rendering path other than the KPI note text changed.
+- Residual risk (low): read alone, for example in a cropped screenshot, "Pending" could suggest detection that is queued or running. On the page, the replay line directly above says detection is "added in later Steps", and the empty state says the same, so QA does not rate this as an overclaim. The Moderator chose this copy in A-025.
+- Process: the plan-approval and code commits share a timestamp (see Gate check). This is the same pattern as QA-016, which A-024 already accepted as a process note.
+
+### Manual checks required
+
+- **Visual check of the KPI card copy at desktop width (for example 1280 px).** The note is 28 characters, up from 19. The cards use `repeat(auto-fit, minmax(200px, 1fr))` (`dashboard.component.scss` lines 87–91), and `.kpi-note` (lines 112–116) does not set `nowrap`, so the text should wrap rather than overflow. QA did not check this in a browser.
+- **Visual check at the 768 px breakpoint.** Confirm that the note wraps cleanly and that card heights stay aligned in both streams. The tablet breakpoint is still subject to QA-007.
+- QA did not run the app in a browser in this session. The `ddcde42` browser evidence still applies to every region except the KPI note text.
+
+### Known limitations
+
+- QA checked the regression guard by reading the spec. It did not mutation-test the guard, because that would require editing implementation files.
+- QA did not repeat the public-source checks, because the delta does not touch fixtures.
+
+### Re-check conclusion
+
+The QA-012 rework does what A-025 approved and nothing more. It changes one line of KPI note copy and the directly affected assertion. The stale "Pending replay data" copy is gone from dashboard source and guarded against. The KPIs stay "—" with no digits in either stream. The new "Pending Divergence detection" copy agrees with the rest of the page and claims no completed detection. Lint, build, and tests pass under Node.js v26.0.0. QA does not accept its own review; the Moderator records QA acceptance.
+
+**Next:** The Moderator records QA acceptance of this re-check. The browser checks above are done or explicitly carried. Then the STEP-02 final gate follows.
+
 MOD-W v5.0.1
