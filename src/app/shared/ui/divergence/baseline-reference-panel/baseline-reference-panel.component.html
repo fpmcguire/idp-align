@@ -1,0 +1,35 @@
+<section class="baseline-panel" aria-labelledby="baseline-panel-heading" data-testid="baseline-panel">
+  <h4 id="baseline-panel-heading" class="panel-heading">Observed Baseline</h4>
+  <dl class="panel-fields">
+    <div class="panel-field">
+      <dt>Method</dt>
+      <dd data-testid="baseline-method">{{ view().method }}</dd>
+    </div>
+    <div class="panel-field">
+      <dt>Reference window</dt>
+      <dd data-testid="baseline-reference-window">{{ view().referenceWindow }}</dd>
+    </div>
+    <div class="panel-field">
+      <dt>Sample size</dt>
+      <dd data-testid="baseline-sample-size">{{ view().sampleSize }}</dd>
+    </div>
+    @for (field of view().numericFields; track field.label) {
+      <div class="panel-field" data-testid="baseline-numeric-field">
+        <dt>{{ field.label }}</dt>
+        <dd>{{ field.value }}</dd>
+      </div>
+    }
+    @if (view().distribution.length > 0) {
+      <div class="panel-field">
+        <dt>Reference distribution</dt>
+        <dd>
+          <ul class="distribution" data-testid="baseline-distribution">
+            @for (entry of view().distribution; track entry.value) {
+              <li>{{ entry.value }}: {{ entry.count }} ({{ entry.share }})</li>
+            }
+          </ul>
+        </dd>
+      </div>
+    }
+  </dl>
+</section>

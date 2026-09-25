@@ -3,7 +3,8 @@
     <h1>IDP-Align Dashboard</h1>
     <div class="stream-subtitle">CAV Level 1 — Observed-State Divergence</div>
     <p class="foundation-note" data-testid="foundation-note">
-      Dashboard foundation: synthetic replay data is loaded, but no Divergences are shown yet.
+      Sustained Divergence detection runs over synthetic replay data. Surfaced Divergences describe
+      observed behavior and do not assess business correctness.
     </p>
   </div>
 
@@ -31,7 +32,7 @@
   <div
     class="dashboard-content"
     role="tabpanel"
-    tabindex="0"
+    [attr.tabindex]="divergences()?.length ? null : 0"
     [id]="'stream-panel-' + activeConfig().kind"
     [attr.aria-labelledby]="'stream-tab-' + activeConfig().kind"
     data-testid="stream-panel"
@@ -42,18 +43,22 @@
       @if (replaySource(); as source) {
         <p class="stream-replay-source" data-testid="stream-replay-source">
           Replay source: {{ source.observationCount }} synthetic {{ source.streamKind }} observations
-          across {{ source.identitySliceCount }} Identity Slices, {{ source.range }} (UTC). Observed
-          Baselines and sustained Divergence detection are added in later Steps.
+          across {{ source.identitySliceCount }} Identity Slices, {{ source.range }} (UTC).
         </p>
       }
     </div>
 
     <div class="kpi-section" data-testid="kpi-section">
-      @for (label of kpiLabels; track label) {
-        <div class="kpi-card">
-          <div class="kpi-label">{{ label }}</div>
-          <div class="kpi-value" aria-hidden="true">—</div>
-          <div class="kpi-note">Pending Divergence detection</div>
+      @for (kpi of kpis(); track kpi.metric) {
+        <div class="kpi-card" [attr.data-testid]="'kpi-card-' + activeConfig().kind + '-' + kpi.metric">
+          <div class="kpi-label">{{ kpi.label }}</div>
+          <div
+            class="kpi-value"
+            data-testid="kpi-value"
+            [class.has-value]="kpi.value !== '—'"
+            [attr.aria-hidden]="kpi.value === '—' ? 'true' : null"
+          >{{ kpi.value }}</div>
+          <div class="kpi-note">{{ kpi.note }}</div>
         </div>
       }
     </div>
@@ -82,17 +87,45 @@
 
     <div class="list-detail-container">
       <section class="divergence-list" aria-label="Divergence list" data-testid="divergence-list">
-        <div class="empty-state" data-testid="empty-state">
-          <p class="empty-title">No Divergences to show yet</p>
-          <p class="placeholder-text">
-            Divergences appear here once sustained Divergence detection is added in a later Step.
-          </p>
-        </div>
+        @if (divergences(); as divergences) {
+          @if (divergences.length > 0) {
+            <ul class="divergence-cards">
+              @for (divergence of divergences; track divergence.id) {
+                <li>
+                  <app-divergence-card
+                    [divergence]="divergence"
+                    [selected]="divergence.id === selectedDivergence()?.id"
+                    [detailId]="detailId"
+                    (cardSelect)="selectDivergence($event)"
+                  />
+                </li>
+              }
+            </ul>
+            <p class="list-note" data-testid="list-note">
+              Each Divergence is compared with its own Observed Baseline for one Identity Slice and
+              dimension.
+            </p>
+          } @else {
+            <div class="empty-state" data-testid="empty-state">
+              <p class="empty-title">No sustained Divergences</p>
+              <p class="placeholder-text">
+                No sustained Divergences in the {{ activeConfig().label }} replay data.
+              </p>
+            </div>
+          }
+        } @else {
+          <div class="empty-state" data-testid="unavailable-state">
+            <p class="empty-title">Divergences unavailable</p>
+            <p class="placeholder-text">Divergence data is not available for this stream.</p>
+          </div>
+        }
       </section>
-      <section class="detail-pane" aria-label="Divergence detail" data-testid="detail-pane">
-        <p class="placeholder-text">
-          Divergence detail, including its Observed Baseline and Evidence trace, will appear here.
-        </p>
+      <section class="detail-pane" [id]="detailId" aria-label="Divergence detail" data-testid="detail-pane">
+        @if (selectedDivergence(); as divergence) {
+          <app-divergence-detail [divergence]="divergence" />
+        } @else {
+          <p class="placeholder-text" data-testid="detail-empty">No Divergence to show.</p>
+        }
       </section>
     </div>
   </div>

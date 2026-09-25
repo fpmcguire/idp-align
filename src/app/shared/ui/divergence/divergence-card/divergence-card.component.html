@@ -1,0 +1,38 @@
+<button
+  type="button"
+  class="divergence-card"
+  data-testid="divergence-card"
+  [attr.data-divergence-id]="divergence().id"
+  [attr.data-status]="divergence().status"
+  [attr.aria-current]="selected() ? 'true' : null"
+  [attr.aria-controls]="detailId()"
+  [class.selected]="selected()"
+  (click)="select()"
+>
+  <span class="card-header">
+    <span class="card-title">
+      <span class="card-identity-slice" data-testid="card-identity-slice">{{ view().identitySlice }}</span>
+      <span class="card-dimension" data-testid="card-dimension">{{ view().dimension }}</span>
+    </span>
+    <app-status-badge [status]="divergence().status" />
+  </span>
+
+  <span class="card-stats">
+    <span class="card-stat">
+      <span class="stat-label">Observed</span>
+      <span class="stat-value" data-testid="card-observed">{{ view().observed }}</span>
+    </span>
+    <span class="card-stat">
+      <span class="stat-label">Observed Baseline</span>
+      <span class="stat-value" data-testid="card-baseline">{{ view().baseline }}</span>
+    </span>
+    <span class="card-stat">
+      <span class="stat-label">Magnitude</span>
+      <span class="stat-value" data-testid="card-magnitude">{{ view().magnitude }}</span>
+    </span>
+  </span>
+
+  <span class="card-timeline" data-testid="card-timeline">
+    Onset {{ view().onset }} · Duration {{ view().duration }}
+  </span>
+</button>

@@ -1,0 +1,23 @@
+<article class="divergence-detail" data-testid="divergence-detail" [attr.data-divergence-id]="divergence().id">
+  <header class="detail-header">
+    <div class="detail-title">
+      <h3 class="detail-identity-slice" data-testid="detail-identity-slice">{{ view().identitySlice }}</h3>
+      <p class="detail-dimension" data-testid="detail-dimension">Dimension: {{ view().dimension }}</p>
+    </div>
+    <app-status-badge [status]="divergence().status" />
+  </header>
+
+  <p class="detail-status-note" data-testid="detail-status-note">{{ view().statusDescription }}</p>
+
+  <dl class="quick-stats" data-testid="detail-quick-stats">
+    @for (stat of view().quickStats; track stat.label) {
+      <div class="quick-stat">
+        <dt>{{ stat.label }}</dt>
+        <dd data-testid="detail-stat" [attr.data-stat]="stat.label">{{ stat.value }}</dd>
+      </div>
+    }
+  </dl>
+
+  <app-baseline-reference-panel [baseline]="divergence().baseline" />
+  <app-evidence-trace [evidence]="divergence().evidence" [dimension]="divergence().dimension" />
+</article>

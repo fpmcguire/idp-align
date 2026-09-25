@@ -1,0 +1,46 @@
+<section class="evidence-trace" aria-labelledby="evidence-trace-heading" data-testid="evidence-trace">
+  <h4 id="evidence-trace-heading" class="trace-heading">Evidence trace</h4>
+  <p class="trace-note" data-testid="evidence-trace-note">
+    {{ items().length }} supporting observations, oldest first.
+  </p>
+  <ol class="trace-items">
+    @for (item of items(); track item.observationId) {
+      <li class="trace-item" data-testid="evidence-item" [attr.data-observation-id]="item.observationId">
+        <div class="item-header">
+          <time class="item-time" [attr.datetime]="item.observedAt" data-testid="evidence-time">{{ item.time }}</time>
+          <span
+            class="baseline-indicator"
+            [class.outside]="!item.withinBaseline"
+            data-testid="evidence-baseline-indicator"
+          >{{ item.withinBaseline ? 'Within Observed Baseline' : 'Outside Observed Baseline' }}</span>
+        </div>
+        <dl class="item-fields">
+          <div class="item-field">
+            <dt>Compared value</dt>
+            <dd data-testid="evidence-value">{{ item.value }}</dd>
+          </div>
+          @if (item.distance !== null) {
+            <div class="item-field">
+              <dt>Difference from baseline mean</dt>
+              <dd data-testid="evidence-distance">{{ item.distance }}</dd>
+            </div>
+          }
+          @for (field of item.context; track field.label) {
+            <div class="item-field" data-testid="evidence-context-field">
+              <dt>{{ field.label }}</dt>
+              <dd>{{ field.value }}</dd>
+            </div>
+          }
+          <div class="item-field">
+            <dt>Source</dt>
+            <dd data-testid="evidence-source">
+              @for (source of item.sources; track source) {
+                <span class="source-ref">{{ source }}</span>
+              }
+            </dd>
+          </div>
+        </dl>
+      </li>
+    }
+  </ol>
+</section>

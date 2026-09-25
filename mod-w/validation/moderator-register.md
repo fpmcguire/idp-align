@@ -1358,4 +1358,81 @@ STEP-04 is approved for Development Team briefing and implementation planning on
 
 ---
 
+### A-035 - STEP-04 Development Team Implementation Plan Approval
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** Implementation-plan approval before Development Team writes code  
+**Step:** `mod-w/step-04.md`  
+**Next authorized action:** Development Team implements STEP-04 per the approved plan and the Tech Lead conditions below, runs the build gate under Node.js v26.0.0, then hands off for Tech Lead review.
+
+#### Approved Plan
+
+Development Team STEP-04 plan (2026-09-25), with the Tech Lead conditions below:
+
+- `DashboardFacade` reads Identity Slices and observations per stream through `StreamObservationRepository`, computes Divergences with the STEP-03 `detectStreamDivergences`, orders them by onset (stable, detector order on ties), and exposes Divergences by stream, per-stream KPI counts, and per-stream selection (default: first Divergence; none when the stream has none).
+- Presentational components under `src/app/shared/ui/divergence/`: Status Badge, Divergence Card, Divergence Detail, Baseline Reference Panel, Evidence Trace, plus a display-only formatting helper.
+- Dashboard renders real list, detail, and KPI content; truthful empty and unavailable states; placeholder "later Step" copy replaced; filters stay disabled; Trend stays a non-chart placeholder.
+- Tests for facade, components, stream switching, selection/detail, baseline panel, Evidence Trace, status wording, QA-014 non-causal presentation, and existing claim guardrails.
+
+#### Tech Lead Conditions Adopted
+
+| Item | Condition |
+| --- | --- |
+| Resolved KPI | Keep visible with count `0` in replay and the note "Finding lifecycle status". No remediation, correction, Convergence, success, or business-correctness implication. |
+| ESLint import rule | Not added in STEP-04. Fixture-import boundary enforced by implementation discipline, tests where practical, and Tech Lead review static checks. |
+| Component location | `src/app/shared/ui/divergence/`. Presentational only: typed inputs/outputs, no repository access, no detector calls, no fixture imports. |
+| Facade / data flow | `DashboardFacade -> repository -> STEP-03 domain detector`. Components must not compute baselines or Divergences inline or import `data/replay/**`. |
+| QA-014 | Workflow Divergences render as sibling findings with no grouping or cross-linking. Shared instance IDs only as Evidence context. No copy or structure implying cause, Attribution, relation, or dependency. |
+| QA-019 | `resolved` wording frames it as finding lifecycle status only. Wording that the resolving observation is not listed in Evidence is acceptable. No STEP-03 detector semantics changes. |
+| QA-018 | No rename/entity-matching claims. "Vendor representation" is acceptable. No "rename", "same vendor", or entity-matching copy. |
+| Tab panel focus | Adjustment approved if tests are updated and keyboard accessibility remains sound. |
+
+#### Conditions
+
+- Verification uses Node.js v26.0.0 via `fnm`: `fnm exec --using=v26.0.0 node --version`, then `npm.cmd run lint`, `npm.cmd run build`, and `npm.cmd test -- --watch=false` through `fnm exec --using=v26.0.0`.
+- No functional filtering/sorting, Chart.js, user actions, About copy or About test changes, fixture or detector changes, live calls, OAuth, credentials, backend/proxy, non-replay adapters, CAV Level 2+ claims, or reserved Level 3+ behavior.
+- Tech Lead review is required before QA acceptance.
+
+---
+
+### A-036 - STEP-04 Development Team Tablet Breakpoint Rework Plan Approval
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** Rework-plan approval before Development Team writes code  
+**Step:** `mod-w/step-04.md`  
+**Next authorized action:** Development Team rework is implemented and verified; STEP-04 is approved to hand back for Tech Lead re-review.
+
+#### Rework Source
+
+- `review.md` Tech Lead Review - STEP-04, verdict "Rework required before QA", Must Fix Now finding 1: the list/detail layout stacked only at `max-width: 1024px`, so 1025-1279px stayed two-column, conflicting with the `design-spec.md` tablet range (768-1279px, stacked).
+
+#### Approved Plan
+
+- In `src/app/features/dashboard/dashboard.component.scss`, change the list/detail breakpoint from `max-width: 1024px` to `max-width: 1279px`: stacked at 1279px and below, two-column from 1280px.
+- No other file, copy, component, fixture, domain logic, About, Chart.js, or test changes unless strictly necessary.
+- Mobile detail modal/push overlay is not added; mobile keeps the single stacked column.
+- No committed breakpoint test: unit tests run in jsdom without media-query evaluation, and adding an e2e suite is outside STEP-04. Browser evidence is provided instead.
+
+#### Conditions
+
+- Browser evidence at 1400, 1280, 1279, 1200, 768, and 390px showing the expected two-column or stacked layout.
+- Verification uses Node.js v26.0.0 via `fnm`: `node --version`, `npm.cmd run lint`, `npm.cmd run build`, `npm.cmd test -- --watch=false`.
+- Do not commit unless instructed.
+- Tech Lead re-review is required before QA acceptance.
+
+#### Evidence
+
+- Development Team reported the one-line breakpoint change only.
+- Playwright browser check: 1400 and 1280px two-column; 1279, 1200, 1032 (iPad Pro 13 portrait), 768, and 390px stacked with full-width detail; no horizontal overflow at any width.
+- Lint, build, and tests pass under Node.js v26.0.0: 26 test files, 337 tests.
+- Moderator approved the Development Team rework for Tech Lead re-review.
+
+---
+
 MOD-W v5.0.1
