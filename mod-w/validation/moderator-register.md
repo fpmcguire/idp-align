@@ -1267,4 +1267,57 @@ QA-014 is closed for STEP-03: the Approval step and Workflow runtime Divergences
 
 ---
 
+### A-033 - STEP-03 Moderator Final Gate
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Final Moderator gate  
+**Gate:** STEP-03 final acceptance  
+**Step:** `mod-w/step-03.md`  
+**Next authorized action:** Create the annotated tag `step-03` on the commit that contains this entry and the roadmap completion update, then proceed to STEP-04 planning when directed.
+
+#### Accepted Artifacts
+
+- STEP-03 implementation commit `164abb6`
+- QA acceptance commit `e828e5c`
+- Tech Lead review in `review.md`
+- QA review in `qa.md`
+- QA acceptance and finding dispositions A-032
+- Roadmap STEP-03 completion update in this final-gate commit
+
+#### Final Acceptance Summary
+
+STEP-03 is accepted as complete. It implements pure domain logic for CAV Level 1 Observed Baseline derivation, sustained Divergence detection, and Evidence-carrying Divergence records for the document and workflow streams.
+
+The accepted STEP-03 scope does not include dashboard rendering, dashboard facade consumption, Divergence cards, detail panels, Evidence Trace UI, Chart.js analysis, fixture changes, live DocuWare calls, credentials, CAV Level 2+ claims, Intent, Alignment Delta, Envelope, Breach, Drift Velocity, Convergence, or Attribution behavior.
+
+#### QA And Finding Dispositions
+
+| Finding | Final disposition |
+| --- | --- |
+| QA-014 | Closed for STEP-03. Approval step and Workflow runtime Divergences are emitted independently when each meets sustained criteria, with no link, suppression, derived marker, or causal Attribution claim. |
+| QA-018 | Accepted as known product/data-model limitation. Carry to later vendor identity/entity-matching planning if needed before adding a vendor-rename demo scenario or live adapter work. |
+| QA-019 | Accepted as MVP detection semantics for STEP-03. Carry into STEP-04 planning before rendering `resolved` Divergence status in user-facing UI. |
+| QA-020 | Accepted as approved A-030 consecutive-observation behavior. No action required. |
+| QA-021 | Accepted as optional cleanup if `observation.ts` is touched later. |
+| QA-022 | Accepted as process traceability note. No STEP-03 rework required. |
+
+#### Evidence
+
+- A-029 approved the STEP-03 definition.
+- A-030 approved the Development Team implementation plan.
+- A-031 accepted the Tech Lead review before QA.
+- A-032 accepted the QA review and dispositioned QA-018 through QA-022.
+- Lint, build, and tests passed under Node.js v26.0.0 in the accepted Tech Lead and QA evidence.
+- QA reported 20 test files and 268 tests passing.
+
+#### Notes
+
+- QA-018 and QA-019 are carry-forward planning notes, not STEP-03 blockers.
+- PO-1 About References remains outside STEP-03.
+- PO-4, QA-007, and QA-008 remain governed by their previously assigned later-Step timing unless separately rerouted by the Moderator.
+
+---
+
 MOD-W v5.0.1
