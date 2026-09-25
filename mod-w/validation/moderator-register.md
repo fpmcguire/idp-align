@@ -1517,4 +1517,60 @@ QA-014 remains satisfied in STEP-04: the Approval step and Workflow runtime Dive
 
 ---
 
+### A-039 - STEP-04 Moderator Final Gate
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Final Moderator gate  
+**Gate:** STEP-04 final acceptance  
+**Step:** `mod-w/step-04.md`  
+**Next authorized action:** Create the annotated tag `step-04` on the commit that contains this entry and the roadmap completion update, then proceed to STEP-05 planning when directed.
+
+#### Accepted Artifacts
+
+- STEP-04 implementation commit `933aece`
+- Tech Lead review acceptance commit `ac434f6`
+- QA acceptance commit `7ca798b`
+- Tech Lead review in `review.md`
+- QA review in `qa.md`
+- QA acceptance and finding dispositions A-038
+- Roadmap STEP-04 completion update in this final-gate commit
+
+#### Final Acceptance Summary
+
+STEP-04 is accepted as complete. It renders computed CAV Level 1 Divergences on the dashboard through the source-agnostic facade: Divergence cards with status badges, a detail panel, Observed Baseline reference context, a chronological Evidence Trace, stream KPI counts, and per-stream local selection state, with a stacked list/detail layout from 768px to 1279px and two columns from 1280px.
+
+The accepted STEP-04 scope does not include functional filters or sorting, Chart.js analysis, user action workflows, About copy changes, fixture changes, detector changes, live DocuWare calls, credentials, CAV Level 2+ claims, Intent, Alignment Delta, Envelope, Breach, Drift Velocity, Convergence, or Attribution behavior.
+
+#### QA And Finding Dispositions
+
+| Finding | Final disposition |
+| --- | --- |
+| QA-014 | Satisfied for STEP-04. Approval step and Workflow runtime Divergences render as independent sibling cards with no grouping, cross-linking, or causal Attribution copy. Shared replay values remain a later-planning risk for Attribution-adjacent copy. |
+| QA-018 | Satisfied for STEP-04. No rename or entity-matching claims in rendered copy. The underlying vendor identity limitation remains carried to later planning. |
+| QA-019 | Satisfied for STEP-04. `resolved` is presented only as finding lifecycle status. Sibling `resolved`/`ongoing` runs on the same Identity Slice and dimension remain a later-planning note. |
+| QA-023 | Resolved by A-037. |
+| QA-024 | Accepted as a known display limitation. Carry to a later UI polish step if duration display precision is revisited. |
+| QA-025 | Closed, no action. |
+
+#### Evidence
+
+- A-034 approved the STEP-04 definition.
+- A-035 approved the Development Team implementation plan with Tech Lead conditions.
+- A-036 approved the tablet breakpoint rework with browser evidence.
+- A-037 accepted the Tech Lead review before QA.
+- A-038 accepted the QA review and dispositioned QA-023 through QA-025.
+- Lint, build, and tests passed under Node.js v26.0.0 in the accepted Tech Lead and QA evidence.
+- QA reported 26 test files and 337 tests passing.
+
+#### Notes
+
+- QA-024 and the QA-014/QA-019 display risks are carry-forward planning notes, not STEP-04 blockers.
+- The pre-existing inactive stream tab `aria-controls` reference to an unrendered panel id is noted for STEP-05 keyboard/focus planning.
+- PO-1 About References remains outside STEP-04.
+- PO-4, QA-007, and QA-008 remain governed by their previously assigned later-Step timing unless separately rerouted by the Moderator.
+
+---
+
 MOD-W v5.0.1
