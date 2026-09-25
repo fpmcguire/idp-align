@@ -1435,4 +1435,47 @@ Development Team STEP-04 plan (2026-09-25), with the Tech Lead conditions below:
 
 ---
 
+### A-037 - STEP-04 Tech Lead Review Acceptance
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Tech Lead review acceptance before QA  
+**Step:** `mod-w/step-04.md`  
+**Next authorized action:** QA may review STEP-04 against `mod-w/step-04.md`, `review.md`, the approved A-035 implementation plan, the A-036 rework approval and browser evidence, and the passing verification evidence.
+
+#### Accepted Artifacts
+
+- `review.md` - Tech Lead Review - STEP-04, verdict "Pass for QA"
+- Current STEP-04 implementation package in commit `933aece`
+- `mod-w/step-04.md`
+- `mod-w/architecture.md`
+- `mod-w/domain-language.md`
+- `mod-w/language-matrix.md`
+- `mod-w/design/design-spec.md`
+
+#### Acceptance Summary
+
+The Moderator accepts the Tech Lead review for STEP-04. The initial Tech Lead review found one must-fix tablet breakpoint issue. A-036 approved the scoped rework, and the Tech Lead re-review confirms that the dashboard now stacks list/detail layout through the approved tablet range and returns to two columns at desktop width.
+
+The implementation remains within STEP-04 scope: dashboard list/detail rendering, status badges, baseline reference context, Evidence Trace display, stream KPI counts, source-agnostic facade consumption, and local selection state. It does not add functional filters/sorting, Chart.js analysis, user action workflows, About copy changes, fixture changes, detector changes, live DocuWare calls, credentials, CAV Level 2+ claims, Intent, Alignment Delta, Envelope, Breach, Drift Velocity, Convergence, or Attribution behavior.
+
+#### Evidence
+
+- `review.md` verdict: Pass for QA.
+- A-036 browser evidence: 1400px and 1280px two-column; 1279px, 1200px, 1032px, 768px, and 390px stacked with no horizontal overflow.
+- `fnm exec --using=v26.0.0 node --version` printed `v26.0.0`.
+- `fnm exec --using=v26.0.0 npm.cmd run lint` passed.
+- `fnm exec --using=v26.0.0 npm.cmd run build` passed after rerun outside the sandbox; the sandboxed run hit the known Angular/esbuild `spawn EPERM` limitation.
+- `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` passed after rerun outside the sandbox; 26 test files and 337 tests passed.
+
+#### Conditions
+
+- QA should verify replay dashboard rendering, independent Approval step and Workflow runtime Divergences, baseline and Evidence Trace copy, lifecycle-only `resolved` wording, and the 768-1279px stacked tablet layout.
+- QA should verify no About, Chart.js, fixture, live-call, credential, domain-detector, CAV Level 2+, Intent, Alignment Delta, Envelope, Breach, Drift Velocity, Convergence, or Attribution scope creep.
+- QA should use Node.js v26.0.0 via `fnm` for verification.
+
+---
+
 MOD-W v5.0.1
