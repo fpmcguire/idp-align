@@ -754,4 +754,45 @@ This is a tooling chore only. It is not part of STEP-02 implementation scope and
 
 ---
 
+### A-020 - STEP-02 Tech Lead Review Acceptance
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Tech Lead review acceptance before QA  
+**Step:** `mod-w/step-02.md`  
+**Next authorized action:** QA may review STEP-02 against `mod-w/step-02.md`, `review.md`, the approved A-018 implementation plan, and the passing verification evidence.
+
+#### Accepted Artifacts
+
+- `review.md` - Tech Lead Review - STEP-02, verdict "Pass for QA"
+- Current STEP-02 implementation package in the working tree, excluding Sass tooling commit `839f9e0` per A-019
+- `mod-w/step-02.md`
+- `mod-w/architecture.md`
+- `mod-w/domain-language.md`
+- `mod-w/language-matrix.md`
+
+#### Acceptance Summary
+
+The Moderator accepts the Tech Lead review for STEP-02. The review found no must-fix or could-fix-later findings and confirms that the implementation remains within STEP-02 scope: domain types, source-agnostic repository interface, synthetic replay fixtures, replay adapter, dashboard facade, neutral replay source line, and QA-006 guardrail expansion.
+
+The implementation does not add Observed Baseline calculation, sustained Divergence detection, Evidence Trace behavior, completed CAV findings, live DocuWare API calls, credentials, or CAV Level 3+ behavior.
+
+#### Evidence
+
+- `review.md` verdict: Pass for QA.
+- `npm run lint` passed under Node.js v26.0.0.
+- `npm run build` passed under Node.js v26.0.0.
+- `npm test -- --watch=false` passed under Node.js v26.0.0.
+- Test result: 12 test files passed, 154 tests passed.
+
+#### Conditions
+
+- QA must exclude `package.json` and `package-lock.json` from Sass commit `839f9e0` from STEP-02 acceptance per A-019.
+- QA should verify that STEP-02 dashboard copy does not imply completed Observed Baseline calculation, sustained Divergence detection, Evidence Trace behavior, or completed CAV findings.
+- QA should verify replay fixtures remain synthetic, public-doc-shaped, and free of credentials, private URLs, real customer data, and live-call configuration.
+
+---
+
 MOD-W v5.0.1

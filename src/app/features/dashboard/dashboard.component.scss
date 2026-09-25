@@ -73,10 +73,15 @@
   font-size: var(--font-size-heading);
 }
 
-.stream-source-note {
+.stream-source-note,
+.stream-replay-source {
   margin: 0;
   font-size: var(--font-size-caption);
   color: var(--color-text-secondary);
+}
+
+.stream-replay-source {
+  margin-top: var(--space-sm);
 }
 
 .kpi-section {

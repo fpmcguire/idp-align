@@ -3,7 +3,7 @@
     <h1>IDP-Align Dashboard</h1>
     <div class="stream-subtitle">CAV Level 1 — Observed-State Divergence</div>
     <p class="foundation-note" data-testid="foundation-note">
-      Dashboard foundation: no replay data is loaded yet, so no Divergences are shown.
+      Dashboard foundation: synthetic replay data is loaded, but no Divergences are shown yet.
     </p>
   </div>
 
@@ -39,6 +39,13 @@
     <div class="stream-context">
       <h2 class="stream-heading" data-testid="stream-heading">{{ activeConfig().label }}</h2>
       <p class="stream-source-note" data-testid="stream-source-note">{{ activeConfig().sourceNote }}</p>
+      @if (replaySource(); as source) {
+        <p class="stream-replay-source" data-testid="stream-replay-source">
+          Replay source: {{ source.observationCount }} synthetic {{ source.streamKind }} observations
+          across {{ source.identitySliceCount }} Identity Slices, {{ source.range }} (UTC). Observed
+          Baselines and sustained Divergence detection are added in later Steps.
+        </p>
+      }
     </div>
 
     <div class="kpi-section" data-testid="kpi-section">
@@ -70,7 +77,7 @@
           <option>All statuses</option>
         </select>
       </label>
-      <p class="filter-note">Filters become available once replay data is loaded.</p>
+      <p class="filter-note">Filters become available in a later Step.</p>
     </div>
 
     <div class="list-detail-container">
@@ -78,7 +85,7 @@
         <div class="empty-state" data-testid="empty-state">
           <p class="empty-title">No Divergences to show yet</p>
           <p class="placeholder-text">
-            Replay data, Observed Baselines, and sustained Divergence detection are added in later Steps.
+            Divergences appear here once sustained Divergence detection is added in a later Step.
           </p>
         </div>
       </section>

@@ -1,5 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { EMPTY, of, throwError } from 'rxjs';
+import {
+  CLAIM_GUARDRAIL_PATTERNS,
+  REPLAY_SOURCE_AVOID_WORDS,
+} from '../../../testing/claim-guardrail-patterns';
+import { provideStreamObservationRepository } from '../../data/provide-stream-observation-repository';
+import { StreamObservationRepository, StreamSourceInfo } from '../../data/stream-observation.repository';
+import { StreamKind } from '../../domain/stream';
 import { DashboardComponent } from './dashboard.component';
+
+const normalize = (text: string | null | undefined) => (text ?? '').replace(/\s+/g, ' ').trim();
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -12,10 +22,12 @@ describe('DashboardComponent', () => {
     target.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }));
     fixture.detectChanges();
   };
+  const replaySource = () => el.querySelector('[data-testid="stream-replay-source"]');
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DashboardComponent],
+      providers: [provideStreamObservationRepository()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DashboardComponent);
@@ -163,10 +175,107 @@ describe('DashboardComponent', () => {
     });
   });
 
-  it('should not use reserved or non-canonical terms for current behavior', () => {
-    const text = el.textContent ?? '';
-    expect(text).not.toMatch(
-      /Declared Intention|Alignment Delta|Envelope|Breach|Drift Velocity|Convergence|Attribution|\balert|\banomal/i
+  describe('replay source line', () => {
+    it('should state neutral document replay source facts', () => {
+      expect(normalize(replaySource()?.textContent)).toBe(
+        'Replay source: 38 synthetic document observations across 6 Identity Slices, ' +
+          '3 Aug–11 Sep 2026 (UTC). Observed Baselines and sustained Divergence detection ' +
+          'are added in later Steps.'
+      );
+    });
+
+    it('should state neutral workflow replay source facts after switching', () => {
+      component.selectStream('workflow');
+      fixture.detectChanges();
+
+      expect(normalize(replaySource()?.textContent)).toContain(
+        'Replay source: 80 synthetic workflow observations across 4 Identity Slices, 3 Aug–12 Sep 2026 (UTC).'
+      );
+    });
+
+    it('should avoid wording that reads as a finding in either stream', () => {
+      for (const stream of ['document', 'workflow'] as const) {
+        component.selectStream(stream);
+        fixture.detectChanges();
+        expect(replaySource()?.textContent).not.toMatch(REPLAY_SOURCE_AVOID_WORDS);
+      }
+    });
+
+    it('should keep the KPI placeholders and disabled filters alongside replay data', () => {
+      expect(el.querySelector('[data-testid="kpi-section"]')?.textContent).not.toMatch(/\d/);
+      expect(el.querySelectorAll('.filter-select:disabled').length).toBe(3);
+      expect(el.querySelector('[data-testid="empty-state"]')).toBeTruthy();
+    });
+  });
+
+  describe('claim guardrails in rendered dashboard copy (QA-006)', () => {
+    for (const stream of ['document', 'workflow'] as const) {
+      describe(`${stream} stream`, () => {
+        let text: string;
+
+        beforeEach(() => {
+          component.selectStream(stream);
+          fixture.detectChanges();
+          text = normalize(el.textContent);
+        });
+
+        it('should render the copy being checked, including the replay source line', () => {
+          expect(text).toContain('DocuWare');
+          expect(text).toContain('Replay source:');
+        });
+
+        for (const [name, pattern] of Object.entries(CLAIM_GUARDRAIL_PATTERNS)) {
+          it(`should not contain ${name} claims`, () => {
+            expect(text).not.toMatch(pattern);
+          });
+        }
+      });
+    }
+  });
+});
+
+describe('DashboardComponent with a non-replay repository', () => {
+  const info = (streamKind: StreamKind): StreamSourceInfo => ({
+    streamKind,
+    sourceKind: 'replay',
+    synthetic: true,
+    observationCount: 3,
+    identitySliceCount: 2,
+    observationWindow: { from: '2025-12-30T10:00:00.000Z', to: '2026-01-02T10:00:00.000Z' },
+  });
+
+  const render = (repository: Partial<StreamObservationRepository>) => {
+    TestBed.configureTestingModule({
+      imports: [DashboardComponent],
+      providers: [
+        {
+          provide: StreamObservationRepository,
+          useValue: {
+            getIdentitySlices: () => EMPTY,
+            getObservations: () => EMPTY,
+            getObservedTruth: () => EMPTY,
+            ...repository,
+          },
+        },
+      ],
+    });
+    const fixture = TestBed.createComponent(DashboardComponent);
+    fixture.detectChanges();
+    return fixture.nativeElement as HTMLElement;
+  };
+
+  it('should render whatever the repository interface provides', () => {
+    const el = render({ getSourceInfo: stream => of(info(stream)) });
+
+    expect(normalize(el.querySelector('[data-testid="stream-replay-source"]')?.textContent)).toContain(
+      'Replay source: 3 synthetic document observations across 2 Identity Slices, 30 Dec 2025–2 Jan 2026 (UTC).'
     );
+  });
+
+  it('should omit the replay source line when the repository cannot be read', () => {
+    const el = render({ getSourceInfo: () => throwError(() => new Error('unavailable')) });
+
+    expect(el.querySelector('[data-testid="stream-replay-source"]')).toBeNull();
+    expect(el.querySelector('[data-testid="kpi-section"]')).toBeTruthy();
   });
 });
