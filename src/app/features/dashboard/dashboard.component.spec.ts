@@ -154,7 +154,8 @@ describe('DashboardComponent', () => {
         fixture.detectChanges();
         const kpiText = el.querySelector('[data-testid="kpi-section"]')?.textContent ?? '';
         expect(kpiText).not.toMatch(/\d/);
-        expect(kpiText).toContain('Pending replay data');
+        expect(kpiText).toContain('Pending Divergence detection');
+        expect(kpiText).not.toContain('Pending replay data');
       }
     });
 
