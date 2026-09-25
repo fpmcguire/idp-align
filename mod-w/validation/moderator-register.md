@@ -971,4 +971,40 @@ QA-012 to QA-017 are dispositioned below so the remaining demo-facing and proces
 
 ---
 
+### A-026 - STEP-02 Tech Lead Re-Review Acceptance (QA-012)
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Tech Lead review acceptance before QA-012 re-check  
+**Step:** `mod-w/step-02.md`  
+**Next authorized action:** Fresh QA re-check of QA-012 against Development Team commit `0fed7ba` and Tech Lead review commit `02a80c3`.
+
+#### Accepted Artifacts
+
+- Development Team QA-012 rework commit `0fed7ba`
+- `review.md` Tech Lead QA-012 re-review at `02a80c3`, verdict "Pass for fresh QA re-check of QA-012"
+- A-025 Development Team QA-012 rework plan approval at `2932e5d`
+
+#### Acceptance Summary
+
+The Moderator accepts the Tech Lead re-review for the STEP-02 QA-012 copy-only rework. The rework replaces stale KPI note copy with "Pending Divergence detection", keeps KPI values as placeholders, and adds a regression guard against the stale "Pending replay data" text.
+
+No About files, fixtures, calculations, Observed Baseline logic, sustained Divergence detection, filters, Evidence Trace behavior, live DocuWare calls, credentials, or new capability changed.
+
+#### Evidence
+
+- `review.md` records no blocking, major, minor, or low findings for the QA-012 rework delta.
+- `npm run lint` passed under Node.js v26.0.0.
+- `npm run build` passed under Node.js v26.0.0 after rerun outside the sandbox.
+- `npm test -- --watch=false` passed under Node.js v26.0.0 after rerun outside the sandbox: 12 files and 158 tests passed.
+
+#### Conditions
+
+- Fresh QA re-checks QA-012 before the STEP-02 final gate.
+- QA should confirm the stale "Pending replay data" copy is no longer present in the dashboard KPI cards and that the replacement copy does not imply completed Divergence detection.
+
+---
+
 MOD-W v5.0.1
