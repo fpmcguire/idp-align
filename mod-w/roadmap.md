@@ -21,7 +21,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | STEP-02 | CAV Domain Model, Repositories, And Replay Fixtures | R1, R3, R8, R9 | Claude Code | Complete (A-028, tag `step-02`) | Added typed document/workflow observations, repository interfaces, replay adapters, dashboard source facade, and QA-006 dashboard guardrail test coverage. |
 | STEP-03 | Observed Baseline And Sustained Divergence Logic | R2, R4, R5, R12 | Claude Code | Complete (A-033, tag `step-03`) | Added pure domain Observed Baseline derivation, sustained Divergence detection, Evidence construction, and QA-014 workflow overlap handling. |
 | STEP-04 | Divergence List, Detail, Baseline, And Evidence Trace | R5, R6, R12 | Claude Code | Complete (A-039, tag `step-04`) | Added shared CAV Divergence cards, status badges, detail panel, Observed Baseline context, chronological Evidence Trace, stream KPIs, and per-stream selection state; carried QA-014, QA-018, and QA-019 wording guardrails. |
-| STEP-05 | Filtering, Sorting, Empty, Loading, And Error States | R6 | Claude Code | Planned | Complete dashboard interaction states and responsive behavior. |
+| STEP-05 | Filtering, Sorting, Empty, Loading, And Error States | R6, R11 | Claude Code | Approved for Dev Team planning (A-040) | Complete dashboard filter/sort interactions, loading/empty/error states, keyboard/focus behavior, and responsive-state checks after STEP-04. |
 | STEP-06 | Divergence Analysis Chart View | R5, R6 | Claude Code or Claude Design | Planned | Implement Chart.js analysis view with metric switching. |
 | STEP-07 | Workflow Stream Parity And Cross-Stream Consistency | R3, R4, R6, R9 | Claude Code | Planned | Verify workflow stream uses same model and components with workflow-specific copy/data. |
 | STEP-08 | Quality Gate Completion And Documentation | R10, R11 | Claude Code | Planned | E2E flows, docs, final claim guardrails, and readiness for Tech Lead review/QA. |
@@ -66,9 +66,9 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 
 **Goal:** Complete primary dashboard interactions and state rendering.
 
-**Requirements:** R6
+**Requirements:** R6, R11
 
-**Output:** Filter/sort bar, empty state, loading/error states, keyboard/focus handling, and responsive behavior.
+**Output:** Functional filter/sort bar, empty and filtered-empty states, loading/error states, keyboard/focus handling, and responsive behavior. STEP-05 carries the STEP-04 inactive tab-panel reference note into accessibility scope; Chart.js analysis and user action workflows remain later/out of scope.
 
 ### STEP-06 - Divergence Analysis Chart View
 
@@ -131,6 +131,8 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | 2026-09-25 | Authored STEP-04 and marked it pending Moderator approval. | Prepare UI surfacing of STEP-03 Divergence, Observed Baseline, and Evidence records while carrying QA-019 into status rendering scope. |
 | 2026-09-25 | Updated STEP-04 status after A-034 approval. | Moderator approved STEP-04 for Development Team briefing/planning only; implementation plan approval remains required before code. |
 | 2026-09-25 | Set STEP-04 to Complete. | Moderator final gate A-039 after implementation-plan approval, tablet rework approval, Tech Lead review acceptance, QA acceptance, and final finding dispositions. |
+| 2026-09-25 | Authored STEP-05 and marked it pending Moderator approval. | Prepare dashboard filtering, sorting, empty/loading/error states, and keyboard/focus refinements after STEP-04 final acceptance A-039. |
+| 2026-09-25 | Updated STEP-05 status after A-040 approval. | Moderator approved STEP-05 for Development Team briefing/planning only; implementation plan approval remains required before code. |
 
 ---
 

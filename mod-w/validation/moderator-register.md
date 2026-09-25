@@ -1573,4 +1573,39 @@ The accepted STEP-04 scope does not include functional filters or sorting, Chart
 
 ---
 
+### A-040 - STEP-05 Step Approval Before Development Team Briefing
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Step approval before Development Team briefing  
+**Step:** `mod-w/step-05.md`  
+**Next authorized action:** Development Team may be briefed on STEP-05 and may prepare an implementation plan. Development Team may not write code until the Moderator approves the Development Team implementation plan in the Moderator Register.
+
+#### Approved Artifacts
+
+- `mod-w/step-05.md` - STEP-05 definition authored by the Tech Lead
+- `mod-w/roadmap.md` - STEP-05 status updated from authored/pending approval to approved for briefing/planning
+
+#### Approval Summary
+
+The Moderator approves `mod-w/step-05.md` as the active STEP-05 definition:
+
+**Filtering, Sorting, Empty, Loading, And Error States**
+
+STEP-05 is approved for Development Team briefing and implementation planning only. The Step covers functional dashboard filters and sorting, explicit loading/empty/error/unavailable states, keyboard/focus refinements, selection behavior under filters, and preservation of STEP-04 responsive behavior.
+
+#### Conditions
+
+- Development Team must implement only the approved STEP-05 scope.
+- STEP-05 must preserve the source-agnostic boundary: dashboard components must not import replay fixtures or reimplement Observed Baseline or sustained Divergence logic inline.
+- STEP-05 implements lifecycle-status filtering, not severity/risk scoring.
+- STEP-05 must carry QA-024 as a known display limitation; duration-format precision is not required unless separately routed.
+- STEP-05 must carry the STEP-04 accessibility note about inactive stream-tab `aria-controls` into keyboard/focus planning.
+- Chart.js analysis, user action workflows, About copy changes, fixture changes, detector changes, live DocuWare calls, credentials, CAV Level 2+ claims, Intent, Alignment Delta, Envelope, Breach, Drift Velocity, Convergence, and Attribution are not authorized in STEP-05.
+- PO-1 About References and future MOD-W roles/harnesses/About-flowchart content remain outside STEP-05 unless separately routed.
+
+---
+
 MOD-W v5.0.1
