@@ -117,7 +117,7 @@ The public DocuWare documentation cited above is the controlling source for fixt
 
 Known conflict disposition:
 
-- Public Platform REST API documentation represents index fields with a single `Item` value plus `FieldName` and `ItemElementName`; do not model that source shape as `Item: [{ Value }]` unless a cited public source supports it.
+- The cited public Platform REST API documentation shows index fields with `FieldName` and a single `Item` value. It does not show `ItemElementName`, `/Date(ms)/` index-field values, `DWSTOREDATETIME`, or Decimal typing. If replay fixtures use those fields or encodings, fixture metadata must mark them as approximations or source-shape assumptions rather than documented fields from the cited page. The cited `DOCUMENT_DATE` sample uses an ISO date string.
 - Public Workflow Analytics API documentation describes eight projection types under `/DocuWare/Workflow/Analytics/v1/{workflowId}/{ProjectionType}`. Do not invent a `WorkflowRuns` endpoint.
 - `WorkflowRuntimes` has a public example payload. Task projection fixture fields may be approximated from projection descriptions when no public example payload is available, but fixture metadata must mark those fields as approximated from public projection descriptions.
 
