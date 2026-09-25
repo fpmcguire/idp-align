@@ -18,7 +18,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | Step | Title | Requirement(s) | Agent | Status | Notes |
 | --- | --- | --- | --- | --- | --- |
 | STEP-01 | Dashboard Foundation, Stream Shell, And About View | R6, R9, R10, R13 | Claude Code | Complete (A-016, tag `step-01`) | Replace Angular starter with routed dashboard foundation, shared layout components, and DocuWare-specific reviewer-facing About route. |
-| STEP-02 | CAV Domain Model, Repositories, And Replay Fixtures | R1, R3, R8, R9 | Claude Code | Approved for Dev Team briefing/planning (A-017) | Add typed document/workflow observations, repository interfaces, replay adapters, and QA-006 dashboard guardrail test coverage. Implementation plan approval still required before code. |
+| STEP-02 | CAV Domain Model, Repositories, And Replay Fixtures | R1, R3, R8, R9 | Claude Code | Complete (A-028, tag `step-02`) | Added typed document/workflow observations, repository interfaces, replay adapters, dashboard source facade, and QA-006 dashboard guardrail test coverage. |
 | STEP-03 | Observed Baseline And Sustained Divergence Logic | R2, R4, R5, R12 | Claude Code | Planned | Pure domain helpers plus unit tests. |
 | STEP-04 | Divergence List, Detail, Baseline, And Evidence Trace | R5, R6, R12 | Claude Code | Planned | Implement shared CAV UI components and selection state. |
 | STEP-05 | Filtering, Sorting, Empty, Loading, And Error States | R6 | Claude Code | Planned | Complete dashboard interaction states and responsive behavior. |
@@ -100,15 +100,15 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 
 | Requirement | Steps | Status |
 | --- | --- | --- |
-| R1 | STEP-02 | Approved for Dev Team briefing/planning; implementation pending plan approval |
+| R1 | STEP-02 | Complete (A-028) |
 | R2 | STEP-03 | Planned |
-| R3 | STEP-02, STEP-07 | STEP-02 approved for Dev Team briefing/planning; STEP-07 planned |
+| R3 | STEP-02, STEP-07 | STEP-02 foundation complete; STEP-07 planned |
 | R4 | STEP-03, STEP-07 | Planned |
 | R5 | STEP-03, STEP-04, STEP-06 | Planned |
 | R6 | STEP-01, STEP-04, STEP-05, STEP-06, STEP-07 | Planned |
 | R7 | Future Step | Deferred until live access/proxy work is explicitly activated. |
-| R8 | STEP-02 | Approved for Dev Team briefing/planning; implementation pending plan approval |
-| R9 | STEP-01, STEP-02, STEP-07 | STEP-01 complete; STEP-02 approved for Dev Team briefing/planning; STEP-07 planned |
+| R8 | STEP-02 | Complete (A-028) |
+| R9 | STEP-01, STEP-02, STEP-07 | STEP-01 and STEP-02 complete; STEP-07 planned |
 | R10 | STEP-01, STEP-08 | Planned |
 | R11 | STEP-03, STEP-05, STEP-08 | Planned |
 | R12 | STEP-03, STEP-04 | Planned |
@@ -124,6 +124,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | 2026-09-24 | Set STEP-01 and R13 to Complete. | Moderator final gate A-016. Carried conditions PO-1 (About References before 2026-09-28), PO-2, PO-4, QA-006 to QA-008 are recorded in A-016. |
 | 2026-09-24 | Authored STEP-02 and marked it pending Moderator approval. | Prepare the domain model, repository boundary, replay fixture, and QA-006 guardrail-test scope after STEP-01 completion. |
 | 2026-09-24 | Updated STEP-02 status after A-017 approval. | Moderator approved STEP-02 for Development Team briefing/planning only; implementation plan approval remains required before code. |
+| 2026-09-25 | Set STEP-02 to Complete. | Moderator final gate A-028 after Tech Lead review, QA re-checks, QA-012 rework, and final QA acceptance. |
 
 ---
 

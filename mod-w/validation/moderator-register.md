@@ -1046,4 +1046,65 @@ The Moderator accepts the fresh QA re-check of QA-012. The KPI card note now rea
 
 ---
 
+### A-028 - STEP-02 Moderator Final Gate
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Final Moderator gate  
+**Gate:** STEP-02 final acceptance  
+**Step:** `mod-w/step-02.md`  
+**Next authorized action:** Create the annotated tag `step-02` on the commit that contains this entry and the roadmap completion update, then proceed to STEP-03 planning when directed.
+
+#### Accepted Artifacts
+
+- STEP-02 implementation commit `ddcde42`, excluding Sass tooling commit `839f9e0` per A-019
+- QA-010 / QA-011 rework commit `032fe2f`
+- QA-012 rework commit `0fed7ba`
+- Tech Lead reviews in `review.md` through `02a80c3`
+- QA records in `qa.md` through `ca4d137`
+- QA acceptances A-024 and A-027
+- Roadmap STEP-02 completion update in this final-gate commit
+
+#### Final Acceptance Summary
+
+STEP-02 is accepted as complete. It establishes canonical CAV Level 1 domain types, source-agnostic repository interfaces, synthetic replay fixtures shaped from public DocuWare documentation, a local replay adapter, a dashboard-facing source facade, and the QA-006 dashboard guardrail expansion.
+
+The accepted STEP-02 scope does not include Observed Baseline calculation, sustained Divergence detection, Evidence Trace behavior, completed CAV findings, live DocuWare API calls, credentials, production readiness claims, private access claims, or CAV Level 3+ concepts.
+
+#### QA And Finding Dispositions
+
+| Finding | Final disposition |
+| --- | --- |
+| QA-010 | Closed by QA-010 rework and QA re-check. |
+| QA-011 | Closed by QA-011 rework and QA re-check. |
+| QA-012 | Closed by copy-only rework, Tech Lead re-review, QA re-check, and A-027 acceptance. |
+| QA-013 | Carried as non-blocking copy/terminology alignment note for future work. |
+| QA-014 | Carried into STEP-03 planning: workflow fixture behavior can appear in both Approval step and Workflow runtime slices. |
+| QA-015 | Carried as future adapter/BFF planning note before non-replay data is introduced. |
+| QA-016 | Accepted as process traceability note; no STEP-02 implementation rework required. |
+| QA-017 | Closed by the STEP-02 Change Notes correction. |
+
+#### Evidence
+
+- A-017 approved the STEP-02 definition.
+- A-018 approved the Development Team implementation plan.
+- A-020 accepted the initial Tech Lead review.
+- A-021 routed QA-010 and recorded the initial QA fail.
+- A-022 approved QA-010 and QA-011 rework.
+- A-023 accepted the Tech Lead re-review for QA-010 / QA-011.
+- A-024 accepted the QA re-check and dispositioned open notes.
+- A-025 approved QA-012 copy-only rework.
+- A-026 accepted the Tech Lead re-review for QA-012.
+- A-027 accepted the QA-012 re-check.
+- Lint, build, and tests passed under Node.js v26.0.0 in the accepted QA evidence.
+
+#### Notes
+
+- `qa.md` line 9 still contains the earlier QA-010 / QA-011 re-check summary. The later "Re-Check - QA-012 Rework" section and A-027 are the controlling QA-012 acceptance evidence for this final gate.
+- PO-1 About References remains outside STEP-02.
+- PO-4, QA-007, and QA-008 remain governed by their previously assigned later-Step timing.
+
+---
+
 MOD-W v5.0.1
