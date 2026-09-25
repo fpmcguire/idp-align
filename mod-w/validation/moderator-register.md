@@ -867,4 +867,41 @@ Development Team QA-010 rework plan (2026-09-25), following the Tech Lead resolu
 
 ---
 
+### A-023 - STEP-02 Tech Lead Re-Review Acceptance (QA-010 / QA-011)
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Tech Lead review acceptance before QA re-check  
+**Step:** `mod-w/step-02.md`  
+**Next authorized action:** Fresh QA re-check of QA-010 and QA-011 against commit `3ab913b`.
+
+#### Accepted Artifacts
+
+- `review.md` re-review result at `3ab913b`, verdict "Pass for fresh QA re-check, with build/test verification limitation noted below"
+- Development Team rework commit `032fe2f`
+- Rework plan approval A-022 at `72f548a`
+- `mod-w/step-02.md` source-conflict correction at `3ab913b`
+
+#### Acceptance Summary
+
+The Moderator accepts the Tech Lead re-review for the STEP-02 QA-010 and QA-011 rework. The rework resolves the traceability mismatch by separating documented public-source fields from replay approximations/source-shape assumptions in the document and workflow fixture metadata, comments, and tests.
+
+No About copy or About tests changed. The rework introduces no live DocuWare calls, credentials, CAV calculation logic, Evidence Trace behavior, completed CAV findings, or Level 3+ concepts.
+
+#### Evidence
+
+- `review.md` records no remaining blocking, major, minor, or low findings for the QA-010/QA-011 rework delta.
+- `npm run lint` passed under Node.js v26.0.0.
+- Fresh `npm run build` and `npm test -- --watch=false` reruns were blocked in the Tech Lead sandbox by `spawn EPERM`; this is recorded as an environment limitation in `review.md`.
+
+#### Conditions
+
+- Fresh QA must rerun `npm run build` and `npm test -- --watch=false` under Node.js v26.0.0 before acceptance.
+- QA must re-check AC8 and AC9 against the cited public sources.
+- QA-012 to QA-016 remain open for Moderator disposition unless resolved separately.
+
+---
+
 MOD-W v5.0.1

@@ -4,13 +4,125 @@
 **Step:** STEP-02 - CAV Domain Model, Repositories, And Replay Fixtures  
 **QA date:** 2026-09-25  
 **QA role:** Claude Code, acting as QA (not Development Team, not Tech Lead). QA did not edit implementation files.  
-**Repository state reviewed:** `master` `ddcde42`, clean working tree  
-**Tech Lead input:** `review.md` Tech Lead Review - STEP-02, verdict "Pass for QA"  
-**Verdict:** **Fail.** One acceptance check (AC8) is not met: the document fixture traceability is wrong. All other checks pass, some with notes. The rework is small. See [QA-010](#qa-010---medium-traceability-document-fixture-claims-a-documented-shape-the-cited-source-does-not-show).
+**Repository state reviewed:** original QA at `master` `ddcde42`; re-check at `master` `3ab913b` (the only working-tree change is the Moderator's uncommitted A-023 register entry)  
+**Tech Lead input:** `review.md` Tech Lead Review - STEP-02, verdict "Pass for QA"; re-review verdict "Pass for fresh QA re-check"  
+**Verdict (re-check):** **Pass with notes.** QA-010 and QA-011 are resolved, and AC8 and AC9 now pass. QA-012 to QA-016 are still open and need a Moderator disposition. See [Re-Check - QA-010 And QA-011 Rework](#re-check---qa-010-and-qa-011-rework).  
+**Original verdict (`ddcde42`):** Fail (AC8, QA-010).
 
 The STEP-01 QA record is preserved at tag `step-01` (`qa.md`).
 
 ---
+
+## Re-Check - QA-010 And QA-011 Rework
+
+**Re-check date:** 2026-09-25  
+**QA session:** A fresh Claude Code QA session. It did not plan, implement, or revert any rework, and it did not edit implementation files, `step-02.md`, `review.md`, or the register.  
+**Delta checked:** `ac790fb..3ab913b`. The implementation changes are all in Development Team commit `032fe2f`. `72f548a` is A-022. `3ab913b` holds the Tech Lead `step-02.md` correction and the `review.md` re-review.  
+**Tech Lead input:** `review.md` "Re-Review Result", verdict "Pass for fresh QA re-check, with build/test verification limitation noted below"
+
+### Gate check
+
+| Gate | Evidence | Result |
+| --- | --- | --- |
+| QA finding dispositions and rework routing | A-021 | Present |
+| Rework-plan approval before code | A-022 (QA-010 plan, and QA-011 included by Moderator decision) | Present; `72f548a` and `032fe2f` share a commit timestamp, the same pattern QA-016 noted |
+| Tech Lead re-review acceptance before QA re-check | A-023 | Present in the working tree but **not yet committed** |
+
+QA may proceed. The Moderator should commit A-023 together with this `qa.md` so the gate record matches the order of events.
+
+### Delta integrity
+
+- `032fe2f` changes exactly the four files that A-022 approved: `docuware-replay.types.ts` (comments only), `document-replay.fixture.ts` (header comment and metadata notes), `workflow-replay.fixture.ts` (`timeSpan()` comment and metadata notes), and `replay-fixtures.spec.ts`.
+- No fixture values, IDs, record shapes, or types changed. `document-replay.mapper.ts` is unchanged, as the plan said.
+- No template, style, component, facade, repository, route, About, or shell file changed.
+- No code path reads the fixture metadata `notes` at runtime. They ship in `main` as data, but no template renders them, so the rework cannot change visible copy.
+
+### Automated results (Node.js v26.0.0 via fnm)
+
+| Command | Result |
+| --- | --- |
+| `npm run lint` | **Passed.** "All files pass linting." |
+| `npm run build` | **Passed.** Initial total 256.96 kB raw / 73.45 kB transfer (was 256.48 / 73.23 kB; the growth is the longer metadata notes). `dashboard-component` 10.87 kB and `about-component` 10.41 kB are unchanged. No warnings. |
+| `npm test -- --watch=false` | **Passed.** Test Files 12 passed (12); Tests 158 passed (158). Vitest v4.1.11. That is 154 + 4 net new tests: the document fixture replaces 1 test with 3, and the workflow fixture adds 2. |
+
+These results satisfy the A-023 condition, which exists because the Tech Lead sandbox hit `spawn EPERM` on build and test.
+
+### Public-source re-check
+
+QA re-fetched both cited pages with curl on 2026-09-25 and compared every documentation claim in the reworked notes and comments against them.
+
+**Platform REST API** (`/docs/default-web-service-docuware-platform-api`):
+
+| String | Occurrences | Reworked claim | Result |
+| --- | --- | --- | --- |
+| `"FieldName"` | 4 | "The cited page documents index fields as a FieldName with a single Item value." | Supported. The sample is `{ "FieldName": "COMPANY", "Item": "Peter's Engineering" }` … `{ "FieldName": "DOCUMENT_DATE", "Item": "2020-01-01" }`. |
+| `COMPANY` / `DOCUMENT_DATE` | 6 / 3 | "COMPANY and DOCUMENT_DATE follow the documented sample field names" | Supported. `DOCUMENT_TYPE`, `AMOUNT`, and `CURRENCY` are now explicitly synthetic. |
+| `ItemElementName` | 0 | Approximation note | Correctly marked as an approximation |
+| `Decimal` | 0 | Approximation note (typing list includes Decimal) | Correctly marked as an approximation |
+| `/Date(` | 0 | Approximation note, which also states that the cited sample is an ISO date string | Correctly marked as an approximation |
+| `DWSTOREDATETIME` | 0 | Approximation note | Correctly marked as an approximation |
+
+**Workflow Analytics API** (`/docs/workflow-analytics-api`):
+
+| Item | Evidence | Reworked claim | Result |
+| --- | --- | --- | --- |
+| `/Date(` | 3 occurrences | "the documented /Date(ms)/ date form" | Supported |
+| `00:00:34.6158214` | 3 occurrences | "the documented hh:mm:ss.fffffff duration form" | Supported |
+| `d.hh:mm:ss` day-prefixed durations | 0 matches for `"\d+\.\d{2}:\d{2}:\d{2}` | Approximation note: "durations of 24 hours or more use a d. day prefix (TimeSpan-style) that the cited page does not show" | Correctly marked as an approximation |
+
+The earlier false note "WorkflowRuntimes rows use the documented fields and value formats" is gone. Every remaining note or comment that says "documented" cites something the page shows.
+
+### Test quality of the new assertions
+
+- **Document fixture:** `should use the documented FieldName and Item pair on every index field` checks the documented pair and the two sample field names on every record. `should add only the approximated ItemElementName to the documented pair` keeps the exact key-set check under an accurate name. `should record approximated typing, date encoding, and DWSTOREDATETIME in metadata` requires all four approximation terms in `Approximation:` notes. It also fails if any note containing "documented" mentions them again, so the QA-010 regression is guarded.
+- **Workflow fixture:** `should use the documented duration form below 24 hours and a day prefix only above it` covers every `WorkflowRuntimes.runtime`, `TaskExecutionTimes.executionTime`, and `TaskReactionTimes.reactionTime`. It ties the prefix to `parseTimeSpan(...) >= 24 h` in both directions. `should record the duration day prefix as an approximation in metadata` requires the approximation note and forbids "d. day prefix" and "value formats" in any "documented" note, so the QA-011 regression is guarded.
+- The durations that A-022 required to stay unchanged are unchanged. `timeSpan()` itself was not modified.
+
+### Regression spot-checks
+
+- About files (`src/app/features/about/`) and the shell (`app.ts`, `app.html`) are unchanged since tag `step-01`, so PO-1 still holds.
+- The dashboard guardrail specs (all `CLAIM_GUARDRAIL_PATTERNS`, both streams) pass.
+- The fixture secret-pattern and URL guardrail tests pass. The only URLs are the two cited `knowledgecenter.docuware.com/docs/` pages.
+- QA did not repeat the browser run. The delta has no rendering-path change (see Delta integrity), so the `ddcde42` browser evidence below still applies.
+
+### Acceptance checks affected by the rework
+
+| # | Check | Original | Re-check | Notes |
+| --- | --- | --- | --- | --- |
+| AC8 | Document fixtures are synthetic and shaped from public Platform REST API concepts | Fail | **Pass** | The documented `FieldName` / `Item` pair and sample field names are claimed as documented. `ItemElementName` (with Decimal typing), `/Date(ms)/`, and `DWSTOREDATETIME` are recorded as approximations. There is no false documentation claim. |
+| AC9 | Workflow fixtures are synthetic and shaped from public Workflow Analytics concepts | Pass with note | **Pass** | QA-011 is resolved. The `d.` prefix is recorded as an approximation. |
+| AC15 | Unit tests cover fixture validity and guardrails | Pass | **Pass** | The inherited false claim in the test name is gone, and the new tests guard both traceability regressions. |
+| AC17–AC19 | Lint / build / test under Node.js v26.0.0 | Pass | **Pass** | Re-run on `3ab913b`; 158 tests. |
+
+All other acceptance checks keep their original results, recorded below, because the delta does not touch them.
+
+### Finding status
+
+| Finding | Status |
+| --- | --- |
+| QA-010 (Medium) | **Resolved.** `step-02.md` Source Conflict Resolution now matches the cited page. |
+| QA-011 (Low) | **Resolved.** |
+| QA-012 to QA-016 | **Open.** They await Moderator disposition (A-021, A-022, A-023). None blocks STEP-02 acceptance in QA's view, because each is Low or Info and none is an acceptance-check failure. The Moderator should still disposition QA-012, the stale KPI note, before the 2026-09-28 demo. |
+
+### New finding
+
+#### QA-017 - Info (process / traceability): `step-02.md` Change Notes do not record the Source Conflict correction
+
+- **Where:** `mod-w/step-02.md` Change Notes table. Its last row is dated 2026-09-24.
+- **Evidence:** `3ab913b` rewrites the first "Known conflict disposition" bullet in Source Conflict Resolution, which is a substantive change to the controlling-source statement. No Change Notes row records it or cites QA-010 or A-021.
+- **Route:** The Tech Lead adds a Change Notes row. This is a documentation-only change, and it does not block acceptance.
+
+### Re-check conclusion
+
+The QA-010 and QA-011 rework does what A-022 approved and nothing more. Every documentation claim in the replay fixtures now traces to the cited public pages, and each source-shape assumption is labeled as an approximation. Lint, build, and tests pass under Node.js v26.0.0. STEP-02 is ready for QA acceptance. QA does not accept its own review: the Moderator records QA acceptance.
+
+**Next:** The Moderator records QA acceptance and dispositions QA-012 to QA-017. Product Owner sign-off, if applicable, and the STEP-02 final gate follow.
+
+---
+
+## Original QA Review (`ddcde42`)
+
+The sections below are the original QA review. They are unchanged except for this heading.
 
 ## Summary
 
