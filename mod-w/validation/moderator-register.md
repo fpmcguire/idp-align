@@ -1320,4 +1320,42 @@ The accepted STEP-03 scope does not include dashboard rendering, dashboard facad
 
 ---
 
+### A-034 - STEP-04 Step Approval Before Development Team Briefing
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Step approval before Development Team briefing  
+**Step:** `mod-w/step-04.md`  
+**Next authorized action:** Brief Development Team on `mod-w/step-04.md`; Development Team may read context and propose an implementation plan, but may not write code until the Moderator approves that plan.
+
+#### Approved Artifacts
+
+- `mod-w/step-04.md` - STEP-04 definition authored by the Tech Lead
+- `mod-w/roadmap.md` - STEP-04 status updated from authored/pending approval to approved for briefing/planning
+
+#### Approval Summary
+
+The Moderator approves `mod-w/step-04.md` as the active STEP-04 definition:
+
+**Divergence List, Detail, Baseline, And Evidence Trace**
+
+STEP-04 is approved for Development Team briefing and implementation planning only. The Step covers UI surfacing of STEP-03 Divergence, Observed Baseline, and Evidence records through dashboard list/detail components, status badges, baseline context, Evidence Trace, selection state, and stream KPI counts.
+
+#### Conditions
+
+- Development Team must implement only the approved STEP-04 scope.
+- Development Team must wait for Moderator approval of its implementation plan before writing code.
+- STEP-04 must preserve the source-agnostic boundary: dashboard components must not import replay fixtures or reimplement baseline/Divergence logic inline.
+- STEP-04 must carry QA-014: workflow Approval and Workflow runtime Divergences may both render, but UI must not imply causation or Attribution.
+- STEP-04 must carry QA-019: `resolved` status, if rendered, must be presented only as a lifecycle status and must not imply remediation, correction, Convergence, or business correctness.
+- STEP-04 must carry QA-018: UI copy must not imply broader vendor rename/entity matching than the STEP-03 detector supports.
+- Filters/sorting, Chart.js analysis, user action workflows, About copy changes, fixture changes, live DocuWare calls, credentials, CAV Level 2+ claims, Intent, Alignment Delta, Envelope, Breach, Drift Velocity, Convergence, and Attribution are not authorized in STEP-04.
+- PO-1 About References remains outside STEP-04 unless separately routed.
+- PO-4, QA-007, and QA-008 retain their later-step timing unless separately rerouted by the Moderator.
+- Tech Lead review is required before QA acceptance.
+
+---
+
 MOD-W v5.0.1
