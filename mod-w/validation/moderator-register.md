@@ -1107,4 +1107,40 @@ The accepted STEP-02 scope does not include Observed Baseline calculation, susta
 
 ---
 
+### A-029 - STEP-03 Step Approval Before Development Team Briefing
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Step approval before Development Team briefing  
+**Step:** `mod-w/step-03.md`  
+**Next authorized action:** Brief Development Team on `mod-w/step-03.md`; Development Team may read context and propose an implementation plan, but may not write code until the Moderator approves that plan.
+
+#### Approved Artifacts
+
+- `mod-w/step-03.md` - STEP-03 definition authored by the Tech Lead
+- `mod-w/roadmap.md` - STEP-03 status updated from authored/pending approval to approved for briefing/planning
+
+#### Approval Summary
+
+The Moderator approves `mod-w/step-03.md` as the active STEP-03 definition:
+
+**Observed Baseline And Sustained Divergence Logic**
+
+STEP-03 is approved for Development Team briefing and implementation planning only. The Step covers CAV Level 1 Observed Baseline derivation, sustained Divergence detection, and Evidence-carrying domain records for document and workflow streams.
+
+#### Conditions
+
+- Development Team must implement only the approved STEP-03 scope.
+- Development Team must wait for Moderator approval of its implementation plan before writing code.
+- STEP-03 must account for QA-014: workflow fixture behavior may appear in both Approval step and Workflow runtime slices.
+- QA-015 remains a future adapter/BFF planning note only unless it affects preserving the source-agnostic boundary.
+- PO-1 About References remains outside STEP-03 unless separately routed.
+- PO-4, QA-007, and QA-008 retain their later-step timing unless separately rerouted by the Moderator.
+- No UI Divergence cards, detail panels, Evidence Trace rendering, Chart.js analysis, live DocuWare calls, credentials, CAV Level 2+ claims, Intent, Alignment Delta, Envelope, Breach, Drift Velocity, Convergence, or Attribution work is authorized in STEP-03.
+- Tech Lead review is required before QA acceptance.
+
+---
+
 MOD-W v5.0.1
