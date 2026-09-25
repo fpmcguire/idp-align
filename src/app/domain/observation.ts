@@ -66,6 +66,11 @@ export interface ObservationWindow {
   readonly to: string;
 }
 
+/** Chronological order by observation time, then by ID so equal times sort deterministically. */
+export function byObservedAt(a: Observation, b: Observation): number {
+  return Date.parse(a.observedAt) - Date.parse(b.observedAt) || a.id.localeCompare(b.id);
+}
+
 export function observationWindowOf(
   observations: readonly Observation[],
 ): ObservationWindow | null {

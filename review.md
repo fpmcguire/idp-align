@@ -1,47 +1,11 @@
-# Tech Lead Review - STEP-02
+# Tech Lead Review - STEP-03
 
 **Project:** IDP-Align  
-**Step:** STEP-02 - CAV Domain Model, Repositories, And Replay Fixtures  
+**Step:** STEP-03 - Observed Baseline And Sustained Divergence Logic  
 **Review date:** 2026-09-25  
 **Reviewer:** Codex, Tech Lead  
-**Implementation package reviewed:** STEP-02 implementation commit `ddcde42`, QA review at `ac790fb`, Development Team QA-010/QA-011 rework commit `032fe2f`, QA-012 rework commit `0fed7ba`, and approval records through A-025; excluding Sass tooling commit `839f9e0` per A-019  
-**Verdict:** Pass for fresh QA re-check of QA-012
-
----
-
-## QA-012 Re-Review
-
-**Reviewed delta:** `2932e5d..0fed7ba`  
-**Approval checked:** A-025 is present in `mod-w/validation/moderator-register.md` and approves the copy-only QA-012 rework before implementation.  
-**Verdict:** Pass for fresh QA re-check.
-
-### Findings
-
-No blocking, major, minor, or low findings.
-
-### Scope And Acceptance
-
-The QA-012 rework matches A-024 and A-025:
-
-- `dashboard.component.html` changes only the KPI note copy from "Pending replay data" to "Pending Divergence detection".
-- KPI values remain `—`; no calculations, Observed Baseline logic, sustained Divergence detection, filters, Evidence Trace behavior, fixtures, live DocuWare calls, credentials, About files, or About tests changed.
-- `dashboard.component.spec.ts` updates the directly affected assertion, keeps the no-digit check, and adds a regression guard that the stale "Pending replay data" copy does not return.
-
-The new copy is bounded and accurate for STEP-02: it says the KPI cards are pending Divergence detection without implying detection exists.
-
-### Verification
-
-Run under Node.js v26.0.0:
-
-| Command | Result |
-| --- | --- |
-| `npm run lint` | Pass |
-| `npm run build` | Pass after rerun outside the sandbox; the sandboxed run hit the known esbuild `spawn EPERM` limitation |
-| `npm test -- --watch=false` | Pass after rerun outside the sandbox; 12 files and 158 tests passed |
-
-### Next Gate
-
-The Moderator should record Tech Lead re-review acceptance for QA-012 before fresh QA re-check. Suggested next register entry: A-026, approving this Tech Lead re-review and authorizing QA to re-check QA-012 against commit `0fed7ba` plus this `review.md` update.
+**Implementation package reviewed:** Current uncommitted Development Team STEP-03 work after A-030 implementation-plan approval  
+**Verdict:** Pass for QA
 
 ---
 
@@ -49,119 +13,24 @@ The Moderator should record Tech Lead re-review acceptance for QA-012 before fre
 
 `mod-w/validation/moderator-register.md` contains the required approvals:
 
-- A-017 approves `mod-w/step-02.md` as the active STEP-02 definition and authorizes Development Team briefing/planning only.
-- A-018 approves the STEP-02 Development Team implementation plan before code work.
-- A-019 approves the Sass command line dev dependency separately and requires `package.json` and `package-lock.json` from commit `839f9e0` to be excluded from STEP-02 review.
+- A-029 approves `mod-w/step-03.md` as the active STEP-03 definition for Development Team briefing and implementation planning.
+- A-030 approves the Development Team implementation plan before code changes and records the accepted Tech Lead conditions.
 
-No process blocker remains before QA. This review covers the STEP-02 implementation files only.
+No process blocker remains before QA. The working tree is intentionally uncommitted per the Development Team handoff.
 
 ---
 
 ## Scope Check
 
-The implementation stays within STEP-02:
+The implementation stays within STEP-03:
 
-- Adds canonical CAV Level 1 domain types for `StreamKind`, `IdentitySlice`, document/workflow observations, `ObservedTruth`, `SourceReference`, and replay source metadata.
-- Adds source-agnostic `StreamObservationRepository` and route-scoped replay provider.
-- Adds local synthetic document and workflow replay fixtures shaped from the public DocuWare documentation.
-- Adds replay mappers, repository implementation, dashboard facade, and a neutral dashboard replay source line.
-- Extends dashboard and fixture guardrail tests for QA-006.
+- Adds pure domain types and helpers for `ObservedBaseline`, `Divergence`, `DivergenceDimension`, `DivergenceStatus`, `Evidence`, baseline statistics, and stream-level detection.
+- Adds focused domain specs and a replay-level detector spec that reads observations through `ReplayStreamObservationRepository`.
+- Adds one small production helper, `byObservedAt`, to `src/app/domain/observation.ts` for deterministic chronological ordering.
+- Adds `src/testing/observation-builders.ts` as a test-only helper imported only by specs.
+- Records A-030 in the Moderator Register.
 
-The implementation does not add Observed Baseline calculation, sustained Divergence detection, Evidence Trace behavior, completed CAV findings, live DocuWare API calls, credentials, or CAV Level 3+ behavior.
-
----
-
-## QA Rework - QA-010
-
-**Status for this delta:** Rework required.
-
-**QA evidence:** `qa.md` at `ac790fb` failed AC8 because the document fixture metadata and tests claim a documented index-field shape that the cited Platform REST API page does not show. The cited page shows `FieldName` and `Item`; it does not show `ItemElementName`, `/Date(ms)/` index-field values, `DWSTOREDATETIME`, or Decimal typing. Its visible `DOCUMENT_DATE` sample uses an ISO date string.
-
-### Tech Lead Resolution
-
-Use QA option **(b)**:
-
-- Keep the current document fixture shape.
-- Mark `ItemElementName`, `/Date(ms)/` date encoding, `DWSTOREDATETIME`, and Decimal typing as approximations or source-shape assumptions in fixture metadata.
-- Rename the fixture test currently titled `should use the documented index field structure` so it no longer claims `ItemElementName` is documented by the cited page.
-- Update assertions as needed so tests verify the documented `FieldName` / `Item` pair separately from approximated replay typing/metadata.
-
-I corrected `mod-w/step-02.md` Source Conflict Resolution to remove the false statement that the public Platform REST API documentation shows `ItemElementName`.
-
-### Required Development Team Rework
-
-| Finding | Required rework | Acceptance criteria |
-| --- | --- | --- |
-| QA-010 | Correct document fixture metadata and test naming for public-source traceability. | Metadata states that `FieldName` and `Item` are documented by the cited Platform REST API page, while `ItemElementName`, `/Date(ms)/`, `DWSTOREDATETIME`, and Decimal typing are approximations/source-shape assumptions. The fixture test no longer says the full three-field structure is documented. AC8 can be checked against the cited page without finding a false documentation claim. |
-
-### Optional Rework Recommendation
-
-QA-011 is the same class of traceability issue for workflow duration values using the undocumented `d.` day prefix. I recommend including it in the same rework because the change is small and improves the same public-source traceability boundary. It needs Moderator approval before Development Team implements it.
-
-If approved, required QA-011 rework:
-
-- Mark the `d.` duration prefix as an approximation/source-shape assumption in workflow fixture metadata or comments.
-- Ensure metadata no longer says every duration format used in the fixture is documented by the cited Workflow Analytics API page.
-- Keep the documented `hh:mm:ss.fffffff` format for values under 24 hours.
-
-### Development Team Rework Brief
-
-```md
-You are acting as the Development Team for IDP-Align under MOD-W v5.0.1.
-
-Read these files first:
-- mod-w/validation/moderator-register.md, especially A-018, A-020, and A-021
-- mod-w/step-02.md
-- review.md
-- qa.md
-- src/app/data/replay/fixtures/document-replay.fixture.ts
-- src/app/data/replay/fixtures/replay-fixtures.spec.ts
-- src/app/data/replay/docuware-replay.types.ts
-
-Task:
-Prepare a rework plan for QA-010 only. Do not code until the Moderator approves the plan and records that approval in the register.
-
-Required rework:
-- Keep the current document fixture shape.
-- Correct document fixture metadata so it says the cited Platform REST API page documents `FieldName` and `Item`.
-- Mark `ItemElementName`, `/Date(ms)/` date encoding, `DWSTOREDATETIME`, and Decimal typing as approximations or source-shape assumptions, not as documented fields from the cited page.
-- Rename the fixture test currently titled `should use the documented index field structure` so it no longer claims the whole `FieldName` / `Item` / `ItemElementName` structure is documented.
-- Update tests to verify documented source shape and approximated replay assumptions separately.
-
-Constraints:
-- Stay within STEP-02.
-- Do not change About copy or About tests.
-- Do not add live DocuWare calls, credentials, new fixture capabilities, Observed Baseline calculation, sustained Divergence detection, Evidence Trace behavior, or CAV Level 3+ concepts.
-- Run `npm run lint`, `npm run build`, and `npm test -- --watch=false` under Node.js v26.0.0 after implementation.
-
-Optional only if Moderator explicitly approves QA-011 in the same rework:
-- Mark the workflow `d.` duration prefix as an approximation/source-shape assumption.
-- Do not claim that the `d.` prefix is documented by the cited Workflow Analytics API page.
-```
-
----
-
-## Re-Review Result
-
-**Re-review date:** 2026-09-25  
-**Delta reviewed:** `ac790fb..72f548a`, with implementation changes in `032fe2f` and register approval A-022 in `72f548a`.
-
-Tech Lead assessment:
-
-- QA-010 passes re-review. `mod-w/step-02.md` now correctly states that the cited Platform REST API page documents `FieldName` and `Item`, while `ItemElementName`, `/Date(ms)/`, `DWSTOREDATETIME`, and Decimal typing must be treated as approximations/source-shape assumptions when used.
-- QA-010 implementation rework passes review. `document-replay.fixture.ts` now separates documented `FieldName` / `Item` support from approximated `ItemElementName`, `/Date(ms)/`, `DWSTOREDATETIME`, and Decimal typing. `replay-fixtures.spec.ts` no longer claims the full three-field structure is documented and now tests documented and approximated parts separately.
-- QA-011 was explicitly approved for same-cycle inclusion in A-022 and passes re-review. `workflow-replay.fixture.ts` and `docuware-replay.types.ts` now state that `hh:mm:ss.fffffff` is documented, while the `d.` day prefix for durations of 24 hours or more is an approximation that the cited page does not show. Tests assert both the documented under-24-hour form and the metadata approximation note.
-- No About copy or About tests changed.
-- No new live API calls, credentials, CAV calculation logic, Evidence Trace behavior, completed CAV findings, or Level 3+ concepts were introduced.
-
-No blocking, major, minor, or low implementation findings remain in the QA-010/QA-011 rework delta.
-
-Verification note:
-
-- `npm run lint` passed under Node.js v26.0.0.
-- `npm run build` could not be rerun in this sandbox after the rework because Angular/esbuild failed with `spawn EPERM`.
-- `npm test -- --watch=false` could not be rerun in this sandbox after the rework because Angular/esbuild failed with `spawn EPERM`.
-- This is an environment permission failure, not an implementation failure, but fresh QA must rerun build and tests under Node.js v26.0.0 before acceptance.
+The implementation does not change dashboard production code, dashboard facade code, fixtures, About files, routes, styles, package metadata, live integration code, credentials, or UI rendering.
 
 ---
 
@@ -169,88 +38,94 @@ Verification note:
 
 ### Must Fix Now
 
-None for the QA-010/QA-011 rework delta.
+None.
 
 ### Could Fix Later
 
-None for the QA-010/QA-011 rework delta.
+None.
 
 ---
 
 ## Acceptance Check Mapping
 
-- STEP-02 approval entry: met. A-017 is present.
-- Canonical TypeScript domain types: met. Domain types are under `src/app/domain/`.
-- Domain terminology: met. The implementation uses Stream, Identity Slice, Observation, Observed Truth, and source metadata without introducing `DivergenceDimension` early.
-- Reserved Level 3+ terms: met. New STEP-02 runtime/domain code does not use reserved Level 3+ terms to describe current behavior.
-- Repository interfaces: met. `StreamObservationRepository` is source-agnostic.
-- Dashboard boundary: met. Dashboard uses `DashboardFacade`, which depends on the repository interface.
-- Replay adapter: met. `ReplayStreamObservationRepository` implements both streams.
-- Document fixtures: met after QA-010 rework. Fixtures are synthetic and use documented `FieldName` / `Item` concepts while marking `ItemElementName`, `/Date(ms)/`, `DWSTOREDATETIME`, and Decimal typing as approximations/source-shape assumptions.
-- Workflow fixtures: met after QA-011 rework. Projection names follow Workflow Analytics API documentation; approximated task projection fields and the `d.` duration day prefix are noted in metadata.
-- Fixture safety: met. Fixtures are synthetic, use synthetic IDs/names, cite public documentation, and tests check secret-like strings and URL guardrails.
-- No browser live calls: met. Repository tests spy on `fetch` and `XMLHttpRequest.open`; no calls occur.
-- Dashboard-visible data: met. The visible addition is a neutral replay source line; KPIs remain placeholders and filters remain disabled.
-- Dashboard guardrail tests: met. Rendered dashboard copy is scanned for endorsement, private access, production readiness, business judgment, reserved terms, and alert/anomaly language.
-- Repository/replay tests: met. Tests cover repository contract, mapper behavior, fixture guardrails, source info, and Observed Truth grouping.
-- Existing STEP-01 behavior: met by test suite and unchanged About files.
-- `npm run lint`: passed under Node.js v26.0.0.
-- `npm run build`: fresh re-run blocked by sandbox `spawn EPERM`; previously passed before QA-010/QA-011 rework.
-- `npm test -- --watch=false`: fresh re-run blocked by sandbox `spawn EPERM`; previously passed before QA-010/QA-011 rework.
+- STEP-03 approval entry: met. A-029 is present.
+- Domain types for Observed Baseline, Divergence, Divergence Dimension, Divergence Status, and Evidence: met. Implemented under `src/app/domain/`.
+- Canonical terminology: met. Runtime/domain values use canonical CAV Level 1 terms, and `domain-terminology.spec.ts` plus replay detection guardrails check serialized outputs.
+- Reserved Level 3+ terms: met for current behavior. Comments/tests mention Attribution and Convergence only as explicit non-claims required by A-030.
+- Pure deterministic baseline derivation: met. `deriveObservedBaseline` and `referenceWindowFor` are pure, deterministic helpers.
+- Observed Baseline fields: met. Baselines carry stream kind, identity slice ID, dimension, reference window, sample size, reference observation IDs, version, method, and numeric/categorical summaries.
+- Pure deterministic sustained detection: met. `detectSustainedDivergences` and `detectStreamDivergences` evaluate chronological candidate observations against immutable baselines.
+- One-off suppression: met. Specs cover one-off document and workflow changes across dimensions and shorter-than-threshold runs.
+- Divergence fields: met. Divergences carry stream kind, full Identity Slice, dimension, embedded baseline, observed summary, magnitude, onset, latest timestamp, duration, status, sustained criteria, and Evidence.
+- Evidence reconstruction: met. Evidence carries source observation IDs, source references, compared values, baseline membership, context, and chronological ordering; specs rebuild a baseline from referenced observations.
+- Document dimensions: met. Tests cover vendor representation, amount value, currency, and supported date behavior via `document-date-lag`.
+- Workflow dimensions: met. Tests cover task duration, response time, task outcome, workflow runtime, and no-baseline behavior where response data is absent.
+- QA-014 handling: met. The detector emits Approval step and Workflow runtime Divergences independently when both meet criteria, with no cross-reference, suppression, or derived marker.
+- No Attribution: met. Decision-agent and instance/runtime fields are Evidence context only; tests assert no decision-agent dimension and no related/derived/cause fields.
+- Source-agnostic boundary: met. Production code stays in domain helpers; replay-level tests use the repository interface and do not import fixture files directly.
+- Existing dashboard behavior: met by scope inspection and passing full test suite; no dashboard production files changed.
+- Fixture safety and live-call boundary: met by scope inspection; fixtures were not changed and no live API code was added.
+- Dashboard guardrail coverage: met. Existing dashboard guardrail specs still pass in the full suite.
+- `npm run lint` under Node.js v26.0.0: met.
+- `npm run build` under Node.js v26.0.0: met after rerun outside sandbox due to known Angular/esbuild `spawn EPERM`.
+- `npm test -- --watch=false` under Node.js v26.0.0: met after rerun outside sandbox due to known Angular/esbuild `spawn EPERM`.
 
 ---
 
 ## Design ID Mapping
 
-- DS-001: met for STEP-02 scope. Dashboard structure remains intact and receives only neutral source metadata.
-- DS-002: met. Document and Workflow remain separate first-class Stream views.
-- DS-009: met for data foundation. Document observation fixtures support later document stream summary metrics without exposing completed metrics now.
-- DS-010: met for data foundation. Workflow observation fixtures support later workflow stream summary metrics without exposing completed metrics now.
+- DS-003: met for STEP-03 data readiness. Divergence results are aggregate-ready, but KPI rendering remains unchanged.
+- DS-006: met. Baseline records carry method, reference window, sample size, and value/range/distribution summaries for later panel rendering.
+- DS-007 and DS-014: met. Evidence records are chronological and carry source/context values for later Evidence Trace/detail rows.
+- DS-009: met. Document stream domain logic covers vendor representation, amount, currency, and date-related behavior supported by normalized observations.
+- DS-010: met. Workflow stream domain logic covers task duration, response time, outcome, and workflow runtime.
+- DS-013: met for domain readiness. `DivergenceStatus` includes lifecycle statuses, while user action handling remains out of scope.
 
-No new user-facing visual component was required by STEP-02.
+No new user-facing visual component was required by STEP-03.
 
 ---
 
 ## Architecture And Domain Check
 
-- `architecture.md` D3/D4/D13 are followed: domain types are explicit, replay is local and synthetic, and the dashboard boundary goes through a facade and repository interface.
-- `domain-language.md` guardrails are respected. Formal `DivergenceDimension` is deferred to STEP-03 as approved in A-018.
-- `language-matrix.md` guardrails are respected. DocuWare references are bounded to public documentation, replay metadata, and source-shaped fixtures.
-- `SourceReference.system` remains a string, keeping the domain layer source-agnostic.
-- Workflow `decisionAgent` remains observation context, not an Identity Slice or Attribution claim.
+- `architecture.md` D3 is followed: canonical CAV domain objects are explicit.
+- `architecture.md` D4 is preserved: detection runs over replay-backed observations without live dependencies.
+- `architecture.md` D5 is followed: Divergences require sustained repeated evidence, not one-off observations.
+- `architecture.md` D6 is followed: Divergence records carry baseline snapshots and Evidence.
+- `architecture.md` D9 is respected: no CAV Level 2+ or Intent behavior is implemented.
+- `architecture.md` D11 is satisfied with focused unit coverage.
+- `architecture.md` D13 remains intact: no dashboard component imports replay fixtures, and no BFF/live adapter work was introduced.
+- `domain-language.md` guardrails are respected. Observed Baseline is not treated as Intent, and Divergence is not labeled as an alert/anomaly/violation/breach in runtime output.
 
 ---
 
 ## Verification
 
-Initial STEP-02 review commands run with Node.js v26.0.0:
+Run with Node.js v26.0.0 via `fnm`:
 
-- `npm run lint` - Passed.
-- `npm run build` - Passed.
-- `npm test -- --watch=false` - Passed.
+| Command | Result |
+| --- | --- |
+| `fnm exec --using=v26.0.0 node --version` | Pass - `v26.0.0` |
+| `fnm exec --using=v26.0.0 npm.cmd run lint` | Pass - all files pass linting |
+| `fnm exec --using=v26.0.0 npm.cmd run build` | Pass after rerun outside sandbox; sandboxed run failed with known `spawn EPERM` |
+| `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` | Pass after rerun outside sandbox; 20 test files and 268 tests passed |
 
-Test result:
+Build output:
 
-- 12 test files passed.
-- 154 tests passed.
-
-Build result:
-
-- Application bundle generation complete.
-- Initial total: 256.48 kB raw / 73.23 kB estimated transfer.
-- Lazy chunks: `dashboard-component` 10.87 kB, `about-component` 10.41 kB.
+- Initial total: 256.96 kB raw / 73.44 kB estimated transfer.
+- Lazy chunks unchanged in kind: `dashboard-component` and `about-component`.
 
 ---
 
 ## QA Handoff
 
-STEP-02 is ready for fresh QA re-check of QA-010 and QA-011, with one verification condition: QA must rerun `npm run build` and `npm test -- --watch=false` under Node.js v26.0.0 because this Tech Lead session hit sandbox `spawn EPERM` on those fresh reruns.
+STEP-03 is ready for QA review.
 
-QA should verify:
+QA should pay special attention to:
 
-- no STEP-02 dashboard copy implies completed Observed Baseline calculation, sustained Divergence detection, Evidence Trace behavior, or completed CAV findings;
-- replay fixtures remain synthetic, public-doc-shaped, and free of credentials, private URLs, real customer data, and live-call configuration;
-- DocuWare references remain bounded research/demo context and do not imply endorsement, private access, confidential information, production readiness, or product defect/gap claims;
-- `package.json` and `package-lock.json` from Sass commit `839f9e0` are excluded from STEP-02 acceptance per A-019.
+- sustained Divergence versus one-off variation;
+- Evidence reconstruction from source observations and baseline context;
+- QA-014 independent Approval step and Workflow runtime Divergences;
+- absence of UI rendering scope creep;
+- absence of Attribution, business-judgment, Intent, Alignment Delta, Envelope, Breach, Drift Velocity, Convergence, or CAV Level 2+ claims in current behavior.
 
 MOD-W v5.0.1

@@ -1143,4 +1143,87 @@ STEP-03 is approved for Development Team briefing and implementation planning on
 
 ---
 
+### A-030 - STEP-03 Development Team Implementation Plan Approval
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** Implementation-plan approval before Development Team writes code  
+**Step:** `mod-w/step-03.md`  
+**Next authorized action:** Development Team implements STEP-03 per the approved plan, runs the build gate under Node.js v26.0.0, then hands off for Tech Lead review.
+
+#### Approved Plan
+
+Development Team STEP-03 plan (2026-09-25), with the Tech Lead conditions below:
+
+- Pure domain files in `src/app/domain/`: `divergence-dimension.ts`, `baseline-statistics.ts`, `observed-baseline.ts`, `evidence.ts`, `divergence.ts`, `divergence-detection.ts`, each with a focused spec, plus `domain-terminology.spec.ts`.
+- One test-only file in `src/app/data/replay/` (`replay-divergence-detection.spec.ts`) that runs the domain detector over observations read through the repository interface.
+- Dimensions: document `vendor-representation`, `amount-value`, `amount-currency`, `document-date-lag`; workflow step `task-duration`, `response-time`, `task-outcome`; workflow runtime `workflow-runtime`.
+- Observed Baselines are immutable snapshots carrying stream kind, Identity Slice, dimension, reference window, method, sample size, reference observation IDs, stable ID and version, and a value/range/distribution summary.
+- Divergences carry stream kind, Identity Slice, dimension, embedded baseline snapshot, observed summary, magnitude, onset, duration, status, sustained criteria, and chronological Evidence.
+
+#### Tech Lead Conditions Adopted
+
+| Item | Condition |
+| --- | --- |
+| QA-014 | Emit both Approval step and Workflow runtime Divergences when both independently meet sustained criteria. Do not link them, suppress one, or mark either as derived. Keep the no-Attribution explanation in comments and tests. |
+| Scope | No production dashboard or facade changes. STEP-03 is pure domain logic plus tests; STEP-04 wires dashboard/facade consumption. |
+| Detection defaults | 28-day reference window; minimum 4 reference observations; numeric range mean ± max(3 sample standard deviations, 5% of absolute mean); categorical minimum reference share 0.1; sustained threshold 3 consecutive out-of-baseline candidate observations. |
+| `resolved` status | The detector may set `resolved`. Comments and tests must make clear it is only a finding lifecycle state and does not imply remediation, Convergence, or business correctness. |
+| Date behavior | Date representation is unsupported by normalized observations. `document-date-lag` is the date-related dimension for STEP-03. |
+| `decisionAgent` | Evidence context only; not a dimension and not Attribution. |
+| Amount / currency | `amount-value` compares raw numeric values; `amount-currency` is a separate dimension. Tests must make the separation obvious. |
+| Credit notes | Credit-note slices receive no baseline due to insufficient reference sample; this must be tested. |
+
+#### Conditions
+
+- Verification uses Node.js v26.0.0 via `fnm`: `fnm exec --using=v26.0.0 node --version`, then `npm.cmd run lint`, `npm.cmd run build`, and `npm.cmd test -- --watch=false` through `fnm exec --using=v26.0.0`.
+- No About copy or About test changes (PO-1 excluded).
+- No fixture changes, live DocuWare calls, credentials, UI rendering, CAV Level 2+ claims, or reserved Level 3+ terms.
+- Tech Lead review is required before QA acceptance.
+
+---
+
+### A-031 - STEP-03 Tech Lead Review Acceptance
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Tech Lead review acceptance before QA  
+**Step:** `mod-w/step-03.md`  
+**Next authorized action:** QA may review STEP-03 against `mod-w/step-03.md`, `review.md`, the approved A-030 implementation plan, and the passing verification evidence.
+
+#### Accepted Artifacts
+
+- `review.md` - Tech Lead Review - STEP-03, verdict "Pass for QA"
+- Current STEP-03 implementation package in the working tree
+- `mod-w/step-03.md`
+- `mod-w/architecture.md`
+- `mod-w/domain-language.md`
+- `mod-w/language-matrix.md`
+
+#### Acceptance Summary
+
+The Moderator accepts the Tech Lead review for STEP-03. The review found no must-fix or could-fix-later findings and confirms that the implementation remains within STEP-03 scope: pure domain logic, Observed Baseline derivation, sustained Divergence detection, Evidence construction, focused domain tests, and replay-level detector tests through the repository interface.
+
+The implementation does not add dashboard rendering, dashboard facade consumption, fixture changes, About copy changes, live DocuWare calls, credentials, CAV Level 2+ claims, Intent, Alignment Delta, Envelope, Breach, Drift Velocity, Convergence, or Attribution behavior.
+
+#### Evidence
+
+- `review.md` verdict: Pass for QA.
+- `fnm exec --using=v26.0.0 node --version` printed `v26.0.0`.
+- `fnm exec --using=v26.0.0 npm.cmd run lint` passed.
+- `fnm exec --using=v26.0.0 npm.cmd run build` passed after rerun outside the sandbox; the sandboxed run hit the known Angular/esbuild `spawn EPERM` limitation.
+- `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` passed after rerun outside the sandbox; 20 test files and 268 tests passed.
+
+#### Conditions
+
+- QA should verify sustained Divergence behavior versus one-off variation, Evidence reconstruction, QA-014 independent Approval step and Workflow runtime Divergences, and absence of UI rendering scope creep.
+- QA should verify no current behavior claims Attribution, business judgment, Intent, Alignment Delta, Envelope, Breach, Drift Velocity, Convergence, or CAV Level 2+ capability.
+- QA should use Node.js v26.0.0 via `fnm` for verification.
+
+---
+
 MOD-W v5.0.1
