@@ -904,4 +904,47 @@ No About copy or About tests changed. The rework introduces no live DocuWare cal
 
 ---
 
+### A-024 - STEP-02 QA Re-Check Acceptance And Open Finding Dispositions
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** QA  
+**Gate:** QA acceptance after STEP-02 QA-010 / QA-011 rework re-check  
+**Step:** `mod-w/step-02.md`  
+**Next authorized action:** Development Team prepares a QA-012 copy-only rework plan for Moderator approval before implementation; Tech Lead prepares final STEP-02 gate after QA-012 is resolved or explicitly carried.
+
+#### Accepted Artifacts
+
+- `qa.md` re-check record at `bc0c64c`, verdict "Pass with notes"
+- Tech Lead re-review acceptance A-023 at `bc0c64c`
+- STEP-02 Change Notes correction for QA-017 at `6498be9`
+
+#### Acceptance Summary
+
+The Moderator accepts the fresh QA re-check for STEP-02. QA-010 and QA-011 are resolved, AC8 now passes, AC9 passes without note, and lint, build, and tests passed under Node.js v26.0.0 in the QA environment.
+
+QA-012 to QA-017 are dispositioned below so the remaining demo-facing and process notes are traceable before the STEP-02 final gate.
+
+#### Finding Dispositions
+
+| Finding | Disposition |
+| --- | --- |
+| QA-010 | Closed by the approved QA-010 rework and QA re-check. |
+| QA-011 | Closed by the approved same-cycle QA-011 rework and QA re-check. |
+| QA-012 | Rework before the 2026-09-28 demo. Development Team should propose a copy-only plan to replace stale KPI note text that says "Pending replay data" with text that accurately says CAV logic is pending while replay data is loaded. No KPI values, calculations, Observed Baseline logic, sustained Divergence detection, filters, About files, or new capability may change. |
+| QA-013 | Accepted as a non-blocking terminology consistency note. Carry into future copy alignment unless it is naturally touched by an approved dashboard copy rework. |
+| QA-014 | Accepted as a STEP-03 planning note. STEP-03 must account for the workflow behavior change appearing in both the Approval step slice and Workflow runtime slice. |
+| QA-015 | Accepted as a future adapter planning note. A later adapter/BFF Step should revisit `sourceKind` extensibility and dashboard rendering of source metadata before non-replay data is introduced. |
+| QA-016 | Accepted as a process traceability note. Future commits should keep role artifacts separated when feasible; no STEP-02 implementation rework required. |
+| QA-017 | Closed by `6498be9`, which adds the missing `mod-w/step-02.md` Change Notes row for the QA-010 Source Conflict correction. |
+
+#### Conditions
+
+- QA-012 requires a Development Team rework plan and Moderator approval before any app-code changes.
+- Any QA-012 rework must stay within STEP-02 scope and PO-1 exclusion: no About copy or About test changes.
+- Final STEP-02 acceptance waits until QA-012 is either reworked and checked or explicitly carried past the demo by Moderator decision.
+
+---
+
 MOD-W v5.0.1
