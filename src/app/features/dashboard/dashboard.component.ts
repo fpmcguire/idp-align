@@ -1,9 +1,27 @@
 import { formatDate } from '@angular/common';
-import { Component, ElementRef, computed, inject, signal, viewChildren } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  computed,
+  inject,
+  signal,
+  viewChild,
+  viewChildren,
+} from '@angular/core';
+import { DivergenceStatus } from '../../domain/divergence';
 import { ObservationWindow } from '../../domain/observation';
 import { StreamKind } from '../../domain/stream';
 import { DivergenceCardComponent } from '../../shared/ui/divergence/divergence-card/divergence-card.component';
 import { DivergenceDetailComponent } from '../../shared/ui/divergence/divergence-detail/divergence-detail.component';
+import { STATUS_LABELS, formatUtcDate } from '../../shared/ui/divergence/divergence-format';
+import {
+  DivergenceSortKey,
+  TimeRangePreset,
+  hasActiveFilters,
+  statusesPresent,
+} from './dashboard-filters';
 import { DashboardFacade } from './dashboard.facade';
 
 interface StreamConfig {
@@ -21,11 +39,21 @@ interface KpiView {
   note: string;
 }
 
+interface OptionView<T> {
+  value: T;
+  label: string;
+}
+
+/** What the Divergence list shows for the active stream. */
+export type ListState = 'loading' | 'unavailable' | 'empty' | 'filtered-empty' | 'ready';
+
 function formatUtcRange({ from, to }: ObservationWindow): string {
   const format = (value: string, pattern: string) => formatDate(value, pattern, 'en-US', 'UTC');
   const sameYear = format(from, 'y') === format(to, 'y');
   return `${format(from, sameYear ? 'd MMM' : 'd MMM y')}–${format(to, 'd MMM y')}`;
 }
+
+const plural = (count: number, one: string, many: string) => (count === 1 ? one : many);
 
 const STREAMS: readonly StreamConfig[] = [
   {
@@ -46,6 +74,21 @@ const STREAMS: readonly StreamConfig[] = [
   },
 ];
 
+const TIME_RANGE_OPTIONS: readonly OptionView<TimeRangePreset>[] = [
+  { value: 'all', label: 'All observations' },
+  { value: 'last-30-days', label: 'Last 30 days of observations' },
+  { value: 'last-7-days', label: 'Last 7 days of observations' },
+];
+
+const SORT_OPTIONS: readonly OptionView<DivergenceSortKey>[] = [
+  { value: 'onset', label: 'Onset (earliest first)' },
+  { value: 'identity-slice', label: 'Identity Slice (A–Z)' },
+  { value: 'dimension', label: 'Dimension (A–Z)' },
+  { value: 'status', label: 'Status (lifecycle order)' },
+];
+
+const selectValue = (event: Event) => (event.target as HTMLSelectElement).value;
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -56,9 +99,13 @@ const STREAMS: readonly StreamConfig[] = [
 })
 export class DashboardComponent {
   private readonly facade = inject(DashboardFacade);
+  private readonly injector = inject(Injector);
 
   readonly streams = STREAMS;
   readonly detailId = 'divergence-detail';
+  readonly timeRangeOptions = TIME_RANGE_OPTIONS;
+  readonly sortOptions = SORT_OPTIONS;
+  readonly skeletons = [0, 1, 2];
 
   activeStream = signal<StreamKind>('document');
   activeConfig = computed(() => STREAMS.find(s => s.kind === this.activeStream())!);
@@ -75,38 +122,114 @@ export class DashboardComponent {
     };
   });
 
-  /** Divergences for the active stream; null while they are unavailable. */
+  private streamState = computed(() => this.facade.streamState(this.activeStream()));
+
+  /** All of the active stream's Divergences; null while they are unavailable. */
   divergences = computed(() => this.facade.divergences()[this.activeStream()] ?? null);
-  selectedDivergence = computed(() => this.facade.selectedDivergence(this.activeStream()));
+  /** The active stream's Divergences after its filters and sort. */
+  visibleDivergences = computed(() => this.facade.visibleDivergences(this.activeStream()) ?? []);
+  selection = computed(() => this.facade.selection(this.activeStream()));
+  selectedDivergence = computed(() => this.selection().divergence);
+
+  filters = computed(() => this.facade.filters(this.activeStream()));
+  sortKey = computed(() => this.facade.sortKey(this.activeStream()));
+  filtersActive = computed(() => hasActiveFilters(this.filters()));
+
+  listState = computed((): ListState => {
+    const state = this.streamState();
+    if (state.status !== 'ready') return state.status;
+    if (state.divergences.length === 0) return 'empty';
+    return this.visibleDivergences().length === 0 ? 'filtered-empty' : 'ready';
+  });
+
+  /** Filters and sort apply only when the stream has Divergences to narrow or order. */
+  controlsEnabled = computed(() => {
+    const state = this.listState();
+    return state === 'ready' || state === 'filtered-empty';
+  });
+
+  /** Without focusable content, the tab panel itself takes focus (APG tabs pattern). */
+  panelFocusable = computed(() => !this.controlsEnabled() && this.listState() !== 'unavailable');
+
+  identitySliceOptions = computed((): OptionView<string>[] => {
+    const state = this.streamState();
+    if (state.status !== 'ready') return [];
+    return [...state.identitySlices]
+      .sort((a, b) => a.label.localeCompare(b.label, 'en-US'))
+      .map(slice => ({ value: slice.id, label: slice.label }));
+  });
+
+  /** Statuses present in the stream, plus the current choice so the control never goes blank. */
+  statusOptions = computed((): OptionView<DivergenceStatus>[] => {
+    const present = statusesPresent(this.divergences() ?? []);
+    const current = this.filters().status;
+    const statuses = current && !present.includes(current) ? [...present, current] : present;
+    return statuses.map(status => ({ value: status, label: STATUS_LABELS[status] }));
+  });
+
+  timeRangeNote = computed(() => {
+    const state = this.streamState();
+    if (state.status !== 'ready' || !state.latestObservedAt) return null;
+    return `Measured back from the latest observation in this stream, ${formatUtcDate(state.latestObservedAt)} (UTC).`;
+  });
+
+  controlsNote = computed(() => {
+    switch (this.listState()) {
+      case 'loading':
+        return 'Filters and sorting are available once Divergence data has loaded.';
+      case 'unavailable':
+        return 'Filters and sorting are unavailable while Divergence data cannot be read.';
+      case 'empty':
+        return 'There are no Divergences in this stream to filter or sort.';
+      default:
+        return null;
+    }
+  });
+
+  resultSummary = computed(() => {
+    const total = this.divergences()?.length ?? 0;
+    if (!this.controlsEnabled()) return null;
+    const shown = this.visibleDivergences().length;
+    return `Showing ${shown} of ${total} ${plural(total, 'Divergence', 'Divergences')}`;
+  });
+
+  hiddenSummary = computed(() => {
+    const hidden = (this.divergences()?.length ?? 0) - this.visibleDivergences().length;
+    return `${hidden} ${plural(hidden, 'Divergence is', 'Divergences are')} hidden`;
+  });
 
   kpis = computed((): KpiView[] => {
     const counts = this.facade.counts(this.activeStream());
-    const unavailable = 'Divergence data is not available';
+    const pending =
+      this.listState() === 'loading'
+        ? 'Divergence data is loading'
+        : 'Divergence data is not available';
     const count = (value: number | undefined) => (value === undefined ? '—' : String(value));
     return [
       {
         metric: 'total',
         label: 'Total Divergences',
         value: count(counts?.total),
-        note: counts ? this.activeConfig().kpiScopeNote : unavailable,
+        note: counts ? this.activeConfig().kpiScopeNote : pending,
       },
       {
         metric: 'ongoing',
         label: 'Ongoing',
         value: count(counts?.ongoing),
-        note: counts ? 'Latest observation outside the Observed Baseline' : unavailable,
+        note: counts ? 'Latest observation outside the Observed Baseline' : pending,
       },
       {
         metric: 'resolved',
         label: 'Resolved',
         value: count(counts?.resolved),
-        note: counts ? 'Finding lifecycle status' : unavailable,
+        note: counts ? 'Finding lifecycle status' : pending,
       },
       { metric: 'trend', label: 'Trend', value: '—', note: 'Trend analysis is added in a later Step' },
     ];
   });
 
   private tabButtons = viewChildren<ElementRef<HTMLButtonElement>>('streamTab');
+  private listRegion = viewChild<ElementRef<HTMLElement>>('listRegion');
 
   selectStream(stream: StreamKind) {
     this.activeStream.set(stream);
@@ -114,6 +237,35 @@ export class DashboardComponent {
 
   selectDivergence(divergenceId: string) {
     this.facade.select(this.activeStream(), divergenceId);
+  }
+
+  onIdentitySliceChange(event: Event) {
+    this.facade.setFilters(this.activeStream(), { identitySliceId: selectValue(event) || null });
+  }
+
+  onTimeRangeChange(event: Event) {
+    this.facade.setFilters(this.activeStream(), { timeRange: selectValue(event) as TimeRangePreset });
+  }
+
+  onStatusChange(event: Event) {
+    const status = selectValue(event) as DivergenceStatus | '';
+    this.facade.setFilters(this.activeStream(), { status: status || null });
+  }
+
+  onSortChange(event: Event) {
+    this.facade.setSort(this.activeStream(), selectValue(event) as DivergenceSortKey);
+  }
+
+  /** The button stays rendered and focusable, so clearing never strands keyboard focus. */
+  clearFilters() {
+    if (!this.filtersActive()) return;
+    this.facade.clearFilters(this.activeStream());
+  }
+
+  /** Reads the stream again, then moves focus to the list so it does not stay on a removed button. */
+  retry() {
+    this.facade.retry(this.activeStream());
+    afterNextRender(() => this.listRegion()?.nativeElement.focus(), { injector: this.injector });
   }
 
   onTabKeydown(event: KeyboardEvent, index: number) {

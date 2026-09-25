@@ -133,31 +133,51 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
+  max-width: 100%;
 }
 
 .filter-label,
-.filter-note {
+.filter-note,
+.kpi-scope-note,
+.result-summary,
+.list-note {
+  margin: 0;
   font-size: var(--font-size-caption);
   color: var(--color-text-secondary);
 }
 
 .filter-note {
-  margin: 0;
+  flex-basis: 100%;
 }
 
-.filter-select {
+.result-summary {
+  min-height: 1lh;
+}
+
+.filter-select,
+.filter-button {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border);
   color: var(--color-text-primary);
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-sm);
   cursor: pointer;
+  font: inherit;
   font-size: var(--font-size-caption);
+  max-width: 100%;
 
-  &:disabled {
+  &:disabled,
+  &[aria-disabled='true'] {
     cursor: not-allowed;
     opacity: 0.6;
   }
+}
+
+.filter-select:focus-visible,
+.filter-button:focus-visible,
+.divergence-list:focus-visible {
+  outline: 2px solid var(--color-baseline);
+  outline-offset: 2px;
 }
 
 .list-detail-container {
@@ -173,28 +193,32 @@
 }
 
 // The list holds Divergence cards directly, so it is not itself a card.
-.divergence-list {
+.divergence-list,
+.divergence-cards {
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
 }
 
 .divergence-cards {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.list-note {
-  margin: 0;
-  font-size: var(--font-size-caption);
-  color: var(--color-text-secondary);
+// Static placeholders; loading is announced by the result summary text.
+.skeleton-card {
+  height: 120px;
+  opacity: 0.5;
+}
+
+.empty-actions {
+  text-align: center;
+  padding-bottom: var(--space-md);
 }
 
 .empty-state,
+.skeleton-card,
 .detail-pane {
   background: var(--color-bg-surface);
   border: 1px solid var(--color-border);

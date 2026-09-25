@@ -1,10 +1,10 @@
-# Tech Lead Review - STEP-04
+# Tech Lead Review - STEP-05
 
 **Project:** IDP-Align  
-**Step:** STEP-04 - Divergence List, Detail, Baseline, And Evidence Trace  
+**Step:** STEP-05 - Filtering, Sorting, Empty, Loading, And Error States  
 **Review date:** 2026-09-25  
 **Reviewer:** Codex, Tech Lead  
-**Implementation package reviewed:** Current uncommitted Development Team STEP-04 work after A-035 implementation-plan approval and A-036 tablet-breakpoint rework approval  
+**Implementation package reviewed:** Current uncommitted Development Team STEP-05 work after A-041 implementation-plan approval  
 **Verdict:** Pass for QA
 
 ---
@@ -19,64 +19,66 @@ None.
 
 None.
 
-### Resolved During Rework
-
-1. **Tablet layout breakpoint corrected.**  
-   The initial review found that `mod-w/design/design-spec.md:252` defines tablet behavior as `768-1279px` stacked, while `.list-detail-container` stacked only at `max-width: 1024px`. A-036 approved a scoped rework, and `src/app/features/dashboard/dashboard.component.scss:170` now uses `max-width: 1279px`. Moderator-recorded browser evidence in A-036 confirms 1400px and 1280px render as two-column, while 1279px, 1200px, 1032px, 768px, and 390px render stacked with no horizontal overflow.
-
 ---
 
 ## Gate Verification
 
 `mod-w/validation/moderator-register.md` contains the required approvals:
 
-- A-034 approves `mod-w/step-04.md` as the active STEP-04 definition before Development Team briefing.
-- A-035 approves the Development Team STEP-04 implementation plan and records the Tech Lead conditions.
-- A-036 approves the scoped tablet-breakpoint rework plan and records Moderator browser evidence after implementation.
+- A-040 approves `mod-w/step-05.md` as the active STEP-05 definition before Development Team briefing.
+- A-041 approves the Development Team STEP-05 implementation plan and records the accepted Tech Lead decisions and conditions.
 
-No process approval is missing. The working tree is intentionally uncommitted per the Development Team handoff.
+A-041 includes a recording note that the Moderator approved the implementation plan in session before code was written and that the Development Team recorded the entry afterwards at the Moderator's explicit instruction for this instance only. That resolves the process concern for this review.
+
+The working tree is intentionally uncommitted per the Development Team handoff.
 
 ---
 
 ## Scope Check
 
-The implementation is within STEP-04 scope:
+The implementation is within STEP-05 scope:
 
-- Dashboard UI now consumes STEP-03 Divergence data through `DashboardFacade`.
-- Divergence list, detail, status badge, baseline reference panel, and Evidence Trace are implemented as display components under `src/app/shared/ui/divergence/`.
-- Dashboard KPI counts cover total, ongoing, resolved, and trend-placeholder state.
-- Selection state is local UI state and does not add user action workflows.
-- Non-replay and unavailable states are still represented.
-- There are no fixture imports in production dashboard/shared UI code, and no dashboard component reimplements baseline or sustained detection logic inline.
-- No Chart.js analysis, About changes, live calls, credentials, CAV Level 2+ behavior, Intent, Alignment Delta, Envelope, Breach, Drift Velocity, Convergence, or Attribution behavior was added.
+- Adds dashboard-local filter/sort helpers for already-computed `Divergence` records.
+- Extends `DashboardFacade` with per-stream loading/unavailable/ready state, retry, filters, sort, visible Divergences, unfiltered counts, and selection behavior under filters.
+- Replaces disabled filter placeholders with functional Identity Slice, time range, status, sort, and clear-filter controls.
+- Adds loading, unavailable, no-divergence, filtered-empty, hidden-selection, result-count, and unfiltered-KPI copy states.
+- Fixes the inactive stream-tab `aria-controls` issue by assigning `aria-controls` only on the active tab.
+- Preserves STEP-04 responsive breakpoint behavior, with `.list-detail-container` still stacking at `max-width: 1279px`.
+
+No About files, fixtures, domain detector logic, replay data, data adapters, live DocuWare integration, credentials, OAuth, backend/proxy code, Chart.js analysis, or user action workflows were changed.
 
 ---
 
 ## Acceptance Check Mapping
 
-- STEP-04 approval entry: met. A-034 is present.
-- Development Team implementation-plan approval: met. A-035 is present.
-- Facade surface for Divergence data: met.
-- Dashboard list/detail rendering: met.
-- Status badges and lifecycle wording: met. `resolved` is rendered as finding lifecycle status only.
-- Baseline reference context: met.
-- Evidence Trace rendering: met.
-- QA-014 carry-forward: met. Approval and Workflow runtime Divergences are rendered independently without causation or Attribution wording.
-- QA-018 carry-forward: met. UI copy does not claim broader vendor rename/entity matching.
-- QA-019 carry-forward: met. Resolved status does not imply remediation, correction, Convergence, or business correctness.
-- Disabled filters/sorting placeholders: met.
-- Dashboard shell/source state behavior: met.
-- Responsive behavior: met after A-036 rework. Tablet widths through 1279px now stack, and desktop begins at 1280px.
+- STEP-05 approval entry before briefing: met. A-040 is present.
+- Implementation-plan approval before review: met. A-041 is present, including Moderator recording note.
+- Functional filters: met. Identity Slice, time range, status, and clear filters are implemented and tested.
+- Functional sort: met. Onset, Identity Slice, dimension, and status sorting are implemented as stable sorts over visible records.
+- Time range semantics: met. Filtering uses `latestObservedAt` anchored to the stream's latest observation, with helper tests for edge cases.
+- Status semantics: met. Status filtering uses `DivergenceStatus` and avoids severity/risk language.
+- KPI semantics: met. Counts remain unfiltered, and UI copy states that filters do not change them.
+- Selection under filters: met. Hidden selected Divergences are not shown as stale detail, and clearing filters restores the selected Divergence.
+- Stream switching: met. Filters, sort, and selection are preserved per stream as approved in A-041.
+- Loading state: met by test evidence. Replay data does not visibly pause in the browser, but Subject-backed tests cover loading UI.
+- Unavailable/error state: met by test evidence. Retry re-reads through the repository and avoids support/live-access copy.
+- Empty and filtered-empty states: met. The states are distinct and tested.
+- Accessibility: met. Active-tab `aria-controls`, tab keyboard behavior, clear-filter focus safety, retry focus handoff, and panel focus behavior are tested.
+- Responsive behavior: met by code inspection and Development Team browser evidence; QA should re-check 1279px/1280px.
+- Source boundary: met. Components do not import replay fixtures, and filtering/sorting do not derive baselines or sustained runs.
+- Guardrails: met. Dashboard copy tests include the existing claim patterns plus dashboard-only severity/risk wording.
+- Out-of-scope boundaries: met. No Chart.js analysis, user action workflow, About change, fixture change, detector change, live call, credential, backend/proxy, or CAV Level 2+ behavior was introduced.
 
 ---
 
 ## Architecture And Domain Check
 
-- `architecture.md` D3/D6 are respected: dashboard surfaces canonical Divergence, Observed Baseline, and Evidence records from domain logic.
-- `architecture.md` D4/D13 are respected: production UI depends on the facade/repository boundary, not direct replay fixture files or live integration code.
-- `architecture.md` D5 remains delegated to STEP-03 domain detection; STEP-04 does not redefine sustained logic.
-- `architecture.md` D9 remains intact: no CAV Level 2+ or Intent semantics are introduced.
-- `domain-language.md` guardrails are respected in reviewed runtime UI copy.
+- `architecture.md` D1/D2 are preserved: the dashboard remains one reusable stream view with shared Divergence components.
+- `architecture.md` D3/D6 are preserved: the UI continues to surface canonical Divergence, Observed Baseline, and Evidence records.
+- `architecture.md` D9 is respected: no CAV Level 2+ or reserved Level 3+ behavior is introduced.
+- `architecture.md` D11 is satisfied with focused helper, facade, and component coverage.
+- `architecture.md` D13 is preserved: dashboard components consume the facade and do not import replay fixtures or live adapters.
+- `domain-language.md` is respected. Filter/sort UI uses lifecycle status, not severity or business-risk scoring.
 
 ---
 
@@ -89,25 +91,30 @@ Run with Node.js v26.0.0 via `fnm`:
 | `fnm exec --using=v26.0.0 node --version` | Pass - `v26.0.0` |
 | `fnm exec --using=v26.0.0 npm.cmd run lint` | Pass - all files pass linting |
 | `fnm exec --using=v26.0.0 npm.cmd run build` | Pass after rerun outside sandbox; sandboxed run failed with known Angular/esbuild `spawn EPERM` |
-| `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` | Pass after rerun outside sandbox; 26 test files and 337 tests passed |
+| `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` | Pass after rerun outside sandbox; 27 test files and 408 tests passed |
 
 Build output:
 
-- Initial total: 262.14 kB raw / 75.22 kB estimated transfer.
-- Lazy chunks: `dashboard-component` 40.55 kB raw / 9.78 kB estimated transfer; `about-component` 10.41 kB raw / 3.06 kB estimated transfer.
+- Initial total: 264.78 kB raw / 75.89 kB estimated transfer.
+- Lazy chunks: `dashboard-component` 50.59 kB raw / 12.06 kB estimated transfer; `about-component` 10.41 kB raw / 3.06 kB estimated transfer.
+
+Development Team also reported 18 of 18 browser checks passing with throwaway Playwright evidence. I did not independently rerun the browser script during this Tech Lead review.
 
 ---
 
 ## QA Handoff Status
 
-STEP-04 is ready for QA review.
+STEP-05 is ready for QA review after Moderator accepts this Tech Lead review.
 
 QA should pay special attention to:
 
-- replay dashboard renders one document Divergence and three workflow Divergences without causal or Attribution wording;
-- baseline and Evidence Trace wording stays descriptive and source-based;
-- `resolved` remains lifecycle-only copy;
-- tablet layout stacks from 768px through 1279px, with desktop two-column layout beginning at 1280px;
-- no About, Chart.js, fixture, live-call, credential, or domain-detector scope creep is present.
+- A-041 process traceability and its recording note;
+- functional filters and sort behavior across both streams;
+- per-stream retention of filters, sort, and selection;
+- hidden-selection detail behavior when filters hide a selected Divergence;
+- loading, unavailable, empty, and filtered-empty states through test doubles where needed;
+- retry copy and behavior staying local and repository-backed;
+- absence of severity/risk, business judgment, Attribution, CAV Level 2+, or live-access claims;
+- responsive behavior at 1279px and 1280px.
 
 MOD-W v5.0.1

@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { EMPTY, Observable, of, throwError } from 'rxjs';
+import { EMPTY, Observable, Subject, of, throwError } from 'rxjs';
 import { amountDivergence } from '../../../testing/divergence-builders';
 import { at, documentObservation, testDocumentSlice } from '../../../testing/observation-builders';
 import { provideStreamObservationRepository } from '../../data/provide-stream-observation-repository';
 import { StreamObservationRepository, StreamSourceInfo } from '../../data/stream-observation.repository';
 import { Divergence } from '../../domain/divergence';
+import { IdentitySlice } from '../../domain/identity-slice';
+import { Observation } from '../../domain/observation';
 import { StreamKind } from '../../domain/stream';
 import { DashboardFacade, orderByOnset } from './dashboard.facade';
 
@@ -210,6 +212,209 @@ describe('DashboardFacade', () => {
 
       expect(facade.selectedDivergence('document')).toBeNull();
       expect(facade.counts('document')).toEqual({ total: 0, ongoing: 0, resolved: 0 });
+    });
+  });
+
+  describe('stream data state', () => {
+    it('should be loading until the repository provides stream data', () => {
+      const slices = new Subject<readonly IdentitySlice[]>();
+      const facade = createFacade({
+        getIdentitySlices: (() => slices) as unknown as StreamObservationRepository['getIdentitySlices'],
+        getObservations: (() => of([])) as StreamObservationRepository['getObservations'],
+      });
+
+      expect(facade.streamState('document')).toEqual({ status: 'loading' });
+      expect(facade.visibleDivergences('document')).toBeNull();
+      expect(facade.counts('document')).toBeNull();
+
+      slices.next([]);
+      slices.complete();
+
+      expect(facade.streamState('document')).toEqual({
+        status: 'ready',
+        divergences: [],
+        identitySlices: [],
+        latestObservedAt: null,
+      });
+    });
+
+    it('should report a stream that completes without data as unavailable, not loading', () => {
+      const facade = createFacade({});
+
+      expect(facade.streamState('document')).toEqual({ status: 'unavailable' });
+      expect(facade.streamState('workflow')).toEqual({ status: 'unavailable' });
+    });
+
+    it('should expose the Identity Slices and latest observation of a ready stream', () => {
+      const facade = createReplayFacade();
+      const state = facade.streamState('document');
+
+      expect(state.status === 'ready' && state.identitySlices.length).toBe(6);
+      expect(state.status === 'ready' && state.latestObservedAt).toBe('2026-09-11T15:00:00.000Z');
+    });
+
+    it('should read an unavailable stream again through the repository on retry', () => {
+      let attempts = 0;
+      const facade = createFacade({
+        getIdentitySlices: ((stream: StreamKind) => {
+          if (stream === 'document') attempts++;
+          return stream === 'document' && attempts === 1
+            ? throwError(() => new Error('unavailable'))
+            : of([]);
+        }) as StreamObservationRepository['getIdentitySlices'],
+        getObservations: (() => of([])) as StreamObservationRepository['getObservations'],
+      });
+
+      expect(facade.streamState('document').status).toBe('unavailable');
+
+      facade.retry('document');
+
+      expect(attempts).toBe(2);
+      expect(facade.streamState('document').status).toBe('ready');
+      expect(facade.streamState('workflow').status).toBe('ready');
+    });
+
+    it('should show loading again while a retry is being read', () => {
+      const reads: Subject<readonly Observation[]>[] = [];
+      const facade = createFacade({
+        getIdentitySlices: (() => of([])) as StreamObservationRepository['getIdentitySlices'],
+        getObservations: (() => {
+          const read = new Subject<readonly Observation[]>();
+          reads.push(read);
+          return read;
+        }) as unknown as StreamObservationRepository['getObservations'],
+      });
+      facade.streamState('document');
+      reads[0].error(new Error('unavailable'));
+      expect(facade.streamState('document').status).toBe('unavailable');
+
+      facade.retry('document');
+
+      expect(facade.streamState('document').status).toBe('loading');
+    });
+  });
+
+  describe('filters and sort', () => {
+    const approvalSliceId = (facade: DashboardFacade) =>
+      facade.divergences().workflow![0].identitySlice.id;
+
+    it('should start with default filters and onset sort in each stream', () => {
+      const facade = createReplayFacade();
+
+      for (const stream of ['document', 'workflow'] as const) {
+        expect(facade.filters(stream)).toEqual({ identitySliceId: null, timeRange: 'all', status: null });
+        expect(facade.sortKey(stream)).toBe('onset');
+        expect(facade.visibleDivergences(stream)).toEqual(facade.divergences()[stream]);
+      }
+    });
+
+    it('should narrow only the stream whose filters change', () => {
+      const facade = createReplayFacade();
+
+      facade.setFilters('workflow', { identitySliceId: approvalSliceId(facade) });
+
+      expect(summary(facade.visibleDivergences('workflow')!)).toEqual([
+        ['Invoice approval (synthetic) · Approval', 'task-duration', 'ongoing'],
+        ['Invoice approval (synthetic) · Approval', 'response-time', 'ongoing'],
+      ]);
+      expect(facade.visibleDivergences('document')!.length).toBe(1);
+      expect(facade.filters('document').identitySliceId).toBeNull();
+    });
+
+    it('should keep counts for all of the stream, whatever the filters', () => {
+      const facade = createReplayFacade();
+
+      facade.setFilters('workflow', { status: 'resolved' });
+
+      expect(facade.visibleDivergences('workflow')).toEqual([]);
+      expect(facade.counts('workflow')).toEqual({ total: 3, ongoing: 3, resolved: 0 });
+    });
+
+    it('should clear only the given stream filters and keep its sort', () => {
+      const facade = createReplayFacade();
+      facade.setFilters('workflow', { status: 'resolved', timeRange: 'last-7-days' });
+      facade.setFilters('document', { status: 'resolved' });
+      facade.setSort('workflow', 'dimension');
+
+      facade.clearFilters('workflow');
+
+      expect(facade.filters('workflow')).toEqual({ identitySliceId: null, timeRange: 'all', status: null });
+      expect(facade.sortKey('workflow')).toBe('dimension');
+      expect(facade.filters('document').status).toBe('resolved');
+      expect(facade.visibleDivergences('workflow')!.length).toBe(3);
+    });
+
+    it('should sort the visible Divergences per stream', () => {
+      const facade = createReplayFacade();
+
+      facade.setSort('workflow', 'dimension');
+
+      expect(summary(facade.visibleDivergences('workflow')!).map(([, dimension]) => dimension)).toEqual([
+        'response-time',
+        'task-duration',
+        'workflow-runtime',
+      ]);
+      expect(facade.sortKey('document')).toBe('onset');
+    });
+
+    it('should keep replay Divergences observed in the last 7 days of each stream', () => {
+      const facade = createReplayFacade();
+
+      facade.setFilters('document', { timeRange: 'last-7-days' });
+      facade.setFilters('workflow', { timeRange: 'last-7-days' });
+
+      expect(facade.visibleDivergences('document')!.length).toBe(1);
+      expect(facade.visibleDivergences('workflow')!.length).toBe(3);
+    });
+  });
+
+  describe('selection under filters', () => {
+    it('should report a chosen Divergence hidden by filters, not show another one', () => {
+      const facade = createReplayFacade();
+      const [approval, , runtime] = facade.divergences().workflow!;
+      facade.select('workflow', runtime.id);
+
+      facade.setFilters('workflow', { identitySliceId: approval.identitySlice.id });
+
+      expect(facade.selection('workflow')).toEqual({ divergence: null, hiddenByFilters: true });
+      expect(facade.selectedDivergence('workflow')).toBeNull();
+    });
+
+    it('should show the chosen Divergence again after clearing filters', () => {
+      const facade = createReplayFacade();
+      const runtime = facade.divergences().workflow![2];
+      facade.select('workflow', runtime.id);
+      facade.setFilters('workflow', { status: 'resolved' });
+
+      facade.clearFilters('workflow');
+
+      expect(facade.selection('workflow')).toEqual({ divergence: runtime, hiddenByFilters: false });
+    });
+
+    it('should keep the chosen Divergence when the sort changes', () => {
+      const facade = createReplayFacade();
+      const response = facade.divergences().workflow![1];
+      facade.select('workflow', response.id);
+
+      facade.setSort('workflow', 'identity-slice');
+
+      expect(facade.selectedDivergence('workflow')).toBe(response);
+    });
+
+    it('should default to the first visible Divergence when none was chosen', () => {
+      const facade = createReplayFacade();
+
+      facade.setSort('workflow', 'dimension');
+
+      expect(facade.selectedDivergence('workflow')?.dimension).toBe('response-time');
+    });
+
+    it('should select nothing, without a hidden choice, when filters leave no Divergences', () => {
+      const facade = createReplayFacade();
+
+      facade.setFilters('document', { status: 'resolved' });
+
+      expect(facade.selection('document')).toEqual({ divergence: null, hiddenByFilters: false });
     });
   });
 });

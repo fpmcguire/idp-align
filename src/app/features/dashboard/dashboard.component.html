@@ -10,6 +10,7 @@
 
   <div class="stream-tabs" role="tablist" aria-label="Streams">
     @for (stream of streams; track stream.kind; let i = $index) {
+      <!-- Only the active tab controls a panel: inactive stream panels are not rendered. -->
       <button
         #streamTab
         type="button"
@@ -18,7 +19,7 @@
         [id]="'stream-tab-' + stream.kind"
         [attr.data-testid]="'stream-tab-' + stream.kind"
         [attr.aria-selected]="activeStream() === stream.kind"
-        [attr.aria-controls]="'stream-panel-' + stream.kind"
+        [attr.aria-controls]="activeStream() === stream.kind ? 'stream-panel-' + stream.kind : null"
         [attr.tabindex]="activeStream() === stream.kind ? 0 : -1"
         [class.active]="activeStream() === stream.kind"
         (click)="selectStream(stream.kind)"
@@ -32,7 +33,7 @@
   <div
     class="dashboard-content"
     role="tabpanel"
-    [attr.tabindex]="divergences()?.length ? null : 0"
+    [attr.tabindex]="panelFocusable() ? 0 : null"
     [id]="'stream-panel-' + activeConfig().kind"
     [attr.aria-labelledby]="'stream-tab-' + activeConfig().kind"
     data-testid="stream-panel"
@@ -62,35 +63,149 @@
         </div>
       }
     </div>
+    @if (divergences()) {
+      <p class="kpi-scope-note" data-testid="kpi-scope-note">
+        Counts include every Divergence in this stream. Filters do not change them.
+      </p>
+    }
 
     <div class="filter-bar" data-testid="filter-bar">
       <label class="filter-field">
         <span class="filter-label">{{ activeConfig().identitySliceLabel }}</span>
-        <select class="filter-select" data-testid="filter-identity-slice" disabled>
-          <option>All identity slices</option>
+        <select
+          class="filter-select"
+          data-testid="filter-identity-slice"
+          [disabled]="!controlsEnabled()"
+          (change)="onIdentitySliceChange($event)"
+        >
+          <option value="" [selected]="filters().identitySliceId === null">All Identity Slices</option>
+          @for (option of identitySliceOptions(); track option.value) {
+            <option [value]="option.value" [selected]="filters().identitySliceId === option.value">
+              {{ option.label }}
+            </option>
+          }
         </select>
       </label>
       <label class="filter-field">
         <span class="filter-label">Time range</span>
-        <select class="filter-select" data-testid="filter-timerange" disabled>
-          <option>Last 7 days</option>
+        <select
+          class="filter-select"
+          data-testid="filter-timerange"
+          [disabled]="!controlsEnabled()"
+          [attr.aria-describedby]="timeRangeNote() ? 'time-range-note' : null"
+          (change)="onTimeRangeChange($event)"
+        >
+          @for (option of timeRangeOptions; track option.value) {
+            <option [value]="option.value" [selected]="filters().timeRange === option.value">
+              {{ option.label }}
+            </option>
+          }
         </select>
       </label>
       <label class="filter-field">
         <span class="filter-label">Status</span>
-        <select class="filter-select" data-testid="filter-status" disabled>
-          <option>All statuses</option>
+        <select
+          class="filter-select"
+          data-testid="filter-status"
+          [disabled]="!controlsEnabled()"
+          (change)="onStatusChange($event)"
+        >
+          <option value="" [selected]="filters().status === null">All statuses</option>
+          @for (option of statusOptions(); track option.value) {
+            <option [value]="option.value" [selected]="filters().status === option.value">
+              {{ option.label }}
+            </option>
+          }
         </select>
       </label>
-      <p class="filter-note">Filters become available in a later Step.</p>
+      <label class="filter-field">
+        <span class="filter-label">Sort by</span>
+        <select
+          class="filter-select"
+          data-testid="sort-select"
+          [disabled]="!controlsEnabled()"
+          (change)="onSortChange($event)"
+        >
+          @for (option of sortOptions; track option.value) {
+            <option [value]="option.value" [selected]="sortKey() === option.value">
+              {{ option.label }}
+            </option>
+          }
+        </select>
+      </label>
+      <!-- aria-disabled rather than disabled while no filter is set, so focus is never dropped. -->
+      <button
+        type="button"
+        class="filter-button"
+        data-testid="clear-filters"
+        [disabled]="!controlsEnabled()"
+        [attr.aria-disabled]="controlsEnabled() && !filtersActive() ? 'true' : null"
+        (click)="clearFilters()"
+      >
+        Clear filters
+      </button>
+      @if (controlsNote(); as note) {
+        <p class="filter-note" data-testid="controls-note">{{ note }}</p>
+      } @else if (timeRangeNote(); as note) {
+        <p class="filter-note" id="time-range-note" data-testid="time-range-note">{{ note }}</p>
+      }
     </div>
 
     <div class="list-detail-container">
-      <section class="divergence-list" aria-label="Divergence list" data-testid="divergence-list">
-        @if (divergences(); as divergences) {
-          @if (divergences.length > 0) {
+      <section
+        #listRegion
+        class="divergence-list"
+        tabindex="-1"
+        aria-label="Divergence list"
+        data-testid="divergence-list"
+        [attr.aria-busy]="listState() === 'loading' ? 'true' : null"
+      >
+        <p class="result-summary" role="status" data-testid="result-summary">
+          @if (listState() === 'loading') {
+            Loading Divergences for the {{ activeConfig().label }}…
+          } @else if (resultSummary(); as summary) {
+            {{ summary }}
+          }
+        </p>
+        @switch (listState()) {
+          @case ('loading') {
+            <ul class="divergence-cards" aria-hidden="true" data-testid="loading-state">
+              @for (skeleton of skeletons; track skeleton) {
+                <li class="skeleton-card"></li>
+              }
+            </ul>
+          }
+          @case ('unavailable') {
+            <div class="empty-state" data-testid="unavailable-state">
+              <p class="empty-title">Divergences unavailable</p>
+              <p class="placeholder-text">Divergence data is not available for this stream.</p>
+              <div class="empty-actions">
+                <button type="button" class="filter-button" data-testid="retry" (click)="retry()">
+                  Try again
+                </button>
+              </div>
+            </div>
+          }
+          @case ('empty') {
+            <div class="empty-state" data-testid="empty-state">
+              <p class="empty-title">No sustained Divergences</p>
+              <p class="placeholder-text">
+                No sustained Divergences in the {{ activeConfig().label }} replay data.
+              </p>
+            </div>
+          }
+          @case ('filtered-empty') {
+            <div class="empty-state" data-testid="filtered-empty-state">
+              <p class="empty-title">No matching Divergences</p>
+              <p class="placeholder-text">
+                No Divergences in the {{ activeConfig().label }} match the current filters.
+                {{ hiddenSummary() }}. Use Clear filters to show them.
+              </p>
+            </div>
+          }
+          @default {
             <ul class="divergence-cards">
-              @for (divergence of divergences; track divergence.id) {
+              @for (divergence of visibleDivergences(); track divergence.id) {
                 <li>
                   <app-divergence-card
                     [divergence]="divergence"
@@ -105,24 +220,25 @@
               Each Divergence is compared with its own Observed Baseline for one Identity Slice and
               dimension.
             </p>
-          } @else {
-            <div class="empty-state" data-testid="empty-state">
-              <p class="empty-title">No sustained Divergences</p>
-              <p class="placeholder-text">
-                No sustained Divergences in the {{ activeConfig().label }} replay data.
-              </p>
-            </div>
           }
-        } @else {
-          <div class="empty-state" data-testid="unavailable-state">
-            <p class="empty-title">Divergences unavailable</p>
-            <p class="placeholder-text">Divergence data is not available for this stream.</p>
-          </div>
         }
       </section>
       <section class="detail-pane" [id]="detailId" aria-label="Divergence detail" data-testid="detail-pane">
         @if (selectedDivergence(); as divergence) {
           <app-divergence-detail [divergence]="divergence" />
+        } @else if (listState() === 'loading') {
+          <p class="placeholder-text" data-testid="detail-loading">
+            Divergence detail is shown once Divergence data has loaded.
+          </p>
+        } @else if (selection().hiddenByFilters) {
+          <p class="placeholder-text" data-testid="detail-hidden">
+            The selected Divergence is hidden by the current filters. Choose a Divergence from the
+            list, or clear filters to show it again.
+          </p>
+        } @else if (listState() === 'filtered-empty') {
+          <p class="placeholder-text" data-testid="detail-empty">
+            No Divergence to show under the current filters.
+          </p>
         } @else {
           <p class="placeholder-text" data-testid="detail-empty">No Divergence to show.</p>
         }

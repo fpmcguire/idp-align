@@ -1,14 +1,28 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { EMPTY, of, throwError } from 'rxjs';
+import { EMPTY, Subject, of, throwError } from 'rxjs';
 import {
   CLAIM_GUARDRAIL_PATTERNS,
   REPLAY_SOURCE_AVOID_WORDS,
+  SEVERITY_RISK_PATTERN,
 } from '../../../testing/claim-guardrail-patterns';
 import { at, documentObservation, testDocumentSlice } from '../../../testing/observation-builders';
 import { provideStreamObservationRepository } from '../../data/provide-stream-observation-repository';
 import { StreamObservationRepository, StreamSourceInfo } from '../../data/stream-observation.repository';
+import { DocumentIdentitySlice } from '../../domain/identity-slice';
 import { StreamKind } from '../../domain/stream';
 import { DashboardComponent } from './dashboard.component';
+
+/** Claim guardrails plus the dashboard-only severity/risk check (STEP-05). */
+const DASHBOARD_GUARDRAIL_PATTERNS = {
+  ...CLAIM_GUARDRAIL_PATTERNS,
+  severityOrRisk: SEVERITY_RISK_PATTERN,
+};
+
+/** A replay Identity Slice per stream with no Divergences, for filtered-empty checks. */
+const UNMATCHED_SLICE: Readonly<Record<StreamKind, string>> = {
+  document: 'Beta Freight Services (synthetic) · Invoice',
+  workflow: 'Invoice approval (synthetic) · Invoice review',
+};
 
 const normalize = (text: string | null | undefined) => (text ?? '').replace(/\s+/g, ' ').trim();
 /** Rendered text with every text node separated, so word-boundary guardrail patterns apply. */
@@ -54,6 +68,23 @@ describe('DashboardComponent', () => {
     component.selectStream(stream);
     fixture.detectChanges();
   };
+  const control = (testId: string) =>
+    el.querySelector<HTMLSelectElement>(`[data-testid="${testId}"]`)!;
+  const optionLabels = (testId: string) =>
+    Array.from(control(testId).options).map(o => normalize(o.textContent));
+  const selectedLabel = (testId: string) =>
+    normalize(control(testId).selectedOptions[0]?.textContent);
+  /** Picks an option by its visible label, as a user would. */
+  const choose = (testId: string, label: string) => {
+    const select = control(testId);
+    const option = Array.from(select.options).find(o => normalize(o.textContent) === label);
+    if (!option) throw new Error(`No "${label}" option in ${testId}`);
+    select.value = option.value;
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+  };
+  const clearButton = () => el.querySelector<HTMLButtonElement>('[data-testid="clear-filters"]')!;
+  const resultSummary = () => normalize(el.querySelector('[data-testid="result-summary"]')?.textContent);
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -102,6 +133,18 @@ describe('DashboardComponent', () => {
       const panel = el.querySelector('[role="tabpanel"]')!;
       expect(tab('document').getAttribute('aria-controls')).toBe(panel.id);
       expect(panel.getAttribute('aria-labelledby')).toBe(tab('document').id);
+    });
+
+    it('should not point an inactive tab at a panel that is not rendered', () => {
+      for (const stream of ['document', 'workflow'] as const) {
+        switchTo(stream);
+        const inactive = stream === 'document' ? 'workflow' : 'document';
+
+        expect(tab(inactive).hasAttribute('aria-controls')).toBe(false);
+        for (const t of Array.from(el.querySelectorAll('[role="tab"][aria-controls]'))) {
+          expect(el.querySelector(`#${t.getAttribute('aria-controls')}`)).toBeTruthy();
+        }
+      }
     });
 
     it('should leave the tab panel out of the tab order when it holds focusable cards', () => {
@@ -178,17 +221,261 @@ describe('DashboardComponent', () => {
       expect(el.querySelector('[data-testid="filter-bar"]')?.textContent).toContain('workflow step / route');
     });
 
-    it('should render disabled filters without invented identity slice values', () => {
+    it('should render enabled filter and sort controls with repository Identity Slices', () => {
       const selects = el.querySelectorAll<HTMLSelectElement>('.filter-select');
-      expect(selects.length).toBe(3);
-      selects.forEach(s => expect(s.disabled).toBe(true));
+      expect(selects.length).toBe(4);
+      selects.forEach(s => expect(s.disabled).toBe(false));
 
-      const sliceOptions = el.querySelectorAll('[data-testid="filter-identity-slice"] option');
-      expect(sliceOptions.length).toBe(1);
-      expect(sliceOptions[0].textContent).toContain('All identity slices');
-      expect(el.querySelector('.filter-note')?.textContent).toContain(
-        'Filters become available in a later Step.'
+      expect(optionLabels('filter-identity-slice')).toEqual([
+        'All Identity Slices',
+        'Alpha Office Supplies (synthetic) · Credit note',
+        'Alpha Office Supplies (synthetic) · Invoice',
+        'Beta Freight Services (synthetic) · Credit note',
+        'Beta Freight Services (synthetic) · Invoice',
+        'Gamma Facilities Care (synthetic) · Credit note',
+        'Gamma Facilities Care (synthetic) · Invoice',
+      ]);
+      expect(el.textContent).not.toContain('Filters become available in a later Step.');
+    });
+  });
+
+  describe('filter and sort controls', () => {
+    it('should offer time range presets measured from the latest observation', () => {
+      expect(optionLabels('filter-timerange')).toEqual([
+        'All observations',
+        'Last 30 days of observations',
+        'Last 7 days of observations',
+      ]);
+      expect(normalize(el.querySelector('[data-testid="time-range-note"]')?.textContent)).toBe(
+        'Measured back from the latest observation in this stream, 11 Sep 2026 (UTC).'
       );
+      expect(control('filter-timerange').getAttribute('aria-describedby')).toBe('time-range-note');
+    });
+
+    it('should offer only the lifecycle statuses present in the stream', () => {
+      expect(optionLabels('filter-status')).toEqual(['All statuses', 'Ongoing']);
+    });
+
+    it('should offer onset, Identity Slice, dimension, and status sort options', () => {
+      expect(optionLabels('sort-select')).toEqual([
+        'Onset (earliest first)',
+        'Identity Slice (A–Z)',
+        'Dimension (A–Z)',
+        'Status (lifecycle order)',
+      ]);
+      expect(control('sort-select').value).toBe('onset');
+    });
+
+    it('should list the workflow stream Identity Slices after switching', () => {
+      switchTo('workflow');
+
+      expect(optionLabels('filter-identity-slice')).toEqual([
+        'All Identity Slices',
+        'Invoice approval (synthetic) · Approval',
+        'Invoice approval (synthetic) · Invoice review',
+        'Invoice approval (synthetic) · Payment release',
+        'Invoice approval (synthetic) · Workflow runtime',
+      ]);
+    });
+
+    it('should narrow the list by Identity Slice', () => {
+      switchTo('workflow');
+
+      choose('filter-identity-slice', 'Invoice approval (synthetic) · Approval');
+
+      expect(cardSummary()).toEqual([
+        ['Invoice approval (synthetic) · Approval', 'Task duration', 'Ongoing'],
+        ['Invoice approval (synthetic) · Approval', 'Response time', 'Ongoing'],
+      ]);
+      expect(resultSummary()).toBe('Showing 2 of 3 Divergences');
+    });
+
+    it('should narrow the list by status', () => {
+      choose('filter-status', 'Ongoing');
+
+      expect(cardSummary().length).toBe(1);
+      expect(resultSummary()).toBe('Showing 1 of 1 Divergence');
+    });
+
+    it('should keep replay Divergences observed in the last 7 days', () => {
+      switchTo('workflow');
+
+      choose('filter-timerange', 'Last 7 days of observations');
+
+      expect(cardSummary().length).toBe(3);
+    });
+
+    it('should reorder the list by the chosen sort', () => {
+      switchTo('workflow');
+
+      choose('sort-select', 'Dimension (A–Z)');
+
+      expect(cardSummary().map(([, dimension]) => dimension)).toEqual([
+        'Response time',
+        'Task duration',
+        'Workflow runtime',
+      ]);
+    });
+
+    it('should keep KPI counts for the whole stream and say so', () => {
+      switchTo('workflow');
+
+      choose('filter-identity-slice', 'Invoice approval (synthetic) · Workflow runtime');
+
+      expect(cardSummary().length).toBe(1);
+      expect(kpiValues()).toEqual(['3', '3', '0', '—']);
+      expect(normalize(el.querySelector('[data-testid="kpi-scope-note"]')?.textContent)).toBe(
+        'Counts include every Divergence in this stream. Filters do not change them.'
+      );
+    });
+  });
+
+  describe('filtered-empty state', () => {
+    beforeEach(() => choose('filter-identity-slice', 'Beta Freight Services (synthetic) · Invoice'));
+
+    it('should distinguish no matches under filters from no Divergences', () => {
+      expect(cards().length).toBe(0);
+      expect(el.querySelector('[data-testid="empty-state"]')).toBeNull();
+      expect(normalize(el.querySelector('[data-testid="filtered-empty-state"]')?.textContent)).toBe(
+        'No matching Divergences No Divergences in the Document stream match the current filters. ' +
+          '1 Divergence is hidden. Use Clear filters to show them.'
+      );
+      expect(resultSummary()).toBe('Showing 0 of 1 Divergence');
+    });
+
+    it('should show no stale detail', () => {
+      expect(detail()).toBeNull();
+      expect(normalize(el.querySelector('[data-testid="detail-empty"]')?.textContent)).toBe(
+        'No Divergence to show under the current filters.'
+      );
+    });
+
+    it('should keep the filter controls available to change or clear', () => {
+      expect(control('filter-identity-slice').disabled).toBe(false);
+      expect(clearButton().disabled).toBe(false);
+      expect(clearButton().hasAttribute('aria-disabled')).toBe(false);
+    });
+
+    it('should add no reset control of its own', () => {
+      expect(el.querySelector('[data-testid="filtered-empty-state"] button')).toBeNull();
+    });
+  });
+
+  describe('clear filters', () => {
+    it('should be focusable but aria-disabled while no filter is set', () => {
+      expect(clearButton().disabled).toBe(false);
+      expect(clearButton().getAttribute('aria-disabled')).toBe('true');
+
+      clearButton().focus();
+      clearButton().click();
+      fixture.detectChanges();
+
+      expect(document.activeElement).toBe(clearButton());
+      expect(cardSummary().length).toBe(1);
+    });
+
+    it('should reset the filters and restore the Divergences', () => {
+      switchTo('workflow');
+      choose('filter-identity-slice', 'Invoice approval (synthetic) · Invoice review');
+      choose('filter-timerange', 'Last 30 days of observations');
+      expect(cards().length).toBe(0);
+
+      clearButton().focus();
+      clearButton().click();
+      fixture.detectChanges();
+
+      expect(cardSummary().length).toBe(3);
+      expect(control('filter-identity-slice').value).toBe('');
+      expect(control('filter-timerange').value).toBe('all');
+      expect(clearButton().getAttribute('aria-disabled')).toBe('true');
+      expect(document.activeElement).toBe(clearButton());
+    });
+
+    it('should keep the chosen sort', () => {
+      switchTo('workflow');
+      choose('sort-select', 'Status (lifecycle order)');
+      choose('filter-status', 'Ongoing');
+
+      clearButton().click();
+      fixture.detectChanges();
+
+      expect(control('sort-select').value).toBe('status');
+    });
+  });
+
+  describe('selection and detail under filters', () => {
+    beforeEach(() => {
+      switchTo('workflow');
+      cards()[2].click();
+      fixture.detectChanges();
+    });
+
+    it('should say the selected Divergence is hidden instead of showing stale detail', () => {
+      choose('filter-identity-slice', 'Invoice approval (synthetic) · Approval');
+
+      expect(detail()).toBeNull();
+      expect(normalize(el.querySelector('[data-testid="detail-hidden"]')?.textContent)).toBe(
+        'The selected Divergence is hidden by the current filters. Choose a Divergence from the ' +
+          'list, or clear filters to show it again.'
+      );
+      expect(cards().some(c => c.getAttribute('aria-current') === 'true')).toBe(false);
+    });
+
+    it('should show the selected Divergence again after clearing filters', () => {
+      const runtimeId = detail()?.dataset['divergenceId'];
+      choose('filter-identity-slice', 'Invoice approval (synthetic) · Approval');
+
+      clearButton().click();
+      fixture.detectChanges();
+
+      expect(detail()?.dataset['divergenceId']).toBe(runtimeId);
+      expect(cards()[2].getAttribute('aria-current')).toBe('true');
+    });
+
+    it('should let another visible Divergence be chosen while one is hidden', () => {
+      choose('filter-identity-slice', 'Invoice approval (synthetic) · Approval');
+
+      cards()[1].click();
+      fixture.detectChanges();
+
+      expect(normalize(detail()?.textContent)).toContain('Dimension: Response time');
+    });
+
+    it('should keep the selection when the sort changes', () => {
+      const runtimeId = detail()?.dataset['divergenceId'];
+
+      choose('sort-select', 'Dimension (A–Z)');
+
+      expect(detail()?.dataset['divergenceId']).toBe(runtimeId);
+    });
+  });
+
+  describe('stream switching with filters', () => {
+    it("should keep each stream's own filters and sort", () => {
+      switchTo('workflow');
+      choose('filter-identity-slice', 'Invoice approval (synthetic) · Approval');
+      choose('sort-select', 'Dimension (A–Z)');
+
+      switchTo('document');
+      expect(cardSummary().length).toBe(1);
+      expect(control('filter-identity-slice').value).toBe('');
+      expect(control('sort-select').value).toBe('onset');
+      expect(clearButton().getAttribute('aria-disabled')).toBe('true');
+
+      switchTo('workflow');
+      expect(selectedLabel('filter-identity-slice')).toBe('Invoice approval (synthetic) · Approval');
+      expect(control('sort-select').value).toBe('dimension');
+      expect(cardSummary().map(([, dimension]) => dimension)).toEqual(['Response time', 'Task duration']);
+    });
+
+    it('should keep a filtered-empty stream after switching away and back', () => {
+      choose('filter-identity-slice', 'Beta Freight Services (synthetic) · Invoice');
+
+      switchTo('workflow');
+      expect(cardSummary().length).toBe(3);
+
+      switchTo('document');
+      expect(el.querySelector('[data-testid="filtered-empty-state"]')).toBeTruthy();
     });
   });
 
@@ -459,7 +746,26 @@ describe('DashboardComponent', () => {
           }
         });
 
-        for (const [name, pattern] of Object.entries(CLAIM_GUARDRAIL_PATTERNS)) {
+        it('should also check the hidden-selection and filtered-empty copy', () => {
+          const filteredTexts: string[] = [];
+          if (stream === 'workflow') {
+            choose('filter-identity-slice', 'Invoice approval (synthetic) · Approval');
+            filteredTexts.push(spacedText(el));
+            expect(el.querySelector('[data-testid="detail-hidden"]')).toBeTruthy();
+          }
+          choose('filter-identity-slice', UNMATCHED_SLICE[stream]);
+          choose('filter-timerange', 'Last 7 days of observations');
+          filteredTexts.push(spacedText(el));
+          expect(el.querySelector('[data-testid="filtered-empty-state"]')).toBeTruthy();
+
+          for (const text of filteredTexts) {
+            for (const pattern of Object.values(DASHBOARD_GUARDRAIL_PATTERNS)) {
+              expect(text).not.toMatch(pattern);
+            }
+          }
+        });
+
+        for (const [name, pattern] of Object.entries(DASHBOARD_GUARDRAIL_PATTERNS)) {
           it(`should not contain ${name} claims`, () => {
             for (const text of texts) {
               expect(text).not.toMatch(pattern);
@@ -481,6 +787,8 @@ describe('DashboardComponent with a non-replay repository', () => {
     observationWindow: { from: '2025-12-30T10:00:00.000Z', to: '2026-01-02T10:00:00.000Z' },
   });
 
+  let fixture: ComponentFixture<DashboardComponent>;
+
   const render = (repository: Partial<StreamObservationRepository>) => {
     TestBed.configureTestingModule({
       imports: [DashboardComponent],
@@ -496,10 +804,12 @@ describe('DashboardComponent with a non-replay repository', () => {
         },
       ],
     });
-    const fixture = TestBed.createComponent(DashboardComponent);
+    fixture = TestBed.createComponent(DashboardComponent);
     fixture.detectChanges();
     return fixture.nativeElement as HTMLElement;
   };
+  const byTestId = <T extends Element = HTMLElement>(el: HTMLElement, testId: string) =>
+    el.querySelector<T>(`[data-testid="${testId}"]`);
 
   const kpiValues = (el: HTMLElement) =>
     Array.from(el.querySelectorAll('[data-testid="kpi-value"]')).map(v => normalize(v.textContent));
@@ -508,6 +818,13 @@ describe('DashboardComponent with a non-replay repository', () => {
   const referenceOnly = [1000, 1010, 990, 1000, 1005, 995].map((amount, i) =>
     documentObservation(`doc-${i}`, at(i), { amount })
   );
+  // Three out-of-baseline invoices after the reference window make one ongoing Divergence.
+  const candidateRun = [
+    ...referenceOnly,
+    ...[30, 31, 32].map((day, i) => documentObservation(`doc-c${i}`, at(day), { amount: 1500 })),
+  ];
+  // A later within-baseline invoice ends the run, so the Divergence is resolved.
+  const resolvingObservation = documentObservation('doc-r', at(33), { amount: 1000 });
 
   it('should render whatever the repository interface provides', () => {
     const el = render({ getSourceInfo: stream => of(info(stream)) });
@@ -563,6 +880,179 @@ describe('DashboardComponent with a non-replay repository', () => {
     expect(el.querySelector('[data-testid="empty-state"]')).toBeNull();
     expect(el.querySelector('[data-testid="detail-empty"]')).toBeTruthy();
     expect(kpiValues(el)).toEqual(['—', '—', '—', '—']);
+    expect(el.querySelector('[data-testid="kpi-scope-note"]')).toBeNull();
+  });
+
+  describe('loading state', () => {
+    let slices: Subject<readonly DocumentIdentitySlice[]>;
+    let el: HTMLElement;
+
+    beforeEach(() => {
+      slices = new Subject();
+      el = render({
+        getSourceInfo: stream => of(info(stream)),
+        getIdentitySlices: (() => slices) as unknown as StreamObservationRepository['getIdentitySlices'],
+        getObservations: ((stream: StreamKind) =>
+          of(stream === 'document' ? referenceOnly : [])) as StreamObservationRepository['getObservations'],
+      });
+    });
+
+    it('should render accessible loading text and skeletons before data is ready', () => {
+      const list = byTestId(el, 'divergence-list')!;
+
+      expect(normalize(byTestId(el, 'result-summary')?.textContent)).toBe(
+        'Loading Divergences for the Document stream…'
+      );
+      expect(byTestId(el, 'result-summary')?.getAttribute('role')).toBe('status');
+      expect(list.getAttribute('aria-busy')).toBe('true');
+      expect(byTestId(el, 'loading-state')?.getAttribute('aria-hidden')).toBe('true');
+      expect(byTestId(el, 'unavailable-state')).toBeNull();
+      expect(byTestId(el, 'empty-state')).toBeNull();
+      expect(normalize(byTestId(el, 'detail-loading')?.textContent)).toBe(
+        'Divergence detail is shown once Divergence data has loaded.'
+      );
+    });
+
+    it('should show pending KPIs and disabled controls while loading', () => {
+      expect(kpiValues(el)).toEqual(['—', '—', '—', '—']);
+      expect(byTestId(el, 'kpi-card-document-total')?.textContent).toContain('Divergence data is loading');
+      el.querySelectorAll<HTMLSelectElement>('.filter-select').forEach(s => expect(s.disabled).toBe(true));
+      expect(byTestId<HTMLButtonElement>(el, 'clear-filters')?.disabled).toBe(true);
+      expect(normalize(byTestId(el, 'controls-note')?.textContent)).toBe(
+        'Filters and sorting are available once Divergence data has loaded.'
+      );
+      expect(el.querySelector<HTMLElement>('[role="tabpanel"]')!.tabIndex).toBe(0);
+    });
+
+    it('should not imply live access in loading copy', () => {
+      const text = spacedText(el.querySelector('.list-detail-container'));
+
+      expect(text).not.toMatch(/DocuWare|\blive\b|connect|fetch|server|API/i);
+    });
+
+    it('should render the stream once data is ready', () => {
+      slices.next([testDocumentSlice]);
+      slices.complete();
+      fixture.detectChanges();
+
+      expect(byTestId(el, 'loading-state')).toBeNull();
+      expect(byTestId(el, 'divergence-list')?.hasAttribute('aria-busy')).toBe(false);
+      expect(byTestId(el, 'empty-state')).toBeTruthy();
+    });
+  });
+
+  describe('unavailable state and retry', () => {
+    let attempts: number;
+    let el: HTMLElement;
+
+    beforeEach(() => {
+      attempts = 0;
+      el = render({
+        getSourceInfo: stream => of(info(stream)),
+        getIdentitySlices: ((stream: StreamKind) => {
+          if (stream !== 'document') return of([]);
+          attempts++;
+          return attempts === 1 ? throwError(() => new Error('unavailable')) : of([testDocumentSlice]);
+        }) as StreamObservationRepository['getIdentitySlices'],
+        getObservations: ((stream: StreamKind) =>
+          of(stream === 'document' ? candidateRun : [])) as StreamObservationRepository['getObservations'],
+      });
+    });
+
+    it('should offer a retry control and disabled filters', () => {
+      expect(normalize(byTestId(el, 'retry')?.textContent)).toBe('Try again');
+      expect(byTestId<HTMLButtonElement>(el, 'clear-filters')?.disabled).toBe(true);
+      expect(normalize(byTestId(el, 'controls-note')?.textContent)).toBe(
+        'Filters and sorting are unavailable while Divergence data cannot be read.'
+      );
+      expect(el.querySelector<HTMLElement>('[role="tabpanel"]')!.hasAttribute('tabindex')).toBe(false);
+    });
+
+    it('should use local copy without support links or live-access claims', () => {
+      const state = byTestId(el, 'unavailable-state')!;
+
+      expect(state.querySelectorAll('a').length).toBe(0);
+      expect(state.textContent).not.toMatch(/support|contact|DocuWare|\blive\b|server|connect/i);
+    });
+
+    it('should read the stream again through the facade and move focus to the list', async () => {
+      byTestId<HTMLButtonElement>(el, 'retry')!.focus();
+      byTestId<HTMLButtonElement>(el, 'retry')!.click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(attempts).toBe(2);
+      expect(byTestId(el, 'unavailable-state')).toBeNull();
+      expect(el.querySelectorAll('[data-testid="divergence-card"]').length).toBe(1);
+      expect(document.activeElement).toBe(byTestId(el, 'divergence-list'));
+    });
+  });
+
+  it('should disable filter and sort controls in a stream with no Divergences', () => {
+    const el = render({
+      getSourceInfo: stream => of(info(stream)),
+      getIdentitySlices: (() => of([testDocumentSlice])) as StreamObservationRepository['getIdentitySlices'],
+      getObservations: (() => of(referenceOnly)) as StreamObservationRepository['getObservations'],
+    });
+
+    expect(byTestId(el, 'empty-state')).toBeTruthy();
+    el.querySelectorAll<HTMLSelectElement>('.filter-select').forEach(s => expect(s.disabled).toBe(true));
+    expect(normalize(byTestId(el, 'controls-note')?.textContent)).toBe(
+      'There are no Divergences in this stream to filter or sort.'
+    );
+    expect(normalize(byTestId(el, 'result-summary')?.textContent)).toBe('');
+  });
+
+  it('should filter by a lifecycle status other than ongoing', () => {
+    const el = render({
+      getSourceInfo: stream => of(info(stream)),
+      getIdentitySlices: ((stream: StreamKind) =>
+        of(stream === 'document' ? [testDocumentSlice] : [])) as StreamObservationRepository['getIdentitySlices'],
+      getObservations: ((stream: StreamKind) =>
+        of(stream === 'document' ? [...candidateRun, resolvingObservation] : [])) as StreamObservationRepository['getObservations'],
+    });
+    const status = byTestId<HTMLSelectElement>(el, 'filter-status')!;
+
+    expect(Array.from(status.options).map(o => normalize(o.textContent))).toEqual([
+      'All statuses',
+      'Resolved',
+    ]);
+    status.value = 'resolved';
+    status.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+
+    expect(
+      Array.from(el.querySelectorAll('[data-testid="divergence-card"]')).map(c => c.getAttribute('data-status'))
+    ).toEqual(['resolved']);
+  });
+
+  it('should keep non-replay state copy within the claim guardrails', () => {
+    const texts: string[] = [];
+    const slices = new Subject<readonly DocumentIdentitySlice[]>();
+    texts.push(
+      spacedText(
+        render({
+          getSourceInfo: stream => of(info(stream)),
+          getIdentitySlices: (() => slices) as unknown as StreamObservationRepository['getIdentitySlices'],
+          getObservations: (() => of([])) as StreamObservationRepository['getObservations'],
+        })
+      )
+    );
+    TestBed.resetTestingModule();
+    texts.push(
+      spacedText(
+        render({
+          getSourceInfo: stream => of(info(stream)),
+          getIdentitySlices: () => throwError(() => new Error('unavailable')),
+        })
+      )
+    );
+
+    for (const text of texts) {
+      for (const pattern of Object.values(DASHBOARD_GUARDRAIL_PATTERNS)) {
+        expect(text).not.toMatch(pattern);
+      }
+    }
   });
 
   it('should omit the replay source line when the repository cannot be read', () => {

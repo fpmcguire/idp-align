@@ -1608,4 +1608,95 @@ STEP-05 is approved for Development Team briefing and implementation planning on
 
 ---
 
+### A-041 - STEP-05 Development Team Implementation Plan Approval
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** Implementation-plan approval before Development Team writes code  
+**Step:** `mod-w/step-05.md`  
+**Next authorized action:** STEP-05 implementation is complete and verified; hand off for Tech Lead review.
+
+#### Recording Note
+
+The Moderator approved the Development Team implementation plan in session before any code was written, and the Development Team then implemented STEP-05. This entry was recorded afterwards by the Development Team at the Moderator's explicit instruction, for this instance only. Register entries otherwise remain the Moderator's to record.
+
+#### Approved Plan
+
+Development Team STEP-05 plan (2026-09-25), with the Tech Lead decisions and conditions below:
+
+- New dashboard-local helpers (`dashboard-filters.ts`) filter and sort Divergence records the detector has already computed. They do not recompute Observed Baselines or sustained Divergences.
+- `DashboardFacade` models per-stream data state (loading, unavailable, ready) behind the repository interface. A source that errors or completes without data is unavailable. Retry re-reads the stream through the repository. Filters, sort, and selection are held per stream. KPI counts stay unfiltered.
+- Filters: Identity Slice (repository slices for the active stream), time range presets, and lifecycle status (statuses present in the stream). Sort: onset (default, STEP-04 order), Identity Slice, dimension, and status (lifecycle order, stable). Magnitude sort and custom time ranges are excluded.
+- Selection: a chosen Divergence hidden by filters is reported as hidden rather than replaced. Clearing filters restores it. With no choice, the first visible Divergence is shown.
+- States: loading, unavailable with retry, no Divergences, and filtered-empty, with local copy that does not imply live access and no support links.
+- Accessibility: only the active stream tab carries `aria-controls`. Controls stay rendered so focus is not stranded, and focus moves to the list after retry. Existing tab keyboard behavior and visible focus states are kept.
+- STEP-04 responsive behavior is preserved: 1280px and wider two-column, 768-1279px stacked, below 768px single stacked flow.
+
+#### Tech Lead Decisions Adopted
+
+| Item | Decision |
+| --- | --- |
+| Stream switching | Preserve per-stream filter, sort, and selection state. |
+| Filtered-empty reset | No extra reset button inside the filtered-empty state; use the stable Clear filters control. |
+| Time range | Filter on `latestObservedAt`, anchored to the latest observation in the stream. |
+| Browser evidence | Throwaway Playwright scripts; no committed e2e suite required in STEP-05. |
+
+#### Conditions
+
+- The dashboard-only severity/risk guardrail must not change About tests.
+- Clear filters `aria-disabled` behavior must be safe and tested.
+- Retry remains behind the facade/repository boundary and does not imply live DocuWare access.
+- KPI copy must state that counts are unfiltered.
+- QA-024 duration precision remains out of scope unless separately routed.
+- Verification uses Node.js v26.0.0 via `fnm`: `npm.cmd run lint`, `npm.cmd run build`, and `npm.cmd test -- --watch=false`.
+- Do not commit unless instructed. Tech Lead review is required before QA acceptance.
+
+---
+
+### A-042 - STEP-05 Tech Lead Review Acceptance
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Tech Lead review acceptance before QA  
+**Step:** `mod-w/step-05.md`  
+**Next authorized action:** QA may review STEP-05 against `mod-w/step-05.md`, `review.md`, the approved A-041 implementation plan, and the passing verification evidence.
+
+#### Accepted Artifacts
+
+- `review.md` - Tech Lead Review - STEP-05, verdict "Pass for QA"
+- Current STEP-05 implementation package in the working tree
+- `mod-w/step-05.md`
+- `mod-w/architecture.md`
+- `mod-w/domain-language.md`
+- `mod-w/language-matrix.md`
+- `mod-w/design/design-spec.md`
+
+#### Acceptance Summary
+
+The Moderator accepts the Tech Lead review for STEP-05. The review found no must-fix or could-fix-later findings and confirms that the implementation remains within STEP-05 scope: functional dashboard filters and sorting, explicit loading/unavailable/empty/filtered-empty states, per-stream filter/sort/selection behavior, hidden-selection handling, retry through the repository/facade boundary, and keyboard/focus refinements.
+
+The implementation does not add Chart.js analysis, user action workflows, About copy changes, fixture changes, detector changes, live DocuWare calls, credentials, backend/proxy work, CAV Level 2+ claims, Intent, Alignment Delta, Envelope, Breach, Drift Velocity, Convergence, Attribution, or severity/risk scoring.
+
+#### Evidence
+
+- `review.md` verdict: Pass for QA.
+- `fnm exec --using=v26.0.0 node --version` printed `v26.0.0`.
+- `fnm exec --using=v26.0.0 npm.cmd run lint` passed.
+- `fnm exec --using=v26.0.0 npm.cmd run build` passed after rerun outside the sandbox; the sandboxed run hit the known Angular/esbuild `spawn EPERM` limitation.
+- `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` passed after rerun outside the sandbox; 27 test files and 408 tests passed.
+- Development Team reported 18 of 18 browser checks passing with throwaway Playwright evidence.
+
+#### Conditions
+
+- QA should verify A-041 process traceability and this A-042 Tech Lead review acceptance before QA.
+- QA should verify filters, sorting, clear filters, stream switching, hidden-selection behavior, loading/unavailable/empty/filtered-empty states, retry behavior, accessibility, and 1279px/1280px responsive behavior.
+- QA should verify no severity/risk scoring, business judgment, live-access claim, Attribution, CAV Level 2+ claim, Chart.js analysis, user action workflow, About change, fixture change, or detector change was introduced.
+- QA should use Node.js v26.0.0 via `fnm` for verification.
+
+---
+
 MOD-W v5.0.1

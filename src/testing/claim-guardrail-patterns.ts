@@ -14,6 +14,13 @@ export const CLAIM_GUARDRAIL_PATTERNS = {
   nonCanonicalFindingNames: /\balert|\banomal/i,
 } as const;
 
+/**
+ * Severity or risk wording the dashboard must avoid: filters and sorting narrow and order findings
+ * by lifecycle status, not importance. Kept out of CLAIM_GUARDRAIL_PATTERNS so the About spec, which
+ * iterates that set, is unchanged.
+ */
+export const SEVERITY_RISK_PATTERN = /severit|\brisk|critical|\burgen|priorit|\bhigh[- ]impact/i;
+
 /** Words the replay source copy must avoid so it cannot read as a finding (A-018). */
 export const REPLAY_SOURCE_AVOID_WORDS =
   /\b(detected|flagged|changed|issues?|anomal\w*|alerts?|violations?|bad|defects?|gaps?|affected|severity|rank\w*)\b/i;

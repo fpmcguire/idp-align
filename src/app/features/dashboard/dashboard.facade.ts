@@ -1,21 +1,68 @@
-import { Injectable, Signal, inject, signal } from '@angular/core';
+import { Injectable, Signal, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Observable, catchError, forkJoin, map, of } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  catchError,
+  defaultIfEmpty,
+  forkJoin,
+  map,
+  of,
+  startWith,
+  switchMap,
+} from 'rxjs';
 import { StreamObservationRepository, StreamSourceInfo } from '../../data/stream-observation.repository';
 import { Divergence } from '../../domain/divergence';
 import { detectStreamDivergences } from '../../domain/divergence-detection';
+import { IdentitySlice } from '../../domain/identity-slice';
+import { observationWindowOf } from '../../domain/observation';
 import { StreamKind } from '../../domain/stream';
+import {
+  DEFAULT_FILTERS,
+  DEFAULT_SORT,
+  DivergenceFilters,
+  DivergenceSortKey,
+  applyDivergenceFilters,
+  sortDivergences,
+} from './dashboard-filters';
 
 export type StreamSourceInfoByStream = Partial<Record<StreamKind, StreamSourceInfo>>;
 
 /** Divergences per stream; a stream is absent until loaded or if its source cannot be read. */
 export type DivergencesByStream = Partial<Record<StreamKind, readonly Divergence[]>>;
 
+/** Where a stream's Divergence data stands: still being read, unreadable, or ready. */
+export type StreamDataState =
+  | { readonly status: 'loading' }
+  | { readonly status: 'unavailable' }
+  | {
+      readonly status: 'ready';
+      /** In onset order. */
+      readonly divergences: readonly Divergence[];
+      readonly identitySlices: readonly IdentitySlice[];
+      /** Latest observation in the stream; time ranges are measured back from it. */
+      readonly latestObservedAt: string | null;
+    };
+
 export interface DivergenceCounts {
   readonly total: number;
   readonly ongoing: number;
   readonly resolved: number;
 }
+
+/**
+ * The Divergence to show in a stream's detail view. `hiddenByFilters` is true when the chosen
+ * Divergence exists but the current filters hide it; the detail then shows no Divergence.
+ */
+export interface StreamSelection {
+  readonly divergence: Divergence | null;
+  readonly hiddenByFilters: boolean;
+}
+
+type ByStream<T> = Readonly<Record<StreamKind, T>>;
+
+const LOADING: StreamDataState = { status: 'loading' };
+const UNAVAILABLE: StreamDataState = { status: 'unavailable' };
 
 /**
  * Display order for Divergences: onset, earliest first. The sort is stable, so Divergences with
@@ -39,37 +86,102 @@ export class DashboardFacade {
     { initialValue: {} },
   );
 
-  /** Sustained Divergences per stream, computed by the domain detector from repository data. */
-  readonly divergences: Signal<DivergencesByStream> = toSignal(
-    forkJoin({
-      document: this.streamDivergences('document'),
-      workflow: this.streamDivergences('workflow'),
-    }).pipe(
-      map(result => {
-        const byStream: DivergencesByStream = {};
-        if (result.document) byStream.document = result.document;
-        if (result.workflow) byStream.workflow = result.workflow;
-        return byStream;
-      }),
-    ),
-    { initialValue: {} },
-  );
+  private readonly reload: ByStream<Subject<void>> = {
+    document: new Subject<void>(),
+    workflow: new Subject<void>(),
+  };
 
+  private readonly states: ByStream<Signal<StreamDataState>> = {
+    document: this.loadState('document'),
+    workflow: this.loadState('workflow'),
+  };
+
+  /** Sustained Divergences per stream, computed by the domain detector from repository data. */
+  readonly divergences: Signal<DivergencesByStream> = computed(() => {
+    const byStream: DivergencesByStream = {};
+    for (const stream of ['document', 'workflow'] as const) {
+      const state = this.states[stream]();
+      if (state.status === 'ready') byStream[stream] = state.divergences;
+    }
+    return byStream;
+  });
+
+  private readonly filtersByStream = signal<ByStream<DivergenceFilters>>({
+    document: DEFAULT_FILTERS,
+    workflow: DEFAULT_FILTERS,
+  });
+  private readonly sortByStream = signal<ByStream<DivergenceSortKey>>({
+    document: DEFAULT_SORT,
+    workflow: DEFAULT_SORT,
+  });
   private readonly selectedIds = signal<Partial<Record<StreamKind, string>>>({});
+
+  streamState(stream: StreamKind): StreamDataState {
+    return this.states[stream]();
+  }
+
+  /** Reads a stream again through the repository, for example after it could not be read. */
+  retry(stream: StreamKind) {
+    this.reload[stream].next();
+  }
+
+  filters(stream: StreamKind): DivergenceFilters {
+    return this.filtersByStream()[stream];
+  }
+
+  /** Changes one stream's filters. Each stream keeps its own filters. */
+  setFilters(stream: StreamKind, change: Partial<DivergenceFilters>) {
+    this.filtersByStream.update(all => ({ ...all, [stream]: { ...all[stream], ...change } }));
+  }
+
+  /** Resets one stream's filters. Its sort and selection are kept. */
+  clearFilters(stream: StreamKind) {
+    this.setFilters(stream, DEFAULT_FILTERS);
+  }
+
+  sortKey(stream: StreamKind): DivergenceSortKey {
+    return this.sortByStream()[stream];
+  }
+
+  setSort(stream: StreamKind, sortKey: DivergenceSortKey) {
+    this.sortByStream.update(all => ({ ...all, [stream]: sortKey }));
+  }
+
+  /** The stream's Divergences after its filters and sort; null while they are unavailable. */
+  visibleDivergences(stream: StreamKind): Divergence[] | null {
+    const state = this.states[stream]();
+    if (state.status !== 'ready') return null;
+    const filtered = applyDivergenceFilters(
+      state.divergences,
+      this.filters(stream),
+      state.latestObservedAt,
+    );
+    return sortDivergences(filtered, this.sortKey(stream));
+  }
 
   /** Chooses the Divergence to show in a stream's detail view. Each stream keeps its own choice. */
   select(stream: StreamKind, divergenceId: string) {
     this.selectedIds.update(ids => ({ ...ids, [stream]: divergenceId }));
   }
 
-  /** The chosen Divergence, else the first in the stream; null when the stream has none. */
-  selectedDivergence(stream: StreamKind): Divergence | null {
-    const divergences = this.divergences()[stream] ?? [];
+  /**
+   * The chosen Divergence while the filters show it. A chosen Divergence the filters hide is
+   * reported as hidden, not replaced, so clearing the filters shows it again. With no choice in
+   * the stream, the first visible Divergence is shown.
+   */
+  selection(stream: StreamKind): StreamSelection {
+    const visible = this.visibleDivergences(stream) ?? [];
     const selectedId = this.selectedIds()[stream];
-    return divergences.find(d => d.id === selectedId) ?? divergences[0] ?? null;
+    const chosen = this.divergences()[stream]?.find(d => d.id === selectedId);
+    if (chosen && !visible.includes(chosen)) return { divergence: null, hiddenByFilters: true };
+    return { divergence: chosen ?? visible[0] ?? null, hiddenByFilters: false };
   }
 
-  /** Status counts for a stream; null while its Divergences are unavailable. */
+  selectedDivergence(stream: StreamKind): Divergence | null {
+    return this.selection(stream).divergence;
+  }
+
+  /** Status counts for all of a stream's Divergences, whatever the filters; null while unavailable. */
   counts(stream: StreamKind): DivergenceCounts | null {
     const divergences = this.divergences()[stream];
     if (!divergences) return null;
@@ -80,15 +192,30 @@ export class DashboardFacade {
     };
   }
 
-  private streamDivergences(stream: StreamKind): Observable<readonly Divergence[] | null> {
+  private loadState(stream: StreamKind): Signal<StreamDataState> {
+    return toSignal(
+      this.reload[stream].pipe(
+        startWith(undefined),
+        switchMap(() => this.readStream(stream).pipe(startWith(LOADING))),
+      ),
+      { initialValue: LOADING },
+    );
+  }
+
+  /** A source that errors, or completes without data, is unavailable rather than empty. */
+  private readStream(stream: StreamKind): Observable<StreamDataState> {
     return forkJoin({
       slices: this.repository.getIdentitySlices(stream),
       observations: this.repository.getObservations(stream),
     }).pipe(
-      map(({ slices, observations }) =>
-        orderByOnset(detectStreamDivergences(slices, observations).divergences),
-      ),
-      catchError(() => of(null)),
+      map(({ slices, observations }): StreamDataState => ({
+        status: 'ready',
+        divergences: orderByOnset(detectStreamDivergences(slices, observations).divergences),
+        identitySlices: slices,
+        latestObservedAt: observationWindowOf(observations)?.to ?? null,
+      })),
+      defaultIfEmpty(UNAVAILABLE),
+      catchError(() => of(UNAVAILABLE)),
     );
   }
 }
