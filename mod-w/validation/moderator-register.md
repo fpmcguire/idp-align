@@ -1226,4 +1226,45 @@ The implementation does not add dashboard rendering, dashboard facade consumptio
 
 ---
 
+### A-032 - STEP-03 QA Acceptance And Finding Dispositions
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** QA  
+**Gate:** QA acceptance before STEP-03 final gate  
+**Step:** `mod-w/step-03.md`  
+**Next authorized action:** Prepare the STEP-03 final Moderator gate. No STEP-03 rework is required before the final gate.
+
+#### Accepted Artifacts
+
+- `qa.md` - QA Review - STEP-03, verdict "Pass with notes"
+- STEP-03 implementation commit `164abb6`
+- Tech Lead review acceptance A-031
+
+#### Acceptance Summary
+
+The Moderator accepts the STEP-03 QA review. QA found that all 21 STEP-03 acceptance checks pass, with AC10 and AC11 passing with notes. Lint, build, and tests passed under Node.js v26.0.0 via `fnm`, with 20 test files and 268 tests passing.
+
+QA-014 is closed for STEP-03: the Approval step and Workflow runtime Divergences are emitted independently when each meets sustained criteria, with no link, suppression, derived marker, or causal Attribution claim.
+
+#### Finding Dispositions
+
+| Finding | Disposition |
+| --- | --- |
+| QA-018 | Accepted as a known product/data-model limitation, not a STEP-03 defect. STEP-03 detects vendor-representation changes within an Identity Slice. Broader vendor rename/entity matching touches Identity Slice design from STEP-02 and should be routed to later Tech Lead planning before adding a vendor-rename demo scenario or live adapter work. |
+| QA-019 | Accepted as MVP detection semantics for STEP-03. Carry to STEP-04 planning: before rendering `resolved` statuses prominently, Tech Lead should decide whether one returning observation is enough or whether resolution needs sustained in-baseline evidence plus resolution evidence. |
+| QA-020 | Accepted as approved A-030 behavior from the consecutive-observation rule. No STEP-03 action required. |
+| QA-021 | Accepted as optional cleanup. If `observation.ts` is touched later, prefer deterministic code-point comparison over locale-sensitive `localeCompare` for equal timestamps. |
+| QA-022 | Accepted as process traceability note. QA independently checked commit `164abb6`, and results match `review.md`. Future commits should keep role artifacts separated when feasible. |
+
+#### Conditions
+
+- No STEP-03 rework is required for QA-018 through QA-022 before the final gate.
+- Carry QA-018 into later domain/data-model planning if vendor rename/entity matching becomes part of the demo or adapter scope.
+- Carry QA-019 into STEP-04 planning before rendering `resolved` Divergence status in user-facing UI.
+- The STEP-03 final gate follows this acceptance.
+
+---
+
 MOD-W v5.0.1
