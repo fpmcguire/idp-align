@@ -829,4 +829,42 @@ QA drafted this entry on the Moderator's in-session instruction to route the fai
 
 ---
 
+### A-022 - STEP-02 Development Team QA-010 / QA-011 Rework Plan Approval
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** Rework-plan approval before Development Team writes code  
+**Step:** `mod-w/step-02.md`  
+**Next authorized action:** Development Team implements the QA-010 and QA-011 rework per the approved plan, runs the build gate, then hands off for Tech Lead re-review.
+
+#### Approved Plan
+
+Development Team QA-010 rework plan (2026-09-25), following the Tech Lead resolution in `review.md` (QA option (b)):
+
+- Keep the current document fixture shape, values, and IDs.
+- Correct `document-replay.fixture.ts` metadata and header comment: the cited Platform REST API page documents `FieldName` and a single `Item`; `COMPANY` and `DOCUMENT_DATE` follow the documented sample field names; `ItemElementName` typing (including Decimal), `/Date(ms)/` date encoding, and `DWSTOREDATETIME` are marked as approximations or source-shape assumptions, noting that the cited `DOCUMENT_DATE` sample is an ISO date string.
+- Correct the `DocuWareIndexField` comment in `docuware-replay.types.ts` (comment only; no type change).
+- Replace the fixture test `should use the documented index field structure` with separate tests for the documented `FieldName` / `Item` pair, the approximated `ItemElementName` key, and the metadata approximation notes.
+- `document-replay.mapper.ts` is not changed.
+
+#### Scope Decision
+
+| Item | Decision |
+| --- | --- |
+| QA-010 | Approved for rework as planned. |
+| QA-011 | Approved for inclusion in the same rework (Moderator decision, 2026-09-25, following the Tech Lead and Development Team recommendations). Mark the workflow `d.` duration day prefix as an approximation/source-shape assumption in `workflow-replay.fixture.ts` metadata and the `timeSpan()` comment, and in the `docuware-replay.types.ts` duration comment. Metadata must no longer say every duration format used is documented by the cited Workflow Analytics API page. Keep the documented `hh:mm:ss.fffffff` form for values under 24 hours. No duration values change. Add a fixture test for the documented form under 24 hours and the metadata approximation note. |
+
+#### Conditions
+
+- Stay within STEP-02. No About copy or About test changes (PO-1 excluded).
+- No live DocuWare calls, credentials, new fixture capabilities, Observed Baseline calculation, sustained Divergence detection, Evidence Trace behavior, or CAV Level 3+ concepts.
+- Verification uses Node.js v26.0.0: `npm run lint`, `npm run build`, `npm test -- --watch=false`.
+- The Development Team leaves the Tech Lead's `mod-w/step-02.md` and `review.md` working-tree changes untouched.
+- After implementation, the Tech Lead re-reviews and a fresh QA session re-checks AC8 and AC9 against the cited public sources.
+- QA-012 to QA-016 remain open for Moderator disposition.
+
+---
+
 MOD-W v5.0.1
