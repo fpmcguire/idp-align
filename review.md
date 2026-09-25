@@ -4,8 +4,44 @@
 **Step:** STEP-02 - CAV Domain Model, Repositories, And Replay Fixtures  
 **Review date:** 2026-09-25  
 **Reviewer:** Codex, Tech Lead  
-**Implementation package reviewed:** STEP-02 implementation commit `ddcde42`, QA review at `ac790fb`, Development Team rework commit `032fe2f`, and A-022 approval record `72f548a`; excluding Sass tooling commit `839f9e0` per A-019  
-**Verdict:** Pass for fresh QA re-check, with build/test verification limitation noted below
+**Implementation package reviewed:** STEP-02 implementation commit `ddcde42`, QA review at `ac790fb`, Development Team QA-010/QA-011 rework commit `032fe2f`, QA-012 rework commit `0fed7ba`, and approval records through A-025; excluding Sass tooling commit `839f9e0` per A-019  
+**Verdict:** Pass for fresh QA re-check of QA-012
+
+---
+
+## QA-012 Re-Review
+
+**Reviewed delta:** `2932e5d..0fed7ba`  
+**Approval checked:** A-025 is present in `mod-w/validation/moderator-register.md` and approves the copy-only QA-012 rework before implementation.  
+**Verdict:** Pass for fresh QA re-check.
+
+### Findings
+
+No blocking, major, minor, or low findings.
+
+### Scope And Acceptance
+
+The QA-012 rework matches A-024 and A-025:
+
+- `dashboard.component.html` changes only the KPI note copy from "Pending replay data" to "Pending Divergence detection".
+- KPI values remain `—`; no calculations, Observed Baseline logic, sustained Divergence detection, filters, Evidence Trace behavior, fixtures, live DocuWare calls, credentials, About files, or About tests changed.
+- `dashboard.component.spec.ts` updates the directly affected assertion, keeps the no-digit check, and adds a regression guard that the stale "Pending replay data" copy does not return.
+
+The new copy is bounded and accurate for STEP-02: it says the KPI cards are pending Divergence detection without implying detection exists.
+
+### Verification
+
+Run under Node.js v26.0.0:
+
+| Command | Result |
+| --- | --- |
+| `npm run lint` | Pass |
+| `npm run build` | Pass after rerun outside the sandbox; the sandboxed run hit the known esbuild `spawn EPERM` limitation |
+| `npm test -- --watch=false` | Pass after rerun outside the sandbox; 12 files and 158 tests passed |
+
+### Next Gate
+
+The Moderator should record Tech Lead re-review acceptance for QA-012 before fresh QA re-check. Suggested next register entry: A-026, approving this Tech Lead re-review and authorizing QA to re-check QA-012 against commit `0fed7ba` plus this `review.md` update.
 
 ---
 
