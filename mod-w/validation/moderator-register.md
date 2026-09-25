@@ -1478,4 +1478,43 @@ The implementation remains within STEP-04 scope: dashboard list/detail rendering
 
 ---
 
+### A-038 - STEP-04 QA Acceptance And Finding Dispositions
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** QA  
+**Gate:** QA acceptance before STEP-04 final gate  
+**Step:** `mod-w/step-04.md`  
+**Next authorized action:** Prepare the STEP-04 final Moderator gate. No STEP-04 rework is required before the final gate.
+
+#### Accepted Artifacts
+
+- `qa.md` - QA Review - STEP-04, verdict "Pass with notes"
+- STEP-04 implementation commit `933aece`
+- Tech Lead review acceptance A-037
+
+#### Acceptance Summary
+
+The Moderator accepts the STEP-04 QA review. QA found that all 28 STEP-04 acceptance checks pass, with AC12, AC15, and AC18 passing with notes. Lint, build, and tests passed under Node.js v26.0.0 via `fnm`, with 26 test files and 337 tests passing. The rendered browser check confirmed replay dashboard content, selection, keyboard access, stream switching, chronological Evidence Trace, Baseline panel content, disabled filters, no charts, and the stacked 768-1279px tablet layout with no horizontal overflow.
+
+QA-014 remains satisfied in STEP-04: the Approval step and Workflow runtime Divergences render as independent sibling cards with no link, grouping, or causal Attribution copy. QA-019 remains satisfied: `resolved` is presented only as a finding lifecycle status.
+
+#### Finding Dispositions
+
+| Finding | Disposition |
+| --- | --- |
+| QA-023 | Resolved by A-037. The Tech Lead review acceptance was recorded after QA started, but it accepts the same `933aece` package QA reviewed, and `ac434f6` changes only this register. |
+| QA-024 | Accepted as a known display limitation for STEP-04. Day-scale duration formatting drops minutes, so some rendered Evidence values do not reconcile exactly; the domain record keeps exact milliseconds. Better duration formatting may be considered in a later UI polish step. No STEP-04 rework. |
+| QA-025 | Closed, no action. `review.md` described the working tree as uncommitted at Tech Lead review time. The work was committed before QA on the Moderator's instruction. |
+
+#### Conditions
+
+- No STEP-04 rework is required for QA-023 through QA-025 before the final gate.
+- Carry QA-024 to a later UI polish step if duration display precision is revisited.
+- Note the QA risks for later planning: shared replay values between Approval and Workflow runtime Divergences may invite inferred relationships (QA-014, data not copy), and sibling `resolved`/`ongoing` cards on the same Identity Slice and dimension are not explained as separate sustained runs (QA-019).
+- The STEP-04 final gate follows this acceptance.
+
+---
+
 MOD-W v5.0.1

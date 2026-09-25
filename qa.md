@@ -1,14 +1,14 @@
-# QA Review - STEP-03
+# QA Review - STEP-04
 
 **Project:** IDP-Align  
-**Step:** STEP-03 - Observed Baseline And Sustained Divergence Logic  
+**Step:** STEP-04 - Divergence List, Detail, Baseline, And Evidence Trace  
 **QA date:** 2026-09-25  
-**QA role:** Claude Code, acting as QA (not Development Team, not Tech Lead). QA did not edit implementation files, `step-03.md`, `review.md`, or the register.  
-**Repository state reviewed:** `master` `164abb6` ("feat: add step 03 divergence logic"), clean working tree  
-**Tech Lead input:** `review.md` Tech Lead Review - STEP-03, verdict "Pass for QA"  
-**Verdict:** **Pass with notes.** All 21 acceptance checks pass. AC10 and AC11 pass with notes. There are no blocking findings. QA-018 (Medium) and QA-019 (Low) need a Moderator disposition before the final gate. QA-020 to QA-022 are Info.
+**QA role:** Claude Code, acting as QA (not Development Team, not Tech Lead). QA did not edit implementation files, `step-04.md`, `review.md`, or the register.  
+**Repository state reviewed:** `master` `933aece` ("feat: surface divergence evidence on dashboard"), clean working tree. Gate re-checked at `ac434f6` ("docs: record step 04 tech lead acceptance"), which changes only `moderator-register.md`.  
+**Tech Lead input:** `review.md` Tech Lead Review - STEP-04, verdict "Pass for QA" (after the A-036 tablet-breakpoint rework)  
+**Verdict:** **Pass with notes.** All 28 acceptance checks pass. AC12, AC15, and AC18 pass with notes. There are no implementation blockers. QA-023 (Medium, process) is resolved by A-037. The Moderator accepted QA-024 (Low) as a known display limitation and closed QA-025 (Info) with no action.
 
-The STEP-01 QA record is preserved at tag `step-01`. The STEP-02 QA record is preserved at tag `step-02`; `qa.md` at that tag is identical to `qa.md` at `164abb6`.
+The STEP-03 QA record is preserved at tag `step-03`. `qa.md` at that tag is identical to `qa.md` at `933aece`.
 
 ---
 
@@ -16,25 +16,25 @@ The STEP-01 QA record is preserved at tag `step-01`. The STEP-02 QA record is pr
 
 | Gate | Register entry | Result |
 | --- | --- | --- |
-| Step approval before Development Team briefing | A-029 | Present. Approves `step-03.md` for briefing and planning only. |
-| Development Team implementation-plan approval | A-030 | Present. Adopts the Tech Lead conditions: QA-014, scope, detection defaults, `resolved`, date behavior, `decisionAgent`, amount/currency, and credit notes. |
-| Tech Lead review acceptance before QA | A-031 | Present. Accepts `review.md` "Pass for QA" and names the QA focus areas. |
+| Step approval before Development Team briefing | A-034 | Present. |
+| Development Team implementation-plan approval | A-035 | Present. Adopts Tech Lead conditions for resolved KPI, component location, data flow, QA-014, QA-018, QA-019, and tab-panel focus. |
+| Rework-plan approval (tablet breakpoint) | A-036 | Present. Records the Development Team's browser evidence and approves hand-back for Tech Lead re-review. |
+| Tech Lead review acceptance before QA | A-037 | Present, recorded in `ac434f6` after this QA session started. Accepts `review.md` "Pass for QA" for the `933aece` package. Resolves QA-023. |
 
-No process blocker. See QA-022 for a traceability note on the commit.
+QA started on the Moderator's direct brief before A-037 existed. The Moderator then recorded A-037 in response to QA-023. A-037 accepts the same `933aece` package QA reviewed, and `ac434f6` changes no implementation files, so the QA evidence below still applies. Each A-037 QA condition is covered: replay rendering, independent workflow Divergences, baseline and Evidence copy, `resolved` wording, the 768-1279px tablet layout, scope creep, and Node.js v26.0.0 verification. No process blocker remains.
 
 ---
 
 ## Scope Of Review
 
-`164abb6` changes 18 files:
+`933aece` changes 31 files:
 
-- **New production domain files:** `baseline-statistics.ts`, `divergence-dimension.ts`, `observed-baseline.ts`, `evidence.ts`, `divergence.ts`, and `divergence-detection.ts`.
-- **Changed production domain file:** `observation.ts` gains only `byObservedAt`, in 5 added lines.
-- **Specs:** a focused spec for each new domain file, plus `domain-terminology.spec.ts` and `src/app/data/replay/replay-divergence-detection.spec.ts`.
-- **Test-only helper:** `src/testing/observation-builders.ts`. It is imported only by specs.
-- **Role artifacts:** `review.md` (Tech Lead) and `moderator-register.md` (A-030, A-031).
+- **Dashboard feature:** `dashboard.facade.ts`, `dashboard.component.ts/html/scss`, and their specs.
+- **New shared UI under `src/app/shared/ui/divergence/`:** Status Badge, Divergence Card, Divergence Detail, Baseline Reference Panel, Evidence Trace, and the display-only `divergence-format.ts`. Each has a spec.
+- **Test-only helper:** `src/testing/divergence-builders.ts`.
+- **Role artifacts:** `review.md` (Tech Lead) and `moderator-register.md` (A-034 to A-036).
 
-Not changed: dashboard components and templates, the dashboard facade, repositories, replay adapters, fixtures, About files, routes, styles, and package metadata.
+Not changed: domain logic under `src/app/domain/`, repositories, replay adapters, fixtures, About files, routes, `package.json`, and the shared guardrail patterns (last changed in STEP-02 `ddcde42`).
 
 ---
 
@@ -44,154 +44,165 @@ Not changed: dashboard components and templates, the dashboard facade, repositor
 | --- | --- |
 | `fnm exec --using=v26.0.0 node --version` | `v26.0.0` |
 | `fnm exec --using=v26.0.0 npm.cmd run lint` | **Passed.** "All files pass linting." Exit 0. |
-| `fnm exec --using=v26.0.0 npm.cmd run build` | **Passed.** Exit 0, no warnings. There was no `spawn EPERM` in this run. Initial total 256.96 kB raw / 73.44 kB transfer. `dashboard-component` is 10.87 kB and `about-component` is 10.41 kB, both the same as at the STEP-02 re-check. The new domain code is not bundled yet because no production code imports it. |
-| `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` | **Passed.** 20 test files, 268 tests. Exit 0. Matches `review.md`. |
+| `fnm exec --using=v26.0.0 npm.cmd run build` | **Passed.** Exit 0, no warnings, no `spawn EPERM`. Initial total 262.14 kB raw / 75.22 kB transfer. `dashboard-component` is 40.55 kB and `about-component` is 10.41 kB, the same as STEP-03. |
+| `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` | **Passed.** 26 test files, 337 tests. Exit 0. Matches `review.md` and A-036. |
 
 ---
 
-## Supplementary Probes
+## Rendered Browser Check
 
-QA ran the domain functions directly against inputs that the specs do not cover. The probe scripts live in the session scratchpad and were bundled with the repo's `esbuild`. They import the repo modules read-only. QA did not add or change any file in the repository to run them.
+QA served the production build (`dist/idp-align/browser`) from a local static server and drove it with the repo's installed Playwright Chromium. The scripts, screenshots, and rendered-text dump are in the QA session scratchpad. No repository file was added or changed.
 
-| Probe | Input | Observed result |
+### Content and selection
+
+| Check | Observed |
+| --- | --- |
+| Document stream list | 1 card: "Alpha Office Supplies (synthetic) · Invoice", Amount, Ongoing. Observed mean 1,878.30 over 4 observations. Observed Baseline mean 1,218.65, range 1,149.38 to 1,287.92. Magnitude +659.65 (+54.1%, +28.6 SD). Onset 31 Aug 2026, duration 10 d 0 h. |
+| Document KPIs | Total 1, Ongoing 1, Resolved 0 ("Finding lifecycle status"), Trend "—" ("Trend analysis is added in a later Step"). |
+| Workflow stream list | 3 sibling cards in onset order: Approval Task duration (onset 07:00), Approval Response time (07:00), and Workflow runtime (07:03), all Ongoing, all on 5 Sep 2026. |
+| Workflow KPIs | Total 3, Ongoing 3, Resolved 0, Trend "—". |
+| Selection | Clicking each card updates the detail pane to that Divergence (`data-divergence-id` matches). `aria-current="true"` is on the selected card only. Each card has `aria-controls="divergence-detail"`. |
+| Keyboard | Tab moves between cards (native buttons). Enter and Space both select. A 2px focus outline is visible. |
+| Stream switching | Selecting the third workflow card, switching to document, then back keeps the workflow selection. The document stream shows only its own card and detail. |
+| Evidence Trace | 4 items (document) and 6 items per workflow Divergence, all in chronological order by `datetime`. Each shows timestamp, "Outside Observed Baseline", compared value, difference from baseline mean, context fields, and source references (`system / resource / recordId`). |
+| Baseline panel | Method "Mean ± the larger of 3 standard deviations or 5% of the mean". Reference window ends "31 Aug 2026, 00:00 UTC (end exclusive)". Sample size 8 (document) or 12 (workflow). Mean, SD, median, reference min to max, and within-baseline range are shown. |
+| Actions and charts | Filters are all `disabled`. No other buttons or links in the stream panel. No `canvas` or chart elements. |
+| Console | No console errors or page errors. |
+
+### Responsive layout (`.list-detail-container`)
+
+| Width | Layout | Horizontal overflow |
 | --- | --- | --- |
-| P1 | 10 reference invoices for "Kappa Paper (synthetic)". 4 later invoices for "Kappa Paper GmbH (synthetic)". Slices built the way the replay mapper builds them. | Two Identity Slices. The new name gets its own slice, with no baseline and no Divergence. **Divergences: none.** (QA-018) |
-| P2 | The same reference, then 3 invoices for "KAPPA PAPER (SYNTHETIC)" (case only). Slices built with `uniqueSlices`. | One `vendor-representation` Divergence. Its Identity Slice label and vendor are **"KAPPA PAPER (SYNTHETIC) · Invoice"**, which is the new representation, not the established one. (QA-018) |
-| P3 | 12 later invoices, two in three of them in USD, repeating USD, USD, EUR. | **Divergences: none.** A EUR invoice always interrupts the run before it reaches three. (QA-020) |
-| P4 | Amount 1500 ×3, then 1010 ×1, then 1500 ×3. | Two Divergences on `amount-value`. The first is `resolved` and the second is `ongoing`. The resolved record's Evidence is c0 to c2 only, so the returning observation is not referenced. (QA-019) |
-| P5 | Amount 1500 ×5, then 1010 ×1 as the latest observation. | One Divergence, marked **`resolved`** by that single returning observation. (QA-019) |
-| P6 | The full `CLAIM_GUARDRAIL_PATTERNS` set plus the `intent` pattern from `domain-terminology.spec.ts`, run over `JSON.stringify` of the real replay detection output for both streams. | **No matches** in either stream. The document stream has 12 baselines and 1 Divergence. The workflow stream has 9 baselines and 3 Divergences. |
+| 1920px | Two-column (list 612 / detail 764) | No |
+| 1400px | Two-column (594 / 742) | No |
+| 1280px | Two-column (540 / 676) | No |
+| 1279px | Stacked (full width) | No |
+| 1200px | Stacked | No |
+| 1024px | Stacked | No |
+| 768px | Stacked | No |
+| 390px | Stacked | No |
 
-P6 also confirms the replay magnitudes. Approval task duration has a baseline mean of about 273 min and an observed mean of about 1389 min. Response time goes from about 51 min to about 105 min. Workflow runtime goes from about 316 min to about 1431 min. Every Evidence item is out of baseline and in chronological order. These values agree with the QA-014 description of the fixture.
+This matches `design-spec.md` (tablet 768-1279px stacked) and A-036.
+
+### Wording probes over all rendered states
+
+QA scanned the full rendered text with each Divergence selected in turn, in both streams:
+
+| Probe | Result |
+| --- | --- |
+| Causation / relation (`caus`, `because`, `due to`, `led to`, `result in/from`, `driv`, `trigger`, `explain`, `related`, `linked`, `depend`, `attribut`, `root`) | None |
+| Remediation (`remediat`, `correct(ed/ion)`, `fixed`, `repair`, `recover`, `restor`, `back to normal`, `healthy`, `normalized`, `converg`, `success`) | None |
+| Business judgment (`failure`, `defect`, `non-conform`, `violation`, `breach`, `bad`, `incorrect`, `wrong`, `error` except the "Error exit" field label) | None |
+| Alert-style (`alert`, `anomal`, `warning`, `critical`, `severity`) | None |
+| Rename / entity matching (`renam`, `same vendor`, `entity`, `match`) | Only false positives: "entity" inside "Identity Slice". No rename or matching claim. |
+
+The only copy mentioning correctness is the negation "do not assess business correctness" in the header foundation note.
 
 ---
 
-## Acceptance Check Results (`mod-w/step-03.md`)
+## Acceptance Check Results (`mod-w/step-04.md`)
 
 | # | Check | Result | Evidence |
 | --- | --- | --- | --- |
-| AC1 | Register has the STEP-03 Step approval before briefing | Pass | A-029, `moderator-register.md` line 1110. |
-| AC2 | Canonical types for Observed Baseline, Divergence, Divergence Dimension, Divergence Status, Evidence / Evidence Trace items | Pass | `ObservedBaseline` at `observed-baseline.ts:89`. `DivergenceDimension` at `divergence-dimension.ts:16-19`. `DivergenceStatus` at `divergence.ts:21`. `Divergence` at `divergence.ts:77-92`. `EvidenceTraceItem` and `Evidence` at `evidence.ts:39-54`. |
-| AC3 | Canonical terms in names, comments, tests, copy | Pass | The names follow the Code column of `domain-language.md`. The statuses are `ongoing`, `reviewed`, `resolved`, and `muted` (`divergence.ts:21-28`). No user-visible copy was added. |
-| AC4 | No reserved Level 3+ terms describe current behavior | Pass | QA grepped the STEP-03 files for reserved, alert, anomaly, judgment, intent, and target terms. The only hits are explicit non-claims: `divergence-detection.ts:43`, `divergence-dimension.ts:37`, `divergence.ts:19`, `evidence.ts:16`, `observed-baseline.ts:87`, and the guardrail specs. P6 found no matches in the runtime output. |
-| AC5 | Baseline derivation is pure and deterministic over observations | Pass | `deriveObservedBaseline` (`observed-baseline.ts:120-182`) reads only its arguments. It sorts a copy of its input and does not mutate. `observed-baseline.spec.ts:220` checks that input order does not matter. Baselines come only from observations inside the reference window (`divergence-detection.ts:57`). Nothing declared or configured per slice is used. See QA-021 for a tie-break note. |
-| AC6 | Baseline carries stream kind, Identity Slice, dimension, reference window, method, sample size, version/stable ID, and value/range/distribution | Pass | `observed-baseline.ts:42-83`. The stable ID includes the slice, dimension, and window (line 134), and `version` is 1. Numeric baselines carry mean, SD, median, min, max, and range. Categorical baselines carry the dominant value, its share, and the distribution. `referenceObservationIds` are included. `observed-baseline.spec.ts:50` asserts every field. |
-| AC7 | Sustained detection is pure and deterministic over baselines and candidates | Pass | `detectSustainedDivergences` (`divergence.ts:106-137`) and `detectStreamDivergences` (`divergence-detection.ts:45-79`). `divergence.spec.ts:95` checks that input order does not matter. |
-| AC8 | A single out-of-baseline observation does not create a Divergence | Pass | `divergence.spec.ts:62-73`. Every document dimension is covered at `divergence-detection.spec.ts:110-120`, and task, response, error exit, and runtime at `:226-231`. In replay, the single 2026-08-21 error exit stays in reference history (`replay-divergence-detection.spec.ts:83-94`). |
-| AC9 | Divergence carries stream kind, Identity Slice, dimension, baseline context, observed summary, magnitude, onset, duration, status, Evidence | Pass | `divergence.ts:77-92`. The baseline snapshot is embedded, and the sustained criteria are recorded on each record. Asserted at `divergence.spec.ts:37-60`. |
-| AC10 | Evidence references source observations/records needed to reconstruct the finding, chronologically | **Pass with note** | Each item carries `observationId`, `sources`, `value`, `withinBaseline`, the distance from the mean, and context (`evidence.ts:39-48`). `evidence.spec.ts:85-128` rebuilds the baseline from `referenceObservationIds` and matches each item to its source observation. Order is chronological. **Note (QA-019):** for `resolved` findings, the observation that set the status is not referenced, so the status cannot be reconstructed from the record. |
-| AC11 | Document tests cover vendor representation, amount/currency, date-related behavior | **Pass with note** | `divergence-detection.spec.ts:61-120` covers all four dimensions, including amount and currency kept separate (`:83-101`). Date representation is excluded, with a comment explaining why (`divergence-dimension.ts:99-101`), as A-030 requires. The document-date-to-storage-time dimension is tested. **Note (QA-018):** vendor representation can only detect variants that produce the same Identity Slice ID. |
-| AC12 | Workflow tests cover task duration, response time, decision/route/error behavior, workflow runtime | Pass | `divergence-detection.spec.ts:184-231`. `task-outcome` covers decisions and error exit routes. The spec checks that response time has no baseline on the automated step (`:184-195`, and replay `:96-104`). |
-| AC13 | QA-014 handled explicitly and tested | Pass | See the QA-014 section below. |
-| AC14 | Decision agent, route, and runtime context are Evidence or Identity Slice fields only, with no Attribution | Pass | Decision agent is not a dimension (`divergence-dimension.ts:36-37`, spec `:35`). It appears only in `WorkflowTaskEvidenceContext` (`evidence.ts:18-25`). Asserted at `divergence-detection.spec.ts:233-240` and replay `:121-128`. |
-| AC15 | Repository/facade access, if added, preserves the source-agnostic boundary | Pass (not added) | A-030 excluded facade changes, and none were made. The replay-level spec reads through `StreamObservationRepository` and imports no fixture files (`replay-divergence-detection.spec.ts:5-11`). No production module outside `src/app/domain/` imports the new files. |
-| AC16 | STEP-01 and STEP-02 behavior intact, with no Divergence UI rendering | Pass | No dashboard, About, shell, route, or style file changed. The `observation.ts` change only adds a function. All 268 tests pass, including the STEP-01 and STEP-02 specs. Lazy chunk sizes are the same as at the STEP-02 re-check. |
-| AC17 | Fixtures stay synthetic, with no live DocuWare calls | Pass | No fixture file changed. The STEP-03 files contain no `fetch`, `HttpClient`, host, token, or secret strings. |
-| AC18 | Dashboard guardrail tests still cover endorsement, private access, production readiness, business judgment, reserved terms, alert/anomaly | Pass | `dashboard.component.spec.ts:228` still iterates over every `CLAIM_GUARDRAIL_PATTERNS` entry. It is unchanged and passing. |
-| AC19 | `npm run lint` passes under v26.0.0 | Pass | See above. |
-| AC20 | `npm run build` passes under v26.0.0 | Pass | See above. |
-| AC21 | `npm test -- --watch=false` passes under v26.0.0 | Pass | 20 files, 268 tests. |
+| AC1 | Register contains STEP-04 Step approval | Pass | A-034. |
+| AC2 | Dashboard-facing code computes Divergences from repository slices and observations via STEP-03 helpers | Pass | `DashboardFacade.streamDivergences` calls `repository.getIdentitySlices`/`getObservations`, then `detectStreamDivergences`. Facade spec "should compute Divergences only from repository slices and observations". |
+| AC3 | No direct replay fixture imports in dashboard components | Pass | `grep` for `data/replay` and `fixture` in non-spec files under `features/dashboard` and `shared/ui` finds nothing. |
+| AC4 | No inline baseline or Divergence calculation | Pass | Components import only `divergence-format.ts`, which formats record values. The only detector reference in the UI layer is the facade call. `orderByOnset` is a display sort. |
+| AC5 | Document stream renders the Alpha Office Supplies amount Divergence | Pass | Browser check and spec "should render the document stream Divergence from replay data". |
+| AC6 | Workflow stream renders Approval task-duration, Approval response-time, and Workflow runtime Divergences | Pass | Browser check (3 cards) and spec "should render the workflow stream Divergences in onset order". |
+| AC7 | Cards render Identity Slice, dimension, observed, magnitude, onset or duration, and status | Pass | `divergence-card.component.html`. Browser card text. |
+| AC8 | Selecting updates detail with an accessible selected state | Pass | Native `<button>`, `aria-current`, `aria-controls`. Enter and Space verified in browser. |
+| AC9 | Stream switching updates list, KPIs, selection, and labels without leaking state | Pass | Per-stream `selectedIds` in the facade. Browser check and specs "should keep each stream's own selection" and "should not show document Divergences in the workflow stream". |
+| AC10 | Detail renders Identity Slice, dimension, status, onset, latest observed, duration, observed summary, and magnitude | Pass | `divergence-detail.component.ts` quick stats. Browser detail text. |
+| AC11 | Baseline panel renders method, reference window, sample size, and range or distribution | Pass | Numeric path verified in browser. The categorical distribution path has no replay Divergence, so it is covered by `baseline-reference-panel.component.spec.ts` only. |
+| AC12 | Evidence Trace is chronological with timestamp, compared value, source/context, and baseline indication | **Pass with note** | Chronology verified in browser for all 4 Divergences. The domain sorts items with `byObservedAt`, and the component preserves order. See QA-024: day-scale compared values drop minutes, so a value and its difference do not always reconcile on screen. |
+| AC13 | `instanceId`, route, runtime, and decision agent shown only as Evidence context | Pass | Rendered as neutral `dt/dd` fields ("Workflow instance", "Decision agent", "Instance state") inside Evidence items only. Code comment: "Context only, never a cause." |
+| AC14 | QA-014: no implied causation between Approval and Workflow runtime Divergences | Pass | Cards are ungrouped `<li>` siblings. No card references another card's id. Causation probe finds nothing. List note says each Divergence has its own Observed Baseline. See Risks for the shared data values. |
+| AC15 | QA-019: `resolved` presented only as lifecycle status | **Pass with note** | Replay produces no `resolved` Divergence, so this path is not visible in the browser. `STATUS_DESCRIPTIONS.resolved` says "finding lifecycle status" and states that the ending observation is not listed in the Evidence trace. This matches `detectSustainedDivergences` semantics. It is covered by `divergence-detail.component.spec.ts` "resolved status" and `divergence-format.spec.ts`. The Resolved KPI note is "Finding lifecycle status". |
+| AC16 | QA-018: no broader rename/entity-matching claims | Pass | Rename probe is clean. Card spec "should render a categorical Divergence without rename or matching claims (QA-018)". |
+| AC17 | KPIs reflect computed records without chart behavior | Pass | `DashboardFacade.counts`. Document 1/1/0, workflow 3/3/0. Trend is a textual placeholder. No canvas. |
+| AC18 | Truthful empty state that does not appear when Divergences exist | **Pass with note** | Both replay streams have Divergences, so no empty state renders in the browser, as expected. The empty and unavailable states are covered only by the non-replay repository specs in `dashboard.component.spec.ts`. |
+| AC19 | Filters disabled or placeholder-only | Pass | All three `select`s are `disabled`, with note "Filters become available in a later Step." |
+| AC20 | No functional user actions | Pass | No buttons or links in the stream panel besides cards. Specs "should offer no user actions". |
+| AC21 | No About copy or About tests changed | Pass | No About files in `933aece`. The About chunk size is unchanged. |
+| AC22 | No fixtures, detector changes, live calls, credentials, OAuth, backend, or non-replay adapters | Pass | Diff is limited to dashboard, shared UI, test helper, and role artifacts. No `HttpClient`, `fetch`, or token strings in the UI layer. |
+| AC23 | No Level 2+, Intent, reserved Level 3+, Attribution, business-judgment, defect, or violation claims | Pass | Guardrail specs and QA wording probes. |
+| AC24 | Dashboard guardrail tests still cover required categories | Pass | `CLAIM_GUARDRAIL_PATTERNS` unchanged. It covers endorsement, private access, production readiness, business judgment, reserved terms, and alert/anomaly. The dashboard spec now runs every pattern against each selected Divergence in both streams. |
+| AC25 | Tests cover rendering, selection, switching, empty/detail states, baseline panel, Evidence Trace, status wording, and QA-014/QA-019 | Pass | See the spec list in `dashboard.component.spec.ts`, `dashboard.facade.spec.ts`, and the six `shared/ui/divergence` specs. |
+| AC26 | `npm run lint` passes on v26.0.0 | Pass | See above. |
+| AC27 | `npm run build` passes on v26.0.0 | Pass | See above. |
+| AC28 | `npm test -- --watch=false` passes on v26.0.0 | Pass | 26 files, 337 tests. |
 
-### A-030 Condition Check
+### Design ID check
 
-| Condition | Result |
+| Design ID | Result |
 | --- | --- |
-| Detection defaults: 28 days, min 4, 3 SD / 5% floor, share 0.1, 3 consecutive | Met. `divergence-detection.ts:19-26`, asserted at spec `:24-33`. |
-| `resolved` is a lifecycle state only | Met in wording. `divergence.ts:15-20` and `divergence.spec.ts:85-93`. For the resolution rule itself, see QA-019. |
-| Date representation unsupported; `document-date-lag` is the date dimension | Met. `divergence-dimension.ts:99-101`. |
-| `amount-value` and `amount-currency` are separate | Met. Specs `:83-101`. |
-| Credit notes get no baseline | Met. `divergence-detection.spec.ts:122-135` and replay `:53-63`. |
-| No About copy or test changes | Met. |
-| File list | Met, with two additions the Tech Lead disclosed: `byObservedAt` in `observation.ts` and `src/testing/observation-builders.ts`. Neither is in the A-030 file list. Both are small and in scope. |
-
----
-
-## QA-014 Verification
-
-A-030 chose **emit both, unlinked**. QA confirmed the following:
-
-- **Code.** Each Identity Slice and dimension is evaluated on its own baseline (`divergence-detection.ts:56-76`). No step correlates, deduplicates, or suppresses records across slices. The comment at lines 39-44 states the no-Attribution reason.
-- **Synthetic tests.** `divergence-detection.spec.ts:243-321` has three tests:
-  - When both slices meet the criteria, both are emitted.
-  - The record keys are an exact closed set, so there is no `related`, `derived`, or `cause` field, and the serialized output does not match `/attribut|cause|derived|related/i`.
-  - When runtime stays within its baseline, only the step Divergence is emitted. This shows each slice is judged independently rather than always paired.
-- **Replay.** `replay-divergence-detection.spec.ts:106-119` covers the real fixture. The Approval `task-duration` and `response-time` Divergences both have onset 2026-09-05T07:00Z. The Workflow runtime Divergence has onset 2026-09-05T07:03Z. All are `ongoing`, with 6 Evidence items each.
-- **Onset timing.** Onset is the confirmation time of the first changed task: an instance started on 2026-09-04 at 08:30 and confirmed about 21.8 h later. This agrees with the 2026-09-04 fixture change noted in QA-014.
-- **Shared instances.** The same instance IDs appear in both Evidence traces, as observed context only. Nothing presents one Divergence as explaining the other.
-
-**QA-014 is closed for STEP-03.** How a later UI shows the two records side by side without implying cause belongs to STEP-04 or later.
-
-**QA-015** stays a future adapter/BFF note. STEP-03 adds no adapter code and does not touch `sourceKind`.
+| DS-001 | Two-column list/detail from 1280px. Stacked below. |
+| DS-003 | KPI values come from computed records. Trend is a non-chart placeholder. |
+| DS-004 / DS-013 | Cards and status badges are present. The badge offers no action. |
+| DS-005 / DS-006 / DS-007 / DS-014 | Detail, Baseline panel, and Evidence rows are present with source/context fields. |
+| DS-009 / DS-010 | Stream-specific headings, source notes, Identity Slice labels, and KPI scope notes. |
+| DS-011 | Empty and unavailable states are distinct (spec-verified only, see AC18). |
 
 ---
 
 ## Findings
 
-### QA-018 - Medium (product coverage): vendor representation changes that start a new Identity Slice are never surfaced
+### QA-023 - Medium (process / gate): Tech Lead review acceptance before QA is not recorded for STEP-04 — **Resolved by A-037**
 
-- **Where:** `identity-slice.ts:36-44` builds the document slice ID from `slug(vendor)`. `document-replay.mapper.ts:41,56` assigns each observation to the slice for its own raw vendor text. `divergence-dimension.ts:136-137` reads `vendor-representation` as that same raw text.
-- **Effect:** A vendor representation can only differ from the baseline inside one slice when the new text has the same slug, which means a change in case, spacing, or punctuation. A materially different name, such as "Kappa Paper GmbH (synthetic)" in place of "Kappa Paper (synthetic)", starts a new Identity Slice. That slice has no reference history and gets no baseline, so no Divergence is surfaced (probe P1). The only vendor-representation test uses a case-only variant (`divergence-detection.spec.ts:56,76-81`).
-- **Related effect (P2):** When a case-only variant is detected, `uniqueSlices` (`replay-fixture.ts:33-35`) keeps the *last* slice object for a shared ID. The Divergence's Identity Slice label and vendor therefore show the new representation. When this is rendered, the slice would appear to be named after the divergent value.
-- **Product reference:** `product.md:27` and `:130` describe "persistent changes in vendor-name representation" and "a materially different vendor representation" as the document-stream case to surface.
-- **Why this does not fail AC11:** As written, AC11 asks only that tests cover vendor representation. They do. The replay fixture does not contain a vendor-representation change (A-018), so the demo path is not affected.
-- **Route:** Moderator disposition. The options are:
-  - (a) Accept the narrow meaning ("representation variants within one slice") and record it in the Step or domain notes.
-  - (b) Route to the Tech Lead to decide whether document slices should key on a normalized vendor identity while `vendor-representation` keeps the raw text. That decision touches STEP-02 slice identity, so it probably belongs in a later Step.
+The register's Required Gate Types table lists "Tech Lead review acceptance" as required before QA starts. It also says a skipped or reordered gate needs an explicit override entry. A-006, A-020, and A-031 recorded this gate for STEP-01 to STEP-03. For STEP-04 the register ends at A-036. A-036 approves hand-back for Tech Lead re-review but does not accept the resulting "Pass for QA" review.
 
-### QA-019 - Low (detection semantics / reconstruction): one returning observation resolves a sustained Divergence
+**Impact:** Traceability only. The implementation is unaffected.  
+**Proposed disposition:** The Moderator records the STEP-04 Tech Lead review acceptance, or an override with rationale, before recording QA acceptance.  
+**Status:** Resolved. The Moderator recorded A-037 - STEP-04 Tech Lead Review Acceptance in commit `ac434f6`. QA confirmed that the commit changes only `moderator-register.md`. The entry was recorded after QA had started, not before, but it accepts the same package, so the gate is now satisfied on the record.
 
-- **Where:** `divergence.ts:119-123` ends a run on any single within-baseline observation. `divergence.ts:129-135` marks every ended run `resolved`. `divergence.ts:166-169` builds Evidence from the run only.
-- **Effect:**
-  - After five sustained out-of-baseline observations, one in-baseline value marks the Divergence `resolved` (probe P5).
-  - If the change continues, a second Divergence with a new ID and a new onset is emitted. One continuing change becomes two findings (probe P4, and `divergence.spec.ts:75-83`).
-  - A single observation can therefore end a Divergence, although STEP-03 requires three to start one. This is the one-off sensitivity that D5 and `product.md:161` rule out for detection.
-  - The observation that set `resolved` is not in the Evidence, and the record has no resolution time. So the `resolved` status cannot be reconstructed from the record (R12, D6).
-- **Why Low:** A-030 allows the detector to set `resolved`, and the wording condition is met. All replay Divergences are `ongoing`, so the demo path is not affected.
-- **Route:** Moderator disposition. The options are:
-  - (a) Accept as MVP behavior and record it as a known limitation.
-  - (b) Tech Lead defines a resolution rule, for example N consecutive within-baseline observations, and adds the resolving observation reference. This could happen in STEP-03 rework or before STEP-04 renders statuses.
+### QA-024 - Low (Evidence reconstruction / display precision): day-scale durations drop minutes — **Accepted by the Moderator**
 
-### QA-020 - Info (detection coverage): intermittent sustained change is not surfaced
+`formatDuration` in `src/app/shared/ui/divergence/divergence-format.ts` shows `"{d} d {h} h"` once a value reaches 24 hours and drops the minutes. The spec asserts this: 2 d 3 h 20 min shows as "2 d 3 h".
 
-- The approved criterion is 3 *consecutive* out-of-baseline observations. A lasting change in mix therefore never qualifies if a baseline value appears at least every third observation. For example, a vendor now invoicing two in three documents in USD is not surfaced (probe P3).
-- This is the approved A-030 behavior, not a defect. It is recorded because `architecture.md` D5 allows "repeated or windowed evidence" and because the product scenario at `product.md:130` includes currency pattern changes.
-- **Route:** For Tech Lead consideration in later detection tuning. No STEP-03 action is needed.
+Rendered example, Approval Task duration Evidence at 10 Sep 2026, 10:01 UTC:
 
-### QA-021 - Info (determinism): the chronological tie-break is locale-sensitive
+- The compared value shows **"1 d 0 h"**.
+- The difference from the baseline mean shows **"+20 h 19 min"**.
+- The baseline mean shows **"4 h 33 min"**.
 
-- `byObservedAt` (`observation.ts:71`) breaks timestamp ties with `a.id.localeCompare(b.id)`. That order depends on the runtime's locale collation. `frequencyDistribution` (`baseline-statistics.ts:35`) deliberately uses code-point comparison instead.
-- The two differ only for equal timestamps, and the replay fixtures have none that matter. It is a small inconsistency in a Step that claims determinism.
-- **Route:** Optional cleanup with a later change to these files.
+The actual value is 24 h 52 min, so 52 minutes are hidden, and the three rendered fields do not add up. The same happens on the Workflow runtime item at 10 Sep ("1 d 1 h" shown, 25 h 34 min actual) and in "Observed values … max 1 d 0 h". Card and detail durations such as "7 d 1 h" lose under 1% and are unaffected in practice.
 
-### QA-022 - Info (process / traceability): one commit holds all three roles' artifacts
+**Impact:** The step's QA Notes ask that Evidence be "reconstructable from rendered fields". A user cannot reconcile compared value, difference, and baseline mean for day-scale workflow values. No data is lost: the domain record keeps exact milliseconds.  
+**Proposed disposition:** Moderator choice. Either accept it as a display convention, or route a small rework so values near a day keep minutes (for example "1 d 0 h 52 min", or hours plus minutes below some threshold).  
+**Moderator disposition:** Accepted as a known display limitation for STEP-04. Duration Evidence values stay intact in the domain record. Better duration formatting may be considered in a later UI polish step. No STEP-04 rework.
 
-- `164abb6` bundles Development Team code with the Tech Lead's `review.md` and the Moderator's A-030 and A-031 entries. This is the same pattern as QA-001 and QA-016.
-- `review.md` and A-031 both describe the reviewed package as the *uncommitted working tree*. QA cannot show from git history that the committed tree is exactly the reviewed tree.
-- QA checked the committed tree independently. The test count (268) and bundle sizes (256.96 kB) match `review.md` exactly, which is consistent with the same package.
-- `review.md` now holds only the STEP-03 review. The STEP-02 review is preserved at tag `step-02`.
+### QA-025 - Info (process / traceability): the review header says the work is uncommitted, but it was committed before QA — **Closed, no action**
+
+`review.md` says "Current uncommitted Development Team STEP-04 work" and "The working tree is intentionally uncommitted per the Development Team handoff". A-036 says "Do not commit unless instructed." QA found the implementation, `review.md`, and A-034 to A-036 all in commit `933aece`, made before QA. QA cannot tell whether the Moderator instructed that commit. The reviewed content and the committed content agree: test count and bundle sizes match `review.md` exactly.
+
+**Proposed disposition:** No rework. Note it for the final gate, as with QA-022.  
+**Moderator disposition:** No action. `review.md` described the working tree as uncommitted at Tech Lead review time. The work was committed before QA on the Moderator's instruction.
 
 ---
 
 ## Regressions Or Risks
 
-- No functional regressions. The STEP-01 and STEP-02 specs pass. The dashboard, About view, shell, facade, and fixtures are unchanged, and the lazy chunk sizes are unchanged.
-- **Risk:** QA-019 matters once STEP-04 renders statuses. A `resolved` badge set by one returning observation, followed by a second card for the same continuing change, could be misread.
-- **Risk:** QA-018 matters if a later fixture or live data introduces renamed vendors. The rename would show as a new Identity Slice rather than as a Divergence.
+- No functional regressions. All STEP-01 to STEP-03 specs pass. The domain, fixtures, About view, routes, and guardrail patterns are unchanged.
+- **Risk (QA-014, data not copy):** The Approval Task duration and Workflow runtime cards show the same magnitude (+18 h 35 min), the same onset day, and the same six workflow instance IDs in their Evidence. The UI does not link them, and the list note says each has its own Observed Baseline. Still, a reader could infer a relationship from the values alone. This comes from the replay data and the Level 1 scope, not from UI wording. The Product Owner may want to keep it in mind for later Attribution-adjacent copy.
+- **Risk (QA-019):** The `resolved` wording is only exercised through unit-test builders. If a later fixture or source produces a `resolved` Divergence next to a new `ongoing` one on the same Identity Slice and dimension, the UI shows two sibling cards. It does not explain that they are separate sustained runs.
+- **Pre-existing, not a STEP-04 regression:** The inactive stream tab's `aria-controls` points to a panel id that is not rendered. This has been the case since at least `step-03`.
 
 ---
 
 ## Manual Checks Required
 
-- **Moderator:** disposition QA-018 and QA-019, and optionally QA-020 to QA-022.
-- **No browser check is needed for STEP-03.** No rendered output changed, and the dashboard and About chunks are the same size as at the STEP-02 re-check. The STEP-02 browser evidence still applies.
+- **Moderator:** record QA acceptance of this review. QA-023 is resolved by A-037, and QA-024 and QA-025 are dispositioned.
+- **Optional human visual pass:** QA verified layout geometry, content, and focus programmatically and captured screenshots. It did not judge visual polish (spacing, badge colour contrast in both themes) against `design-spec.md` by eye.
+- **Screen reader check (optional):** `aria-current="true"` on a button is announced differently across screen readers. QA did not test it with NVDA or VoiceOver.
 
 ---
 
 ## Known Limitations
 
-- QA probed behavior with scratch scripts outside the repository. It did not mutation-test the specs, because that would require editing implementation files.
-- Detection parameters were checked for conformance to A-030, not for statistical suitability. That remains a Tech Lead and Product Owner concern.
-- The reference window is stream-wide and fixed to the first 28 days. Baselines are not recalculated over time, and later observations never become reference history. This agrees with A-030 and the immutable-snapshot decision, and is noted for later Steps.
+- The `resolved`, categorical-baseline, empty-state, and unavailable-state paths do not occur in replay data. QA verified them from specs and code, not in the browser.
+- QA did not mutation-test the specs, because that would require editing implementation files.
+- The browser check used Chromium only.
 
 ---
 
@@ -199,9 +210,10 @@ A-030 chose **emit both, unlinked**. QA confirmed the following:
 
 Per MOD-W, QA does not implement fixes. Proposed route:
 
-1. The Moderator records QA acceptance of this review and dispositions QA-018 to QA-022.
-2. If any finding is routed to rework, the Tech Lead defines it in `review.md`. The Development Team plans it, the Moderator approves the plan, and the Development Team implements. The Tech Lead then re-reviews, and a fresh QA session re-checks.
-3. If none is routed to rework, the STEP-03 final gate follows. Product Owner sign-off applies if required.
+1. Done: A-037 records the STEP-04 Tech Lead review acceptance (QA-023 resolved).
+2. Done: the Moderator dispositioned QA-024 (accepted as a known display limitation, no rework) and QA-025 (no action).
+3. The Moderator records QA acceptance of this review in the register.
+4. The STEP-04 final gate follows.
 
 QA does not accept its own review.
 
