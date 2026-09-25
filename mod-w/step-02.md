@@ -206,6 +206,7 @@ Not applicable. Claude Code is assigned; Claude Design is not implementing this 
 | --- | --- | --- |
 | 2026-09-24 | Initial STEP-02 authored | Begin post-STEP-01 domain/data foundation while carrying QA-006 guardrail coverage forward. |
 | 2026-09-24 | Updated approval status, Reference Implementation disposition, and source conflict handling | A-017 approved STEP-02 for briefing/planning; Development Team flagged missing prototype files and advisory-summary conflicts with public DocuWare docs. |
+| 2026-09-25 | Corrected Platform REST API source conflict wording | QA-010 found that the cited public page documents `FieldName` and `Item`, while `ItemElementName`, `/Date(ms)/`, `DWSTOREDATETIME`, and Decimal typing must be treated as replay approximations/source-shape assumptions. |
 
 ---
 
