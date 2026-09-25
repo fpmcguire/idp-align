@@ -1007,4 +1007,43 @@ No About files, fixtures, calculations, Observed Baseline logic, sustained Diver
 
 ---
 
+### A-027 - STEP-02 QA-012 Re-Check Acceptance
+
+**Status:** Approved  
+**Date:** 2026-09-25  
+**Moderator:** Frank McGuire  
+**Role approved:** QA  
+**Gate:** QA acceptance after STEP-02 QA-012 rework re-check  
+**Step:** `mod-w/step-02.md`  
+**Next authorized action:** Tech Lead prepares the STEP-02 final gate.
+
+#### Accepted Artifacts
+
+- `qa.md` "Re-Check - QA-012 Rework", verdict "Pass"
+- Tech Lead re-review acceptance A-026 at `09adf09`
+- Development Team QA-012 rework commit `0fed7ba`
+
+#### Acceptance Summary
+
+The Moderator accepts the fresh QA re-check of QA-012. The KPI card note now reads "Pending Divergence detection", KPI values remain "—", and the stale "Pending replay data" copy is removed from source. Lint, build, and tests (12 files, 158 tests) passed under Node.js v26.0.0.
+
+#### Evidence
+
+- QA re-check found no new findings. Lint, build, and tests passed under Node.js v26.0.0.
+- Moderator manual browser review of the KPI card copy completed successfully on 2026-09-25, closing the manual check listed in the QA re-check.
+
+#### Finding Dispositions
+
+| Finding | Disposition |
+| --- | --- |
+| QA-012 | Closed by the approved QA-012 rework, Tech Lead re-review, QA re-check, and Moderator browser review. |
+
+#### Conditions
+
+- QA-013 to QA-016 dispositions from A-024 stand unchanged.
+- No About copy or About test changes (PO-1 excluded).
+- The STEP-02 final gate follows this acceptance.
+
+---
+
 MOD-W v5.0.1
