@@ -100,7 +100,10 @@ const docuWareDate = (ms: number) => `/Date(${ms})/`;
 
 const pad = (value: number) => String(value).padStart(2, '0');
 
-/** Formats milliseconds in the documented "[d.]hh:mm:ss.fffffff" duration form. */
+/**
+ * Formats milliseconds in the documented "hh:mm:ss.fffffff" duration form. Durations of 24 hours
+ * or more add an approximated "d." day prefix that the cited page does not show.
+ */
 function timeSpan(ms: number): string {
   const totalSeconds = Math.floor(ms / 1_000);
   const days = Math.floor(totalSeconds / 86_400);
@@ -209,7 +212,8 @@ export const WORKFLOW_REPLAY_FIXTURE: ReplayFixture<WorkflowAnalyticsProjections
     ],
     notes: [
       'Projection names match the documented projection types.',
-      'WorkflowRuntimes rows use the documented fields and value formats.',
+      'WorkflowRuntimes rows use the documented fields, the documented /Date(ms)/ date form, and the documented hh:mm:ss.fffffff duration form.',
+      'Approximation: durations of 24 hours or more use a d. day prefix (TimeSpan-style) that the cited page does not show.',
       'Task-level projections have no published example payload; their field names are approximations.',
       'responseTimeMs is read from the TaskReactionTimes projection (assignment until pickup).',
       'decisionAgent is read from the TaskDecisionUsers projection and holds synthetic role labels, not people.',

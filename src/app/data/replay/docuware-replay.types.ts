@@ -1,7 +1,10 @@
 // Record shapes for replay fixtures, following the public DocuWare documentation cited in each
 // fixture's metadata. These describe replay input only; the rest of the app uses domain types.
 
-/** Platform REST API index field: `Item` holds one value typed by `ItemElementName`. */
+/**
+ * Platform REST API index field. `FieldName` and the single `Item` value follow the cited page;
+ * `ItemElementName` typing is a replay approximation that the cited page does not show.
+ */
 export interface DocuWareIndexField {
   readonly FieldName: string;
   readonly Item: string | number | null;
@@ -14,7 +17,8 @@ export interface DocuWareDocumentRecord {
 }
 
 // Workflow Analytics API projections. Dates use the documented "/Date(ms)/" form and durations
-// the documented "hh:mm:ss.fffffff" form (with an optional "d." day prefix).
+// the documented "hh:mm:ss.fffffff" form. Durations of 24 hours or more add a "d." day prefix,
+// an approximation (TimeSpan-style) that the cited page does not show.
 
 /** Documented WorkflowRuntimes row. */
 export interface WorkflowRuntimesRow {

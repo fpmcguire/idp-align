@@ -3,6 +3,7 @@ import {
   FIXTURE_SECRET_PATTERNS,
   PUBLIC_DOCUMENTATION_URL,
 } from '../../../../testing/claim-guardrail-patterns';
+import { parseTimeSpan } from '../docuware-value.parsers';
 import { DOCUMENT_REPLAY_FIXTURE } from './document-replay.fixture';
 import { WORKFLOW_REPLAY_FIXTURE } from './workflow-replay.fixture';
 
@@ -11,6 +12,7 @@ import { WORKFLOW_REPLAY_FIXTURE } from './workflow-replay.fixture';
 
 const FIXTURES = [DOCUMENT_REPLAY_FIXTURE, WORKFLOW_REPLAY_FIXTURE];
 const SYNTHETIC_INSTANCE_ID = /^00000000-0000-4000-8000-\d{12}$/;
+const DAY_MS = 86_400_000;
 
 describe('replay fixtures', () => {
   for (const fixture of FIXTURES) {
@@ -65,9 +67,32 @@ describe('replay fixtures', () => {
       }
     });
 
-    it('should use the documented index field structure', () => {
+    it('should use the documented FieldName and Item pair on every index field', () => {
+      for (const record of records) {
+        for (const field of record.Fields) {
+          expect(typeof field.FieldName).toBe('string');
+          expect(field).toHaveProperty('Item');
+        }
+        const fieldNames = record.Fields.map(f => f.FieldName);
+        expect(fieldNames).toContain('COMPANY');
+        expect(fieldNames).toContain('DOCUMENT_DATE');
+      }
+    });
+
+    it('should add only the approximated ItemElementName to the documented pair', () => {
       for (const field of records.flatMap(r => r.Fields)) {
         expect(Object.keys(field).sort()).toEqual(['FieldName', 'Item', 'ItemElementName']);
+      }
+    });
+
+    it('should record approximated typing, date encoding, and DWSTOREDATETIME in metadata', () => {
+      const { notes } = DOCUMENT_REPLAY_FIXTURE.metadata;
+      const approximations = notes.filter(note => note.startsWith('Approximation:')).join(' ');
+      for (const term of ['ItemElementName', 'Decimal', '/Date(ms)/', 'DWSTOREDATETIME']) {
+        expect(approximations).toContain(term);
+      }
+      for (const note of notes.filter(n => /documented/i.test(n))) {
+        expect(note).not.toMatch(/ItemElementName|Decimal|\/Date\(|DWSTOREDATETIME/);
       }
     });
   });
@@ -90,6 +115,26 @@ describe('replay fixtures', () => {
         expect(Object.keys(row).sort()).toEqual(
           ['docId', 'instanceId', 'runtime', 'startTime', 'state', 'timeOfCompletion', 'workflowVersion'].sort(),
         );
+      }
+    });
+
+    it('should use the documented duration form below 24 hours and a day prefix only above it', () => {
+      const durations = [
+        ...records.WorkflowRuntimes.map(r => r.runtime),
+        ...records.TaskExecutionTimes.map(r => r.executionTime),
+        ...records.TaskReactionTimes.map(r => r.reactionTime),
+      ];
+      for (const duration of durations) {
+        expect(duration).toMatch(/^(\d+\.)?\d{2}:\d{2}:\d{2}\.\d{7}$/);
+        expect(/^\d+\./.test(duration)).toBe((parseTimeSpan(duration) ?? 0) >= DAY_MS);
+      }
+    });
+
+    it('should record the duration day prefix as an approximation in metadata', () => {
+      const { notes } = WORKFLOW_REPLAY_FIXTURE.metadata;
+      expect(notes.filter(note => note.startsWith('Approximation:')).join(' ')).toMatch(/d\. day prefix/);
+      for (const note of notes.filter(n => /documented/i.test(n))) {
+        expect(note).not.toMatch(/d\. day prefix|value formats/);
       }
     });
 

@@ -1,8 +1,9 @@
 import { DocuWareDocumentRecord } from '../docuware-replay.types';
 import { ReplayFixture } from '../replay-fixture';
 
-// Synthetic document replay data. Vendors, IDs, amounts, and dates are invented for IDP-Align;
-// only the record shape follows the public DocuWare Platform REST API documentation.
+// Synthetic document replay data. Vendors, IDs, amounts, and dates are invented for IDP-Align.
+// The FieldName / Item pair follows the public DocuWare Platform REST API documentation; the
+// value typing, date encoding, and storage-time field are approximations recorded in metadata.
 
 const ALPHA = 'Alpha Office Supplies (synthetic)';
 const BETA = 'Beta Freight Services (synthetic)';
@@ -95,9 +96,11 @@ export const DOCUMENT_REPLAY_FIXTURE: ReplayFixture<readonly DocuWareDocumentRec
       },
     ],
     notes: [
-      'Index fields use the documented FieldName / Item / ItemElementName structure.',
-      'COMPANY and DOCUMENT_DATE follow the documented sample field names; the other field names are synthetic.',
-      'DWSTOREDATETIME holds the time the document was stored and becomes the observation time.',
+      'The cited page documents index fields as a FieldName with a single Item value.',
+      'COMPANY and DOCUMENT_DATE follow the documented sample field names; DOCUMENT_TYPE, AMOUNT, and CURRENCY are synthetic.',
+      'Approximation: ItemElementName typing (String, Decimal, Date, DateTime) is a source-shape assumption not shown on the cited page.',
+      'Approximation: date values use the /Date(ms)/ encoding; the cited DOCUMENT_DATE sample is an ISO date string.',
+      'Approximation: DWSTOREDATETIME is an assumed storage-time field not shown on the cited page; it becomes the observation time.',
     ],
   },
   records: SEEDS.map(toDocumentRecord),
