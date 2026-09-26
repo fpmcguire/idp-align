@@ -2085,6 +2085,37 @@ STEP-07 is approved for Development Team briefing and implementation planning. T
 - QA-028 and QA-029 remain accepted carry-forward notes and are not STEP-07 requirements unless separately routed and approved.
 - The Development Team must obtain implementation-plan approval before writing code. Tech Lead review is required before QA acceptance.
 
+### A-054 - STEP-07 Development Team Implementation Plan Approval
+
+**Status:** Approved with conditions  
+**Date:** 2026-09-26  
+**Moderator:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** Implementation-plan approval before Development Team writes code  
+**Step:** `mod-w/step-07.md`  
+**Tech Lead verdict:** Pass for Moderator implementation-plan approval, with conditions  
+**Next authorized action:** Development Team may implement the approved STEP-07 plan and run verification. Tech Lead review is required before QA acceptance.
+
+#### Approved Plan Decision
+
+The Moderator explicitly approves **KPI Option C**: add a data-backed shared KPI for **"Identity Slices with Divergences"**. This is approved shared-layout fallout within STEP-07 parity work and may affect both Document and Workflow stream presentation. The KPI must use existing facade/domain data and must not count decision agents or routes as a proxy for parity or Attribution.
+
+#### Acceptance Summary
+
+The Moderator approves the Development Team implementation plan reviewed by the Tech Lead. The plan is within A-053 and may now be implemented with KPI Option C and the conditions below.
+
+#### Conditions
+
+- KPI wording must remain non-comparative. **"2 of 4"** is acceptable as within-stream coverage, but copy must not compare Document and Workflow streams or imply cross-stream alignment.
+- Use descriptive wording such as **"Identity Slices with Divergences"**. Do not use **"with Divergences"** as a risk or severity cue. Notes may identify workflow coverage, such as **"Workflow steps and Workflow runtime."**
+- The shared KPI must be data-backed, use existing facade/domain data, and remain within the shared layout without changing detector, baseline, fixture, or repository semantics.
+- The test-only categorical builder is approved only for tests. It must not alter replay fixtures, detection thresholds, reference windows, production data, or browser-visible scenarios.
+- The Evidence label change must be checked in Document specs as well as Workflow coverage. **"Amount (compared value)"** is acceptable only if shared wording remains truthful for categorical and document rows and does not imply a target.
+- About files and About tests remain untouched. The separately reported stale About sentence is out of scope and requires separate routing.
+- Development Team must preserve independent CAV Level 1 streams and must not introduce cross-stream reconciliation, comparison, correlation, Attribution, CAV Level 2+ or Level 3+ claims, business judgment, severity/risk, alert/anomaly, or user-action workflow behavior.
+- Existing STEP-05 and STEP-06 behavior must not regress. No fixture value changes, detector changes, threshold changes, reference-window changes, live DocuWare calls, credentials, backend/proxy work, non-replay adapters, or package/chart dependency changes are authorized.
+- Development Team must hand off the completed implementation diff and verification evidence for Tech Lead review before QA.
+
 ---
 
 MOD-W v5.0.1
