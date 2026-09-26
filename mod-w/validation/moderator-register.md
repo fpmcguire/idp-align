@@ -1790,6 +1790,79 @@ The Tech Lead found no remaining Must Fix or Could Fix Later findings. The previ
 - QA must preserve the existing STEP-05 scope and must not treat this acceptance as final STEP-05 or QA acceptance.
 - QA-027 remains a documented process note and does not require implementation rework.
 
+### A-046 - STEP-05 QA Acceptance And Finding Dispositions
+
+**Status:** Approved  
+**Date:** 2026-09-26  
+**Moderator:** Frank McGuire  
+**Role approved:** QA  
+**Gate:** QA acceptance before Moderator final gate  
+**Step:** `mod-w/step-05.md`  
+**Next authorized action:** The Moderator may record the STEP-05 final gate and update the roadmap.
+
+#### Accepted Artifacts
+
+- `qa.md` - STEP-05 QA-026 Re-check, verdict "QA-026 resolved. There are no new findings."
+- `review.md` - STEP-05 QA-026 Rework Review Addendum, verdict "Pass for QA re-check"
+- A-045 Moderator acceptance of the Tech Lead rework review
+- Commit `6100088` - `fix(step-05): resolve time-range description reference`
+
+#### Acceptance Summary
+
+The Moderator accepts the QA-026 re-check and the STEP-05 QA review. QA independently reran lint, build, and tests under Node.js v26.0.0; all passed, with 27 test files and 408 tests. The no-Divergence state no longer contains a dangling Time range `aria-describedby` reference, and the ready state continues to expose a valid rendered description.
+
+#### Finding Dispositions
+
+| Finding | Disposition                                                                                 |
+| ------- | ------------------------------------------------------------------------------------------- |
+| QA-026  | Closed. The approved accessibility rework is verified by QA and introduces no new findings. |
+| QA-027  | Accepted as a non-blocking process traceability note. No implementation rework is required. |
+
+#### Conditions
+
+- No additional STEP-05 implementation changes are authorized or required.
+- The final Moderator gate must preserve the documented QA-027 process note.
+
+---
+
+### A-047 - STEP-05 Moderator Final Gate
+
+**Status:** Approved  
+**Date:** 2026-09-26  
+**Moderator:** Frank McGuire  
+**Role approved:** Final Moderator gate  
+**Gate:** STEP-05 final acceptance  
+**Step:** `mod-w/step-05.md`  
+**Next authorized action:** STEP-05 is complete; proceed to STEP-06 planning when directed.
+
+#### Accepted Artifacts
+
+- STEP-05 implementation commit `6100088`
+- `review.md` Tech Lead STEP-05 review and QA-026 rework review addendum
+- `qa.md` STEP-05 QA review and QA-026 re-check
+- Moderator approvals A-040 through A-046
+- `mod-w/step-05.md`
+- Updated STEP-05 roadmap status
+
+#### Final Acceptance Summary
+
+STEP-05 is accepted as complete. It delivers functional dashboard filtering and sorting, explicit loading/unavailable/empty/filtered-empty states, per-stream filter/sort/selection behavior, hidden-selection handling, repository-backed retry behavior, keyboard and focus refinements, and preserved responsive behavior.
+
+The QA-026 accessibility rework is closed. QA-027 remains a non-blocking process note. The accepted scope contains no Chart.js analysis, user action workflows, About changes, fixture or detector changes, live DocuWare calls, credentials, backend/proxy work, or CAV Level 2+ behavior.
+
+#### Evidence
+
+- `npm.cmd run lint` passed under Node.js v26.0.0.
+- `npm.cmd run build` passed under Node.js v26.0.0.
+- `npm.cmd test -- --watch=false` passed under Node.js v26.0.0: 27 test files and 408 tests.
+- QA independently verified the no-Divergence and ready-state accessibility behavior after commit `6100088`.
+
+#### Conditions And Carry-Forward Notes
+
+- QA-027 is carried as a process note; future workflow cycles should keep approval artifacts separate from implementation commits where feasible.
+- QA-024 remains a known duration-display limitation carried from STEP-04.
+- STEP-06 Chart.js analysis remains planned and is not included in this acceptance.
+
 ---
 
 MOD-W v5.0.1

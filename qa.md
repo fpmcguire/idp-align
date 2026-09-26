@@ -12,6 +12,57 @@ The STEP-04 QA record is preserved at tag `step-04`. `qa.md` at that tag is iden
 
 ---
 
+## QA-026 Re-check
+
+**Re-check date:** 2026-09-26  
+**Repository state re-checked:** `master` `6100088` ("fix(step-05): resolve time-range description reference"), clean working tree.  
+**Inputs:** A-043 (rework plan), A-044 (`qa.md` documentation carry), A-045 (Tech Lead rework review acceptance), and the `review.md` "QA-026 Rework Review Addendum" (verdict "Pass for QA re-check").  
+**Result:** **QA-026 resolved.** There are no new findings. The original STEP-05 review below is otherwise unchanged.
+
+A-045 authorizes this re-check only. It is not final STEP-05 acceptance. QA acceptance and the final gate remain with the Moderator.
+
+### Scope of the rework
+
+`6100088` changes three implementation files plus role documents:
+
+- `dashboard.component.ts` adds `shownTimeRangeNote = computed(() => (this.controlsNote() ? null : this.timeRangeNote()))`.
+- `dashboard.component.html` uses `shownTimeRangeNote()` for both the Time range select `[attr.aria-describedby]` and the `@else if` branch that renders `#time-range-note`.
+- `dashboard.component.spec.ts` adds three assertions to the existing "should disable filter and sort controls in a stream with no Divergences" spec.
+- `review.md`, `moderator-register.md` (A-043 to A-045), and `qa.md`. The `qa.md` change is the original STEP-05 QA record, which A-044 carries separately from the fix.
+
+This matches the A-043 scope conditions. Note copy, controls-note copy, disabled state, filters, sorting, KPIs, the facade, domain logic, fixtures, About, and shared Divergence UI are unchanged. `timeRangeNote` and `controlsNote` are unchanged, and no other code reads the new signal.
+
+### Re-check results
+
+| Check | Result | Evidence |
+| --- | --- | --- |
+| The select references `time-range-note` only when the note renders | Pass | The attribute and the render condition now read the same signal, `shownTimeRangeNote()`, so they cannot disagree. |
+| No-Divergence state: no `aria-describedby` on the Time range select | Pass | The spec asserts `hasAttribute('aria-describedby')` is `false`. `controlsNote()` is non-null in this state, so `shownTimeRangeNote()` is `null`. |
+| No-Divergence state: `time-range-note` is not rendered | Pass | The spec asserts that `[data-testid="time-range-note"]` and `#time-range-note` are both absent. The controls note still renders with unchanged copy. |
+| Ready state still renders the note and a valid reference | Pass | The spec "should offer time range presets measured from the latest observation" is unchanged and passes against replay data. It asserts the note text and `aria-describedby="time-range-note"`. In the ready state `controlsNote()` is `null`, so `shownTimeRangeNote()` equals `timeRangeNote()`. |
+| No unrelated STEP-05 behavior or scope changed | Pass | Diff scope above. The build output sizes are identical to the original review (initial 264.78 kB, `dashboard-component` 50.67 kB raw). |
+| Lint, build, and test evidence | Pass | QA ran all three again independently (below). The results match A-045 and `review.md`. |
+
+### Automated command results (Node.js v26.0.0 via fnm)
+
+| Command | Result |
+| --- | --- |
+| `fnm exec --using=v26.0.0 npm.cmd run lint` | Pass. "All files pass linting." |
+| `fnm exec --using=v26.0.0 npm.cmd run build` | Pass. Initial total 264.78 kB raw / 75.91 kB transfer. `dashboard-component` 50.67 kB / 12.07 kB. |
+| `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` | Pass. 27 files, 408 tests. The count is unchanged, as A-043 expects, because the plan extended an existing spec. |
+
+### Notes
+
+- **Browser:** QA did not repeat the browser check. Replay data never reaches the no-Divergence state, so a browser cannot show this fix, and the ready state is covered by the passing spec above. The original browser evidence still applies to everything else, because nothing else changed.
+- **AC15:** Its note about the dangling `aria-describedby` no longer applies. AC15 now passes without a note on that point.
+- **QA-027:** Unchanged. It stays a process note with no rework, as A-045 states. The rework commit `6100088` again bundles the register entries with the code, as QA-027 already describes.
+
+### Next step
+
+The Moderator records QA acceptance of STEP-05, including this re-check, and then the final gate. QA does not accept its own review.
+
+---
+
 ## Gate Check
 
 | Gate | Register entry | Result |
@@ -179,6 +230,8 @@ The loading, unavailable, and no-Divergence copy does not render with replay dat
 ## Findings
 
 ### QA-026 - Low (accessibility): the Time range select points to an unrendered note when a stream has no Divergences
+
+**Status (2026-09-26):** Resolved in `6100088` (A-043 rework, A-045 Tech Lead acceptance). See "QA-026 Re-check" above.
 
 In `dashboard.component.html`, the Time range select sets `[attr.aria-describedby]="timeRangeNote() ? 'time-range-note' : null"`. The `#time-range-note` paragraph renders only in the `@else if` branch after `controlsNote()`.
 

@@ -15,16 +15,16 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 
 ## Steps
 
-| Step | Title | Requirement(s) | Agent | Status | Notes |
-| --- | --- | --- | --- | --- | --- |
-| STEP-01 | Dashboard Foundation, Stream Shell, And About View | R6, R9, R10, R13 | Claude Code | Complete (A-016, tag `step-01`) | Replace Angular starter with routed dashboard foundation, shared layout components, and DocuWare-specific reviewer-facing About route. |
-| STEP-02 | CAV Domain Model, Repositories, And Replay Fixtures | R1, R3, R8, R9 | Claude Code | Complete (A-028, tag `step-02`) | Added typed document/workflow observations, repository interfaces, replay adapters, dashboard source facade, and QA-006 dashboard guardrail test coverage. |
-| STEP-03 | Observed Baseline And Sustained Divergence Logic | R2, R4, R5, R12 | Claude Code | Complete (A-033, tag `step-03`) | Added pure domain Observed Baseline derivation, sustained Divergence detection, Evidence construction, and QA-014 workflow overlap handling. |
-| STEP-04 | Divergence List, Detail, Baseline, And Evidence Trace | R5, R6, R12 | Claude Code | Complete (A-039, tag `step-04`) | Added shared CAV Divergence cards, status badges, detail panel, Observed Baseline context, chronological Evidence Trace, stream KPIs, and per-stream selection state; carried QA-014, QA-018, and QA-019 wording guardrails. |
-| STEP-05 | Filtering, Sorting, Empty, Loading, And Error States | R6, R11 | Claude Code | Approved for Dev Team planning (A-040) | Complete dashboard filter/sort interactions, loading/empty/error states, keyboard/focus behavior, and responsive-state checks after STEP-04. |
-| STEP-06 | Divergence Analysis Chart View | R5, R6 | Claude Code or Claude Design | Planned | Implement Chart.js analysis view with metric switching. |
-| STEP-07 | Workflow Stream Parity And Cross-Stream Consistency | R3, R4, R6, R9 | Claude Code | Planned | Verify workflow stream uses same model and components with workflow-specific copy/data. |
-| STEP-08 | Quality Gate Completion And Documentation | R10, R11 | Claude Code | Planned | E2E flows, docs, final claim guardrails, and readiness for Tech Lead review/QA. |
+| Step    | Title                                                 | Requirement(s)   | Agent                        | Status                          | Notes                                                                                                                                                                                                                        |
+| ------- | ----------------------------------------------------- | ---------------- | ---------------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| STEP-01 | Dashboard Foundation, Stream Shell, And About View    | R6, R9, R10, R13 | Claude Code                  | Complete (A-016, tag `step-01`) | Replace Angular starter with routed dashboard foundation, shared layout components, and DocuWare-specific reviewer-facing About route.                                                                                       |
+| STEP-02 | CAV Domain Model, Repositories, And Replay Fixtures   | R1, R3, R8, R9   | Claude Code                  | Complete (A-028, tag `step-02`) | Added typed document/workflow observations, repository interfaces, replay adapters, dashboard source facade, and QA-006 dashboard guardrail test coverage.                                                                   |
+| STEP-03 | Observed Baseline And Sustained Divergence Logic      | R2, R4, R5, R12  | Claude Code                  | Complete (A-033, tag `step-03`) | Added pure domain Observed Baseline derivation, sustained Divergence detection, Evidence construction, and QA-014 workflow overlap handling.                                                                                 |
+| STEP-04 | Divergence List, Detail, Baseline, And Evidence Trace | R5, R6, R12      | Claude Code                  | Complete (A-039, tag `step-04`) | Added shared CAV Divergence cards, status badges, detail panel, Observed Baseline context, chronological Evidence Trace, stream KPIs, and per-stream selection state; carried QA-014, QA-018, and QA-019 wording guardrails. |
+| STEP-05 | Filtering, Sorting, Empty, Loading, And Error States  | R6, R11          | Claude Code                  | Complete (A-047)                | Complete dashboard filter/sort interactions, loading/empty/error states, keyboard/focus behavior, and responsive-state checks after STEP-04.                                                                                 |
+| STEP-06 | Divergence Analysis Chart View                        | R5, R6           | Claude Code or Claude Design | Planned                         | Implement Chart.js analysis view with metric switching.                                                                                                                                                                      |
+| STEP-07 | Workflow Stream Parity And Cross-Stream Consistency   | R3, R4, R6, R9   | Claude Code                  | Planned                         | Verify workflow stream uses same model and components with workflow-specific copy/data.                                                                                                                                      |
+| STEP-08 | Quality Gate Completion And Documentation             | R10, R11         | Claude Code                  | Planned                         | E2E flows, docs, final claim guardrails, and readiness for Tech Lead review/QA.                                                                                                                                              |
 
 ---
 
@@ -98,41 +98,42 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 
 ## Coverage Check
 
-| Requirement | Steps | Status |
-| --- | --- | --- |
-| R1 | STEP-02 | Complete (A-028) |
-| R2 | STEP-03 | Complete (A-033) |
-| R3 | STEP-02, STEP-07 | STEP-02 foundation complete; STEP-07 planned |
-| R4 | STEP-03, STEP-07 | STEP-03 domain logic complete (A-033); STEP-07 planned |
-| R5 | STEP-03, STEP-04, STEP-06 | STEP-03 domain/evidence records complete (A-033); STEP-04 Divergence UI complete (A-039); later chart Step planned |
-| R6 | STEP-01, STEP-04, STEP-05, STEP-06, STEP-07 | STEP-04 list/detail dashboard complete (A-039); later interaction/chart/parity Steps planned |
-| R7 | Future Step | Deferred until live access/proxy work is explicitly activated. |
-| R8 | STEP-02 | Complete (A-028) |
-| R9 | STEP-01, STEP-02, STEP-07 | STEP-01 and STEP-02 complete; STEP-07 planned |
-| R10 | STEP-01, STEP-08 | Planned |
-| R11 | STEP-03, STEP-05, STEP-08 | STEP-03 quality gates complete (A-033); later quality gates planned |
-| R12 | STEP-03, STEP-04 | STEP-03 evidence-carrying records complete (A-033); STEP-04 Evidence Trace UI complete (A-039) |
-| R13 | STEP-01 | Complete (A-016) - DocuWare-specific v1 interview research/demo framing. |
+| Requirement | Steps                                       | Status                                                                                                             |
+| ----------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| R1          | STEP-02                                     | Complete (A-028)                                                                                                   |
+| R2          | STEP-03                                     | Complete (A-033)                                                                                                   |
+| R3          | STEP-02, STEP-07                            | STEP-02 foundation complete; STEP-07 planned                                                                       |
+| R4          | STEP-03, STEP-07                            | STEP-03 domain logic complete (A-033); STEP-07 planned                                                             |
+| R5          | STEP-03, STEP-04, STEP-06                   | STEP-03 domain/evidence records complete (A-033); STEP-04 Divergence UI complete (A-039); later chart Step planned |
+| R6          | STEP-01, STEP-04, STEP-05, STEP-06, STEP-07 | STEP-04 list/detail dashboard complete (A-039); later interaction/chart/parity Steps planned                       |
+| R7          | Future Step                                 | Deferred until live access/proxy work is explicitly activated.                                                     |
+| R8          | STEP-02                                     | Complete (A-028)                                                                                                   |
+| R9          | STEP-01, STEP-02, STEP-07                   | STEP-01 and STEP-02 complete; STEP-07 planned                                                                      |
+| R10         | STEP-01, STEP-08                            | Planned                                                                                                            |
+| R11         | STEP-03, STEP-05, STEP-08                   | STEP-03 quality gates complete (A-033); later quality gates planned                                                |
+| R12         | STEP-03, STEP-04                            | STEP-03 evidence-carrying records complete (A-033); STEP-04 Evidence Trace UI complete (A-039)                     |
+| R13         | STEP-01                                     | Complete (A-016) - DocuWare-specific v1 interview research/demo framing.                                           |
 
 ---
 
 ## Change Log
 
-| Date | Change | Reason |
-| --- | --- | --- |
-| 2026-09-24 | Updated STEP-01 roadmap language for DocuWare-specific interview research/demo framing. | Align roadmap with Product v1.2, STEP-01 update, language matrix, and Moderator approval A-004. |
-| 2026-09-24 | Set STEP-01 and R13 to Complete. | Moderator final gate A-016. Carried conditions PO-1 (About References before 2026-09-28), PO-2, PO-4, QA-006 to QA-008 are recorded in A-016. |
-| 2026-09-24 | Authored STEP-02 and marked it pending Moderator approval. | Prepare the domain model, repository boundary, replay fixture, and QA-006 guardrail-test scope after STEP-01 completion. |
-| 2026-09-24 | Updated STEP-02 status after A-017 approval. | Moderator approved STEP-02 for Development Team briefing/planning only; implementation plan approval remains required before code. |
-| 2026-09-25 | Set STEP-02 to Complete. | Moderator final gate A-028 after Tech Lead review, QA re-checks, QA-012 rework, and final QA acceptance. |
-| 2026-09-25 | Authored STEP-03 and marked it pending Moderator approval. | Prepare Observed Baseline and sustained Divergence domain logic after STEP-02 completion; carry QA-014 into STEP-03 scope. |
-| 2026-09-25 | Updated STEP-03 status after A-029 approval. | Moderator approved STEP-03 for Development Team briefing/planning only; implementation plan approval remains required before code. |
-| 2026-09-25 | Set STEP-03 to Complete. | Moderator final gate A-033 after implementation-plan approval, Tech Lead review acceptance, QA acceptance, and final finding dispositions. |
-| 2026-09-25 | Authored STEP-04 and marked it pending Moderator approval. | Prepare UI surfacing of STEP-03 Divergence, Observed Baseline, and Evidence records while carrying QA-019 into status rendering scope. |
-| 2026-09-25 | Updated STEP-04 status after A-034 approval. | Moderator approved STEP-04 for Development Team briefing/planning only; implementation plan approval remains required before code. |
-| 2026-09-25 | Set STEP-04 to Complete. | Moderator final gate A-039 after implementation-plan approval, tablet rework approval, Tech Lead review acceptance, QA acceptance, and final finding dispositions. |
-| 2026-09-25 | Authored STEP-05 and marked it pending Moderator approval. | Prepare dashboard filtering, sorting, empty/loading/error states, and keyboard/focus refinements after STEP-04 final acceptance A-039. |
-| 2026-09-25 | Updated STEP-05 status after A-040 approval. | Moderator approved STEP-05 for Development Team briefing/planning only; implementation plan approval remains required before code. |
+| Date       | Change                                                                                  | Reason                                                                                                                                                             |
+| ---------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 2026-09-24 | Updated STEP-01 roadmap language for DocuWare-specific interview research/demo framing. | Align roadmap with Product v1.2, STEP-01 update, language matrix, and Moderator approval A-004.                                                                    |
+| 2026-09-24 | Set STEP-01 and R13 to Complete.                                                        | Moderator final gate A-016. Carried conditions PO-1 (About References before 2026-09-28), PO-2, PO-4, QA-006 to QA-008 are recorded in A-016.                      |
+| 2026-09-24 | Authored STEP-02 and marked it pending Moderator approval.                              | Prepare the domain model, repository boundary, replay fixture, and QA-006 guardrail-test scope after STEP-01 completion.                                           |
+| 2026-09-24 | Updated STEP-02 status after A-017 approval.                                            | Moderator approved STEP-02 for Development Team briefing/planning only; implementation plan approval remains required before code.                                 |
+| 2026-09-25 | Set STEP-02 to Complete.                                                                | Moderator final gate A-028 after Tech Lead review, QA re-checks, QA-012 rework, and final QA acceptance.                                                           |
+| 2026-09-25 | Authored STEP-03 and marked it pending Moderator approval.                              | Prepare Observed Baseline and sustained Divergence domain logic after STEP-02 completion; carry QA-014 into STEP-03 scope.                                         |
+| 2026-09-25 | Updated STEP-03 status after A-029 approval.                                            | Moderator approved STEP-03 for Development Team briefing/planning only; implementation plan approval remains required before code.                                 |
+| 2026-09-25 | Set STEP-03 to Complete.                                                                | Moderator final gate A-033 after implementation-plan approval, Tech Lead review acceptance, QA acceptance, and final finding dispositions.                         |
+| 2026-09-25 | Authored STEP-04 and marked it pending Moderator approval.                              | Prepare UI surfacing of STEP-03 Divergence, Observed Baseline, and Evidence records while carrying QA-019 into status rendering scope.                             |
+| 2026-09-25 | Updated STEP-04 status after A-034 approval.                                            | Moderator approved STEP-04 for Development Team briefing/planning only; implementation plan approval remains required before code.                                 |
+| 2026-09-25 | Set STEP-04 to Complete.                                                                | Moderator final gate A-039 after implementation-plan approval, tablet rework approval, Tech Lead review acceptance, QA acceptance, and final finding dispositions. |
+| 2026-09-25 | Authored STEP-05 and marked it pending Moderator approval.                              | Prepare dashboard filtering, sorting, empty/loading/error states, and keyboard/focus refinements after STEP-04 final acceptance A-039.                             |
+| 2026-09-25 | Updated STEP-05 status after A-040 approval.                                            | Moderator approved STEP-05 for Development Team briefing/planning only; implementation plan approval remains required before code.                                 |
+| 2026-09-26 | Set STEP-05 to Complete.                                                                | Moderator final gate A-047 after Tech Lead review, QA-026 rework, QA re-check, QA acceptance, and finding dispositions.                                            |
 
 ---
 
