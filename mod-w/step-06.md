@@ -20,13 +20,13 @@ This Step implements the DS-015 Chart.js analysis intent using bundled dependenc
 
 ## Related Design IDs
 
-| Design ID | Design element | Design intent to preserve | Product requirement |
-| --- | --- | --- | --- |
-| DS-015 | Divergence Analysis Chart.js detailed view | Show observed values, Observed Baseline, confidence/range context, metric switching, and summary/timeline context for deeper investigation. | R5, R6 |
-| DS-005 | Divergence detail pane | Keep selected Divergence context coherent and connected to baseline/evidence details. | R5, R6 |
-| DS-006 | Baseline reference panel | Reuse observed baseline reference semantics in chart side context. | R2, R4, R5 |
-| DS-007 | Evidence trace | Preserve reconstructable Evidence connection without duplicating or mutating evidence. | R5 |
-| DS-013 | Status badges | Continue lifecycle-status semantics in analysis context. | R5, R6 |
+| Design ID | Design element                             | Design intent to preserve                                                                                                                   | Product requirement |
+| --------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| DS-015    | Divergence Analysis Chart.js detailed view | Show observed values, Observed Baseline, confidence/range context, metric switching, and summary/timeline context for deeper investigation. | R5, R6              |
+| DS-005    | Divergence detail pane                     | Keep selected Divergence context coherent and connected to baseline/evidence details.                                                       | R5, R6              |
+| DS-006    | Baseline reference panel                   | Reuse observed baseline reference semantics in chart side context.                                                                          | R2, R4, R5          |
+| DS-007    | Evidence trace                             | Preserve reconstructable Evidence connection without duplicating or mutating evidence.                                                      | R5                  |
+| DS-013    | Status badges                              | Continue lifecycle-status semantics in analysis context.                                                                                    | R5, R6              |
 
 DS-009 and DS-010 stream summary chart concepts remain dashboard KPI enhancements unless explicitly needed to support the selected Divergence analysis. User action controls from DS-004/DS-005 remain out of scope.
 
@@ -237,8 +237,8 @@ Rejected prototype assumptions:
 
 ## Change Notes
 
-| Date | Change | Reason |
-| --- | --- | --- |
+| Date       | Change                   | Reason                                                                            |
+| ---------- | ------------------------ | --------------------------------------------------------------------------------- |
 | 2026-09-26 | Initial STEP-06 authored | Begin Chart.js Divergence Analysis planning after STEP-05 final acceptance A-047. |
 
 ---
