@@ -23,7 +23,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | STEP-04 | Divergence List, Detail, Baseline, And Evidence Trace | R5, R6, R12      | Claude Code | Complete (A-039, tag `step-04`) | Added shared CAV Divergence cards, status badges, detail panel, Observed Baseline context, chronological Evidence Trace, stream KPIs, and per-stream selection state; carried QA-014, QA-018, and QA-019 wording guardrails. |
 | STEP-05 | Filtering, Sorting, Empty, Loading, And Error States  | R6, R11          | Claude Code | Complete (A-047)                | Complete dashboard filter/sort interactions, loading/empty/error states, keyboard/focus behavior, and responsive-state checks after STEP-04.                                                                                 |
 | STEP-06 | Divergence Analysis Chart View                        | R5, R6, R11      | Claude Code | Complete (A-052)                | Implemented bundled Chart.js analysis view with metric switching over selected Divergence evidence; categorical browser coverage remains spec-only because replay data is numeric-only.                                      |
-| STEP-07 | Workflow Stream Parity And Cross-Stream Consistency   | R3, R4, R6, R9   | Claude Code | Planned                         | Verify workflow stream uses same model and components with workflow-specific copy/data.                                                                                                                                      |
+| STEP-07 | Workflow Stream Parity And Cross-Stream Consistency   | R3, R4, R6, R9   | Claude Code | Approved for Dev Team planning (A-053) | Verify workflow stream uses same model and components with workflow-specific copy/data; implementation plan approval remains required before code.                                                                    |
 | STEP-08 | Quality Gate Completion And Documentation             | R10, R11         | Claude Code | Planned                         | E2E flows, docs, final claim guardrails, and readiness for Tech Lead review/QA.                                                                                                                                              |
 
 ---
@@ -102,13 +102,13 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | ----------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
 | R1          | STEP-02                                     | Complete (A-028)                                                                                                            |
 | R2          | STEP-03                                     | Complete (A-033)                                                                                                            |
-| R3          | STEP-02, STEP-07                            | STEP-02 foundation complete; STEP-07 planned                                                                                |
-| R4          | STEP-03, STEP-07                            | STEP-03 domain logic complete (A-033); STEP-07 planned                                                                      |
+| R3          | STEP-02, STEP-07                            | STEP-02 foundation complete; STEP-07 approved for parity planning (A-053)                                                   |
+| R4          | STEP-03, STEP-07                            | STEP-03 domain logic complete (A-033); STEP-07 approved for parity planning (A-053)                                         |
 | R5          | STEP-03, STEP-04, STEP-06                   | STEP-03 domain/evidence records complete (A-033); STEP-04 Divergence UI complete (A-039); STEP-06 analysis complete (A-052) |
-| R6          | STEP-01, STEP-04, STEP-05, STEP-06, STEP-07 | STEP-05 dashboard interactions complete (A-047); STEP-06 analysis complete (A-052); STEP-07 parity planned                  |
+| R6          | STEP-01, STEP-04, STEP-05, STEP-06, STEP-07 | STEP-05 dashboard interactions complete (A-047); STEP-06 analysis complete (A-052); STEP-07 parity planning approved (A-053) |
 | R7          | Future Step                                 | Deferred until live access/proxy work is explicitly activated.                                                              |
 | R8          | STEP-02                                     | Complete (A-028)                                                                                                            |
-| R9          | STEP-01, STEP-02, STEP-07                   | STEP-01 and STEP-02 complete; STEP-07 planned                                                                               |
+| R9          | STEP-01, STEP-02, STEP-07                   | STEP-01 and STEP-02 complete; STEP-07 parity planning approved (A-053)                                                      |
 | R10         | STEP-01, STEP-08                            | Planned                                                                                                                     |
 | R11         | STEP-03, STEP-05, STEP-06, STEP-08          | STEP-03, STEP-05, and STEP-06 quality gates complete; STEP-08 remains planned                                               |
 | R12         | STEP-03, STEP-04                            | STEP-03 evidence-carrying records complete (A-033); STEP-04 Evidence Trace UI complete (A-039)                              |
@@ -137,6 +137,8 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | 2026-09-26 | Authored STEP-06 and marked it pending Moderator approval.                              | Prepare bundled Chart.js Divergence Analysis view after STEP-05 final acceptance A-047; implementation plan approval remains required before code.                 |
 | 2026-09-26 | Updated STEP-06 status after A-048 approval.                                            | Moderator approved STEP-06 for Development Team briefing/planning only; implementation plan approval remains required before code.                                 |
 | 2026-09-26 | Set STEP-06 to Complete.                                                                | Moderator final gate A-052 after Tech Lead review, QA acceptance, browser verification, and finding dispositions.                                                  |
+| 2026-09-26 | Authored STEP-07 and marked it pending Moderator approval.                              | Prepare workflow stream parity and cross-stream consistency work after STEP-06 final acceptance A-052; implementation plan approval remains required before code.   |
+| 2026-09-26 | Updated STEP-07 status after A-053 approval.                                            | Moderator approved STEP-07 for Development Team briefing/planning only; implementation plan approval remains required before code.                                 |
 
 ---
 

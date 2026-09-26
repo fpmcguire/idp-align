@@ -2047,6 +2047,44 @@ QA-028 and QA-029 are carried as non-blocking future polish/accessibility notes.
 - QA-029 keyboard access for a potentially scrolling chart table remains a later accessibility note.
 - STEP-07 Workflow Stream Parity And Cross-Stream Consistency remains planned.
 
+### A-053 - STEP-07 Step Approval Before Development Team Briefing
+
+**Status:** Approved  
+**Date:** 2026-09-26  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Step approval before Development Team briefing  
+**Step:** `mod-w/step-07.md`  
+**Next authorized action:** Development Team may be briefed on STEP-07 and may prepare an implementation plan. Development Team may not write code until the Moderator approves that implementation plan in the Moderator Register.
+
+#### Approved Artifacts
+
+- `mod-w/step-07.md` - STEP-07 Workflow Stream Parity And Cross-Stream Consistency definition
+- `mod-w/roadmap.md` - STEP-07 status updated to approved for Development Team planning
+- `mod-w/architecture.md` - D1, D2, D3, D4, D5, D6, D9, D11, and D13 boundaries
+- `mod-w/domain-language.md`
+- `mod-w/language-matrix.md`
+- `mod-w/design/design-spec.md` - DS-001 through DS-015 as applicable to workflow parity
+
+#### Approval Summary
+
+The Moderator approves `mod-w/step-07.md` as the active STEP-07 definition:
+
+**Workflow Stream Parity And Cross-Stream Consistency**
+
+STEP-07 is approved for Development Team briefing and implementation planning. The Step may verify and close workflow-stream parity gaps across the shared dashboard, Divergence detail, Evidence, filters/sorting, analysis behavior, accessibility, and responsive surfaces while preserving workflow-specific meaning.
+
+#### Conditions
+
+- Development Team must implement only the approved STEP-07 scope.
+- The implementation must preserve independent CAV Level 1 Document and Workflow streams; cross-stream reconciliation, comparison, correlation, and CAV Level 2 claims are not authorized.
+- Workflow fields such as decision agent, route, error, task duration, response time, and runtime must remain factual Evidence context and must not imply Attribution, root cause, violation, failure, risk, or business correctness.
+- Existing workflow Divergence, Observed Baseline, Evidence, and replay data must be used through the facade/repository boundary. No direct replay-fixture imports, fixture value changes, detector changes, threshold changes, or reference-window changes are authorized.
+- No live DocuWare calls, credentials, OAuth, backend/proxy work, non-replay adapters, package dependency changes, chart-library changes, About changes, or user action workflows are authorized.
+- Existing STEP-05 and STEP-06 behavior, including filters, sorting, hidden-selection handling, analysis open/back, chart lifecycle, metric switching, tab accessibility, and responsive breakpoints, must not regress.
+- QA-028 and QA-029 remain accepted carry-forward notes and are not STEP-07 requirements unless separately routed and approved.
+- The Development Team must obtain implementation-plan approval before writing code. Tech Lead review is required before QA acceptance.
+
 ---
 
 MOD-W v5.0.1
