@@ -1,0 +1,79 @@
+<article class="divergence-analysis" data-testid="divergence-analysis" [attr.data-divergence-id]="divergence().id">
+  <header class="analysis-subject">
+    <p class="analysis-identity-slice" data-testid="analysis-identity-slice">{{ view().identitySlice }}</p>
+    <app-status-badge [status]="divergence().status" />
+  </header>
+
+  @if (dimensionOptions().length > 1) {
+    <div class="dimension-toggle" role="group" aria-label="Dimension" data-testid="dimension-toggle">
+      <span class="toggle-label" aria-hidden="true">Dimension</span>
+      @for (option of dimensionOptions(); track option.divergenceId) {
+        <button
+          type="button"
+          class="toggle-button"
+          data-testid="dimension-option"
+          [attr.aria-pressed]="option.divergenceId === divergence().id"
+          (click)="selectDimension(option.divergenceId)"
+        >
+          {{ option.label }}
+        </button>
+      }
+    </div>
+  } @else {
+    <p class="analysis-dimension" data-testid="analysis-dimension">
+      Dimension: {{ view().dimension }}. No other Divergence in this Identity Slice is shown under
+      the current filters.
+    </p>
+  }
+
+  <div class="analysis-body">
+    <figure class="analysis-chart">
+      <app-divergence-chart
+        [model]="view().chartModel"
+        [label]="view().chartLabel"
+        [describedBy]="summaryId"
+      />
+      <figcaption class="chart-summary" [id]="summaryId" data-testid="analysis-chart-summary">
+        {{ view().chartSummary }}
+      </figcaption>
+    </figure>
+
+    <section class="analysis-context" aria-labelledby="analysis-context-heading" data-testid="analysis-context">
+      <h4 id="analysis-context-heading" class="context-heading">Divergence summary</h4>
+      <p class="context-status-note" data-testid="analysis-status-note">{{ view().statusDescription }}</p>
+      <dl class="context-fields">
+        @for (field of view().contextFields; track field.label) {
+          <div class="context-field">
+            <dt>{{ field.label }}</dt>
+            <dd data-testid="analysis-stat" [attr.data-stat]="field.label">{{ field.value }}</dd>
+          </div>
+        }
+      </dl>
+      <app-baseline-reference-panel [baseline]="divergence().baseline" />
+    </section>
+  </div>
+
+  <div class="table-scroll">
+    <table class="analysis-table" data-testid="analysis-table">
+      <caption>Chart data: Evidence observations for {{ view().dimension }}</caption>
+      <thead>
+        <tr>
+          <th scope="col">Observed at</th>
+          <th scope="col">Value</th>
+          <th scope="col">{{ view().table.comparisonHeading }}</th>
+          <th scope="col">Position</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of view().table.rows; track row.observationId) {
+          <tr data-testid="analysis-table-row">
+            <td>{{ row.observedAt }}</td>
+            <td>{{ row.value }}</td>
+            <td>{{ row.comparison }}</td>
+            <td>{{ row.position }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</article>

@@ -181,6 +181,20 @@ export class DashboardFacade {
     return this.selection(stream).divergence;
   }
 
+  /**
+   * Divergences the analysis view can switch between: the visible Divergences that share the
+   * selected Divergence's Identity Slice, including it. They keep the stream's onset order, not the
+   * list sort, so the options do not move when the sort changes. Empty with no selection.
+   */
+  analysisOptions(stream: StreamKind): Divergence[] {
+    const selected = this.selectedDivergence(stream);
+    if (!selected) return [];
+    const visible = new Set(this.visibleDivergences(stream));
+    return (this.divergences()[stream] ?? []).filter(
+      d => visible.has(d) && d.identitySlice.id === selected.identitySlice.id,
+    );
+  }
+
   /** Status counts for all of a stream's Divergences, whatever the filters; null while unavailable. */
   counts(stream: StreamKind): DivergenceCounts | null {
     const divergences = this.divergences()[stream];

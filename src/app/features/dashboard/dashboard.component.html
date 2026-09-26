@@ -151,98 +151,138 @@
       }
     </div>
 
-    <div class="list-detail-container">
-      <section
-        #listRegion
-        class="divergence-list"
-        tabindex="-1"
-        aria-label="Divergence list"
-        data-testid="divergence-list"
-        [attr.aria-busy]="listState() === 'loading' ? 'true' : null"
-      >
-        <p class="result-summary" role="status" data-testid="result-summary">
-          @if (listState() === 'loading') {
-            Loading Divergences for the {{ activeConfig().label }}…
-          } @else if (resultSummary(); as summary) {
-            {{ summary }}
-          }
-        </p>
-        @switch (listState()) {
-          @case ('loading') {
-            <ul class="divergence-cards" aria-hidden="true" data-testid="loading-state">
-              @for (skeleton of skeletons; track skeleton) {
-                <li class="skeleton-card"></li>
-              }
-            </ul>
-          }
-          @case ('unavailable') {
-            <div class="empty-state" data-testid="unavailable-state">
-              <p class="empty-title">Divergences unavailable</p>
-              <p class="placeholder-text">Divergence data is not available for this stream.</p>
-              <div class="empty-actions">
-                <button type="button" class="filter-button" data-testid="retry" (click)="retry()">
-                  Try again
-                </button>
-              </div>
-            </div>
-          }
-          @case ('empty') {
-            <div class="empty-state" data-testid="empty-state">
-              <p class="empty-title">No sustained Divergences</p>
-              <p class="placeholder-text">
-                No sustained Divergences in the {{ activeConfig().label }} replay data.
-              </p>
-            </div>
-          }
-          @case ('filtered-empty') {
-            <div class="empty-state" data-testid="filtered-empty-state">
-              <p class="empty-title">No matching Divergences</p>
-              <p class="placeholder-text">
-                No Divergences in the {{ activeConfig().label }} match the current filters.
-                {{ hiddenSummary() }}. Use Clear filters to show them.
-              </p>
-            </div>
-          }
-          @default {
-            <ul class="divergence-cards">
-              @for (divergence of visibleDivergences(); track divergence.id) {
-                <li>
-                  <app-divergence-card
-                    [divergence]="divergence"
-                    [selected]="divergence.id === selectedDivergence()?.id"
-                    [detailId]="detailId"
-                    (cardSelect)="selectDivergence($event)"
-                  />
-                </li>
-              }
-            </ul>
-            <p class="list-note" data-testid="list-note">
-              Each Divergence is compared with its own Observed Baseline for one Identity Slice and
-              dimension.
-            </p>
-          }
-        }
-      </section>
-      <section class="detail-pane" [id]="detailId" aria-label="Divergence detail" data-testid="detail-pane">
+    @if (analysisOpen()) {
+      <section class="analysis-view" aria-labelledby="analysis-heading" data-testid="analysis-view">
+        <div class="analysis-header">
+          <h3 #analysisHeading id="analysis-heading" class="analysis-heading" tabindex="-1">
+            Divergence Analysis
+          </h3>
+          <button type="button" class="filter-button" data-testid="analysis-back" (click)="closeAnalysis()">
+            Back to Divergence list
+          </button>
+        </div>
         @if (selectedDivergence(); as divergence) {
-          <app-divergence-detail [divergence]="divergence" />
-        } @else if (listState() === 'loading') {
-          <p class="placeholder-text" data-testid="detail-loading">
-            Divergence detail is shown once Divergence data has loaded.
-          </p>
+          <app-divergence-analysis
+            [divergence]="divergence"
+            [dimensionOptions]="analysisDimensionOptions()"
+            (dimensionSelect)="selectDivergence($event)"
+          />
         } @else if (selection().hiddenByFilters) {
-          <p class="placeholder-text" data-testid="detail-hidden">
-            The selected Divergence is hidden by the current filters. Choose a Divergence from the
-            list, or clear filters to show it again.
-          </p>
-        } @else if (listState() === 'filtered-empty') {
-          <p class="placeholder-text" data-testid="detail-empty">
-            No Divergence to show under the current filters.
+          <p class="placeholder-text" data-testid="analysis-hidden">
+            The selected Divergence is hidden by the current filters. Clear filters to show it
+            again, or go back to the Divergence list to choose another.
           </p>
         } @else {
-          <p class="placeholder-text" data-testid="detail-empty">No Divergence to show.</p>
+          <p class="placeholder-text" data-testid="analysis-empty">
+            No Divergence to analyze under the current filters.
+          </p>
         }
       </section>
-    </div>
+    } @else {
+      <div class="list-detail-container">
+        <section
+          #listRegion
+          class="divergence-list"
+          tabindex="-1"
+          aria-label="Divergence list"
+          data-testid="divergence-list"
+          [attr.aria-busy]="listState() === 'loading' ? 'true' : null"
+        >
+          <p class="result-summary" role="status" data-testid="result-summary">
+            @if (listState() === 'loading') {
+              Loading Divergences for the {{ activeConfig().label }}…
+            } @else if (resultSummary(); as summary) {
+              {{ summary }}
+            }
+          </p>
+          @switch (listState()) {
+            @case ('loading') {
+              <ul class="divergence-cards" aria-hidden="true" data-testid="loading-state">
+                @for (skeleton of skeletons; track skeleton) {
+                  <li class="skeleton-card"></li>
+                }
+              </ul>
+            }
+            @case ('unavailable') {
+              <div class="empty-state" data-testid="unavailable-state">
+                <p class="empty-title">Divergences unavailable</p>
+                <p class="placeholder-text">Divergence data is not available for this stream.</p>
+                <div class="empty-actions">
+                  <button type="button" class="filter-button" data-testid="retry" (click)="retry()">
+                    Try again
+                  </button>
+                </div>
+              </div>
+            }
+            @case ('empty') {
+              <div class="empty-state" data-testid="empty-state">
+                <p class="empty-title">No sustained Divergences</p>
+                <p class="placeholder-text">
+                  No sustained Divergences in the {{ activeConfig().label }} replay data.
+                </p>
+              </div>
+            }
+            @case ('filtered-empty') {
+              <div class="empty-state" data-testid="filtered-empty-state">
+                <p class="empty-title">No matching Divergences</p>
+                <p class="placeholder-text">
+                  No Divergences in the {{ activeConfig().label }} match the current filters.
+                  {{ hiddenSummary() }}. Use Clear filters to show them.
+                </p>
+              </div>
+            }
+            @default {
+              <ul class="divergence-cards">
+                @for (divergence of visibleDivergences(); track divergence.id) {
+                  <li>
+                    <app-divergence-card
+                      [divergence]="divergence"
+                      [selected]="divergence.id === selectedDivergence()?.id"
+                      [detailId]="detailId"
+                      (cardSelect)="selectDivergence($event)"
+                    />
+                  </li>
+                }
+              </ul>
+              <p class="list-note" data-testid="list-note">
+                Each Divergence is compared with its own Observed Baseline for one Identity Slice and
+                dimension.
+              </p>
+            }
+          }
+        </section>
+        <section class="detail-pane" [id]="detailId" aria-label="Divergence detail" data-testid="detail-pane">
+          @if (selectedDivergence(); as divergence) {
+            <div class="detail-actions">
+              <button
+                #analysisTrigger
+                type="button"
+                class="filter-button"
+                data-testid="open-analysis"
+                (click)="openAnalysis()"
+              >
+                Open Divergence Analysis
+              </button>
+            </div>
+            <app-divergence-detail [divergence]="divergence" />
+          } @else if (listState() === 'loading') {
+            <p class="placeholder-text" data-testid="detail-loading">
+              Divergence detail is shown once Divergence data has loaded.
+            </p>
+          } @else if (selection().hiddenByFilters) {
+            <p class="placeholder-text" data-testid="detail-hidden">
+              The selected Divergence is hidden by the current filters. Choose a Divergence from the
+              list, or clear filters to show it again.
+            </p>
+          } @else if (listState() === 'filtered-empty') {
+            <p class="placeholder-text" data-testid="detail-empty">
+              No Divergence to show under the current filters.
+            </p>
+          } @else {
+            <p class="placeholder-text" data-testid="detail-empty">No Divergence to show.</p>
+          }
+        </section>
+      </div>
+    }
   </div>
 </div>

@@ -417,4 +417,56 @@ describe('DashboardFacade', () => {
       expect(facade.selection('document')).toEqual({ divergence: null, hiddenByFilters: false });
     });
   });
+
+  describe('analysis options (STEP-06)', () => {
+    const dimensions = (divergences: readonly Divergence[]) => divergences.map(d => d.dimension);
+
+    it('should offer the dimensions that share the selected Identity Slice, in onset order', () => {
+      const facade = createReplayFacade();
+
+      expect(dimensions(facade.analysisOptions('workflow'))).toEqual(['task-duration', 'response-time']);
+      expect(facade.analysisOptions('workflow')).toContain(facade.selectedDivergence('workflow'));
+    });
+
+    it('should offer only the selected Divergence when its Identity Slice has no other', () => {
+      const facade = createReplayFacade();
+      const runtime = facade.divergences().workflow!.find(d => d.dimension === 'workflow-runtime')!;
+      facade.select('workflow', runtime.id);
+
+      expect(facade.analysisOptions('workflow')).toEqual([runtime]);
+      expect(dimensions(facade.analysisOptions('document'))).toEqual(['amount-value']);
+    });
+
+    it('should keep the option order when the list sort changes', () => {
+      const facade = createReplayFacade();
+      facade.setSort('workflow', 'dimension');
+
+      expect(dimensions(facade.analysisOptions('workflow'))).toEqual(['task-duration', 'response-time']);
+    });
+
+    it('should offer nothing while the selection is hidden by filters or absent', () => {
+      const facade = createReplayFacade();
+      const runtime = facade.divergences().workflow!.find(d => d.dimension === 'workflow-runtime')!;
+      facade.select('workflow', runtime.id);
+      facade.setFilters('workflow', {
+        identitySliceId: facade.divergences().workflow![0].identitySlice.id,
+      });
+
+      expect(facade.selection('workflow').hiddenByFilters).toBe(true);
+      expect(facade.analysisOptions('workflow')).toEqual([]);
+
+      facade.setFilters('document', { identitySliceId: 'document/none' });
+      expect(facade.analysisOptions('document')).toEqual([]);
+    });
+
+    it('should offer nothing while a stream is loading', () => {
+      const facade = createFacade({
+        getIdentitySlices: () => new Subject<never>(),
+        getObservations: () => new Subject<never>(),
+      });
+
+      expect(facade.streamState('document').status).toBe('loading');
+      expect(facade.analysisOptions('document')).toEqual([]);
+    });
+  });
 });

@@ -1,0 +1,17 @@
+<div class="chart-box" data-testid="divergence-chart" [attr.data-chart-kind]="model().kind">
+  <canvas
+    #canvas
+    role="img"
+    data-testid="divergence-chart-canvas"
+    [attr.aria-label]="label()"
+    [attr.aria-describedby]="describedBy()"
+  ></canvas>
+</div>
+<ul class="chart-legend" data-testid="chart-legend">
+  @for (entry of legend(); track entry.key) {
+    <li class="legend-entry">
+      <span class="legend-swatch" [attr.data-swatch]="entry.swatch" aria-hidden="true"></span>
+      {{ entry.label }}
+    </li>
+  }
+</ul>

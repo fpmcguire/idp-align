@@ -13,6 +13,8 @@ import {
 import { DivergenceStatus } from '../../domain/divergence';
 import { ObservationWindow } from '../../domain/observation';
 import { StreamKind } from '../../domain/stream';
+import { toAnalysisDimensionOptions } from '../../shared/ui/divergence/divergence-analysis-view';
+import { DivergenceAnalysisComponent } from '../../shared/ui/divergence/divergence-analysis/divergence-analysis.component';
 import { DivergenceCardComponent } from '../../shared/ui/divergence/divergence-card/divergence-card.component';
 import { DivergenceDetailComponent } from '../../shared/ui/divergence/divergence-detail/divergence-detail.component';
 import { STATUS_LABELS, formatUtcDate } from '../../shared/ui/divergence/divergence-format';
@@ -92,9 +94,9 @@ const selectValue = (event: Event) => (event.target as HTMLSelectElement).value;
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [DivergenceCardComponent, DivergenceDetailComponent],
+  imports: [DivergenceCardComponent, DivergenceDetailComponent, DivergenceAnalysisComponent],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  styleUrls: ['./dashboard.component.scss', './dashboard-analysis.scss'],
   providers: [DashboardFacade],
 })
 export class DashboardComponent {
@@ -231,11 +233,41 @@ export class DashboardComponent {
     ];
   });
 
+  /**
+   * Whether the Divergence Analysis replaces the list and detail in the stream panel. It follows
+   * the stream's selection, so filters and dimension switching keep it coherent.
+   */
+  analysisOpen = signal(false);
+
+  /** Dimensions the analysis can switch between, within the selected Identity Slice. */
+  analysisDimensionOptions = computed(() =>
+    toAnalysisDimensionOptions(this.facade.analysisOptions(this.activeStream())),
+  );
+
   private tabButtons = viewChildren<ElementRef<HTMLButtonElement>>('streamTab');
   private listRegion = viewChild<ElementRef<HTMLElement>>('listRegion');
+  private analysisHeading = viewChild<ElementRef<HTMLElement>>('analysisHeading');
+  private analysisTrigger = viewChild<ElementRef<HTMLButtonElement>>('analysisTrigger');
 
+  /** Switching stream returns to the list and detail view; focus stays on the stream tab. */
   selectStream(stream: StreamKind) {
     this.activeStream.set(stream);
+    this.analysisOpen.set(false);
+  }
+
+  /** Opens the analysis for the selected Divergence and moves focus to its heading. */
+  openAnalysis() {
+    this.analysisOpen.set(true);
+    afterNextRender(() => this.analysisHeading()?.nativeElement.focus(), { injector: this.injector });
+  }
+
+  /** Returns to the list and detail view, with focus back on the control that opened the analysis. */
+  closeAnalysis() {
+    this.analysisOpen.set(false);
+    afterNextRender(
+      () => (this.analysisTrigger() ?? this.listRegion())?.nativeElement.focus(),
+      { injector: this.injector },
+    );
   }
 
   selectDivergence(divergenceId: string) {

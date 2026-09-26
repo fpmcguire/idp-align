@@ -5,6 +5,7 @@ import {
   REPLAY_SOURCE_AVOID_WORDS,
   SEVERITY_RISK_PATTERN,
 } from '../../../testing/claim-guardrail-patterns';
+import { FakeChartFactory, fakeChartFactory } from '../../../testing/fake-chart-factory';
 import { at, documentObservation, testDocumentSlice } from '../../../testing/observation-builders';
 import { provideStreamObservationRepository } from '../../data/provide-stream-observation-repository';
 import { StreamObservationRepository, StreamSourceInfo } from '../../data/stream-observation.repository';
@@ -622,7 +623,11 @@ describe('DashboardComponent', () => {
         const regions = el.querySelector('.list-detail-container')!;
         const buttons = Array.from(regions.querySelectorAll<HTMLElement>('button'));
 
-        expect(buttons.every(b => b.dataset['testid'] === 'divergence-card')).toBe(true);
+        // Opening the Divergence Analysis (STEP-06) is navigation, not a user action workflow.
+        expect(
+          buttons.every(b => ['divergence-card', 'open-analysis'].includes(b.dataset['testid']!))
+        ).toBe(true);
+        expect(buttons.filter(b => b.dataset['testid'] === 'open-analysis').length).toBe(1);
         expect(regions.querySelectorAll('a, input, select, textarea').length).toBe(0);
         expect(regions.textContent).not.toMatch(
           /copy details|\bmute\b|mark (as )?reviewed|export|open investigation/i
@@ -1063,5 +1068,305 @@ describe('DashboardComponent with a non-replay repository', () => {
 
     expect(el.querySelector('[data-testid="stream-replay-source"]')).toBeNull();
     expect(el.querySelector('[data-testid="kpi-section"]')).toBeTruthy();
+  });
+});
+
+describe('DashboardComponent Divergence Analysis (STEP-06)', () => {
+  let component: DashboardComponent;
+  let fixture: ComponentFixture<DashboardComponent>;
+  let el: HTMLElement;
+  let charts: FakeChartFactory;
+
+  const byTestId = <T extends Element = HTMLElement>(testId: string) =>
+    el.querySelector<T>(`[data-testid="${testId}"]`);
+  const cards = () =>
+    Array.from(el.querySelectorAll<HTMLButtonElement>('[data-testid="divergence-card"]'));
+  const openButton = () => byTestId<HTMLButtonElement>('open-analysis');
+  const backButton = () => byTestId<HTMLButtonElement>('analysis-back');
+  const analysis = () => byTestId('divergence-analysis');
+  const dimensionOptions = () =>
+    Array.from(el.querySelectorAll<HTMLButtonElement>('[data-testid="dimension-option"]'));
+  const pressedOption = () =>
+    normalize(dimensionOptions().find(b => b.getAttribute('aria-pressed') === 'true')?.textContent);
+  const switchTo = (stream: StreamKind) => {
+    component.selectStream(stream);
+    fixture.detectChanges();
+  };
+  const click = (button: HTMLButtonElement | null) => {
+    button!.click();
+    fixture.detectChanges();
+  };
+  /** Lets afterNextRender focus handoffs run. */
+  const settle = async () => {
+    await fixture.whenStable();
+    fixture.detectChanges();
+  };
+  const chooseIdentitySlice = (label: string) => {
+    const select = byTestId<HTMLSelectElement>('filter-identity-slice')!;
+    select.value = Array.from(select.options).find(o => normalize(o.textContent) === label)!.value;
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+  };
+
+  beforeEach(async () => {
+    charts = fakeChartFactory();
+    await TestBed.configureTestingModule({
+      imports: [DashboardComponent],
+      providers: [provideStreamObservationRepository(), charts.provider()],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(DashboardComponent);
+    component = fixture.componentInstance;
+    el = fixture.nativeElement;
+    fixture.detectChanges();
+  });
+
+  describe('entry and return', () => {
+    it('should offer the analysis from the selected Divergence detail', () => {
+      const button = openButton()!;
+
+      expect(byTestId('detail-pane')?.contains(button)).toBe(true);
+      expect(button.type).toBe('button');
+      expect(normalize(button.textContent)).toBe('Open Divergence Analysis');
+      expect(byTestId('analysis-view')).toBeNull();
+      expect(charts.charts.length).toBe(0);
+    });
+
+    it('should replace the list and detail with the analysis and focus its heading', async () => {
+      click(openButton());
+      await settle();
+
+      expect(el.querySelector('.list-detail-container')).toBeNull();
+      expect(byTestId('analysis-view')?.getAttribute('aria-labelledby')).toBe('analysis-heading');
+      expect(normalize(el.querySelector('#analysis-heading')?.textContent)).toBe('Divergence Analysis');
+      expect(document.activeElement?.id).toBe('analysis-heading');
+      expect(analysis()?.dataset['divergenceId']).toBe(component.selectedDivergence()?.id);
+      expect(charts.live().length).toBe(1);
+    });
+
+    it('should keep the stream header, KPIs, and filters in place', () => {
+      click(openButton());
+
+      expect(byTestId('stream-heading')).toBeTruthy();
+      expect(byTestId('kpi-section')).toBeTruthy();
+      expect(byTestId('filter-bar')).toBeTruthy();
+    });
+
+    it('should return to the list and detail with focus on the open button', async () => {
+      const selected = component.selectedDivergence()?.id;
+      click(openButton());
+      await settle();
+
+      click(backButton());
+      await settle();
+
+      expect(byTestId('analysis-view')).toBeNull();
+      expect(byTestId('divergence-detail')?.dataset['divergenceId']).toBe(selected);
+      expect(document.activeElement).toBe(openButton());
+      expect(charts.live().length).toBe(0);
+    });
+
+    it('should close the analysis when the stream changes', () => {
+      click(openButton());
+
+      switchTo('workflow');
+
+      expect(byTestId('analysis-view')).toBeNull();
+      expect(el.querySelector('.list-detail-container')).toBeTruthy();
+      expect(charts.live().length).toBe(0);
+    });
+  });
+
+  describe('chart and summary', () => {
+    it('should chart the selected document Divergence with an accessible name and summary', () => {
+      click(openButton());
+      const canvas = el.querySelector('canvas')!;
+
+      expect(canvas.getAttribute('aria-label')).toBe(
+        'Chart of Amount for Alpha Office Supplies (synthetic) · Invoice: observed Evidence ' +
+          'values over time against the Observed Baseline mean and range'
+      );
+      expect(normalize(byTestId('analysis-chart-summary')?.textContent)).toContain(
+        'The chart plots 4 Evidence observations from 31 Aug 2026, 15:00 UTC to 10 Sep 2026, 15:00 UTC.'
+      );
+      expect(el.querySelectorAll('[data-testid="analysis-table-row"]').length).toBe(4);
+      expect(charts.live()[0].configs[0].type).toBe('line');
+    });
+
+    it('should show the only document dimension as text', () => {
+      click(openButton());
+
+      expect(byTestId('dimension-toggle')).toBeNull();
+      expect(normalize(byTestId('analysis-dimension')?.textContent)).toContain('Dimension: Amount.');
+    });
+  });
+
+  describe('dimension switching in the workflow stream', () => {
+    beforeEach(() => {
+      switchTo('workflow');
+      click(openButton());
+    });
+
+    it('should offer the dimensions of the selected Identity Slice only', () => {
+      expect(dimensionOptions().map(b => normalize(b.textContent))).toEqual([
+        'Task duration',
+        'Response time',
+      ]);
+      expect(pressedOption()).toBe('Task duration');
+      expect(normalize(byTestId('dimension-toggle')?.textContent)).not.toContain('Workflow runtime');
+    });
+
+    it('should update the chart, summary, and selection when the dimension changes', () => {
+      const before = analysis()?.dataset['divergenceId'];
+      const summaryBefore = normalize(byTestId('analysis-chart-summary')?.textContent);
+
+      click(dimensionOptions()[1]);
+
+      expect(pressedOption()).toBe('Response time');
+      expect(analysis()?.dataset['divergenceId']).not.toBe(before);
+      expect(analysis()?.dataset['divergenceId']).toBe(component.selectedDivergence()?.id);
+      expect(normalize(byTestId('analysis-chart-summary')?.textContent)).not.toBe(summaryBefore);
+      expect(normalize(el.querySelector('.analysis-table caption')?.textContent)).toBe(
+        'Chart data: Evidence observations for Response time'
+      );
+      expect(charts.charts.length).toBe(1);
+      expect(charts.charts[0].configs.length).toBe(2);
+      expect(el.querySelectorAll('canvas').length).toBe(1);
+    });
+
+    it('should keep focus on the chosen dimension button', () => {
+      const responseTime = dimensionOptions()[1];
+      responseTime.focus();
+
+      click(responseTime);
+
+      expect(document.activeElement).toBe(responseTime);
+    });
+
+    it('should keep the switched dimension selected after going back', () => {
+      click(dimensionOptions()[1]);
+      click(backButton());
+
+      expect(normalize(byTestId('divergence-detail')?.textContent)).toContain('Dimension: Response time');
+      expect(cards()[1].getAttribute('aria-current')).toBe('true');
+    });
+
+    it('should show a single dimension for the Workflow runtime Identity Slice', () => {
+      click(backButton());
+      click(cards()[2]);
+      click(openButton());
+
+      expect(byTestId('dimension-toggle')).toBeNull();
+      expect(normalize(byTestId('analysis-dimension')?.textContent)).toContain(
+        'Dimension: Workflow runtime.'
+      );
+    });
+  });
+
+  describe('selection under filters', () => {
+    it('should say the selected Divergence is hidden and draw no chart', () => {
+      switchTo('workflow');
+      click(cards()[2]);
+      click(openButton());
+
+      chooseIdentitySlice('Invoice approval (synthetic) · Approval');
+
+      expect(normalize(byTestId('analysis-hidden')?.textContent)).toBe(
+        'The selected Divergence is hidden by the current filters. Clear filters to show it ' +
+          'again, or go back to the Divergence list to choose another.'
+      );
+      expect(el.querySelector('canvas')).toBeNull();
+      expect(charts.live().length).toBe(0);
+    });
+
+    it('should chart the selected Divergence again after clearing filters', () => {
+      switchTo('workflow');
+      click(cards()[2]);
+      click(openButton());
+      const runtimeId = analysis()?.dataset['divergenceId'];
+      chooseIdentitySlice('Invoice approval (synthetic) · Approval');
+
+      click(byTestId<HTMLButtonElement>('clear-filters'));
+
+      expect(analysis()?.dataset['divergenceId']).toBe(runtimeId);
+      expect(charts.live().length).toBe(1);
+    });
+
+    it('should say there is nothing to analyze when filters leave no Divergence', () => {
+      click(openButton());
+
+      chooseIdentitySlice('Beta Freight Services (synthetic) · Invoice');
+
+      expect(normalize(byTestId('analysis-empty')?.textContent)).toBe(
+        'No Divergence to analyze under the current filters.'
+      );
+      expect(el.querySelector('canvas')).toBeNull();
+    });
+  });
+
+  it('should keep rendered analysis copy within CAV Level 1 wording', () => {
+    for (const stream of ['document', 'workflow'] as const) {
+      switchTo(stream);
+      click(openButton());
+      const text = spacedText(byTestId('analysis-view'));
+
+      expect(text).toBeTruthy();
+      for (const pattern of Object.values(DASHBOARD_GUARDRAIL_PATTERNS)) {
+        expect(text).not.toMatch(pattern);
+      }
+    }
+  });
+
+  describe('without an available Divergence', () => {
+    const render = (repository: Partial<StreamObservationRepository>) => {
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        imports: [DashboardComponent],
+        providers: [
+          {
+            provide: StreamObservationRepository,
+            useValue: {
+              getSourceInfo: () => EMPTY,
+              getIdentitySlices: () => EMPTY,
+              getObservations: () => EMPTY,
+              getObservedTruth: () => EMPTY,
+              ...repository,
+            },
+          },
+          charts.provider(),
+        ],
+      });
+      fixture = TestBed.createComponent(DashboardComponent);
+      fixture.detectChanges();
+      el = fixture.nativeElement;
+    };
+
+    it('should not offer the analysis while loading', () => {
+      render({
+        getIdentitySlices: () => new Subject<never>(),
+        getObservations: () => new Subject<never>(),
+      });
+
+      expect(byTestId('loading-state')).toBeTruthy();
+      expect(openButton()).toBeNull();
+    });
+
+    it('should not offer the analysis when a stream has no Divergences', () => {
+      render({
+        getIdentitySlices: (() => of([testDocumentSlice])) as unknown as StreamObservationRepository['getIdentitySlices'],
+        getObservations: (() => of([])) as StreamObservationRepository['getObservations'],
+      });
+
+      expect(byTestId('empty-state')).toBeTruthy();
+      expect(openButton()).toBeNull();
+    });
+
+    it('should not offer the analysis when the stream is unavailable', () => {
+      render({ getIdentitySlices: () => throwError(() => new Error('unavailable')) });
+
+      expect(byTestId('unavailable-state')).toBeTruthy();
+      expect(openButton()).toBeNull();
+      expect(charts.charts.length).toBe(0);
+    });
   });
 });

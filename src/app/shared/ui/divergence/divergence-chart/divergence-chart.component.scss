@@ -1,0 +1,68 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+// Chart.js sizes the canvas to this box (maintainAspectRatio: false).
+.chart-box {
+  position: relative;
+  height: 320px;
+
+  @media (max-width: 767px) {
+    height: 260px;
+  }
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-md);
+  margin: var(--space-sm) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+}
+
+.legend-entry {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 16px;
+  height: 10px;
+  border-radius: 2px;
+
+  &[data-swatch='observed'] {
+    background: var(--color-divergence-ongoing);
+  }
+
+  &[data-swatch='reference'] {
+    background: var(--color-baseline);
+  }
+
+  &[data-swatch='baseline-range'] {
+    background: var(--color-baseline);
+    opacity: 0.3;
+  }
+
+  &[data-swatch='baseline-mean'],
+  &[data-swatch='threshold'],
+  &[data-swatch='onset'] {
+    height: 0;
+    border-top: 2px dashed var(--color-baseline);
+    border-radius: 0;
+  }
+
+  &[data-swatch='threshold'] {
+    border-top-color: var(--color-text-secondary);
+  }
+
+  &[data-swatch='onset'] {
+    border-top-style: solid;
+    border-top-color: var(--color-dimension-highlight);
+  }
+}

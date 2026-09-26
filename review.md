@@ -1,172 +1,109 @@
-# Tech Lead Review - STEP-05
+# Tech Lead Review - STEP-06
 
-**Project:** IDP-Align  
-**Step:** STEP-05 - Filtering, Sorting, Empty, Loading, And Error States  
-**Review date:** 2026-09-25  
-**Reviewer:** Codex, Tech Lead  
-**Implementation package reviewed:** Current uncommitted Development Team STEP-05 work after A-041 implementation-plan approval  
-**Verdict:** Pass for QA
-
----
-
-## QA-026 Rework Review Addendum
-
+**Step:** STEP-06 - Divergence Analysis Chart View  
 **Review date:** 2026-09-26  
-**Reviewed package:** Current STEP-05 QA-026 rework after A-043 approval  
-**Verdict:** Pass for QA re-check after Moderator disposition A-044.
-
-### Findings
-
-#### Must Fix Now
-
-**TL-STEP05-RW-001 - Out-of-scope `qa.md` modification remains in the reviewed working tree**
-
-A-043 approved a narrow QA-026 rework and explicitly kept `qa.md` out of scope. The reviewed working tree still includes a `qa.md` diff alongside the approved dashboard implementation files and the A-043 register entry.
-
-Impact: process/scope only. The dashboard implementation is not affected, but the current package cannot be treated as the approved QA-026 rework package unless the `qa.md` change is removed from the handoff or the Moderator explicitly approves carrying it.
-
-Required disposition before QA acceptance: either remove the `qa.md` modification from this rework package, or record a Moderator disposition authorizing that documentation change separately from QA-026.
-
-**Resolution:** Resolved by A-044. The Moderator approved carrying the current `qa.md` modification separately from the QA-026 rework implementation. The QA-026 code scope remains limited to the A-043 Time range `aria-describedby`/`time-range-note` fix.
-
-#### Could Fix Later
-
-None.
-
-### Gate Verification
-
-`mod-w/validation/moderator-register.md` contains A-043, which approves the STEP-05 QA-026 rework plan before implementation. A-043 authorizes the Development Team to implement the narrow accessibility fix and hand the completed diff and verification evidence back for Tech Lead review before QA acceptance.
-
-### Implementation Check
-
-The dashboard code changes match the approved A-043 plan:
-
-- `dashboard.component.ts` adds `shownTimeRangeNote`, a computed value that returns the time range note only when no controls note replaces it.
-- `dashboard.component.html` uses `shownTimeRangeNote()` for both the Time range select `aria-describedby` attribute and the `#time-range-note` paragraph render condition.
-- The empty list state still renders only the controls note and does not render a second time range note.
-- The existing ready-state assertion still verifies that the Time range select references `time-range-note` when the note renders.
-- The no-Divergences stream spec now verifies that `filter-timerange` has no `aria-describedby`, `[data-testid="time-range-note"]` is not rendered, and no `#time-range-note` element exists.
-
-No domain logic, facade behavior, filter/sort helper behavior, fixtures, About files, Chart.js analysis, user action workflow, live integration, QA-027 handling, or review acceptance gate behavior is changed by the implementation files.
-
-### Verification
-
-- `fnm exec --using=v26.0.0 npm.cmd run lint`: passed. Angular lint reports all files pass linting.
-- `fnm exec --using=v26.0.0 npm.cmd run build`: passed after rerun outside the sandbox; the sandboxed run hit the known Angular/esbuild `spawn EPERM` limitation. Initial total remains 264.78 kB raw / 75.91 kB estimated transfer. `dashboard-component` is 50.67 kB raw / 12.07 kB estimated transfer.
-- `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false`: passed after rerun outside the sandbox; the sandboxed run hit the same Angular/esbuild `spawn EPERM` limitation. 27 test files and 408 tests passed.
-
-### Approval Needed Before QA May Proceed
-
-A-044 resolves TL-STEP05-RW-001. The needed approval record before QA may proceed is Moderator acceptance of this QA-026 Tech Lead rework review, authorizing QA to re-check the approved fix against A-043, A-044, and the verification evidence.
+**Reviewer:** Codex, acting as Tech Lead  
+**Implementation package reviewed:** Current uncommitted Development Team STEP-06 implementation after A-049 implementation-plan approval  
+**Verdict:** Pass for QA
 
 ---
 
 ## Findings
 
-### Must Fix Now
-
-None.
-
-### Could Fix Later
-
-None.
+No Must Fix or Could Fix Later findings.
 
 ---
 
-## Gate Verification
+## Gate And Scope Check
 
-`mod-w/validation/moderator-register.md` contains the required approvals:
+`mod-w/validation/moderator-register.md` contains the required approvals before this review:
 
-- A-040 approves `mod-w/step-05.md` as the active STEP-05 definition before Development Team briefing.
-- A-041 approves the Development Team STEP-05 implementation plan and records the accepted Tech Lead decisions and conditions.
+- A-048 approves `mod-w/step-06.md` as the active STEP-06 definition before Development Team briefing.
+- A-049 approves the Development Team implementation plan and authorizes implementation.
 
-A-041 includes a recording note that the Moderator approved the implementation plan in session before code was written and that the Development Team recorded the entry afterwards at the Moderator's explicit instruction for this instance only. That resolves the process concern for this review.
+The implementation matches A-049's approved decisions:
 
-The working tree is intentionally uncommitted per the Development Team handoff.
+- In-page Divergence Analysis pattern is used; no routed child view, browser Back behavior, or deep-linking is introduced.
+- Metric switching uses visible Divergences in the same Identity Slice.
+- Chart series use existing Divergence Evidence only; reference-window observation plotting remains deferred.
+- Browser evidence is scratchpad-based rather than committed E2E.
 
----
-
-## Scope Check
-
-The implementation is within STEP-05 scope:
-
-- Adds dashboard-local filter/sort helpers for already-computed `Divergence` records.
-- Extends `DashboardFacade` with per-stream loading/unavailable/ready state, retry, filters, sort, visible Divergences, unfiltered counts, and selection behavior under filters.
-- Replaces disabled filter placeholders with functional Identity Slice, time range, status, sort, and clear-filter controls.
-- Adds loading, unavailable, no-divergence, filtered-empty, hidden-selection, result-count, and unfiltered-KPI copy states.
-- Fixes the inactive stream-tab `aria-controls` issue by assigning `aria-controls` only on the active tab.
-- Preserves STEP-04 responsive breakpoint behavior, with `.list-detail-container` still stacking at `max-width: 1279px`.
-
-No About files, fixtures, domain detector logic, replay data, data adapters, live DocuWare integration, credentials, OAuth, backend/proxy code, Chart.js analysis, or user action workflows were changed.
+The implementation remains within STEP-06 scope. It adds a bundled Chart.js analysis view for selected Divergences and does not change domain detection, fixtures, About, routes, package dependencies, live integration, backend/proxy code, user action workflows, or status lifecycle semantics.
 
 ---
 
-## Acceptance Check Mapping
+## Architecture And Domain Alignment
 
-- STEP-05 approval entry before briefing: met. A-040 is present.
-- Implementation-plan approval before review: met. A-041 is present, including Moderator recording note.
-- Functional filters: met. Identity Slice, time range, status, and clear filters are implemented and tested.
-- Functional sort: met. Onset, Identity Slice, dimension, and status sorting are implemented as stable sorts over visible records.
-- Time range semantics: met. Filtering uses `latestObservedAt` anchored to the stream's latest observation, with helper tests for edge cases.
-- Status semantics: met. Status filtering uses `DivergenceStatus` and avoids severity/risk language.
-- KPI semantics: met. Counts remain unfiltered, and UI copy states that filters do not change them.
-- Selection under filters: met. Hidden selected Divergences are not shown as stale detail, and clearing filters restores the selected Divergence.
-- Stream switching: met. Filters, sort, and selection are preserved per stream as approved in A-041.
-- Loading state: met by test evidence. Replay data does not visibly pause in the browser, but Subject-backed tests cover loading UI.
-- Unavailable/error state: met by test evidence. Retry re-reads through the repository and avoids support/live-access copy.
-- Empty and filtered-empty states: met. The states are distinct and tested.
-- Accessibility: met. Active-tab `aria-controls`, tab keyboard behavior, clear-filter focus safety, retry focus handoff, and panel focus behavior are tested.
-- Responsive behavior: met by code inspection and Development Team browser evidence; QA should re-check 1279px/1280px.
-- Source boundary: met. Components do not import replay fixtures, and filtering/sorting do not derive baselines or sustained runs.
-- Guardrails: met. Dashboard copy tests include the existing claim patterns plus dashboard-only severity/risk wording.
-- Out-of-scope boundaries: met. No Chart.js analysis, user action workflow, About change, fixture change, detector change, live call, credential, backend/proxy, or CAV Level 2+ behavior was introduced.
+Architecture alignment is met:
+
+- D2/D6: Analysis reuses existing Divergence, Observed Baseline, Evidence, status badge, and baseline panel semantics.
+- D7: Chart.js and `chartjs-plugin-annotation` are imported from bundled npm dependencies; no CDN/runtime third-party script loading was found.
+- D9: The analysis copy stays within CAV Level 1 and avoids Level 2+, Level 3+, Attribution, alert/anomaly, severity/risk, defect, non-conformance, and business-judgment claims.
+- D11: Unit/component coverage was added for view-model mapping, Chart.js lifecycle, analysis behavior, facade options, dashboard flow, and guardrails.
+- D13: Dashboard/shared UI code does not import replay fixtures directly. Chart data is projected from existing Divergence, Observed Baseline, and Evidence records.
+
+Domain-language alignment is met. The implementation uses Observed Baseline, Divergence, Evidence, Identity Slice, Dimension, magnitude, onset, duration, and lifecycle status consistently. Categorical charts are represented as reference/Evidence share comparisons, with no fabricated numeric confidence band.
 
 ---
 
-## Architecture And Domain Check
+## Design And Reference Implementation
 
-- `architecture.md` D1/D2 are preserved: the dashboard remains one reusable stream view with shared Divergence components.
-- `architecture.md` D3/D6 are preserved: the UI continues to surface canonical Divergence, Observed Baseline, and Evidence records.
-- `architecture.md` D9 is respected: no CAV Level 2+ or reserved Level 3+ behavior is introduced.
-- `architecture.md` D11 is satisfied with focused helper, facade, and component coverage.
-- `architecture.md` D13 is preserved: dashboard components consume the facade and do not import replay fixtures or live adapters.
-- `domain-language.md` is respected. Filter/sort UI uses lifecycle status, not severity or business-risk scoring.
+DS-015 is satisfied within the approved production constraints:
+
+- Numeric Divergences render Evidence values with markers, Observed Baseline range, Observed Baseline mean, and onset indication.
+- Categorical Divergences render reference share versus Evidence share, plus the minimum-share threshold, without a band.
+- Metric switching updates the selected Divergence through the dashboard facade, preserving selection as the single source of truth.
+- Side context shows Evidence count, baseline summary, observed summary, magnitude, onset, duration, latest observed time, lifecycle status, and the existing Baseline Reference Panel.
+- The chart has a canvas label/description and a visible non-canvas data table.
+
+Reference implementation disposition is honored: design intent is adopted with production Angular components, SCSS, typed view models, bundled Chart.js imports, accessibility support, and tests rather than copied prototype HTML/scripts.
+
+---
+
+## Review Notes
+
+The changed STEP-05 guardrail spec now permits exactly one `open-analysis` navigation button in the detail pane. This is acceptable because STEP-06 explicitly scopes navigation into the analysis view and the spec still blocks user action workflows such as copy, mute, mark reviewed, export, or investigation actions.
+
+The dashboard component now uses a second style file, `dashboard-analysis.scss`, to keep per-file component style size under Angular's warning threshold. The production build has no style-budget warning, and the split is acceptable for STEP-06.
+
+Replay data exposes only numeric Divergences in the browser. Categorical behavior is therefore covered by view-model/component specs, and QA should record that browser coverage limitation.
+
+The current replay data gives multi-option metric switching only for the Workflow Approval Identity Slice. Other Divergences correctly show a single non-interactive dimension label.
+
+Y-axis tick formatting remains Chart.js-selected and can produce uneven human-readable durations. This is cosmetic and not a STEP-06 blocker.
 
 ---
 
 ## Verification
 
-Run with Node.js v26.0.0 via `fnm`:
+Verification run under Node.js v26.0.0:
 
-| Command | Result |
-| --- | --- |
-| `fnm exec --using=v26.0.0 node --version` | Pass - `v26.0.0` |
-| `fnm exec --using=v26.0.0 npm.cmd run lint` | Pass - all files pass linting |
-| `fnm exec --using=v26.0.0 npm.cmd run build` | Pass after rerun outside sandbox; sandboxed run failed with known Angular/esbuild `spawn EPERM` |
-| `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` | Pass after rerun outside sandbox; 27 test files and 408 tests passed |
+- `fnm exec --using=v26.0.0 npm.cmd run lint` - Pass.
+- `fnm exec --using=v26.0.0 npm.cmd run build` - Pass after outside-sandbox rerun for known Angular/esbuild `spawn EPERM`.
+- `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` - Pass after outside-sandbox rerun for known Angular/esbuild `spawn EPERM`: 30 files, 470 tests.
 
 Build output:
 
-- Initial total: 264.78 kB raw / 75.89 kB estimated transfer.
-- Lazy chunks: `dashboard-component` 50.59 kB raw / 12.06 kB estimated transfer; `about-component` 10.41 kB raw / 3.06 kB estimated transfer.
+- Initial total: 266.65 kB raw / 76.40 kB estimated transfer.
+- Lazy `dashboard-component`: 250.58 kB raw / 70.22 kB estimated transfer.
 
-Development Team also reported 18 of 18 browser checks passing with throwaway Playwright evidence. I did not independently rerun the browser script during this Tech Lead review.
+Development Team reports scratchpad Playwright evidence covering both streams, metric switching on Workflow Approval, keyboard open/back/switching, no external requests or console errors, and 1440px, 1280px, 1279px, 768px, and 375px responsive checks.
 
 ---
 
 ## QA Handoff Status
 
-STEP-05 is ready for QA review after Moderator accepts this Tech Lead review.
+STEP-06 is ready for QA review after Moderator accepts this Tech Lead review.
 
 QA should pay special attention to:
 
-- A-041 process traceability and its recording note;
-- functional filters and sort behavior across both streams;
-- per-stream retention of filters, sort, and selection;
-- hidden-selection detail behavior when filters hide a selected Divergence;
-- loading, unavailable, empty, and filtered-empty states through test doubles where needed;
-- retry copy and behavior staying local and repository-backed;
-- absence of severity/risk, business judgment, Attribution, CAV Level 2+, or live-access claims;
-- responsive behavior at 1279px and 1280px.
+- browser evidence for chart rendering, focus behavior, metric switching, and responsive layout;
+- categorical chart coverage through specs only, because replay browser data currently produces numeric Divergences only;
+- no regression in STEP-05 filters, sorting, hidden-selection behavior, loading/unavailable states, tab accessibility, and 1279px/1280px layout behavior;
+- no direct replay fixture imports, CDN Chart.js loading, live DocuWare calls, About changes, user actions, Attribution, Level 2+ claims, or business-judgment language.
+
+Approval needed before QA may proceed: Moderator acceptance of this Tech Lead review in `mod-w/validation/moderator-register.md`, authorizing QA to review STEP-06 against A-048, A-049, `mod-w/step-06.md`, this `review.md`, and the verification evidence.
+
+---
 
 MOD-W v5.0.1
