@@ -1970,6 +1970,83 @@ The Moderator accepts the Tech Lead review for STEP-06. The review found no Must
 - QA should verify no direct replay-fixture imports, CDN Chart.js loading, live DocuWare calls, About changes, user action workflows, Attribution, CAV Level 2+ claims, alert/anomaly wording, severity/risk claims, or business-judgment language.
 - The completed implementation diff and verification evidence remain subject to QA review; this entry is not final STEP-06 acceptance.
 
+### A-051 - STEP-06 QA Acceptance And Finding Dispositions
+
+**Status:** Approved  
+**Date:** 2026-09-26  
+**Moderator:** Frank McGuire  
+**Role approved:** QA  
+**Gate:** QA acceptance before Moderator final gate  
+**Step:** `mod-w/step-06.md`  
+**Next authorized action:** The Moderator may record the STEP-06 final gate and update the roadmap.
+
+#### Accepted Artifacts
+
+- `qa.md` - STEP-06 QA review, verdict "Pass with notes"
+- `review.md` - STEP-06 Tech Lead Review, verdict "Pass for QA"
+- A-048 STEP-06 Step approval
+- A-049 STEP-06 Development Team implementation-plan approval
+- A-050 STEP-06 Tech Lead review acceptance
+- Commit `194437b` - `feat(step-06): add divergence analysis view`
+
+#### Acceptance Summary
+
+The Moderator accepts the STEP-06 QA review. All 25 acceptance checks pass, lint/build/tests pass under Node.js v26.0.0 with 30 test files and 470 tests, and the independent browser check passes all 72 checks. The categorical chart behavior is covered by component and view-model specs because replay browser data currently exposes numeric Divergences only.
+
+#### Finding Dispositions
+
+| Finding | Disposition                                                                                                                                                                                                     |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| QA-028  | Accepted as an Info-level cosmetic limitation. No STEP-06 rework; carry uneven duration tick formatting to a later polish pass.                                                                                 |
+| QA-029  | Accepted as an Info-level latent accessibility note. No STEP-06 rework; carry keyboard access for a future horizontally scrolling table to a later accessibility pass.                                          |
+| QA-030  | Accepted as an Info-level process traceability note. No action required; approval artifacts A-049 and A-050 were committed separately before the implementation, and the package matches the reviewed evidence. |
+
+#### Conditions
+
+- No additional STEP-06 implementation rework is required.
+- The final Moderator gate must preserve the categorical browser-coverage limitation and QA-028/QA-029 carry-forward notes.
+
+---
+
+### A-052 - STEP-06 Moderator Final Gate
+
+**Status:** Approved  
+**Date:** 2026-09-26  
+**Moderator:** Frank McGuire  
+**Role approved:** Final Moderator gate  
+**Gate:** STEP-06 final acceptance  
+**Step:** `mod-w/step-06.md`  
+**Next authorized action:** STEP-06 is complete; proceed to STEP-07 planning when directed.
+
+#### Accepted Artifacts
+
+- STEP-06 implementation commit `194437b`
+- `review.md` Tech Lead STEP-06 review
+- `qa.md` STEP-06 QA review
+- Moderator approvals A-048 through A-051
+- `mod-w/step-06.md`
+- Updated STEP-06 roadmap status
+
+#### Final Acceptance Summary
+
+STEP-06 is accepted as complete. It delivers an in-page bundled Chart.js Divergence Analysis view using existing Divergence, Observed Baseline, and Evidence records, same-Identity-Slice metric switching, truthful numeric and categorical representations, accessible non-canvas summaries, chart lifecycle cleanup, and preserved STEP-05 dashboard behavior.
+
+QA-028 and QA-029 are carried as non-blocking future polish/accessibility notes. QA-030 is carried as a non-blocking process traceability note. The accepted scope contains no fixture or detector changes, direct replay-fixture imports, live DocuWare calls, credentials, CDN loading, About changes, user action workflows, Attribution, CAV Level 2+ or Level 3+ behavior, alert/anomaly wording, severity/risk claims, or business-judgment language.
+
+#### Evidence
+
+- `npm.cmd run lint` passed under Node.js v26.0.0.
+- `npm.cmd run build` passed under Node.js v26.0.0.
+- `npm.cmd test -- --watch=false` passed under Node.js v26.0.0: 30 test files and 470 tests.
+- Independent Playwright/browser verification passed 72 of 72 checks across chart rendering, metric switching, focus, lifecycle cleanup, regression behavior, and responsive layouts.
+
+#### Conditions And Carry-Forward Notes
+
+- Categorical chart behavior remains spec-covered only until replay data exposes a categorical Divergence in the browser.
+- QA-028 uneven duration tick formatting remains a later polish note.
+- QA-029 keyboard access for a potentially scrolling chart table remains a later accessibility note.
+- STEP-07 Workflow Stream Parity And Cross-Stream Consistency remains planned.
+
 ---
 
 MOD-W v5.0.1
