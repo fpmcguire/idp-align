@@ -1901,6 +1901,39 @@ STEP-06 is approved for Development Team briefing and implementation planning. T
 - No CAV Level 2+, Level 3+, Attribution, business judgment, severity/risk, alert/anomaly, live DocuWare, credentials, backend/proxy, About, or user-action workflow scope is authorized.
 - The Development Team must obtain implementation-plan approval before writing code. Tech Lead review is required before QA acceptance.
 
+### A-049 - STEP-06 Development Team Implementation Plan Approval
+
+**Status:** Approved  
+**Date:** 2026-09-26  
+**Moderator:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** Implementation-plan approval before Development Team writes code  
+**Step:** `mod-w/step-06.md`  
+**Tech Lead verdict:** Pass for Moderator implementation-plan approval  
+**Next authorized action:** Development Team may implement the approved STEP-06 plan and run verification. Tech Lead review is required before QA acceptance.
+
+#### Approved Plan Decisions
+
+- **View pattern:** In-page Divergence Analysis within the dashboard is approved. A routed child view, browser Back behavior, and deep-linking are outside STEP-06 scope.
+- **Metric options:** Metric-switching options are same-Identity-Slice visible Divergences from the selected stream.
+- **Chart series:** Evidence-only chart series are approved. Reference-window observation plotting is deferred because the current facade does not retain those observation values.
+- **Browser evidence:** Scratchpad Playwright/browser evidence is approved; a committed E2E spec is not required for STEP-06.
+
+#### Acceptance Summary
+
+The Moderator approves the Development Team implementation plan reviewed by the Tech Lead with a verdict of "Pass for Moderator implementation-plan approval." The plan may now be implemented within the approved STEP-06 definition and the decisions recorded above.
+
+#### Conditions
+
+- Development Team may implement only the approved STEP-06 scope.
+- Chart.js and `chartjs-plugin-annotation` must be bundled dependencies only. CDN and runtime third-party script loading are not authorized.
+- Chart data and metric options must derive from existing selected-stream Divergence, Observed Baseline, and Evidence data.
+- No chart-only mock data, direct replay-fixture imports, fixture changes, detector changes, baseline recomputation, live DocuWare calls, credentials, backend/proxy work, About changes, user action workflows, Attribution, CAV Level 2+ or Level 3+ terms, business-judgment language, alert/anomaly wording, or severity/risk claims are authorized.
+- Numeric and categorical Divergences must be represented truthfully. Categorical charts must not fabricate numeric confidence bands.
+- Existing STEP-05 filters, sorting, selection behavior, accessibility, and responsive behavior must not regress.
+- Categorical chart behavior may be verified through component or view-model specs if replay browser data exposes only numeric Divergences; QA must record that coverage limitation.
+- Development Team must hand off the completed implementation diff and verification evidence for Tech Lead review before QA.
+
 ---
 
 MOD-W v5.0.1
