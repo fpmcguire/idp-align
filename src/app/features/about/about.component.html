@@ -53,7 +53,7 @@
         </li>
       </ul>
       <p>
-        Replay data will be modeled on these publicly documented API shapes. If sandbox access becomes
+        Replay data is modeled on these publicly documented API shapes. If sandbox access becomes
         available, live calls would go through a thin server-side adapter so that credentials never
         reside in the browser.
       </p>
@@ -75,9 +75,10 @@
         </li>
       </ul>
       <p>
-        This build is the STEP-01 foundation: stream tabs plus reserved regions for summary metrics,
-        filters, the Divergence list, and Divergence detail. Replay data, Observed Baseline calculation,
-        sustained Divergence detection, Evidence traces, and chart analysis are added in later Steps.
+        The dashboard runs sustained Divergence detection over synthetic replay data. For each stream it
+        calculates Observed Baselines and shows summary metrics, filters and sorting, a Divergence list
+        and detail, an Evidence Trace, and a Divergence Analysis chart. Both streams share the same
+        presentational components and are observed independently.
       </p>
     </section>
 
@@ -130,11 +131,12 @@
         <li><strong>Features:</strong> the Dashboard and About routes.</li>
         <li><strong>Shared UI:</strong> presentational components reused by both streams.</li>
         <li>
-          <strong>Domain (planned):</strong> pure functions for Observed Truth, Identity Slices, Observed
-          Baselines, and Divergence.
+          <strong>Domain:</strong> pure functions for Observed Truth, Identity Slices, Observed Baselines,
+          and sustained Divergence detection.
         </li>
         <li>
-          <strong>Data (planned):</strong> repository interfaces with a local replay adapter first.
+          <strong>Data:</strong> repository interfaces with a local replay adapter, the only adapter
+          implemented.
         </li>
       </ul>
       <p>
@@ -166,6 +168,34 @@
         <li>Not a claim of market novelty; drift detection and data observability have mature prior art.</li>
         <li>No real customer data; replay data is synthetic and modeled on public API documentation.</li>
       </ul>
+    </section>
+
+    <section data-testid="about-references">
+      <h2>References</h2>
+      <ul>
+        <li>
+          <a
+            href="https://knowledgecenter.docuware.com/docs/default-web-service-docuware-platform-api"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="reference-platform-api"
+            >DocuWare Platform REST API documentation</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://knowledgecenter.docuware.com/docs/workflow-analytics-api"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="reference-workflow-analytics-api"
+            >DocuWare Workflow Analytics API documentation</a
+          >
+        </li>
+      </ul>
+      <p data-boundary>
+        These are public documentation pages; linking to them does not imply DocuWare review or
+        endorsement.
+      </p>
     </section>
   </article>
 </div>

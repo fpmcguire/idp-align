@@ -88,7 +88,21 @@ describe('AboutComponent', () => {
       const dashboard = section('about-dashboard');
       expect(dashboard).toContain('Document stream');
       expect(dashboard).toContain('Workflow stream');
-      expect(dashboard).toContain('STEP-01 foundation');
+      expect(dashboard).toMatch(/sustained Divergence detection over synthetic replay data/);
+      for (const feature of ['Observed Baselines', 'filters and sorting', 'Evidence Trace', 'Divergence Analysis chart']) {
+        expect(dashboard).toContain(feature);
+      }
+      expect(dashboard).toContain('Both streams share the same presentational components and are observed independently.');
+    });
+
+    it('should describe the current state without STEP-01-era planned or later-Step wording', () => {
+      for (const stale of [/STEP-01/, /later Steps?/i, /\(planned\)/i, /will be modeled/i, /reserved regions/i]) {
+        expect(content).not.toMatch(stale);
+      }
+      const arch = section('about-architecture');
+      expect(arch).toContain('Domain: pure functions for Observed Truth, Identity Slices, Observed Baselines, and sustained Divergence detection.');
+      expect(arch).toContain('Data: repository interfaces with a local replay adapter, the only adapter implemented.');
+      expect(section('about-api-research')).toContain('Replay data is modeled on these publicly documented API shapes.');
     });
 
     it('should explain CAV Level 1 with canonical terminology', () => {
@@ -108,6 +122,40 @@ describe('AboutComponent', () => {
       expect(link?.target).toBe('_blank');
       expect(link?.rel).toContain('noopener');
       expect(link?.rel).toContain('noreferrer');
+    });
+
+    it('should link the public DocuWare API documentation in a References section (PO-1)', () => {
+      const references = el.querySelector('[data-testid="about-references"]')!;
+      expect(text(references.querySelector('h2'))).toBe('References');
+      const links = Array.from(references.querySelectorAll<HTMLAnchorElement>('a'));
+      expect(links.map(link => [text(link), link.href])).toEqual([
+        [
+          'DocuWare Platform REST API documentation',
+          'https://knowledgecenter.docuware.com/docs/default-web-service-docuware-platform-api',
+        ],
+        [
+          'DocuWare Workflow Analytics API documentation',
+          'https://knowledgecenter.docuware.com/docs/workflow-analytics-api',
+        ],
+      ]);
+    });
+
+    it('should open every external link safely', () => {
+      const external = Array.from(el.querySelectorAll<HTMLAnchorElement>('a[href^="http"]'));
+      expect(external.length).toBe(3);
+      for (const link of external) {
+        expect(link.href).toMatch(/^https:\/\//);
+        expect(link.target).toBe('_blank');
+        expect(link.rel).toContain('noopener');
+        expect(link.rel).toContain('noreferrer');
+      }
+    });
+
+    it('should state that reference links imply no DocuWare review or endorsement', () => {
+      const boundary = el.querySelector('[data-testid="about-references"] [data-boundary]');
+      expect(text(boundary)).toBe(
+        'These are public documentation pages; linking to them does not imply DocuWare review or endorsement.'
+      );
     });
 
     it('should render the CAV reference as one sentence without a space before the period', () => {
