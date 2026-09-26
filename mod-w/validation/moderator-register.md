@@ -2225,4 +2225,103 @@ The Product Owner approves STEP-07 for the final Moderator gate. This approval i
 
 ---
 
+### A-058 - STEP-08 Final-Gate Eligibility Check
+
+- **Status:** Blocked - not eligible for final gate
+- **Date:** 2026-09-26
+- **Moderator:** Frank McGuire
+- **Gate:** STEP-08 final-gate eligibility check
+- **Step:** `mod-w/step-08.md`
+- **Next authorized action:** Tech Lead authors and submits a STEP-08 definition for Moderator approval. No STEP-08 implementation or completion is authorized by this entry.
+
+#### Findings
+
+| ID          | Classification                  | Finding                                                                                                                                                                                                                                                                                            |
+| ----------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| M-STEP08-01 | Blocking                        | `mod-w/step-08.md` does not exist. There are no approved STEP-08 scope boundaries or acceptance checks. The roadmap's `Planned` status and summary are not approval or acceptance criteria.                                                                                                        |
+| M-STEP08-02 | Blocking                        | No STEP-08 Moderator Step-approval record exists. The required approval before Development Team briefing is absent.                                                                                                                                                                                |
+| M-STEP08-03 | Blocking                        | No STEP-08 implementation-plan approval, Tech Lead review acceptance, or QA acceptance is recorded. The STEP-07 review and QA evidence in `review.md` and `qa.md` apply only to STEP-07.                                                                                                           |
+| M-STEP08-04 | Blocking                        | No STEP-08-specific verification evidence is recorded for build, unit tests, E2E flows, final CAV claim guardrails, or R10/R11 documentation. The current `e2e/example.spec.ts` is Playwright starter coverage against `playwright.dev`, not evidence of IDP-Align E2E behavior.                   |
+| M-STEP08-05 | Blocking pending approved scope | No STEP-08 Product Owner review/approval is recorded, and without an approved Step its applicability and acceptance criteria cannot be determined. Product Owner note PO-1 in A-014 requires STEP-08 authoring to address the About References check for R10; this is not itself STEP-08 approval. |
+| M-STEP08-06 | Blocking prerequisite           | STEP-07 has not reached its final Moderator gate. A-057 authorizes that gate but is not its decision, and the roadmap still lists STEP-07 as approved for Development Team planning rather than complete. Do not advance to STEP-08 completion before STEP-07 is completed through its own gate.   |
+
+#### Disposition
+
+The final gate is not conducted because STEP-08 is not eligible. No STEP-08 acceptance checks are inferred from the roadmap. No implementation changes are authorized by this entry, and STEP-08 must not be marked complete. The roadmap remains unchanged.
+
+The stale About sentence is not assessed or routed here; it may be considered only if it is explicitly included in a Moderator-approved STEP-08 scope. No non-blocking STEP-08 findings are assigned because there is no approved scope against which to classify them.
+
+#### Prerequisites For A Future Final Gate
+
+- Author `mod-w/step-08.md` with explicit R10/R11 scope, acceptance checks, E2E expectations, final CAV claim guardrails, and any separately routed documentation change; submit it for Moderator Step approval.
+- After Step approval, obtain and record Development Team implementation-plan approval before implementation.
+- Complete the approved work and provide STEP-08-specific build, unit-test, E2E, documentation, and claim-guardrail evidence for Tech Lead review.
+- Record Tech Lead review acceptance, QA acceptance, and Product Owner approval if required by the approved Step and gate process.
+- Request a new Moderator final gate only after those prerequisites are evidenced.
+
+### A-059 - STEP-07 Final Moderator Gate
+
+- **Status:** Approved with notes (Pass)
+- **Date:** 2026-09-26
+- **Moderator:** Frank McGuire
+- **Gate:** Final Moderator gate
+- **Step:** `mod-w/step-07.md`
+- **Next authorized action:** Tech Lead may author and submit STEP-08 for Moderator review. Development Team briefing requires STEP-08 approval, and code changes require a separately approved implementation plan.
+
+#### Accepted Artifacts
+
+- `mod-w/step-07.md` and its acceptance checks
+- `review.md` - Tech Lead Review - STEP-07, Pass for QA
+- `qa.md` - QA Review - STEP-07, Pass with notes
+- A-053 STEP-07 approval, A-054 implementation-plan approval, A-055 Tech Lead review acceptance, A-056 QA acceptance, and A-057 Product Owner approval for the final gate
+
+#### Final-Gate Findings
+
+- No blocking STEP-07 changes remain. QA reports all 27 acceptance checks pass; lint, build, and 496 unit/component tests pass; the independent browser check passes 115/115. Product Owner A-057 approves the scope with no blocking changes.
+- QA-031 and QA-032 are accepted as informational notes under A-056. QA-028 and QA-029 remain accepted non-blocking carry-forward notes per A-057.
+- Categorical workflow behavior remains spec-covered only because current replay browser data exposes numeric workflow Divergences only; this limitation is recorded in QA and accepted by the Product Owner.
+- The STEP-07 work preserves independent CAV Level 1 streams and does not introduce cross-stream reconciliation, Attribution, Level 2+ claims, prohibited user actions, or changes to About files, fixtures, detectors, thresholds, reference windows, live access, or dependencies.
+
+#### Decision
+
+STEP-07 passes its final Moderator gate and is complete. Roadmap advancement is authorized. This decision resolves finding M-STEP08-06 from A-058, which identified STEP-07's pending final gate as a STEP-08 sequencing blocker. Findings M-STEP08-01 through M-STEP08-05 remain blocking; STEP-08 is not approved or complete, and no STEP-08 acceptance criteria are inferred from the roadmap.
+
+### A-060 - STEP-08 Step Approval Before Development Team Briefing
+
+- **Status:** Approved with conditions - Step definition only
+- **Date:** 2026-09-26
+- **Moderator:** Frank McGuire
+- **Gate:** Step approval before Development Team briefing
+- **Step:** `mod-w/step-08.md`
+- **Next authorized action:** Development Team may be briefed and may prepare an implementation plan. No STEP-08 code or documentation changes are authorized until the Moderator separately approves that implementation plan and records the approval in this register.
+
+#### Approved Artifact And Scope
+
+- `mod-w/step-08.md` - Quality Gate Completion And Documentation, as reviewed on 2026-09-26.
+- Scope is limited to R10/R11 documentation, local IDP-Align Playwright E2E coverage, final CAV Level 1 claim guardrails, and the explicitly listed About current-state/reference-copy updates.
+
+#### Approval Conditions
+
+- Preserve CAV Level 1 boundaries. Do not add new CAV behavior, data scenarios, fixture changes, detector or baseline changes, live access, user workflows, cross-stream reconciliation, or Level 2+ claims without separate Moderator approval.
+- Replace the Playwright starter coverage with committed E2E tests against the local IDP-Align app, runnable through `npm run test:e2e`. Any server/config approach must be described in the implementation plan and be deterministic; code or configuration changes still wait for plan approval.
+- Address PO-1 from A-014: the About page must link the public DocuWare Platform REST API and Workflow Analytics API documentation unless a separate Moderator-approved About-only route is implemented and verified before STEP-08 implementation. The current About copy names these APIs but does not link them, so PO-1 is not currently satisfied.
+- R10 requires a durable research/reference artifact under `mod-w/docs/` consistent with D10; About links alone are insufficient. The artifact must document the specific sources used for the Product References topics: DocuWare AI Hub, Platform REST API, Workflow Analytics API, Purchase-to-Pay/invoice processing, relevant adjacent ML drift-monitoring/data-observability/streaming-drift approaches, canonical CAV Manifesto v1.0, and MOD-W methodology. Cite only sources actually consulted and explain their relevance to scope.
+- Product Owner review is required after QA and before the STEP-08 final Moderator gate because this Step changes reviewer-facing About/reference copy. The implementation plan must identify this handoff.
+- The stale About copy is approved only within the specific statements routed in this Step; it does not authorize a broader About rewrite.
+- QA-028 and QA-029 remain accepted non-blocking carry-forward notes unless a narrow change is explicitly proposed in the implementation plan and separately approved before implementation.
+- Categorical workflow behavior remains spec-covered only. Do not add categorical workflow fixtures or make the behavior browser-visible unless a separate Moderator approval authorizes that data scope.
+- Respect A-059: factual source-state text such as “Failed” under “Instance state” is not a failure/judgment claim. Guardrail checks must assess context rather than reject that source value indiscriminately.
+
+#### Moderator Resolutions Of Proposed Open Decisions
+
+- A MOD-W research/reference artifact is required by D10 and R10; the About References section is a separate concise user-facing summary.
+- Product Owner review before the final Moderator gate is required as stated above.
+- The implementation plan may select how Playwright starts or reaches the local app, provided `npm run test:e2e` is deterministic and exercises IDP-Align.
+- README/reviewer documentation changes are optional; they must be justified in the implementation plan and remain within approved R10/R11 scope.
+- A-059's QA-031 disposition is sufficient; no new carve-out is required beyond preserving factual source-state context.
+
+#### Gate Boundary
+
+This entry authorizes briefing and implementation planning only. It is not implementation-plan approval, Tech Lead review acceptance, QA acceptance, Product Owner final sign-off, or STEP-08 completion. Those gates and STEP-specific verification evidence remain required before a future final Moderator gate. It resolves A-058 findings M-STEP08-01 and M-STEP08-02; remaining A-058 requirements apply to their respective later gates.
+
 MOD-W v5.0.1
