@@ -24,7 +24,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | STEP-05 | Filtering, Sorting, Empty, Loading, And Error States  | R6, R11          | Claude Code | Complete (A-047)                | Complete dashboard filter/sort interactions, loading/empty/error states, keyboard/focus behavior, and responsive-state checks after STEP-04.                                                                                 |
 | STEP-06 | Divergence Analysis Chart View                        | R5, R6, R11      | Claude Code | Complete (A-052)                | Implemented bundled Chart.js analysis view with metric switching over selected Divergence evidence; categorical browser coverage remains spec-only because replay data is numeric-only.                                      |
 | STEP-07 | Workflow Stream Parity And Cross-Stream Consistency   | R3, R4, R6, R9   | Claude Code | Complete (A-059)                | Workflow parity accepted with notes; categorical workflow behavior remains spec-covered only, and QA-028/QA-029 remain non-blocking carry-forward notes.                                                                     |
-| STEP-08 | Quality Gate Completion And Documentation             | R10, R11         | Claude Code | Planned                         | E2E flows, docs, final claim guardrails, and readiness for Tech Lead review/QA.                                                                                                                                              |
+| STEP-08 | Quality Gate Completion And Documentation             | R10, R11         | Claude Code | Complete (A-066)                | Local IDP-Align E2E, R10 research references, About/README current-state copy, and CAV Level 1 claim guardrails accepted with QA notes; categorical workflow remains spec-covered only.                                      |
 
 ---
 
@@ -109,8 +109,8 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | R7          | Future Step                                 | Deferred until live access/proxy work is explicitly activated.                                                               |
 | R8          | STEP-02                                     | Complete (A-028)                                                                                                             |
 | R9          | STEP-01, STEP-02, STEP-07                   | STEP-01, STEP-02, and STEP-07 complete (A-059)                                                                               |
-| R10         | STEP-01, STEP-08                            | Planned                                                                                                                      |
-| R11         | STEP-03, STEP-05, STEP-06, STEP-08          | STEP-03, STEP-05, and STEP-06 quality gates complete; STEP-08 remains planned                                                |
+| R10         | STEP-01, STEP-08                            | Complete (STEP-01; STEP-08 A-066)                                                                                            |
+| R11         | STEP-03, STEP-05, STEP-06, STEP-08          | Complete (STEP-03, STEP-05, STEP-06, and STEP-08 A-066)                                                                      |
 | R12         | STEP-03, STEP-04                            | STEP-03 evidence-carrying records complete (A-033); STEP-04 Evidence Trace UI complete (A-039)                               |
 | R13         | STEP-01                                     | Complete (A-016) - DocuWare-specific v1 interview research/demo framing.                                                     |
 
@@ -140,6 +140,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | 2026-09-26 | Authored STEP-07 and marked it pending Moderator approval.                              | Prepare workflow stream parity and cross-stream consistency work after STEP-06 final acceptance A-052; implementation plan approval remains required before code.  |
 | 2026-09-26 | Updated STEP-07 status after A-053 approval.                                            | Moderator approved STEP-07 for Development Team briefing/planning only; implementation plan approval remains required before code.                                 |
 | 2026-09-26 | Set STEP-07 to Complete.                                                                | Final Moderator gate A-059 after Tech Lead review, QA acceptance, Product Owner approval, and acceptance of non-blocking notes.                                    |
+| 2026-09-26 | Set STEP-08 to Complete.                                                                | Final Moderator gate A-066 after Tech Lead review acceptance, QA acceptance with notes, Product Owner approval, and finding dispositions.                          |
 
 ---
 

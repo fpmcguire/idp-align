@@ -2437,4 +2437,118 @@ QA should pay particular attention to:
 
 This entry accepts only the Tech Lead implementation review and authorizes QA to begin. It is not QA acceptance, Product Owner approval, roadmap completion, or the STEP-08 final Moderator gate. Product Owner review of the About/reference copy and `mod-w/docs/research-references.md` remains required after QA and before the final Moderator gate.
 
+### A-064 - STEP-08 QA Acceptance And Finding Dispositions
+
+- **Status:** Accepted with notes (Pass)
+- **Date:** 2026-09-26
+- **Moderator:** Frank McGuire
+- **Role accepted:** QA
+- **Gate:** QA acceptance before Product Owner review and Moderator final gate
+- **Step:** `mod-w/step-08.md`
+- **QA verdict:** Pass with notes; no blocking findings and no findings above Info
+- **Next authorized action:** Product Owner review of the About/reference copy and `mod-w/docs/research-references.md`; after that, request the STEP-08 final Moderator gate.
+
+#### Accepted Artifacts And Evidence
+
+- `qa.md` - QA Review - STEP-08, verdict "Pass with notes"
+- `review.md` - Tech Lead Review - STEP-08, verdict "Pass for QA", accepted under A-063
+- `mod-w/step-08.md` and `mod-w/step-08-implementation-plan.md`
+- A-060 STEP-08 Step approval, A-062 implementation-plan approval, and A-063 Tech Lead review acceptance
+- Implementation commits `3095e05`, `ae01eda`, and `64bd924`; QA ran from `12f1903` and changed only `qa.md`
+- QA reports Node.js v26.0.0 verification: lint and build passed; unit/component tests passed (30 files, 500 tests); local production-build Playwright E2E passed (42 Chromium tests); independent scratch probes confirmed the external-request, console-error, and uncaught-error guards fail as intended; all 13 cited research URLs were fetched and read.
+
+#### Finding Dispositions
+
+| Finding                         | Disposition                                                                                                                                                                                                                                                                                                                                                                     |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| QA-033                          | Accepted as Info. The two flagged `review.md` metadata lines use the repository's intentional two-space Markdown line-break convention; no cleanup required.                                                                                                                                                                                                                    |
+| QA-034                          | Accepted as Info process/traceability note. Verified that `3095e05` contains the STEP-08 implementation review rather than a preserved Tech Lead plan-review artifact. A-062 records the plan approval and Tech Lead verdict before implementation commits; the missing standalone plan-review artifact does not change the accepted implementation result. No rework required. |
+| QA-035                          | Accepted as Info test-design note. The E2E suite intentionally asserts the current fixed replay state `Completed`; synthetic controls test that `Failed` is allowed only as factual `Instance state` context. Any separately approved replay-data change that makes another state visible must update the expectation.                                                          |
+| QA-036                          | Accepted as Info test-coverage note. The suite has no committed negative-control spec for the E2E guard, but QA's independent scratch probes confirmed external requests, console errors, and uncaught errors fail tests. No rework required for this gate.                                                                                                                     |
+| QA-028 / QA-029                 | Remain accepted non-blocking carry-forward notes. QA's responsive probe confirms the chart table does not scroll horizontally at the tested widths, so the QA-029 condition still does not occur.                                                                                                                                                                               |
+| Categorical workflow limitation | Preserved: categorical workflow behavior remains spec-covered only; no categorical fixtures or browser-visible changes were introduced.                                                                                                                                                                                                                                         |
+
+#### Acceptance Summary
+
+The Moderator accepts the STEP-08 QA review. All acceptance checks assessable by QA pass, including local IDP-Align E2E coverage, PO-1 links and safe attributes, R10 research documentation, CAV Level 1 guardrails, absence of unauthorized implementation scope, and lint/build/unit/E2E verification. Product Owner review is not a QA criterion and remains a required next gate.
+
+#### Gate Boundary
+
+This entry records QA acceptance only. It is not Product Owner approval, roadmap completion, STEP-08 completion, or the final Moderator gate. The Product Owner must review the About/reference copy and `mod-w/docs/research-references.md` before the Moderator conducts the final gate. No roadmap status is changed by this entry.
+
+### A-065 - STEP-08 Product Owner Review
+
+- **Status:** Approved for final Moderator gate
+- **Date:** 2026-09-26
+- **Product Owner:** Frank McGuire
+- **Gate:** Product Owner review after QA and before final Moderator gate
+- **Step:** `mod-w/step-08.md`
+- **Next authorized action:** Moderator may conduct the STEP-08 final gate after reviewing A-060, A-062, A-063, A-064, and this Product Owner approval.
+
+#### Reviewed Artifacts
+
+- STEP-08 About/reference copy in `src/app/features/about/about.component.html`
+- `mod-w/docs/research-references.md`
+- `qa.md` - STEP-08 QA Review, Pass with notes
+- `mod-w/step-08.md` and `mod-w/step-08-implementation-plan.md`
+
+#### Product Owner Decision
+
+The Product Owner confirms review of the About/reference copy and `mod-w/docs/research-references.md` and approves STEP-08 for the final Moderator gate. This approval covers the reviewer-facing current-state and public API reference copy and the research/reference artifact's source choices, relevance statements, claim limits, and disclosure that the original pre-build source list was not recorded.
+
+The approval does not accept the final Moderator gate, mark STEP-08 complete, or authorize roadmap advancement. QA-028 and QA-029 remain accepted non-blocking notes, and categorical workflow behavior remains spec-covered only.
+
+### A-066 - STEP-08 Final Moderator Gate
+
+- **Status:** Approved with notes (Pass)
+- **Date:** 2026-09-26
+- **Moderator:** Frank McGuire
+- **Gate:** Final Moderator gate
+- **Step:** `mod-w/step-08.md`
+- **Next authorized action:** STEP-08 is complete. Roadmap advancement is authorized; no additional STEP-08 implementation is required by this gate.
+
+#### Accepted Artifacts And Gate Evidence
+
+- `mod-w/step-08.md` and `mod-w/step-08-implementation-plan.md`, approved under A-060 and A-062
+- `review.md` - STEP-08 Tech Lead implementation review, Pass for QA, accepted under A-063
+- `qa.md` - STEP-08 QA review, Pass with notes, accepted under A-064
+- A-065 Product Owner review approving the About/reference copy and `mod-w/docs/research-references.md`
+- Implementation commits `3095e05`, `ae01eda`, and `64bd924`
+- QA verification under Node.js v26.0.0: lint and production build passed; unit/component tests passed (30 files, 500 tests); local production-build Playwright E2E passed (42 Chromium tests); all 13 cited research URLs were retrieved and read; independent scratch probes confirmed the E2E safety guards fail on external requests, console errors, and uncaught errors
+
+#### Final Finding Dispositions
+
+- No blocking findings remain. QA reports all 36 acceptance checks assessable by QA pass; Product Owner review, the 37th check, is satisfied by A-065.
+- QA-033 is accepted as intentional Markdown hard-break whitespace; no cleanup is required.
+- QA-034 is accepted as an informational traceability note: the plan approval predates the implementation commits, while the standalone Tech Lead plan-review artifact was not preserved in `review.md`. This does not change the reviewed implementation result or require rework.
+- QA-035 is accepted: the current replay data renders `Instance state: Completed`; E2E assertions are intentionally tied to the current fixture, while synthetic controls test the allowed factual source-state context. Any separately approved data change must update those expectations.
+- QA-036 is accepted: the E2E guard lacks committed negative-control tests, but QA independently verified failure behavior for external requests, console errors, and uncaught errors. No rework is required for this gate.
+- QA-028 and QA-029 remain accepted non-blocking carry-forward notes. QA confirmed the analysis table does not scroll horizontally at tested widths.
+- Categorical workflow behavior remains spec-covered only. No fixture/data changes or browser-visible categorical workflow cases were introduced.
+- The implementation remains within A-060/A-062: CAV Level 1 only; no unauthorized fixture, domain/detector, package, backend, connector, live-access, user-action, Attribution, or cross-stream reconciliation changes.
+
+#### Decision
+
+STEP-08 passes the final Moderator gate and is complete. The approved R10/R11 documentation, E2E coverage, and CAV Level 1 claim-guardrail work meets the approved acceptance checks with the informational notes and limitations above. Roadmap advancement is authorized. This decision does not waive or reopen any later product or methodology work outside STEP-08.
+
+### A-067 - STEP-08 Final Moderator Gate Reconfirmation
+
+- **Status:** Reconfirmed - Pass with notes
+- **Date:** 2026-09-26
+- **Moderator:** Frank McGuire
+- **Gate:** Final Moderator gate re-review
+- **Step:** `mod-w/step-08.md`
+- **Prior final-gate decision:** A-066
+- **Next authorized action:** STEP-08 remains complete. No additional implementation or roadmap action is required.
+
+#### Reconfirmation Basis
+
+The Moderator re-reviewed the current gate record after the request to rerun the final gate. A-060 Step approval, A-062 implementation-plan approval, A-063 Tech Lead review acceptance, A-064 QA acceptance, and A-065 Product Owner approval are present. QA reports all 36 acceptance checks assessable by QA pass; Product Owner review is recorded for the remaining check. The reviewed implementation remains at commits `3095e05`, `ae01eda`, and `64bd924`; no subsequent application-code changes are reported in the current worktree.
+
+The accepted informational findings remain QA-033 through QA-036. QA-028/QA-029 remain non-blocking carry-forward notes, and categorical workflow behavior remains spec-covered only. No blocking findings or unapproved scope are identified.
+
+#### Decision
+
+The Moderator reaffirms A-066: STEP-08 passes the final Moderator gate and remains complete. The roadmap already records STEP-08, R10, and R11 as complete under A-066 and requires no further status change. This reaffirmation does not waive any accepted conditions or authorize scope beyond STEP-08.
+
 MOD-W v5.0.1

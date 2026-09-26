@@ -1,14 +1,14 @@
-# QA Review - STEP-07
+# QA Review - STEP-08
 
 **Project:** IDP-Align  
-**Step:** STEP-07 - Workflow Stream Parity And Cross-Stream Consistency  
+**Step:** STEP-08 - Quality Gate Completion And Documentation  
 **QA date:** 2026-09-26  
-**QA role:** Claude Code, acting as QA (not Development Team, not Tech Lead). QA did not edit implementation files, `step-07.md`, `review.md`, or the Moderator Register.  
-**Repository state reviewed:** `master` `e19b580` ("feat(step-07): complete workflow parity implementation"), clean working tree.  
-**Tech Lead input:** `review.md` Tech Lead Review - STEP-07, verdict "Pass for QA", accepted by the Moderator in A-055 (`3be6020`)  
-**Verdict:** **Pass with notes.** All 27 acceptance checks pass. The categorical workflow check passes on spec evidence only, because replay browser data exposes numeric workflow Divergences only. There are no implementation blockers and no findings above Info.
+**QA role:** Claude Code, acting as QA (not Development Team, not Tech Lead). QA did not edit implementation files, tests, `review.md`, `mod-w/roadmap.md`, or the Moderator Register. QA probes were written and run only in a scratch directory outside the repository.  
+**Repository state reviewed:** `master` `12f1903` ("docs(step-08): accept tech lead review"), clean working tree before and after QA runs.  
+**Tech Lead input:** `review.md` Tech Lead Review - STEP-08, verdict "Pass for QA", accepted by the Moderator in A-063 (`12f1903`)  
+**Verdict:** **Pass with notes.** All applicable acceptance checks pass. There are no blocking findings and no findings above Info. STEP-08 is ready for Product Owner review of the About/reference copy and `mod-w/docs/research-references.md`, and then for a Moderator final gate. QA does not mark STEP-08 complete and does not give Product Owner or Moderator approval.
 
-The STEP-06 QA record is preserved at tag `step-06` (`a382c43`). `qa.md` at that tag is identical to `qa.md` at `e19b580`.
+The STEP-07 QA record is preserved in git at `273d66f` and `12f1903` (no `step-07` tag exists). `qa.md` at `12f1903` is the STEP-07 record.
 
 ---
 
@@ -16,306 +16,253 @@ The STEP-06 QA record is preserved at tag `step-06` (`a382c43`). `qa.md` at that
 
 | Gate | Register entry | Result |
 | --- | --- | --- |
-| Step approval before Development Team briefing | A-053 | Present. Committed in `2a5b6ea` / `2f832d0`, before implementation. |
-| Implementation-plan approval | A-054 | Present. Committed in `f39b7a6`, before `e19b580`. It selects KPI Option C, approves the test-only categorical builder, and approves the Dimension-specific Evidence label on condition that Document specs are checked. |
-| Tech Lead review acceptance before QA | A-055 | Present. Committed in `3be6020`, before `e19b580`. It accepts `review.md` "Pass for QA" with no Must Fix or Could Fix Later findings. |
-
-A-055 and `review.md` describe the reviewed package as "uncommitted". The Moderator then committed it as `e19b580` together with `review.md`. The committed package matches the Tech Lead evidence exactly: 30 test files, 496 tests, initial total 266.65 kB, and `dashboard-component` 251.42 kB. See QA-032.
+| Step approval before Development Team briefing | A-060 | Present. Committed in `b389389`, before any STEP-08 implementation. |
+| Implementation-plan approval | A-062 (after A-061 non-approval) | Present. Committed in `3095e05` (09:30:39) together with the plan and `review.md`, before the implementation commits `ae01eda` (09:30:51) and `64bd924` (09:31:04). See QA-034. |
+| Tech Lead review acceptance before QA | A-063 | Present. Committed in `12f1903`. It accepts `review.md` "Pass for QA" with no Must Fix or Could Fix Later findings and authorizes QA. |
 
 ---
 
 ## Scope Of Review
 
-`e19b580` changes 14 files (diff from `step-06`, excluding MOD-W governance files):
+`b389389..12f1903` changes 21 files:
 
-- **Dashboard:** `dashboard.component.ts` (new `identity-slices` KPI, `identitySliceKpiNote` per stream, Workflow filter label "workflow step / runtime", and Trend note) and `dashboard.facade.ts` (`identitySliceCoverage`).
-- **Shared UI:** `divergence-format.ts` (`comparedValueLabel`, `INSTANCE_STATE_LABELS`), plus `evidence-trace.component.ts/html` (Dimension-specific value label).
-- **Test helper:** `src/testing/divergence-builders.ts` (`taskOutcomeDivergence()`, test-only).
-- **Specs:** dashboard component and facade, divergence-analysis-view, divergence-analysis, divergence-detail, divergence-format, and evidence-trace.
-- **Role artifact:** `review.md`.
+- **Governance (Moderator/Tech Lead):** `mod-w/step-08-implementation-plan.md`, `mod-w/validation/moderator-register.md` (A-061, A-062, A-063), `review.md`.
+- **Documentation:** `README.md`, `mod-w/docs/research-references.md` (new), `src/app/features/about/about.component.html`, `src/app/features/about/about.component.spec.ts`.
+- **E2E:** `playwright.config.ts`; `e2e/example.spec.ts` deleted; new `e2e/support/{fixtures.ts, claim-text.ts, serve-dist.mjs}` and nine specs (`about`, `claim-guardrails`, `dashboard-document`, `dashboard-workflow`, `divergence-analysis`, `documentation`, `filters-sorting`, `responsive`, `stream-tabs-a11y`).
 
-These paths are unchanged between `step-06` and `e19b580`: `package.json`, `package-lock.json`, `angular.json`, `src/app/domain/`, `src/app/data/` (including replay fixtures), `src/app/features/about/`, `src/app/app.routes.ts`, and `src/index.html`.
+This matches the affected-files list in section 10 of the implementation plan exactly.
 
-**Removed spec lines:** every removed assertion was replaced with an updated counterpart in the same test. The changes are:
+The following have **no diff** in `b389389..12f1903`: `src/app/domain/`, `src/app/data/` (including replay fixtures), `src/app/shared/`, `src/app/features/dashboard/`, `src/app/app.routes.ts`, `src/index.html`, `package.json`, `package-lock.json`, and `angular.json`.
 
-- KPI arrays gain a fifth value, for example `['3','3','0','—']` becomes `['3','3','0','2 of 4','—']`.
-- The label list gains "Identity Slices with Divergences".
-- The Trend note assertion changes from "added in a later Step" to the new note, plus a `not.toMatch(/later Step/)` guard.
-- The Workflow filter label changes from "step / route" to "step / runtime".
-- The instance state `completed` becomes `Completed`.
-- Builder lists are widened to include `taskOutcomeDivergence()`.
-
-No spec was deleted or weakened.
+**About spec changes:** the only removed assertion is `expect(dashboard).toContain('STEP-01 foundation')`. It is replaced by current-state assertions. Five tests are added: current-state wording, References links (PO-1), safe external links, and the reference boundary sentence. The overclaim-pattern and boundary-negation tests are unchanged. No spec was weakened.
 
 ---
 
 ## Automated Command Results (Node.js v26.0.0 via fnm)
 
+All commands were run by QA as `fnm exec --using=v26.0.0 npm.cmd …` inside the sandbox. No outside-sandbox rerun was needed.
+
 | Command | Result |
 | --- | --- |
 | `fnm exec --using=v26.0.0 node --version` | `v26.0.0` |
-| `fnm exec --using=v26.0.0 npm.cmd run lint` | **Passed.** "All files pass linting." Exit 0. |
-| `fnm exec --using=v26.0.0 npm.cmd run build` | **Passed.** No warnings. Initial total 266.65 kB raw / 76.42 kB transfer. `dashboard-component` 251.42 kB / 70.30 kB. `about-component` 10.41 kB / 3.06 kB (unchanged from STEP-06). Exit 0. |
-| `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` | **Passed.** 30 test files, 496 tests (STEP-06: 470). Exit 0. |
+| `npm run lint` | **Passed.** "All files pass linting." Exit 0. |
+| `npm run build` | **Passed.** No warnings. Initial total 266.65 kB raw / 76.41 kB transfer. Lazy `dashboard-component` 251.42 kB / 70.30 kB. `about-component` 11.24 kB / 3.22 kB (STEP-07: 10.41 kB; the increase is the References section and copy). Exit 0. Matches `review.md` exactly. |
+| `npm test -- --watch=false` | **Passed.** 30 test files, 500 tests (STEP-07: 496; +4 net About tests: 5 added, 1 assertion replaced in place). Exit 0. Matches `review.md`. |
+| `npm run test:e2e` | **Passed.** 42 tests, Chromium only, 2 workers, 52.1 s. Exit 0. Runs `npm run build && node e2e/support/serve-dist.mjs` and serves on `http://127.0.0.1:4300`. Matches `review.md` (42 tests). |
+| `git diff --check b389389..64bd924` | Flags `review.md:3` and `review.md:6` for trailing whitespace. See QA-033. No other file is flagged. |
 
-These results match `review.md` and A-055. QA ran all three commands outside the sandbox, so the known `spawn EPERM` did not occur.
+E2E test count per spec: `about` 3, `claim-guardrails` 7 (3 rendered and 4 synthetic controls), `dashboard-document` 3, `dashboard-workflow` 4, `divergence-analysis` 3, `documentation` 7, `filters-sorting` 6, `responsive` 6, `stream-tabs-a11y` 3. Total 42.
 
----
-
-## Static Checks
-
-| Check | Result |
-| --- | --- |
-| No direct fixture imports | No `data/replay` or `fixture` reference appears in non-spec files under `src/app/features` or `src/app/shared`. No production file imports `src/testing`. |
-| Test-only categorical builder | `taskOutcomeDivergence()` exists only in `src/testing/divergence-builders.ts`. It is used only from specs. |
-| No live access | No `HttpClient`, `fetch(`, or `XMLHttpRequest` appears in `features/` or `shared/`. |
-| Shared UI stays presentational | The only `inject` calls in `shared/ui/divergence` are the existing `CHART_FACTORY` and `DestroyRef`. `comparedValueLabel` and `INSTANCE_STATE_LABELS` are pure display helpers. |
-| KPI uses existing facade data | `identitySliceCoverage` reads only the stream's ready state: the distinct `identitySlice.id` values of its Divergences out of `state.identitySlices.length`. It does not call a detector or baseline builder, and it does not count decision agents or routes. It returns `null` while the stream is loading or unavailable. |
-| No recomputation added | The diff adds no call to detection or baseline code. The facade's existing `detectStreamDivergences` call in `readStream` is unchanged from STEP-05/06. |
-| Wording in added production lines | A probe over added non-spec lines for compar/align/risk/sever/caus/attribut/fail/alert/anomal/reconcil/correlat/cross found only `comparedValueLabel` identifiers, the "(compared value)" label, and the `failed: 'Failed'` source-state label (see QA-031). |
-
----
-
-## Rendered Browser Check
-
-QA served the production build (`dist/idp-align/browser`) from a local static server and drove it with the repo's installed Playwright Chromium. The script (`qa07.cjs`), logs, screenshots, and a rendered-copy dump are in the QA session scratchpad. The script was written independently of the Development Team's browser script. No repository file was added or changed. An init script counted live `ResizeObserver` observations and window `resize` listeners, as in STEP-06 QA.
-
-**Result: 115/115 checks passed.** No console errors, no page errors, and no external requests occurred.
-
-Run history:
-
-- **First run:** stopped at the detail checks because of a QA script bug. It read `dt/dd` inside `detail-stat`, but `detail-stat` is the `<dd>` itself.
-- **Second run:** 114/115. The one failure was a false positive in the live-access wording probe. `\bsupport` matched "4 supporting observations", which is the Evidence Trace note and was already present at `step-06`. It makes no support or contact claim.
-- **Third run:** QA narrowed the probe to `\bsupport(?!ing observations)` and reran everything. The third run passed 115/115. The results below are from that run.
-
-### 1-2. Identity Slices with Divergences KPI
-
-| Check | Document | Workflow |
-| --- | --- | --- |
-| KPI order | Total Divergences / Ongoing / Resolved / Identity Slices with Divergences / Trend | Same |
-| Value | **1 of 6** | **2 of 4** |
-| Numerator = distinct Identity Slices among the cards | 1 (Alpha Office Supplies · Invoice) | 2 (Approval, Workflow runtime) |
-| Denominator = stream Identity Slices | 6 = 6 filter options = "across 6 Identity Slices" in the replay source line | 4 = 4 filter options = "across 4 Identity Slices" |
-| Note | "Vendor / document type Identity Slices in this stream" | "Workflow steps and Workflow runtime in this stream" |
-| Filters | — | The value stays "2 of 4" with the Payment release filter applied, which matches the scope note "Counts include every Divergence in this stream. Filters do not change them." |
-
-The wording is descriptive and within-stream only. Neither stream's note mentions the other stream. The KPI text has no compare, versus, alignment, reconciliation, correlation, risk, severity, critical, attention, concern, issue, health, or gap wording. The Trend note now reads "Not charted here. Divergence Analysis charts a selected Divergence's Evidence over time." It no longer says "later Step".
-
-### 3. Workflow filter options
-
-The label reads "Identity Slice (workflow step / runtime)" and no longer says "step / route". The options are the four actual workflow Identity Slices: Invoice approval (synthetic) · Approval, · Invoice review, · Payment release, and · Workflow runtime. That count equals the KPI denominator.
-
-### 4. Workflow cards
-
-| Card | Dimension | Magnitude | Onset · Duration | Status |
-| --- | --- | --- | --- | --- |
-| Invoice approval (synthetic) · Approval | Task duration | +18 h 35 min from baseline mean (+408.2%, +60.5 SD) | 5 Sep 2026 · 7 d 1 h | Ongoing |
-| Invoice approval (synthetic) · Approval | Response time | +53 min from baseline mean (+103.9%, +8.0 SD) | 5 Sep 2026 · 7 d 1 h | Ongoing |
-| Invoice approval (synthetic) · Workflow runtime | Workflow runtime | +18 h 35 min from baseline mean (+352.7%, +68.7 SD) | 5 Sep 2026 · 7 d 1 h | Ongoing |
-
-Each card is a `<button>`. Its accessible name contains the Identity Slice, the Dimension, and the status. After selection it carries `aria-current="true"`. The card's Magnitude, onset day, Duration, and status equal the detail pane values for the same `data-divergence-id`.
-
-### 5. Workflow detail and Evidence Trace
-
-| Check | Observed |
-| --- | --- |
-| Detail context | For all three workflow Divergences: Onset, Latest observed, Duration, Observed, Observed values, Observed Baseline, Magnitude, and Sustained criterion; the lifecycle status note; and the Baseline Reference Panel (reference window, sample size, and no target, expected, or intended wording). |
-| Evidence count | 6 items for each Divergence. This equals the trace note ("6 supporting observations") and the "across 6 observations" figure in Observed. Items are oldest first. |
-| Task rows (Approval) | Workflow instance, Step (Approval, matching the Identity Slice), Decision (Approve), and Decision agent (Finance approver role (synthetic)). Sources cite TaskExecutionTimes, TaskReactionTimes, TaskDecisions, and TaskDecisionUsers. No Error exit appears, because none is present in this Evidence. |
-| Task duration / response time values | Duration-formatted, for example "21 h 50 min … 23 h 21 min" (task duration) and "1 h 35 min … 1 h 45 min" (response time). |
-| Runtime rows | Workflow instance and Instance state. Sources are WorkflowRuntimes records. All six visible states are "Completed" (a source state name). |
-| Analysis side context | 7 stats (Evidence observations, Observed Baseline, Observed, Magnitude, Onset, Duration, Latest observed), plus the status badge and Baseline Reference Panel. |
-
-Error behavior (Error exit) and categorical Decision or route outcome values do not occur in browser-visible workflow Evidence. They are spec-covered. See item 11.
-
-### 6. Evidence labels
-
-| Stream / Dimension | Value label |
-| --- | --- |
-| Document · Amount | **Amount (compared value)** (4 rows). Document context fields are unchanged: Vendor, Document type, Currency, Document date. |
-| Workflow · Task duration | Task duration (compared value) |
-| Workflow · Response time | Response time (compared value) |
-| Workflow · Workflow runtime | Workflow runtime (compared value) |
-
-Categorical labels are spec-covered in `evidence-trace.component.spec.ts`: "Vendor representation (compared value)" and "Decision or route outcome (compared value)" with the value "Error exit: Test error exit (synthetic)" and no distance row. The label names the observed Dimension and does not imply a target.
-
-### 7. Filters, sorting, and states
-
-| Check | Observed |
-| --- | --- |
-| Sorting | Each of the 4 sort options gives the same order when reselected. With Identity Slice (A–Z), the two equal-key Approval Divergences keep onset order (Task duration → Response time). Dimension (A–Z) gives Response time → Task duration → Workflow runtime. Status (lifecycle order), with all Divergences Ongoing, keeps onset order. |
-| Time range / status | "Last 7 days" and "Ongoing" each keep all 3 workflow Divergences, which is correct because all are ongoing up to 12 Sep. |
-| Filtered-empty | The Payment release filter shows "No matching Divergences. No Divergences in the Workflow stream match the current filters. 3 Divergences are hidden. Use Clear filters to show them." The detail says "No Divergence to show under the current filters." with no analysis button. |
-| Hidden selection | Selecting Workflow runtime and then filtering to Approval shows the `detail-hidden` copy, no analysis button, and the 2 Approval cards. Clear filters restores the same selection, and focus stays on Clear filters. |
-| Stream independence | QA set the Workflow filter to Workflow runtime and the sort to Dimension, then switched to Document. Document still had "All Identity Slices", onset sort, and 1 card. Switching back to Workflow restored its own filter, sort, and selection. |
-| Loading / unavailable / retry | Not reachable with bundled replay data (as in STEP-05/06). These states are spec-covered and pass as part of the 496 tests. The facade specs cover loading, completes-without-data as unavailable, retry re-read, and loading during retry, and KPI coverage is `null` while loading or unavailable. The dashboard specs cover the unavailable state, retry, disabled controls, pending KPIs (now five "—"), and no analysis while loading or unavailable. |
-
-### 8. Workflow analysis
-
-| Check | Observed |
-| --- | --- |
-| Open | Enter on "Open Divergence Analysis" opens the analysis for the same Divergence. Focus moves to `h3#analysis-heading`. The list/detail is replaced, the filter bar stays visible, and exactly 1 canvas renders. |
-| Workflow Approval metric switching | A `role="group"` offers "Task duration" and "Response time" with `aria-pressed`. Tab and Enter switch to Response time, `aria-pressed` moves, and focus stays on the pressed option. The chart summary and canvas `aria-label` update. There is still 1 canvas, and the observer and listener counts are unchanged ({roLive 1, resize 1}). |
-| Table | 6 rows, equal to the Evidence values. |
-| Lifecycle | After 10 switches and 5 back/reopen cycles: 1 canvas, 1 live observation, and 1 resize listener. After closing: 0 canvases, 0 observations, and 0 listeners, the same as the initial page. |
-| Back | Space on Back restores list/detail with the switched-to Divergence selected. Exactly one card has `aria-current`. Focus returns to the trigger and the canvas is removed. |
-| Filter-hidden while open | Filtering to Workflow runtime shows `analysis-hidden` with no canvas. Clear filters restores the same Divergence and chart. |
-| Workflow runtime chart | Numeric chart. It shows a single Dimension label ("Dimension: Workflow runtime. No other Divergence in this Identity Slice is shown under the current filters."). The canvas label is "Chart of Workflow runtime for Invoice approval (synthetic) · Workflow runtime: observed Evidence values over time against the Observed Baseline mean and range". |
-| Stream switch while open | ArrowLeft on the tablist closes the analysis, focuses the Document tab, and removes the canvas. ArrowRight returns to Workflow with the analysis still closed. |
-
-### 9. STEP-05 / STEP-06 regression
-
-| Check | Observed |
-| --- | --- |
-| Tabs | Only the active tab has `aria-controls`, and it resolves to the rendered panel. Roving `tabindex` gives exactly one tab `tabindex=0`. Arrow keys move stream and focus. |
-| Document analysis | The table values are 1,872.40, 1,905.00, 1,846.20, and 1,889.60, identical to STEP-06 QA. Back returns focus to the trigger. |
-| Breakpoints | List/detail widths are 612/764 at 1440px, 540/676 at 1280px, and 1231 stacked at 1279px in both streams. This is identical to STEP-05 and STEP-06 QA. |
-| Analysis canvas sizes | 895×320, 788×320, 1197×320, 702×320, and 309×260 at 1440, 1280, 1279, 768, and 375px. This is identical to STEP-06 QA. |
-
-### 10. Keyboard and responsive
-
-**Keyboard:** Tab from the Workflow tab reaches, in order, the Identity Slice filter, Time range, Status, Sort by, Clear filters, the three cards, and Open Divergence Analysis. Enter and Space on a card select it. The focused card shows a solid 2px outline.
-
-The table shows the layout in both streams. "KPI rows" is the number of rows the five KPI cards wrap into. "Clipped / overflow" counts KPI cards or KPI text that is clipped or overflows.
-
-| Width | List/detail | KPI rows | Clipped / overflow | Analysis | Clipped controls | Page overflow |
-| --- | --- | --- | --- | --- | --- | --- |
-| 1440px | Two-column | 1 | 0 / 0 | Side by side | 0 | No |
-| 1280px | Two-column | 1 | 0 / 0 | Side by side | 0 | No |
-| 1279px | Stacked | 1 | 0 / 0 | Stacked | 0 | No |
-| 768px | Stacked | 2 (3 + 2) | 0 / 0 | Stacked | 0 | No |
-| 375px | Stacked | 5 | 0 / 0 | Stacked | 0 | No |
-
-The fifth KPI does not break the shared layout at any tested width. The analysis table did not scroll horizontally at any width, so the QA-029 condition still does not occur.
-
-### 11. Categorical coverage limitation
-
-**Replay browser data still exposes numeric workflow Divergences only**: Task duration, Response time, and Workflow runtime. QA could not render categorical workflow behavior in the browser. It is **spec-covered only**, using the test-only `taskOutcomeDivergence()` builder:
-
-- `divergence-analysis.component.spec.ts`: "should chart a workflow task outcome as categorical shares without a numeric band".
-- `divergence-detail.component.spec.ts`: "should render a categorical workflow task outcome with its reference distribution".
-- `evidence-trace.component.spec.ts`: "should label categorical document and workflow values by their dimension" (the Decision or route outcome label, the Error exit value, and no distance row).
-- `divergence-analysis-view.spec.ts`: "should carry no numeric band, mean, or range for a categorical baseline".
-
-No fixture, detector, threshold, or reference window was changed to make a categorical case visible.
-
-### 12. Wording probes
-
-QA scanned the full rendered stream panel for Document and Workflow (list, detail, and Evidence), plus the analysis views for Document Amount, Workflow Approval (after the metric switch), and Workflow runtime:
+### QA-only independent probes (scratch directory, not committed)
 
 | Probe | Result |
 | --- | --- |
-| Severity / risk | None |
-| Causation / Attribution / root cause | None |
-| Business judgment (fail*, defect, non-conformance, violation, breach, incorrect, wrong) | None |
-| Alert / anomaly / warning | None |
-| Live access / support / tenant | None (after excluding the pre-existing "supporting observations"; see run history) |
-| Level 2+ / reserved Level 3+ terms | None |
-| Cross-stream reconciliation / correlation / comparison | None |
-| User actions (mute, mark reviewed, resolve, export, copy details, assign, comment, investigation) | None |
+| **Guard negative controls.** A scratch Playwright config served the same `dist` on port 4301 and imported the committed guarded `test` from `e2e/support/fixtures.ts`. A clean control test, then three probes: a `fetch('https://example.com/…')`, a `console.error(…)`, and a `throw` inside `setTimeout`. | Clean control **passed**. All three probes **failed in fixture teardown** with the intended messages: `no external network requests` (received `https://example.com/qa-probe`), `no console or page errors` (received `console: qa-probe console error`), and `no console or page errors` (received `console: ERROR Error: qa-probe page error`). See QA-036. |
+| **QA-029 condition.** Opened analysis for every Divergence in both streams at 1280, 1279, and 375 px, and measured the nearest overflow container of `analysis-table`. | `scrollWidth == clientWidth` in all 12 cases (1198/1198, 1197/1197, 309/309). The table does not scroll horizontally, so the QA-029 condition still does not occur. |
+| **Source verification.** Fetched all 13 cited URLs in `mod-w/docs/research-references.md`. | All 13 were retrieved. Each page supports the stated relevance. See the R10 section. |
 
 ---
 
-## Acceptance Check Results (`mod-w/step-07.md`)
+## Checks By QA Focus Area
+
+### 1. E2E targets the local production build, not `playwright.dev`
+
+- `playwright.config.ts`: `baseURL` is `http://127.0.0.1:4300`; `webServer.command` is `npm run build && node e2e/support/serve-dist.mjs`; `reuseExistingServer: false`; `retries: 0`; one `chromium` project; reporter `html` with `open: 'never'`.
+- `e2e/support/serve-dist.mjs`: `node:http` only, no package. It binds `127.0.0.1`, serves `dist/idp-align/browser`, blocks path traversal (403), returns 404 for missing files that have an extension, and falls back to `index.html` for extensionless routes.
+- `e2e/example.spec.ts` is deleted. `grep playwright.dev e2e/` finds nothing. The only `playwright.dev` string left is a documentation-comment URL in `playwright.config.ts:9`, which is not a test target.
+- Chromium is the only engine, as A-062 approves. No cross-engine evidence was supplied; it is optional.
+
+**Pass.**
+
+### 2. Dashboard and About flow coverage
+
+| Area | Evidence (spec › test) |
+| --- | --- |
+| Both streams load; KPIs | `dashboard-document` checks `/` redirects to `/dashboard`, the Document tab is selected, and KPIs are 1 / 1 / 0 / "1 of 6" / "—" (5 cards). `dashboard-workflow` checks KPIs 3 / 3 / 0 / "2 of 4" / "—" and that no Document KPI cards appear. |
+| Accessible tabs | `stream-tabs-a11y` checks `tablist "Streams"`, `aria-selected`, roving `tabindex`, `aria-controls` → `stream-panel-*`, `aria-labelledby`, ArrowRight/ArrowLeft wrap, Home/End, and focus kept on the tab after a click. |
+| Selection, detail, Observed Baseline, Evidence | Document: `aria-current`, detail Identity Slice and Dimension, baseline method, reference window, and sample size, 4 Evidence items with time, value, and source, and the baseline indicator. Workflow: 3 cards in onset order, single `aria-current`, 6 Evidence items, and Step and Decision agent context fields. |
+| Filters, sorting, hidden, filtered-empty, clear | `filters-sorting`: Identity Slice and Status filters, KPI unchanged under filters, Time range note and `aria-describedby`, sort by Dimension and back to onset, hidden selection (`detail-hidden`, no `aria-current`) restored by Clear filters, Document filtered-empty, Clear filters `aria-disabled` and focus, and per-stream filter/sort state in both directions. |
+| Stream independence | `dashboard-workflow` › "keeps each stream's selection and filters out of the other stream". |
+| Analysis open/back and focus | `divergence-analysis`: focus moves to the "Divergence Analysis" heading, the list is removed, the canvas has non-zero size, 4 table rows, Back returns focus to `open-analysis`. |
+| Workflow Approval metric switching | Toggle group "Dimension", `aria-pressed` swaps, caption changes Task duration → Response time, `data-divergence-id` contains `:response-time:`, 6 rows, and the selected metric carries over to list and detail after Back. |
+| Stream-switch closure | Analysis closes on tab switch, focus stays on the tab, and analysis is not open on return. |
+| 1280 / 1279 / 375 px | `responsive`: side by side at 1280 (both streams), stacked at 1279 (both streams), all regions and analysis at 375, About at 375, and no page-level horizontal scroll at all three widths including analysis. |
+| About navigation | `about` › reachable from the Primary nav with `aria-current="page"`, and returns to the Dashboard. |
+
+**Pass.**
+
+### 3. Guardrails for external requests, console errors, and page errors; About link safety
+
+- `e2e/support/fixtures.ts` routes `**/*`. It aborts and records any request whose origin is not the app origin (except `data:` and `blob:`). It records `console` errors and `pageerror`, and asserts both lists are empty after every test. Every browser spec imports this `test`. `documentation.spec.ts` uses the base `test` but opens no page.
+- QA probes confirm the guard fails a test for an external request, a console error, and an uncaught error. See QA-036.
+- `about.spec.ts` checks that References has exactly two links with the expected text and `href`, and that every `a[href^="http"]` on About (3 links, including the CAV repository) has `target="_blank"` and `rel` containing `noopener` and `noreferrer`. No link is clicked, so no external navigation happens.
+- The E2E run passed with no guard failures.
+
+**Pass.**
+
+### 4. About (PO-1) and README
+
+- **PO-1:** `about.component.html` adds `<section data-testid="about-references">` with links to `…/default-web-service-docuware-platform-api` and `…/workflow-analytics-api`, both with `target="_blank" rel="noopener noreferrer"`. A `data-boundary` sentence says the links imply no DocuWare review or endorsement.
+- **Current-state copy:** exactly the four statements routed in section 4 of the plan are changed ("will be modeled" → "is modeled"; the STEP-01 foundation paragraph; "Domain (planned)"; "Data (planned)"), plus the new References section. No other About text changed. The new copy is accurate against the implemented app: detection, per-stream Observed Baselines, KPIs, filters and sorting, list and detail, Evidence Trace, analysis chart, shared presentational components, and a replay adapter as the only adapter. It makes no live-access or production claim.
+- **README:** "dashboard foundation" → "dashboard", "two planned streams" → "two independent streams", "Current Step" (STEP-01) → "Current State", updated MOD-W artifact pointers, and added `lint` and `test:e2e` commands with an E2E note. The new copy says "does not connect to any DocuWare system" and "It is not production software". A claim-term scan of README finds only pre-existing negations ("not affiliated with, reviewed by, or endorsed by"; "not a judgment of failure, defect, or non-conformance"). This is within A-062 and adds no CAV claim.
+
+**Pass.** Product Owner review of this copy is still required.
+
+### 5. `mod-w/docs/research-references.md`
+
+- **Retrieved and read:** QA fetched all 13 cited URLs on 2026-09-26. Every page was reachable, and every stated relevance matches the page:
+  - AI Hub: "global AI research and development center"; focus on "intelligent document processing".
+  - IDP introduction: splitting, classification, and extraction of "invoice number … vendor name … total amount" into index fields.
+  - Platform API: "Access your file cabinets and documents …", with Route/Path, Command, and HTTP body (sample).
+  - Workflow Analytics API: instance duration and status (Running, Completed, Failed, Stopped), task durations, the decision and the user who chose it, and assigned-to-picked-up time.
+  - Purchase-to-Pay: requisitions, invoice capture, "reconciles data between invoices, quotes, delivery notes", and approval routing.
+  - Invoice processing: receipt, capture/indexing, verification, and rules-based routing.
+  - Evidently: current vs reference, with a method "chosen automatically based on the column type".
+  - Arize: "Drift is measured using a reference data set"; "the most impactful features degrading your model".
+  - Soda: monitors that "track key data quality metrics over time", anomaly detection on historical patterns, and alerts.
+  - River ADWIN: sub-window comparison, significance δ, citing Bifet and Gavaldà (2007).
+  - River PageHinkley: CUSUM control chart, up/down/both mode, and a minimum number of instances.
+  - CAV repository: "CAV Manifesto v1.0 is the current canonical public definition"; L1 is Observed-State Divergence.
+  - MOD-W repository: Moderator, Product Owner, Tech Lead, Development Team, and QA roles with gated Steps.
+- **Relevance and limits:** every row has "How it informed IDP-Align scope" and "Limits of the claim". Adjacent tools are framed as prior art. Their terms (anomaly, alert, drift detected, degrading) appear only in Limits cells as those tools' terms, and a boundary bullet says so.
+- **Omitted candidates:** the "Candidates Not Cited" section lists the ACM survey (HTTP 403), NannyML (not fetched), the DocuWare developer portal (not fetched), and `docs/design-api-summary.md` (advisory, not a source). "Unrecorded Pre-Build Research" does not reconstruct the 2026-09-16/17 sources.
+- **No implied access, endorsement, confidentiality, readiness, or defect/gap:** all seven boundary bullets are negations (checked by `documentation.spec.ts`). QA read the full document and found no statement implying private access, endorsement, confidential information, production readiness, or a DocuWare defect or gap. The Status line correctly says it is a draft awaiting Product Owner review.
+
+**Pass.**
+
+### 6. CAV Level 1 guardrails across UI, About, README, docs, and E2E
+
+- `claim-guardrails.spec.ts` scans the rendered `main` text of About and of every Divergence in both streams, with analysis closed and open. It uses `CLAIM_GUARDRAIL_PATTERNS` (endorsement, private access, production readiness, defect/gap, Levels 2–6, Attribution/root cause, certification, business judgment, reserved Level 3+ terms, alert/anomaly), `SEVERITY_RISK_PATTERN`, cross-stream/reconcile/correlate, baseline-as-target, and `FAIL_WORDING`. All pass.
+- Boundary removal is limited to `[data-boundary]`. QA confirmed that no dashboard or shared template has `data-boundary`, so all dashboard copy is scanned. Only About's negation paragraphs are excluded, as in the existing About spec.
+- **Instance state:** `claim-text.ts` removes an Evidence context field only when its `dt` is exactly "Instance state" and its `dd` is exactly one of Completed, Running, Failed, or Stopped. The rendered runtime Divergence shows only `Instance state: Completed` (`dashboard-workflow.spec.ts:49`, `claim-guardrails.spec.ts:62`). No test requires "Failed" to render. Synthetic controls accept `Instance state: Failed`, and reject "Divergence failure", `Instance state: failure of approval`, and `Approval outcome: Failed`. This matches A-059, A-060, and A-062. See QA-035.
+- README and the research doc: see sections 4 and 5. E2E copy uses canonical terms only.
+
+**Pass.**
+
+### 7. `src/testing` helpers only in tests and E2E
+
+`grep` for imports of `testing/` in non-spec `.ts` under `src/` finds none. The only importers are `*.spec.ts` files and `e2e/claim-guardrails.spec.ts` and `e2e/documentation.spec.ts`. **Pass.**
+
+### 8. No unapproved changes
+
+No diff to fixtures or data, domain or detectors, baselines, dashboard or shared UI production code, packages, `angular.json`, routes, or `index.html`. No backend, proxy, connector, live access, credentials, OAuth, user action, Attribution, or cross-stream reconciliation code or copy is added. `grep fixture` in non-spec `src/app/features` and `src/app/shared` finds nothing. **Pass.**
+
+### 9. QA-028, QA-029, and categorical workflow behavior
+
+- **QA-028** (uneven duration tick values): not reopened. No chart code changed, so it remains an accepted Info-level carry-forward note.
+- **QA-029** (non-focusable table scroll container): not reopened. The QA probe shows the analysis table does not scroll horizontally at 1280, 1279, or 375 px, so the condition still does not occur. It remains an accepted latent note.
+- **Categorical workflow behavior** remains **spec-covered only**. No categorical fixture was added and nothing was made browser-visible. Section 3 of the implementation plan and `review.md` record this, and the STEP-07 component specs that cover it are unchanged and passing.
+
+**Pass.**
+
+### 10. `review.md` trailing spaces
+
+The two flagged lines are intentional Markdown hard breaks. See QA-033. **No cleanup routed.**
+
+---
+
+## Acceptance Check Results (`mod-w/step-08.md`)
 
 | # | Check | Result | Evidence |
 | --- | --- | --- | --- |
-| AC1 | Register contains STEP-07 Step approval before briefing | Pass | A-053. See Gate Check. |
-| AC2 | Workflow uses the same shared layout, tabs, filter/sort, list/detail, Evidence Trace, Baseline panel, status badge, and analysis surface | Pass | One `StreamConfig`-driven view. The browser shows identical structure and breakpoints in both streams. |
-| AC3 | Workflow KPI labels and values are workflow-specific and data-backed | Pass | "2 of 4" with the note "Workflow steps and Workflow runtime in this stream". It is computed by `identitySliceCoverage` and cross-checked against the cards, filter options, and replay source line. |
-| AC4 | Workflow cards show correct slice, Dimension, magnitude, onset, duration, status, and accessible labels | Pass | Item 4. |
-| AC5 | Workflow detail shows baseline, observed, magnitude, onset, duration, latest, status, and reconstructable Evidence | Pass | Item 5. |
-| AC6 | Workflow Evidence exposes step, route, decision agent, duration, response time, error, and runtime when present | Pass | Step, Decision, Decision agent, task duration, response time, runtime, and instance state appear in the browser. Error exit and route outcome are spec-covered (no browser-visible case). |
-| AC7 | Workflow Evidence context implies no Attribution, root cause, judgment, or severity | Pass with note | Wording probes and guardrail specs. See QA-031 for the "Failed" source-state label (not browser-visible). |
-| AC8 | Workflow filters work and do not affect Document state | Pass | Item 7, stream independence. |
-| AC9 | Workflow sorting deterministic and stable for equal keys | Pass | Item 7, sorting. The facade/filter sort specs pass. |
-| AC10 | Hidden-selection, filtered-empty, no-Divergence, loading, unavailable, and retry states truthful and source-neutral | Pass | Hidden and filtered-empty were checked in the browser. The others are spec-covered because replay data cannot reach them. |
-| AC11 | Stream switching preserves per-stream filter, sort, and selection | Pass | Item 7, plus the facade spec "should narrow only the stream whose filters change". |
-| AC12 | Workflow analysis opens, gives an accessible back path, and closes on stream switch or hidden selection | Pass | Item 8. |
-| AC13 | Metric options derive from visible same-slice Divergences; Workflow Approval switching coherent | Pass | Item 8. |
-| AC14 | Chart/table use existing data and import no fixtures | Pass | Static checks. The table equals the Evidence. |
-| AC15 | Categorical behavior browser-verified or spec-covered with the limitation recorded | Pass with note | Spec-covered only. See item 11. |
-| AC16 | Shared UI stays presentational | Pass | Static checks. |
-| AC17 | Dashboard does not recompute baselines or Divergences inline | Pass | No new detection or baseline call. The KPI counts existing records. |
-| AC18 | No About copy or tests changed | Pass | No About files in the diff. The About chunk is unchanged at 10.41 kB. |
-| AC19 | No fixtures, detectors, thresholds, windows, lifecycle semantics, live calls, credentials, OAuth, backend/proxy, adapters, or package/chart changes | Pass | Diff scope and static checks. |
-| AC20 | No Level 2+, Level 3+, Attribution, judgment, alert/anomaly, or severity-as-risk claims | Pass | Wording probes and guardrail specs. |
-| AC21 | Document behavior does not regress | Pass | Document KPI, Evidence, analysis, and breakpoints match STEP-06. The only change is the approved "Amount (compared value)" label and the fifth KPI. |
-| AC22 | STEP-05/06 behavior does not regress | Pass | Item 9. All earlier specs are retained and updated, none weakened. |
-| AC23 | Unit/component tests cover workflow summary, cards, detail, Evidence, filters/sorting, analysis options, guardrails, a11y, and categorical | Pass | 26 new tests (470 → 496) across the dashboard component and facade, detail, Evidence Trace, format, and analysis specs. |
-| AC24 | Browser or rendered checks cover the happy path, Approval switching, filter-hidden, keyboard/focus, and responsive layouts | Pass | This QA browser check (115/115), independent of the Development Team evidence. |
-| AC25 | `npm run lint` on v26.0.0 | Pass | See above. |
-| AC26 | `npm run build` on v26.0.0 | Pass | See above. |
-| AC27 | `npm test -- --watch=false` on v26.0.0 | Pass | 30 files, 496 tests. |
+| AC1 | Register has the STEP-08 Step approval before briefing | Pass | A-060, committed in `b389389`. |
+| AC2 | Separate plan approval before any code/doc change | Pass with note | A-062 in `3095e05`, committed before `ae01eda` and `64bd924`. See QA-034. |
+| AC3 | Limited to approved R10/R11 scope | Pass | 21 changed files match plan section 10. See Scope Of Review. |
+| AC4 | Starter tests removed; no dependency on external starter sites | Pass | `example.spec.ts` deleted; no `playwright.dev` target. |
+| AC5 | `test:e2e` runs against the local app | Pass | `webServer` builds and serves `dist` on `127.0.0.1:4300`; 42 passed. |
+| AC6 | Initial load, Document KPI/list/detail/Evidence, About navigation | Pass | `dashboard-document` (3), `about` › navigation. |
+| AC7 | Workflow KPI/list/detail/Evidence, tab a11y, no cross-stream contamination | Pass | `dashboard-workflow` (4), `stream-tabs-a11y` (3). |
+| AC8 | Filters, sorting, hidden, filtered-empty, clear, per-stream state | Pass | `filters-sorting` (6): Workflow and Document. |
+| AC9 | Analysis open/back, focus, metric switch, chart, stream-switch closure | Pass | `divergence-analysis` (3). |
+| AC10 | 1280 / 1279 / 375 px | Pass | `responsive` (6). |
+| AC11 | No console errors or unexpected external requests | Pass | Guarded fixture on every browser test; QA negative controls prove it fails (QA-036). |
+| AC12 | CAV domain and dashboard unit tests pass and are not weakened | Pass | 500 passed; only one About assertion replaced with stronger current-state checks. |
+| AC13 | STEP-05 to STEP-07 behavior covered with no regression | Pass | Unit/component suite unchanged and passing (including loading, unavailable, and retry); E2E adds browser coverage of filters, tabs, analysis, metric switch, and breakpoints. |
+| AC14 | About References links the two DocuWare API pages | Pass | `about-references`; unit and E2E. |
+| AC15 | Safe external-link attributes | Pass | All 3 external links: `_blank` and `noopener noreferrer`. |
+| AC16 | No "planned" / "later Steps" current-state copy | Pass | Four statements replaced; stale phrases absent (unit and E2E). |
+| AC17 | Docs cite public sources without implied access, endorsement, confidentiality, readiness, or defect | Pass | 13 sources verified by QA fetch; boundary section. |
+| AC18 | Durable `mod-w/docs/` artifact covering the R10 topics, relevance, and bounded framing | Pass | `research-references.md`, 7 topics; `documentation.spec.ts` (7). |
+| AC19 | Docs imply no private access, endorsement, confidential info, readiness, or defect/gap | Pass | Full read by QA; negation-only boundaries. |
+| AC20 | Only CAV Level 1 claimed as implemented | Pass | Rendered guardrail scan; README and research-doc read. |
+| AC21 | Observed Baseline not a target, intent, policy, requirement, or truth | Pass | `baselineAsTarget` plus existing specs; README wording unchanged. |
+| AC22 | Divergence not an alert, anomaly, …, or root cause | Pass | Pattern set in `claim-guardrails.spec.ts`; all pass. |
+| AC23 | Workflow context stays factual, no Attribution | Pass | Instance state context rule and `attribution` pattern. See QA-035. |
+| AC24 | No cross-stream, Level 2+, Intent, Delta, Envelope, Breach, Velocity, Convergence, or Attribution | Pass | `crossStream`, `higherCavLevels`, and `reservedTerms` patterns; static read. |
+| AC25 | Categorical workflow remains spec-covered only | Pass | No fixture change; limitation recorded. |
+| AC26 | QA-028 / QA-029 stay non-blocking carry-forward notes | Pass | Not routed; QA-029 condition absent (probe). |
+| AC27 | No fixture, algorithm, dependency, live-access, or other forbidden change | Pass | Empty diff on all listed paths. |
+| AC28 | Shared UI remains presentational | Pass | No diff under `src/app/shared`. |
+| AC29 | Dashboard uses the facade/repository boundary with no direct fixture import | Pass | No diff under `features/dashboard`; fixture grep empty. |
+| AC30 | `npm run lint` passes (Node v26.0.0) | Pass | Run by QA. |
+| AC31 | `npm run build` passes (Node v26.0.0) | Pass | Run by QA. |
+| AC32 | `npm test -- --watch=false` passes (Node v26.0.0) | Pass | 30 files, 500 tests. |
+| AC33 | `npm run test:e2e` passes (Node v26.0.0) with STEP-08 evidence | Pass | 42 Chromium tests, 52.1 s. |
+| AC34 | Handoff lists files, E2E/doc changes, carry-forwards, and verification | Pass | `review.md` Verification and Review Notes; plan sections 9-11. |
+| AC35 | Tech Lead review done and accepted before QA | Pass | `review.md`; A-063 in `12f1903`. |
+| AC36 | QA review done in `qa.md` before the final gate is requested | Pass | This document. |
+| AC37 | Product Owner review after QA, before the final gate | Not applicable to QA (pending) | Must follow this QA review. It covers the About/reference copy and `research-references.md` (A-062, A-063). |
 
 ### Design ID check
 
-| Design ID | Result |
-| --- | --- |
-| DS-001 / DS-002 | The shared shell and accessible tabs are unchanged, and the workflow stream uses the same layout. |
-| DS-003 / DS-010 | The fifth shared KPI is workflow-specific in its note and data-backed. The shared KPI pattern is preserved at every width. |
-| DS-004 / DS-013 | Workflow cards use the shared card with workflow slice and Dimension copy. Lifecycle status semantics are unchanged. |
-| DS-005 / DS-006 | Workflow detail is as complete as Document detail. The Baseline panel shows the reference window and sample with no target wording. |
-| DS-007 / DS-014 | Workflow Evidence rows are reconstructable, with instance, step, decision, decision agent, and source records, and Dimension-specific value labels. |
-| DS-008 / DS-011 / DS-012 | Filter copy matches the real workflow slices. Filtered-empty and hidden copy is truthful. Loading and unavailable states are spec-covered and source-neutral. |
-| DS-015 | Workflow analysis uses the same surface. Approval metric switching and runtime chart behavior are preserved. |
-| DS-009 | Not changed beyond the shared KPI layout fallout approved in A-054. |
+DS-001 through DS-010 and DS-013 through DS-015 are covered by the E2E specs as mapped in section 3 of the plan and in section 2 above. DS-011 is covered by browser filtered-empty and unit empty states. DS-012 (loading, unavailable, and retry) and DS-006/DS-013/DS-014 edge cases stay covered by the unchanged component specs, because current replay data cannot produce them in the browser. No production UI changed, so no Design ID regressed.
 
 ---
 
 ## Findings
 
-### QA-031 - Info (wording, latent): the "Failed" source-state label is in the shared format helper
+No Blocker, Major, or Minor findings. No rework is routed to the Tech Lead.
 
-`INSTANCE_STATE_LABELS` in `divergence-format.ts` maps the DocuWare Workflow Analytics instance state `failed` to "Failed". It renders under the "Instance state" label in runtime Evidence rows. The word "failure" is on STEP-07's guardrail list, but this label reports a recorded source state, not a judgment. The raw value `failed` was already rendered before STEP-07; STEP-07 only capitalizes it. **This does not appear in the browser today:** every runtime Evidence row in the current Workflow runtime Divergence is "Completed". The replay fixture marks only instances with a Payment release error exit as `Failed`, and none of them is in the Divergence's Evidence. `review.md` describes the change as formatting runtime state "as source state names". A-054 does not address it explicitly.  
-**Proposed disposition:** No rework. The Moderator may confirm that showing the source-state name "Failed" as factual Evidence context is acceptable, or route alternative wording later.
+### QA-033 - Info (formatting): `review.md` trailing spaces are intentional Markdown hard breaks
 
-### QA-032 - Info (process / traceability): `review.md` was committed with the implementation
+`git diff --check b389389..64bd924` flags `review.md:3` and `review.md:6`. Lines 3-6 of `review.md` (Step, Review date, Reviewer, Implementation package) all end with exactly two spaces. Line 7 (Verdict), the last line of the block, does not. Only lines 3 and 6 are flagged, because lines 4 and 5 are unchanged from the STEP-07 `review.md`, which uses the same two-space pattern. The STEP-07 `qa.md` header uses the same convention. The pattern forces line breaks in the rendered metadata block. **Disposition:** intentional. No cleanup is needed and nothing is routed.
 
-As with QA-030 in STEP-06, A-053, A-054, and A-055 were each committed separately and in order before `e19b580`. `review.md` itself was committed in the implementation commit, and A-055 describes the package as "uncommitted". The committed package matches the Tech Lead evidence exactly (496 tests and identical bundle sizes).  
-**Proposed disposition:** No action. Recorded for traceability only.
+### QA-034 - Info (process / traceability): plan approval and the Tech Lead plan review are committed with the implementation batch
+
+A-061, A-062, the plan, and `review.md` were committed in `3095e05` 12 seconds before the implementation commits. So git order is correct, but git alone cannot show that approval came before the work was written. The register text records the sequence. A-062 also cites a "Tech Lead Review - STEP-08 Implementation Plan" in `review.md`. That plan review was never committed: `3095e05` already contains the implementation review, so the plan review exists only as the TL-PLAN-01 references in the plan and register. This is the same pattern as QA-030 (STEP-06) and QA-032 (STEP-07). It does not affect the implementation. **Disposition:** Moderator awareness only; no rework.
+
+### QA-035 - Info (test design): E2E pins runtime Instance state to "Completed"
+
+`claim-guardrails.spec.ts:62` asserts that the set of Instance state fields equals exactly `{'Instance state: Completed'}`, and `dashboard-workflow.spec.ts:49` asserts the first value is "Completed". Neither requires "Failed" to render, as A-062 requires. They snapshot the current fixed replay data, so a future, separately approved fixture change that made "Failed" visible would need these assertions updated, even though "Failed" is an accepted source-state value. The contextual allow rule is independently proven by the synthetic controls. **Disposition:** acceptable as written; no rework.
+
+### QA-036 - Info (test coverage): the E2E guard has no committed negative control
+
+The suite proves the guard passes clean flows but has no committed test proving it fails. QA confirmed independently, outside the repository, that it fails for an external `fetch`, a `console.error`, and an uncaught error. Inside the Angular app, an uncaught error thrown in a zone task reaches the guard through Angular's `ErrorHandler` as a console error rather than as `pageerror`. Either path fails the test. **Disposition:** the acceptance check is met; no rework.
 
 ### Carry-forward notes (not reopened)
 
-- **QA-028** (uneven duration tick values): still visible, for example on the Workflow Approval Task duration and Response time y-axes. It remains an accepted Info-level polish note. STEP-07 did not route it.
-- **QA-029** (non-focusable table scroll container): the table did not scroll horizontally at any tested width, including 375px. It remains an accepted latent accessibility note.
+- **QA-028** (uneven duration tick values): accepted Info-level polish note. No chart code changed in STEP-08.
+- **QA-029** (non-focusable table scroll container): accepted latent accessibility note. The QA probe confirms the table does not scroll horizontally at 1280, 1279, or 375 px.
+- **QA-031** ("Failed" source-state label): handled as A-059 and A-062 require. Not browser-visible; accepted if present under "Instance state" only.
+- QA-014, QA-019, and QA-024 (day-scale duration precision) are unchanged. QA-027, QA-030, and QA-032 remain process notes.
 
 ---
 
 ## Regressions Or Risks
 
-- No functional regressions. All STEP-05 and STEP-06 specs are retained. Only the expected values changed for the fifth KPI, the Trend note, the filter label, and instance-state capitalization. STEP-05 and STEP-06 browser behavior, list/detail widths, and analysis canvas sizes match earlier QA exactly.
-- **Replay coverage gap (unchanged):** there is no categorical workflow Divergence, no Error exit in visible Evidence, and no resolved-status Divergence. Multi-option metric switching exists only for the Workflow Approval Identity Slice. These paths are covered by specs with builder data.
-- **KPI scope:** "Identity Slices with Divergences" ignores filters by design, which the scope note states. A user could still read "2 of 4" as a filtered figure while filters are active. The existing note mitigates this, and A-054 and `review.md` accept it.
-- **Carried forward, unchanged:** QA-014, QA-019, and QA-024 (day-scale duration precision, for example "7 d 1 h"). QA-027 and QA-030 remain process notes.
+- **No regressions found.** No production dashboard, shared UI, domain, or data code changed. Unit tests went from 496 to 500 and the build output is unchanged except for the About chunk.
+- **E2E is tied to current replay values** (KPI numbers, card order, "Completed"). This is intended for a deterministic gate. Any future approved fixture change must update the E2E specs.
+- **`test:e2e` rebuilds before serving** (about 7 s build plus about 45 s tests). This is accepted in the plan.
+- **External reference URLs can move.** Both DocuWare pages were live on 2026-09-26. The E2E checks attributes only and does not detect link rot.
 
 ---
 
 ## Manual Checks Required
 
-- **Moderator:** disposition QA-031 and QA-032 (no rework proposed), then record QA acceptance.
-- **Optional human visual pass:** QA checked geometry, focus, and copy programmatically and inspected screenshots, for example the Workflow list at 768px. It did not judge visual polish beyond legibility and layout integrity.
-- **Optional screen reader check:** QA did not test with NVDA or VoiceOver how the card button names or the new KPI are announced. A card's accessible name is its full text content, which is long but complete.
+- **Product Owner (required before the final gate, A-062/A-063):** review the About References section, the four replaced About statements, and `mod-w/docs/research-references.md` (source choice, relevance wording, Limits cells that quote adjacent tools' terms, and the unrecorded pre-build research note). QA verified accuracy and boundaries; wording approval belongs to the Product Owner.
+- **Moderator:** note QA-033 to QA-036 (Info, no rework), record QA acceptance, then run the STEP-08 final gate after Product Owner review.
+- Optional, not required by A-062: cross-engine (Firefox/WebKit) E2E evidence.
 
 ---
 
 ## Known Limitations
 
-- Categorical workflow behavior, Error exit Evidence, and the "Failed" instance-state label are spec-covered or code-reviewed only. Replay browser data exposes numeric workflow Divergences with "Completed" runtime states only.
-- Loading, unavailable/retry, no-Divergence, and `resolved`-status paths still do not occur with replay data. QA verified them from specs and code. Those specs exercise the shared state paths, mostly with Document-stream repository stubs. They are not duplicated per stream.
-- Equal-key sort stability could be observed in the browser for only one pair (the two Approval Divergences). Broader stability relies on the facade and filter specs.
-- The browser check used Chromium only. QA did not mutation-test the specs, because that would require editing implementation files.
+- **Categorical workflow behavior is spec-covered only.** Replay data exposes only numeric workflow Divergences (Task duration, Response time, Workflow runtime). Categorical Decision or route outcome and Error exit rendering are covered by component specs with the test-only builder. STEP-08 did not change this and was not authorized to.
+- **Loading, unavailable, and retry states, resolved-status Divergences, and "Instance state: Failed"** cannot occur in the browser with current replay data. They are component/spec-covered only.
+- **QA-028 and QA-029** remain accepted non-blocking notes.
+- **Chromium only.** Other engines were not run.
+- **Research sources** reflect pages as retrieved on 2026-09-26. The original 2026-09-16/17 research sources are unrecorded, as the artifact states.
 
 ---
-
-## Recommended Routing
-
-QA does not implement fixes. No rework is proposed.
-
-1. The Moderator dispositions QA-031 and QA-032.
-2. The Moderator records QA acceptance of this review in the register.
-3. The STEP-07 final Moderator gate follows.
-
-QA does not accept its own review.
 
 MOD-W v5.0.1
