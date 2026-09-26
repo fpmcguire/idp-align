@@ -1000,6 +1000,9 @@ describe('DashboardComponent with a non-replay repository', () => {
     expect(normalize(byTestId(el, 'controls-note')?.textContent)).toBe(
       'There are no Divergences in this stream to filter or sort.'
     );
+    expect(byTestId(el, 'filter-timerange')!.hasAttribute('aria-describedby')).toBe(false);
+    expect(byTestId(el, 'time-range-note')).toBeNull();
+    expect(el.querySelector('#time-range-note')).toBeNull();
     expect(normalize(byTestId(el, 'result-summary')?.textContent)).toBe('');
   });
 

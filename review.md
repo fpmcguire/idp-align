@@ -9,6 +9,58 @@
 
 ---
 
+## QA-026 Rework Review Addendum
+
+**Review date:** 2026-09-26  
+**Reviewed package:** Current STEP-05 QA-026 rework after A-043 approval  
+**Verdict:** Pass for QA re-check after Moderator disposition A-044.
+
+### Findings
+
+#### Must Fix Now
+
+**TL-STEP05-RW-001 - Out-of-scope `qa.md` modification remains in the reviewed working tree**
+
+A-043 approved a narrow QA-026 rework and explicitly kept `qa.md` out of scope. The reviewed working tree still includes a `qa.md` diff alongside the approved dashboard implementation files and the A-043 register entry.
+
+Impact: process/scope only. The dashboard implementation is not affected, but the current package cannot be treated as the approved QA-026 rework package unless the `qa.md` change is removed from the handoff or the Moderator explicitly approves carrying it.
+
+Required disposition before QA acceptance: either remove the `qa.md` modification from this rework package, or record a Moderator disposition authorizing that documentation change separately from QA-026.
+
+**Resolution:** Resolved by A-044. The Moderator approved carrying the current `qa.md` modification separately from the QA-026 rework implementation. The QA-026 code scope remains limited to the A-043 Time range `aria-describedby`/`time-range-note` fix.
+
+#### Could Fix Later
+
+None.
+
+### Gate Verification
+
+`mod-w/validation/moderator-register.md` contains A-043, which approves the STEP-05 QA-026 rework plan before implementation. A-043 authorizes the Development Team to implement the narrow accessibility fix and hand the completed diff and verification evidence back for Tech Lead review before QA acceptance.
+
+### Implementation Check
+
+The dashboard code changes match the approved A-043 plan:
+
+- `dashboard.component.ts` adds `shownTimeRangeNote`, a computed value that returns the time range note only when no controls note replaces it.
+- `dashboard.component.html` uses `shownTimeRangeNote()` for both the Time range select `aria-describedby` attribute and the `#time-range-note` paragraph render condition.
+- The empty list state still renders only the controls note and does not render a second time range note.
+- The existing ready-state assertion still verifies that the Time range select references `time-range-note` when the note renders.
+- The no-Divergences stream spec now verifies that `filter-timerange` has no `aria-describedby`, `[data-testid="time-range-note"]` is not rendered, and no `#time-range-note` element exists.
+
+No domain logic, facade behavior, filter/sort helper behavior, fixtures, About files, Chart.js analysis, user action workflow, live integration, QA-027 handling, or review acceptance gate behavior is changed by the implementation files.
+
+### Verification
+
+- `fnm exec --using=v26.0.0 npm.cmd run lint`: passed. Angular lint reports all files pass linting.
+- `fnm exec --using=v26.0.0 npm.cmd run build`: passed after rerun outside the sandbox; the sandboxed run hit the known Angular/esbuild `spawn EPERM` limitation. Initial total remains 264.78 kB raw / 75.91 kB estimated transfer. `dashboard-component` is 50.67 kB raw / 12.07 kB estimated transfer.
+- `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false`: passed after rerun outside the sandbox; the sandboxed run hit the same Angular/esbuild `spawn EPERM` limitation. 27 test files and 408 tests passed.
+
+### Approval Needed Before QA May Proceed
+
+A-044 resolves TL-STEP05-RW-001. The needed approval record before QA may proceed is Moderator acceptance of this QA-026 Tech Lead rework review, authorizing QA to re-check the approved fix against A-043, A-044, and the verification evidence.
+
+---
+
 ## Findings
 
 ### Must Fix Now

@@ -29,13 +29,13 @@ Each entry should include date, role/gate, status, approved artifacts or scope, 
 
 For each implementation Step, record these gates when they occur:
 
-| Gate | Required before | Evidence to cite |
-| --- | --- | --- |
-| Step approval | Development Team briefing | Active `step-xx.md`, roadmap status, conditions |
-| Implementation-plan approval | Development Team writes code | Dev Team plan and affected areas |
-| Tech Lead review acceptance | QA starts | `review.md`, build/test evidence, findings status |
-| QA acceptance | Moderator final gate | `qa.md`, acceptance-check evidence |
-| Final Moderator gate | Tagging, roadmap advancement, Step completion | `review.md`, `qa.md`, Product Owner sign-off if applicable, manual verification notes |
+| Gate                         | Required before                               | Evidence to cite                                                                      |
+| ---------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Step approval                | Development Team briefing                     | Active `step-xx.md`, roadmap status, conditions                                       |
+| Implementation-plan approval | Development Team writes code                  | Dev Team plan and affected areas                                                      |
+| Tech Lead review acceptance  | QA starts                                     | `review.md`, build/test evidence, findings status                                     |
+| QA acceptance                | Moderator final gate                          | `qa.md`, acceptance-check evidence                                                    |
+| Final Moderator gate         | Tagging, roadmap advancement, Step completion | `review.md`, `qa.md`, Product Owner sign-off if applicable, manual verification notes |
 
 If a gate is skipped or reordered, the Moderator must record an explicit override entry here with rationale and conditions.
 
@@ -385,15 +385,15 @@ The Moderator approves `.claude/settings.json` separately from STEP-01. It is co
 
 #### QA Finding Dispositions
 
-| Finding | Disposition | Owner |
-| --- | --- | --- |
-| QA-001 | Approved separately; see A-009. | Closed |
-| QA-002 | Option (b) chosen after the explanation in `qa.md`. Rework required: extend the About surfacing-boundary sentence to read "…it does not decide what the behavior should have been, or whether it violates business intent." and update the About test to assert the phrase. | Development Team |
-| QA-003 | Rework required: remove the stray space in "repository ." on the About page. | Development Team |
-| QA-004 | Rework required: browser tab title `IDP-Align` and an original project favicon. DocuWare or other third-party branding must not be used. | Development Team |
-| QA-005 | Rework required: nav `aria-current` and `aria-label`, a single `h1` per route, and a focusable tab panel. | Development Team |
-| QA-006 | Not actioned. | Open (low) |
-| QA-007, QA-008 | Informational; deferred to later Steps. | Tech Lead (future Step planning) |
+| Finding        | Disposition                                                                                                                                                                                                                                                                 | Owner                            |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| QA-001         | Approved separately; see A-009.                                                                                                                                                                                                                                             | Closed                           |
+| QA-002         | Option (b) chosen after the explanation in `qa.md`. Rework required: extend the About surfacing-boundary sentence to read "…it does not decide what the behavior should have been, or whether it violates business intent." and update the About test to assert the phrase. | Development Team                 |
+| QA-003         | Rework required: remove the stray space in "repository ." on the About page.                                                                                                                                                                                                | Development Team                 |
+| QA-004         | Rework required: browser tab title `IDP-Align` and an original project favicon. DocuWare or other third-party branding must not be used.                                                                                                                                    | Development Team                 |
+| QA-005         | Rework required: nav `aria-current` and `aria-label`, a single `h1` per route, and a focusable tab panel.                                                                                                                                                                   | Development Team                 |
+| QA-006         | Not actioned.                                                                                                                                                                                                                                                               | Open (low)                       |
+| QA-007, QA-008 | Informational; deferred to later Steps.                                                                                                                                                                                                                                     | Tech Lead (future Step planning) |
 
 #### Process Record
 
@@ -494,13 +494,13 @@ A fresh QA session, which did not implement or revert any STEP-01 fixes, re-chec
 
 #### Finding Dispositions
 
-| Finding | Disposition | Owner |
-| --- | --- | --- |
-| QA-002 to QA-005 | Resolved; verified in re-check. | Closed |
-| QA-006 | Accepted as known risk for STEP-01. The dashboard guardrail test pattern gap is carried into STEP-02 test scope. | Tech Lead (STEP-02 planning) |
-| QA-007 | Deferred. Tech Lead to resolve the STEP-01 tablet breakpoint contradiction (DS-001 "stacked below desktop" vs. Required Changes "single-column below tablet width") before STEP-04/05 authoring. | Tech Lead |
-| QA-008 | Deferred to STEP-08. | Tech Lead (future Step planning) |
-| QA-009 | Resolved by A-012. | Closed |
+| Finding          | Disposition                                                                                                                                                                                      | Owner                            |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------- |
+| QA-002 to QA-005 | Resolved; verified in re-check.                                                                                                                                                                  | Closed                           |
+| QA-006           | Accepted as known risk for STEP-01. The dashboard guardrail test pattern gap is carried into STEP-02 test scope.                                                                                 | Tech Lead (STEP-02 planning)     |
+| QA-007           | Deferred. Tech Lead to resolve the STEP-01 tablet breakpoint contradiction (DS-001 "stacked below desktop" vs. Required Changes "single-column below tablet width") before STEP-04/05 authoring. | Tech Lead                        |
+| QA-008           | Deferred to STEP-08.                                                                                                                                                                             | Tech Lead (future Step planning) |
+| QA-009           | Resolved by A-012.                                                                                                                                                                               | Closed                           |
 
 #### Tech Lead Follow-Ups Outside STEP-01
 
@@ -550,12 +550,12 @@ The Product Owner reviewed the rendered copy against `mod-w/product.md` v1.3 dir
 
 #### Notes And Dispositions
 
-| Note | Disposition | Owner |
-| --- | --- | --- |
-| PO-1 - R10 is only partly met: About names the public DocuWare APIs but cites no sources. | Not STEP-01 rework. When authoring STEP-08, the Tech Lead adds an acceptance check that About includes a References section linking the public DocuWare Platform REST API and Workflow Analytics API documentation. If About will be demoed on 2026-09-28, the Moderator may instead approve a separately recorded About-only change before that date, following the full MOD-W route. | Tech Lead (STEP-08 authoring), or the Moderator's decision on an earlier change |
-| PO-2 - The interview-date framing ("on September 28, 2026") goes stale after the interview. | No change before the interview. After 2026-09-28, the Product Owner proposes `mod-w/product.md` v1.4 with past-tense framing. After Moderator approval, the copy and test update go into the next active Step. | Product Owner |
-| PO-3 - About omits Product v1.3's sentence "an Observed Baseline describes what has happened, not what should happen." | Closed. The meaning is already present; no action. | Closed |
-| PO-4 - QA-007's orange accent is not named in A-013, which names only the tablet breakpoint. | The Tech Lead chooses the nav/tab active-indicator token (currently `--color-divergence-ongoing`) alongside the tablet breakpoint, before STEP-04 authoring, so the active tab and Ongoing Divergence status don't share one signal colour. The A-013 dispositions for QA-006, QA-007 (breakpoint), and QA-008 stand. | Tech Lead |
+| Note                                                                                                                   | Disposition                                                                                                                                                                                                                                                                                                                                                                            | Owner                                                                           |
+| ---------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| PO-1 - R10 is only partly met: About names the public DocuWare APIs but cites no sources.                              | Not STEP-01 rework. When authoring STEP-08, the Tech Lead adds an acceptance check that About includes a References section linking the public DocuWare Platform REST API and Workflow Analytics API documentation. If About will be demoed on 2026-09-28, the Moderator may instead approve a separately recorded About-only change before that date, following the full MOD-W route. | Tech Lead (STEP-08 authoring), or the Moderator's decision on an earlier change |
+| PO-2 - The interview-date framing ("on September 28, 2026") goes stale after the interview.                            | No change before the interview. After 2026-09-28, the Product Owner proposes `mod-w/product.md` v1.4 with past-tense framing. After Moderator approval, the copy and test update go into the next active Step.                                                                                                                                                                         | Product Owner                                                                   |
+| PO-3 - About omits Product v1.3's sentence "an Observed Baseline describes what has happened, not what should happen." | Closed. The meaning is already present; no action.                                                                                                                                                                                                                                                                                                                                     | Closed                                                                          |
+| PO-4 - QA-007's orange accent is not named in A-013, which names only the tablet breakpoint.                           | The Tech Lead chooses the nav/tab active-indicator token (currently `--color-divergence-ongoing`) alongside the tablet breakpoint, before STEP-04 authoring, so the active tab and Ongoing Divergence status don't share one signal colour. The A-013 dispositions for QA-006, QA-007 (breakpoint), and QA-008 stand.                                                                  | Tech Lead                                                                       |
 
 #### Conditions
 
@@ -614,15 +614,15 @@ This approval records infrastructure/tooling support only. It does not complete 
 
 #### Gate Evidence
 
-| Gate | Record | Result |
-| --- | --- | --- |
-| Step approval | A-002 | Approved |
-| Implementation-plan approval | A-003; rework plans A-005 and A-011 | Approved |
-| Tech Lead review acceptance | A-006; post-QA re-review A-012 (`review.md` Re-Review Result) | Pass |
-| QA acceptance | A-013 (`qa.md` Re-Check, verdict Pass) | Pass |
-| Product Owner sign-off | A-014 | Accepted with notes |
-| Tooling update | A-015 | Approved; committed before this gate as A-015 required |
-| Manual verification | Moderator manual check, 2026-09-24 | Passed |
+| Gate                         | Record                                                        | Result                                                 |
+| ---------------------------- | ------------------------------------------------------------- | ------------------------------------------------------ |
+| Step approval                | A-002                                                         | Approved                                               |
+| Implementation-plan approval | A-003; rework plans A-005 and A-011                           | Approved                                               |
+| Tech Lead review acceptance  | A-006; post-QA re-review A-012 (`review.md` Re-Review Result) | Pass                                                   |
+| QA acceptance                | A-013 (`qa.md` Re-Check, verdict Pass)                        | Pass                                                   |
+| Product Owner sign-off       | A-014                                                         | Accepted with notes                                    |
+| Tooling update               | A-015                                                         | Approved; committed before this gate as A-015 required |
+| Manual verification          | Moderator manual check, 2026-09-24                            | Passed                                                 |
 
 - `npm run build` passed and `npm test -- --watch=false` passed with 4 files and 62/62 tests, under Node.js v26.0.0 at `f7fe019`.
 - `npm run lint` passed under Node.js v26.0.0 (A-015).
@@ -634,15 +634,15 @@ The Moderator approves STEP-01 as complete. The dashboard foundation, the Docume
 
 #### Open Conditions Carried Forward
 
-| Item | Condition | Owner |
-| --- | --- | --- |
-| PO-1 | The Moderator confirmed that the About page will be demoed on 2026-09-28. Add an About References section linking the public DocuWare Platform REST API and Workflow Analytics API documentation before that date. This is a separately approved About-only change: Tech Lead defines it, Development Team plans it, the Moderator approves the plan, the Development Team implements it, then Tech Lead and QA check it. It does not reopen STEP-01 or move the `step-01` tag. | Tech Lead, then Development Team |
-| PO-2 | After 2026-09-28, the Product Owner proposes `mod-w/product.md` v1.4 with past-tense interview framing. The approved copy and test update go into the next active Step. | Product Owner |
-| PO-4 | Before STEP-04 authoring, choose the nav/tab active-indicator token (currently `--color-divergence-ongoing`) together with the QA-007 tablet breakpoint. | Tech Lead |
-| QA-006 | Dashboard guardrail test pattern gap goes into STEP-02 test scope. | Tech Lead (STEP-02 planning) |
-| QA-007 | Resolve the tablet breakpoint contradiction before STEP-04/05 authoring. | Tech Lead |
-| QA-008 | Replace the Playwright starter spec in STEP-08. | Tech Lead (future Step planning) |
-| A-013 follow-ups | Pin the project Node.js version; the role completing a phase requests its register entry before handoff. Each needs its own proposal and Moderator approval. | Tech Lead |
+| Item             | Condition                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Owner                            |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| PO-1             | The Moderator confirmed that the About page will be demoed on 2026-09-28. Add an About References section linking the public DocuWare Platform REST API and Workflow Analytics API documentation before that date. This is a separately approved About-only change: Tech Lead defines it, Development Team plans it, the Moderator approves the plan, the Development Team implements it, then Tech Lead and QA check it. It does not reopen STEP-01 or move the `step-01` tag. | Tech Lead, then Development Team |
+| PO-2             | After 2026-09-28, the Product Owner proposes `mod-w/product.md` v1.4 with past-tense interview framing. The approved copy and test update go into the next active Step.                                                                                                                                                                                                                                                                                                         | Product Owner                    |
+| PO-4             | Before STEP-04 authoring, choose the nav/tab active-indicator token (currently `--color-divergence-ongoing`) together with the QA-007 tablet breakpoint.                                                                                                                                                                                                                                                                                                                        | Tech Lead                        |
+| QA-006           | Dashboard guardrail test pattern gap goes into STEP-02 test scope.                                                                                                                                                                                                                                                                                                                                                                                                              | Tech Lead (STEP-02 planning)     |
+| QA-007           | Resolve the tablet breakpoint contradiction before STEP-04/05 authoring.                                                                                                                                                                                                                                                                                                                                                                                                        | Tech Lead                        |
+| QA-008           | Replace the Playwright starter spec in STEP-08.                                                                                                                                                                                                                                                                                                                                                                                                                                 | Tech Lead (future Step planning) |
+| A-013 follow-ups | Pin the project Node.js version; the role completing a phase requests its register entry before handoff. Each needs its own proposal and Moderator approval.                                                                                                                                                                                                                                                                                                                    | Tech Lead                        |
 
 #### Conditions
 
@@ -707,13 +707,13 @@ Development Team STEP-02 plan (2026-09-24), with the Tech Lead dispositions belo
 
 #### Tech Lead Dispositions Adopted
 
-| Item | Disposition |
-| --- | --- |
-| Dimension | Leave formal Dimension / `DivergenceDimension` out of STEP-02. |
-| Fixture behavior | Include one neutral change in behavior per stream, in one Identity Slice each, not labeled as Divergence or expected output. |
+| Item                 | Disposition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Dimension            | Leave formal Dimension / `DivergenceDimension` out of STEP-02.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Fixture behavior     | Include one neutral change in behavior per stream, in one Identity Slice each, not labeled as Divergence or expected output.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | Dashboard (Option B) | Approved. Neutral replay source line with source facts only: replay source, observation count, Identity Slice count, date range, UTC. KPI cards stay "—", filters stay disabled, and list/detail placeholders stay intact. No Observed Baselines, Divergences, Evidence traces, rankings, severity, status, or "affected" language. Avoid "detected", "flagged", "changed", "issue", "anomaly", "alert", "violation", "bad", "defect", and "gap". Use "synthetic" and "replay" plainly. Browser code makes no live DocuWare calls, and credentials never live in browser code. |
-| QA-006 expansion | Approved as planned. `src/testing/claim-guardrail-patterns.ts` holds constants only and is imported by tests only. The dashboard visible-copy guardrail scans rendered dashboard text only. Fixture tests cover fixture safety and reserved/finding terminology, not ordinary source-domain values such as `state: "Failed"`. The shell route target and About boundary-scan limitation stay out of STEP-02. |
-| Naming | `responseTimeMs` approved, with a fixture metadata or test note mapping it to `TaskReactionTimes`. `StreamSourceInfo` approved as a data-layer name. Existing "Identity Slice" copy is unchanged. No artifact updates needed before implementation. |
+| QA-006 expansion     | Approved as planned. `src/testing/claim-guardrail-patterns.ts` holds constants only and is imported by tests only. The dashboard visible-copy guardrail scans rendered dashboard text only. Fixture tests cover fixture safety and reserved/finding terminology, not ordinary source-domain values such as `state: "Failed"`. The shell route target and About boundary-scan limitation stay out of STEP-02.                                                                                                                                                                   |
+| Naming               | `responseTimeMs` approved, with a fixture metadata or test note mapping it to `TaskReactionTimes`. `StreamSourceInfo` approved as a data-layer name. Existing "Identity Slice" copy is unchanged. No artifact updates needed before implementation.                                                                                                                                                                                                                                                                                                                            |
 
 #### Conditions
 
@@ -811,10 +811,10 @@ The implementation does not add Observed Baseline calculation, sustained Diverge
 
 #### QA Finding Dispositions
 
-| Finding | Disposition | Owner |
-| --- | --- | --- |
+| Finding                   | Disposition                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Owner                            |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
 | QA-010 (Medium, AC8 Fail) | Rework required. The document fixture metadata claims a documented `FieldName` / `Item` / `ItemElementName` shape, but the cited Platform REST API page contains no `ItemElementName`, no `/Date(...)/` values, and no `DWSTOREDATETIME`, and its `DOCUMENT_DATE` sample is the ISO string `"2020-01-01"`. The Tech Lead corrects `step-02.md` Source Conflict Resolution (line 120), chooses the rework route (`qa.md` options a, b, or c), and records it in `review.md`. | Tech Lead, then Development Team |
-| QA-011 to QA-016 | Not dispositioned in this entry. They remain open for Moderator disposition. The Tech Lead may propose including QA-011, which is the same class of traceability issue as QA-010, but the proposal needs Moderator approval. | Open |
+| QA-011 to QA-016          | Not dispositioned in this entry. They remain open for Moderator disposition. The Tech Lead may propose including QA-011, which is the same class of traceability issue as QA-010, but the proposal needs Moderator approval.                                                                                                                                                                                                                                                | Open                             |
 
 #### Process Record
 
@@ -851,9 +851,9 @@ Development Team QA-010 rework plan (2026-09-25), following the Tech Lead resolu
 
 #### Scope Decision
 
-| Item | Decision |
-| --- | --- |
-| QA-010 | Approved for rework as planned. |
+| Item   | Decision                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| QA-010 | Approved for rework as planned.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | QA-011 | Approved for inclusion in the same rework (Moderator decision, 2026-09-25, following the Tech Lead and Development Team recommendations). Mark the workflow `d.` duration day prefix as an approximation/source-shape assumption in `workflow-replay.fixture.ts` metadata and the `timeSpan()` comment, and in the `docuware-replay.types.ts` duration comment. Metadata must no longer say every duration format used is documented by the cited Workflow Analytics API page. Keep the documented `hh:mm:ss.fffffff` form for values under 24 hours. No duration values change. Add a fixture test for the documented form under 24 hours and the metadata approximation note. |
 
 #### Conditions
@@ -928,16 +928,16 @@ QA-012 to QA-017 are dispositioned below so the remaining demo-facing and proces
 
 #### Finding Dispositions
 
-| Finding | Disposition |
-| --- | --- |
-| QA-010 | Closed by the approved QA-010 rework and QA re-check. |
-| QA-011 | Closed by the approved same-cycle QA-011 rework and QA re-check. |
-| QA-012 | Rework before the 2026-09-28 demo. Development Team should propose a copy-only plan to replace stale KPI note text that says "Pending replay data" with text that accurately says CAV logic is pending while replay data is loaded. No KPI values, calculations, Observed Baseline logic, sustained Divergence detection, filters, About files, or new capability may change. |
-| QA-013 | Accepted as a non-blocking terminology consistency note. Carry into future copy alignment unless it is naturally touched by an approved dashboard copy rework. |
-| QA-014 | Accepted as a STEP-03 planning note. STEP-03 must account for the workflow behavior change appearing in both the Approval step slice and Workflow runtime slice. |
-| QA-015 | Accepted as a future adapter planning note. A later adapter/BFF Step should revisit `sourceKind` extensibility and dashboard rendering of source metadata before non-replay data is introduced. |
-| QA-016 | Accepted as a process traceability note. Future commits should keep role artifacts separated when feasible; no STEP-02 implementation rework required. |
-| QA-017 | Closed by `6498be9`, which adds the missing `mod-w/step-02.md` Change Notes row for the QA-010 Source Conflict correction. |
+| Finding | Disposition                                                                                                                                                                                                                                                                                                                                                                   |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| QA-010  | Closed by the approved QA-010 rework and QA re-check.                                                                                                                                                                                                                                                                                                                         |
+| QA-011  | Closed by the approved same-cycle QA-011 rework and QA re-check.                                                                                                                                                                                                                                                                                                              |
+| QA-012  | Rework before the 2026-09-28 demo. Development Team should propose a copy-only plan to replace stale KPI note text that says "Pending replay data" with text that accurately says CAV logic is pending while replay data is loaded. No KPI values, calculations, Observed Baseline logic, sustained Divergence detection, filters, About files, or new capability may change. |
+| QA-013  | Accepted as a non-blocking terminology consistency note. Carry into future copy alignment unless it is naturally touched by an approved dashboard copy rework.                                                                                                                                                                                                                |
+| QA-014  | Accepted as a STEP-03 planning note. STEP-03 must account for the workflow behavior change appearing in both the Approval step slice and Workflow runtime slice.                                                                                                                                                                                                              |
+| QA-015  | Accepted as a future adapter planning note. A later adapter/BFF Step should revisit `sourceKind` extensibility and dashboard rendering of source metadata before non-replay data is introduced.                                                                                                                                                                               |
+| QA-016  | Accepted as a process traceability note. Future commits should keep role artifacts separated when feasible; no STEP-02 implementation rework required.                                                                                                                                                                                                                        |
+| QA-017  | Closed by `6498be9`, which adds the missing `mod-w/step-02.md` Change Notes row for the QA-010 Source Conflict correction.                                                                                                                                                                                                                                                    |
 
 #### Conditions
 
@@ -1034,9 +1034,9 @@ The Moderator accepts the fresh QA re-check of QA-012. The KPI card note now rea
 
 #### Finding Dispositions
 
-| Finding | Disposition |
-| --- | --- |
-| QA-012 | Closed by the approved QA-012 rework, Tech Lead re-review, QA re-check, and Moderator browser review. |
+| Finding | Disposition                                                                                           |
+| ------- | ----------------------------------------------------------------------------------------------------- |
+| QA-012  | Closed by the approved QA-012 rework, Tech Lead re-review, QA re-check, and Moderator browser review. |
 
 #### Conditions
 
@@ -1074,16 +1074,16 @@ The accepted STEP-02 scope does not include Observed Baseline calculation, susta
 
 #### QA And Finding Dispositions
 
-| Finding | Final disposition |
-| --- | --- |
-| QA-010 | Closed by QA-010 rework and QA re-check. |
-| QA-011 | Closed by QA-011 rework and QA re-check. |
-| QA-012 | Closed by copy-only rework, Tech Lead re-review, QA re-check, and A-027 acceptance. |
-| QA-013 | Carried as non-blocking copy/terminology alignment note for future work. |
-| QA-014 | Carried into STEP-03 planning: workflow fixture behavior can appear in both Approval step and Workflow runtime slices. |
-| QA-015 | Carried as future adapter/BFF planning note before non-replay data is introduced. |
-| QA-016 | Accepted as process traceability note; no STEP-02 implementation rework required. |
-| QA-017 | Closed by the STEP-02 Change Notes correction. |
+| Finding | Final disposition                                                                                                      |
+| ------- | ---------------------------------------------------------------------------------------------------------------------- |
+| QA-010  | Closed by QA-010 rework and QA re-check.                                                                               |
+| QA-011  | Closed by QA-011 rework and QA re-check.                                                                               |
+| QA-012  | Closed by copy-only rework, Tech Lead re-review, QA re-check, and A-027 acceptance.                                    |
+| QA-013  | Carried as non-blocking copy/terminology alignment note for future work.                                               |
+| QA-014  | Carried into STEP-03 planning: workflow fixture behavior can appear in both Approval step and Workflow runtime slices. |
+| QA-015  | Carried as future adapter/BFF planning note before non-replay data is introduced.                                      |
+| QA-016  | Accepted as process traceability note; no STEP-02 implementation rework required.                                      |
+| QA-017  | Closed by the STEP-02 Change Notes correction.                                                                         |
 
 #### Evidence
 
@@ -1165,16 +1165,16 @@ Development Team STEP-03 plan (2026-09-25), with the Tech Lead conditions below:
 
 #### Tech Lead Conditions Adopted
 
-| Item | Condition |
-| --- | --- |
-| QA-014 | Emit both Approval step and Workflow runtime Divergences when both independently meet sustained criteria. Do not link them, suppress one, or mark either as derived. Keep the no-Attribution explanation in comments and tests. |
-| Scope | No production dashboard or facade changes. STEP-03 is pure domain logic plus tests; STEP-04 wires dashboard/facade consumption. |
+| Item               | Condition                                                                                                                                                                                                                                                  |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| QA-014             | Emit both Approval step and Workflow runtime Divergences when both independently meet sustained criteria. Do not link them, suppress one, or mark either as derived. Keep the no-Attribution explanation in comments and tests.                            |
+| Scope              | No production dashboard or facade changes. STEP-03 is pure domain logic plus tests; STEP-04 wires dashboard/facade consumption.                                                                                                                            |
 | Detection defaults | 28-day reference window; minimum 4 reference observations; numeric range mean ± max(3 sample standard deviations, 5% of absolute mean); categorical minimum reference share 0.1; sustained threshold 3 consecutive out-of-baseline candidate observations. |
-| `resolved` status | The detector may set `resolved`. Comments and tests must make clear it is only a finding lifecycle state and does not imply remediation, Convergence, or business correctness. |
-| Date behavior | Date representation is unsupported by normalized observations. `document-date-lag` is the date-related dimension for STEP-03. |
-| `decisionAgent` | Evidence context only; not a dimension and not Attribution. |
-| Amount / currency | `amount-value` compares raw numeric values; `amount-currency` is a separate dimension. Tests must make the separation obvious. |
-| Credit notes | Credit-note slices receive no baseline due to insufficient reference sample; this must be tested. |
+| `resolved` status  | The detector may set `resolved`. Comments and tests must make clear it is only a finding lifecycle state and does not imply remediation, Convergence, or business correctness.                                                                             |
+| Date behavior      | Date representation is unsupported by normalized observations. `document-date-lag` is the date-related dimension for STEP-03.                                                                                                                              |
+| `decisionAgent`    | Evidence context only; not a dimension and not Attribution.                                                                                                                                                                                                |
+| Amount / currency  | `amount-value` compares raw numeric values; `amount-currency` is a separate dimension. Tests must make the separation obvious.                                                                                                                             |
+| Credit notes       | Credit-note slices receive no baseline due to insufficient reference sample; this must be tested.                                                                                                                                                          |
 
 #### Conditions
 
@@ -1250,13 +1250,13 @@ QA-014 is closed for STEP-03: the Approval step and Workflow runtime Divergences
 
 #### Finding Dispositions
 
-| Finding | Disposition |
-| --- | --- |
-| QA-018 | Accepted as a known product/data-model limitation, not a STEP-03 defect. STEP-03 detects vendor-representation changes within an Identity Slice. Broader vendor rename/entity matching touches Identity Slice design from STEP-02 and should be routed to later Tech Lead planning before adding a vendor-rename demo scenario or live adapter work. |
-| QA-019 | Accepted as MVP detection semantics for STEP-03. Carry to STEP-04 planning: before rendering `resolved` statuses prominently, Tech Lead should decide whether one returning observation is enough or whether resolution needs sustained in-baseline evidence plus resolution evidence. |
-| QA-020 | Accepted as approved A-030 behavior from the consecutive-observation rule. No STEP-03 action required. |
-| QA-021 | Accepted as optional cleanup. If `observation.ts` is touched later, prefer deterministic code-point comparison over locale-sensitive `localeCompare` for equal timestamps. |
-| QA-022 | Accepted as process traceability note. QA independently checked commit `164abb6`, and results match `review.md`. Future commits should keep role artifacts separated when feasible. |
+| Finding | Disposition                                                                                                                                                                                                                                                                                                                                          |
+| ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| QA-018  | Accepted as a known product/data-model limitation, not a STEP-03 defect. STEP-03 detects vendor-representation changes within an Identity Slice. Broader vendor rename/entity matching touches Identity Slice design from STEP-02 and should be routed to later Tech Lead planning before adding a vendor-rename demo scenario or live adapter work. |
+| QA-019  | Accepted as MVP detection semantics for STEP-03. Carry to STEP-04 planning: before rendering `resolved` statuses prominently, Tech Lead should decide whether one returning observation is enough or whether resolution needs sustained in-baseline evidence plus resolution evidence.                                                               |
+| QA-020  | Accepted as approved A-030 behavior from the consecutive-observation rule. No STEP-03 action required.                                                                                                                                                                                                                                               |
+| QA-021  | Accepted as optional cleanup. If `observation.ts` is touched later, prefer deterministic code-point comparison over locale-sensitive `localeCompare` for equal timestamps.                                                                                                                                                                           |
+| QA-022  | Accepted as process traceability note. QA independently checked commit `164abb6`, and results match `review.md`. Future commits should keep role artifacts separated when feasible.                                                                                                                                                                  |
 
 #### Conditions
 
@@ -1294,14 +1294,14 @@ The accepted STEP-03 scope does not include dashboard rendering, dashboard facad
 
 #### QA And Finding Dispositions
 
-| Finding | Final disposition |
-| --- | --- |
-| QA-014 | Closed for STEP-03. Approval step and Workflow runtime Divergences are emitted independently when each meets sustained criteria, with no link, suppression, derived marker, or causal Attribution claim. |
-| QA-018 | Accepted as known product/data-model limitation. Carry to later vendor identity/entity-matching planning if needed before adding a vendor-rename demo scenario or live adapter work. |
-| QA-019 | Accepted as MVP detection semantics for STEP-03. Carry into STEP-04 planning before rendering `resolved` Divergence status in user-facing UI. |
-| QA-020 | Accepted as approved A-030 consecutive-observation behavior. No action required. |
-| QA-021 | Accepted as optional cleanup if `observation.ts` is touched later. |
-| QA-022 | Accepted as process traceability note. No STEP-03 rework required. |
+| Finding | Final disposition                                                                                                                                                                                        |
+| ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| QA-014  | Closed for STEP-03. Approval step and Workflow runtime Divergences are emitted independently when each meets sustained criteria, with no link, suppression, derived marker, or causal Attribution claim. |
+| QA-018  | Accepted as known product/data-model limitation. Carry to later vendor identity/entity-matching planning if needed before adding a vendor-rename demo scenario or live adapter work.                     |
+| QA-019  | Accepted as MVP detection semantics for STEP-03. Carry into STEP-04 planning before rendering `resolved` Divergence status in user-facing UI.                                                            |
+| QA-020  | Accepted as approved A-030 consecutive-observation behavior. No action required.                                                                                                                         |
+| QA-021  | Accepted as optional cleanup if `observation.ts` is touched later.                                                                                                                                       |
+| QA-022  | Accepted as process traceability note. No STEP-03 rework required.                                                                                                                                       |
 
 #### Evidence
 
@@ -1379,16 +1379,16 @@ Development Team STEP-04 plan (2026-09-25), with the Tech Lead conditions below:
 
 #### Tech Lead Conditions Adopted
 
-| Item | Condition |
-| --- | --- |
-| Resolved KPI | Keep visible with count `0` in replay and the note "Finding lifecycle status". No remediation, correction, Convergence, success, or business-correctness implication. |
-| ESLint import rule | Not added in STEP-04. Fixture-import boundary enforced by implementation discipline, tests where practical, and Tech Lead review static checks. |
-| Component location | `src/app/shared/ui/divergence/`. Presentational only: typed inputs/outputs, no repository access, no detector calls, no fixture imports. |
-| Facade / data flow | `DashboardFacade -> repository -> STEP-03 domain detector`. Components must not compute baselines or Divergences inline or import `data/replay/**`. |
-| QA-014 | Workflow Divergences render as sibling findings with no grouping or cross-linking. Shared instance IDs only as Evidence context. No copy or structure implying cause, Attribution, relation, or dependency. |
-| QA-019 | `resolved` wording frames it as finding lifecycle status only. Wording that the resolving observation is not listed in Evidence is acceptable. No STEP-03 detector semantics changes. |
-| QA-018 | No rename/entity-matching claims. "Vendor representation" is acceptable. No "rename", "same vendor", or entity-matching copy. |
-| Tab panel focus | Adjustment approved if tests are updated and keyboard accessibility remains sound. |
+| Item               | Condition                                                                                                                                                                                                   |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Resolved KPI       | Keep visible with count `0` in replay and the note "Finding lifecycle status". No remediation, correction, Convergence, success, or business-correctness implication.                                       |
+| ESLint import rule | Not added in STEP-04. Fixture-import boundary enforced by implementation discipline, tests where practical, and Tech Lead review static checks.                                                             |
+| Component location | `src/app/shared/ui/divergence/`. Presentational only: typed inputs/outputs, no repository access, no detector calls, no fixture imports.                                                                    |
+| Facade / data flow | `DashboardFacade -> repository -> STEP-03 domain detector`. Components must not compute baselines or Divergences inline or import `data/replay/**`.                                                         |
+| QA-014             | Workflow Divergences render as sibling findings with no grouping or cross-linking. Shared instance IDs only as Evidence context. No copy or structure implying cause, Attribution, relation, or dependency. |
+| QA-019             | `resolved` wording frames it as finding lifecycle status only. Wording that the resolving observation is not listed in Evidence is acceptable. No STEP-03 detector semantics changes.                       |
+| QA-018             | No rename/entity-matching claims. "Vendor representation" is acceptable. No "rename", "same vendor", or entity-matching copy.                                                                               |
+| Tab panel focus    | Adjustment approved if tests are updated and keyboard accessibility remains sound.                                                                                                                          |
 
 #### Conditions
 
@@ -1502,11 +1502,11 @@ QA-014 remains satisfied in STEP-04: the Approval step and Workflow runtime Dive
 
 #### Finding Dispositions
 
-| Finding | Disposition |
-| --- | --- |
-| QA-023 | Resolved by A-037. The Tech Lead review acceptance was recorded after QA started, but it accepts the same `933aece` package QA reviewed, and `ac434f6` changes only this register. |
-| QA-024 | Accepted as a known display limitation for STEP-04. Day-scale duration formatting drops minutes, so some rendered Evidence values do not reconcile exactly; the domain record keeps exact milliseconds. Better duration formatting may be considered in a later UI polish step. No STEP-04 rework. |
-| QA-025 | Closed, no action. `review.md` described the working tree as uncommitted at Tech Lead review time. The work was committed before QA on the Moderator's instruction. |
+| Finding | Disposition                                                                                                                                                                                                                                                                                        |
+| ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| QA-023  | Resolved by A-037. The Tech Lead review acceptance was recorded after QA started, but it accepts the same `933aece` package QA reviewed, and `ac434f6` changes only this register.                                                                                                                 |
+| QA-024  | Accepted as a known display limitation for STEP-04. Day-scale duration formatting drops minutes, so some rendered Evidence values do not reconcile exactly; the domain record keeps exact milliseconds. Better duration formatting may be considered in a later UI polish step. No STEP-04 rework. |
+| QA-025  | Closed, no action. `review.md` described the working tree as uncommitted at Tech Lead review time. The work was committed before QA on the Moderator's instruction.                                                                                                                                |
 
 #### Conditions
 
@@ -1545,14 +1545,14 @@ The accepted STEP-04 scope does not include functional filters or sorting, Chart
 
 #### QA And Finding Dispositions
 
-| Finding | Final disposition |
-| --- | --- |
-| QA-014 | Satisfied for STEP-04. Approval step and Workflow runtime Divergences render as independent sibling cards with no grouping, cross-linking, or causal Attribution copy. Shared replay values remain a later-planning risk for Attribution-adjacent copy. |
-| QA-018 | Satisfied for STEP-04. No rename or entity-matching claims in rendered copy. The underlying vendor identity limitation remains carried to later planning. |
-| QA-019 | Satisfied for STEP-04. `resolved` is presented only as finding lifecycle status. Sibling `resolved`/`ongoing` runs on the same Identity Slice and dimension remain a later-planning note. |
-| QA-023 | Resolved by A-037. |
-| QA-024 | Accepted as a known display limitation. Carry to a later UI polish step if duration display precision is revisited. |
-| QA-025 | Closed, no action. |
+| Finding | Final disposition                                                                                                                                                                                                                                       |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| QA-014  | Satisfied for STEP-04. Approval step and Workflow runtime Divergences render as independent sibling cards with no grouping, cross-linking, or causal Attribution copy. Shared replay values remain a later-planning risk for Attribution-adjacent copy. |
+| QA-018  | Satisfied for STEP-04. No rename or entity-matching claims in rendered copy. The underlying vendor identity limitation remains carried to later planning.                                                                                               |
+| QA-019  | Satisfied for STEP-04. `resolved` is presented only as finding lifecycle status. Sibling `resolved`/`ongoing` runs on the same Identity Slice and dimension remain a later-planning note.                                                               |
+| QA-023  | Resolved by A-037.                                                                                                                                                                                                                                      |
+| QA-024  | Accepted as a known display limitation. Carry to a later UI polish step if duration display precision is revisited.                                                                                                                                     |
+| QA-025  | Closed, no action.                                                                                                                                                                                                                                      |
 
 #### Evidence
 
@@ -1636,12 +1636,12 @@ Development Team STEP-05 plan (2026-09-25), with the Tech Lead decisions and con
 
 #### Tech Lead Decisions Adopted
 
-| Item | Decision |
-| --- | --- |
-| Stream switching | Preserve per-stream filter, sort, and selection state. |
+| Item                 | Decision                                                                                     |
+| -------------------- | -------------------------------------------------------------------------------------------- |
+| Stream switching     | Preserve per-stream filter, sort, and selection state.                                       |
 | Filtered-empty reset | No extra reset button inside the filtered-empty state; use the stable Clear filters control. |
-| Time range | Filter on `latestObservedAt`, anchored to the latest observation in the stream. |
-| Browser evidence | Throwaway Playwright scripts; no committed e2e suite required in STEP-05. |
+| Time range           | Filter on `latestObservedAt`, anchored to the latest observation in the stream.              |
+| Browser evidence     | Throwaway Playwright scripts; no committed e2e suite required in STEP-05.                    |
 
 #### Conditions
 
@@ -1696,6 +1696,99 @@ The implementation does not add Chart.js analysis, user action workflows, About 
 - QA should verify filters, sorting, clear filters, stream switching, hidden-selection behavior, loading/unavailable/empty/filtered-empty states, retry behavior, accessibility, and 1279px/1280px responsive behavior.
 - QA should verify no severity/risk scoring, business judgment, live-access claim, Attribution, CAV Level 2+ claim, Chart.js analysis, user action workflow, About change, fixture change, or detector change was introduced.
 - QA should use Node.js v26.0.0 via `fnm` for verification.
+
+---
+
+### A-043 - STEP-05 QA-026 Rework Plan Approval
+
+**Status:** Approved  
+**Date:** 2026-09-26  
+**Moderator:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** QA-026 rework plan approval before implementation  
+**Step:** `mod-w/step-05.md`  
+**Next authorized action:** Development Team may implement the approved QA-026 rework plan, then hand off the completed diff and verification evidence for Tech Lead review before QA acceptance.
+
+#### Approved Rework Plan
+
+The Moderator approves the Development Team's QA-026 rework plan for STEP-05.
+
+The approved fix is limited to aligning the Time range select's `aria-describedby` reference with the rendered `#time-range-note` paragraph so the control cannot point to a missing description in the empty list state.
+
+#### Scope Conditions
+
+- Add a computed dashboard value that exposes the time range note only when no controls note replaces it.
+- Use that computed value for both the Time range select `aria-describedby` attribute and the `time-range-note` paragraph render condition.
+- Do not render the time range note in the empty list state.
+- Do not change note copy, controls-note copy, disabled state behavior, filters, sorting, KPIs, fixtures, facade/domain logic, About, Chart.js analysis, user actions, live integration, QA-027, `qa.md`, or `review.md`.
+- Do not commit unless separately instructed.
+
+#### Expected Verification
+
+- Extend the existing no-Divergences stream spec to assert that `filter-timerange` has no `aria-describedby`, `[data-testid="time-range-note"]` is not rendered, and no `#time-range-note` element exists.
+- Preserve the existing ready-state assertion that `filter-timerange` references `time-range-note` and the note renders.
+- Run verification under Node.js v26.0.0 via `fnm`: `npm.cmd run lint`, `npm.cmd run build`, and `npm.cmd test`.
+- Expected test count remains 408 because the plan extends an existing spec.
+
+---
+
+### A-044 - STEP-05 QA Documentation Carry Approval
+
+**Status:** Approved  
+**Date:** 2026-09-26  
+**Moderator:** Frank McGuire  
+**Role approved:** Development Team  
+**Gate:** Documentation-scope disposition before QA-026 QA re-check  
+**Step:** `mod-w/step-05.md`  
+**Next authorized action:** Tech Lead may treat the `qa.md` modification as separately approved from QA-026 and may clear the QA-026 rework package for QA re-check if no other findings remain.
+
+#### Disposition
+
+The Moderator approves carrying the current `qa.md` modification separately from the QA-026 rework implementation.
+
+This approval does not widen the QA-026 implementation scope. The QA-026 code rework remains limited to the Time range `aria-describedby`/`time-range-note` fix approved in A-043.
+
+#### Conditions
+
+- QA may consider the `qa.md` modification as separately authorized documentation context, not as part of the QA-026 implementation fix.
+- This disposition resolves the Tech Lead process finding TL-STEP05-RW-001 if the dashboard implementation and verification remain otherwise acceptable.
+- QA-026 remains subject to QA re-check against A-043, the Tech Lead rework review, and the verification evidence.
+
+### A-045 - STEP-05 Tech Lead Rework Review Acceptance
+
+**Status:** Approved  
+**Date:** 2026-09-26  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Tech Lead rework review acceptance before QA re-check  
+**Step:** `mod-w/step-05.md`  
+**Next authorized action:** QA may re-check QA-026 against A-043, A-044, the completed implementation, and the verification evidence.
+
+#### Accepted Artifacts
+
+- `review.md` - STEP-05 QA-026 Rework Review Addendum, verdict "Pass for QA re-check"
+- QA-026 implementation rework in the current working tree
+- A-043 approved QA-026 rework plan
+- A-044 approved separate `qa.md` documentation disposition
+
+#### Acceptance Summary
+
+The Moderator accepts the Tech Lead's rework review for STEP-05. The review confirms that the implementation matches the approved QA-026 plan: the Time range select references `time-range-note` only when that note is rendered, and the no-Divergences state no longer exposes a dangling description reference.
+
+The Tech Lead found no remaining Must Fix or Could Fix Later findings. The previously identified scope finding concerning the `qa.md` modification is resolved by A-044. The QA-026 code scope remains limited to the approved accessibility fix.
+
+#### Evidence
+
+- `fnm exec --using=v26.0.0 npm.cmd run lint` passed.
+- `fnm exec --using=v26.0.0 npm.cmd run build` passed after rerun outside the sandbox.
+- `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` passed after rerun outside the sandbox: 27 test files and 408 tests passed.
+- The existing ready-state assertion remains in place, and the no-Divergences spec covers the absent `aria-describedby` and absent `time-range-note` element.
+
+#### Conditions
+
+- QA must re-check QA-026 and confirm the approved fix against the no-Divergences state.
+- QA must preserve the existing STEP-05 scope and must not treat this acceptance as final STEP-05 or QA acceptance.
+- QA-027 remains a documented process note and does not require implementation rework.
 
 ---
 

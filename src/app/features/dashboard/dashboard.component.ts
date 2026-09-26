@@ -186,6 +186,9 @@ export class DashboardComponent {
     }
   });
 
+  /** The time range note, only while no controls note replaces it. */
+  shownTimeRangeNote = computed(() => (this.controlsNote() ? null : this.timeRangeNote()));
+
   resultSummary = computed(() => {
     const total = this.divergences()?.length ?? 0;
     if (!this.controlsEnabled()) return null;
