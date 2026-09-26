@@ -5,7 +5,9 @@ import {
 } from '../../../../../testing/claim-guardrail-patterns';
 import {
   amountDivergence,
+  taskOutcomeDivergence,
   vendorRepresentationDivergence,
+  workflowDivergences,
 } from '../../../../../testing/divergence-builders';
 import { fakeChartFactory } from '../../../../../testing/fake-chart-factory';
 import { Divergence } from '../../../../domain/divergence';
@@ -115,6 +117,23 @@ describe('DivergenceAnalysisComponent', () => {
       );
       expect(spacedText(el)).not.toMatch(/confidence|band/i);
     });
+
+    // Spec-only coverage: replay data has no categorical workflow Divergence.
+    it('should chart a workflow task outcome as categorical shares without a numeric band', () => {
+      render(taskOutcomeDivergence());
+
+      expect(text('analysis-identity-slice')).toBe('Test approval (synthetic) · Approval');
+      expect(el.querySelector('[data-testid="divergence-chart"]')?.getAttribute('data-chart-kind')).toBe(
+        'categorical',
+      );
+      expect(text('analysis-chart-summary')).toContain(
+        'A categorical Observed Baseline has no numeric range, so none is drawn.',
+      );
+      expect(stat('Magnitude')).toBe(
+        'Error exit: Test error exit (synthetic) seen in 0% of reference observations',
+      );
+      expect(spacedText(el)).not.toMatch(/confidence|band/i);
+    });
   });
 
   describe('dimension switching', () => {
@@ -178,7 +197,12 @@ describe('DivergenceAnalysisComponent', () => {
   });
 
   it('should keep rendered copy within CAV Level 1 wording', () => {
-    for (const divergence of [amountDivergence(), vendorRepresentationDivergence()]) {
+    for (const divergence of [
+      amountDivergence(),
+      vendorRepresentationDivergence(),
+      ...workflowDivergences(),
+      taskOutcomeDivergence(),
+    ]) {
       render(divergence);
       const copy = spacedText(el);
       for (const pattern of [...Object.values(CLAIM_GUARDRAIL_PATTERNS), SEVERITY_RISK_PATTERN]) {

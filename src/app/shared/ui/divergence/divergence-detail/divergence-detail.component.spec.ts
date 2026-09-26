@@ -2,7 +2,9 @@ import { TestBed } from '@angular/core/testing';
 import { CLAIM_GUARDRAIL_PATTERNS } from '../../../../../testing/claim-guardrail-patterns';
 import {
   amountDivergence,
+  taskOutcomeDivergence,
   vendorRepresentationDivergence,
+  workflowDivergences,
 } from '../../../../../testing/divergence-builders';
 import { Divergence } from '../../../../domain/divergence';
 import { DivergenceDetailComponent } from './divergence-detail.component';
@@ -110,11 +112,43 @@ describe('DivergenceDetailComponent', () => {
       amountDivergence(),
       amountDivergence({ resolved: true }),
       vendorRepresentationDivergence(),
+      ...workflowDivergences(),
+      taskOutcomeDivergence(),
     ]) {
       const text = spacedText(render(divergence).el);
       for (const pattern of Object.values(CLAIM_GUARDRAIL_PATTERNS)) {
         expect(text).not.toMatch(pattern);
       }
     }
+  });
+
+  describe('workflow Divergences', () => {
+    it('should render workflow timing values as durations in every section', () => {
+      const [task] = workflowDivergences();
+      const { el, text, stat } = render(task);
+
+      expect(text('detail-identity-slice')).toBe('Test approval (synthetic) · Approval');
+      expect(text('detail-dimension')).toBe('Dimension: Task duration');
+      expect(stat('Observed')).toBe('Mean 5 h 0 min across 3 observations');
+      expect(stat('Observed values')).toBe('Min 5 h 0 min, max 5 h 0 min, latest 5 h 0 min');
+      expect(stat('Magnitude')).toMatch(/^\+4 h 0 min from baseline mean/);
+      expect(
+        Array.from(el.querySelectorAll('[data-testid="baseline-numeric-field"] dd')).every(dd =>
+          /\d+ (d|h|min)/.test(dd.textContent ?? ''),
+        ),
+      ).toBe(true);
+      expect(el.querySelectorAll('[data-testid="evidence-item"]').length).toBe(3);
+    });
+
+    // Spec-only coverage: replay data has no categorical workflow Divergence.
+    it('should render a categorical workflow task outcome with its reference distribution', () => {
+      const { el, text, stat } = render(taskOutcomeDivergence());
+
+      expect(text('detail-dimension')).toBe('Dimension: Decision or route outcome');
+      expect(stat('Observed')).toBe('Error exit: Test error exit (synthetic) in 100% of 3 observations');
+      expect(stat('Observed Baseline')).toBe('Decision: Approve in 100% of reference observations');
+      expect(text('baseline-distribution')).toBe('Decision: Approve: 6 (100%)');
+      expect(el.textContent).not.toMatch(/caus|because|due to|attribut|root|failure|violation/i);
+    });
   });
 });

@@ -96,6 +96,48 @@ describe('DashboardFacade', () => {
     });
   });
 
+  describe('Identity Slice coverage (STEP-07)', () => {
+    it('should count Identity Slices with Divergences within each stream', () => {
+      const facade = createReplayFacade();
+
+      expect(facade.identitySliceCoverage('document')).toEqual({ withDivergences: 1, total: 6 });
+      // Approval (two Divergences) and Workflow runtime, out of three steps plus Workflow runtime.
+      expect(facade.identitySliceCoverage('workflow')).toEqual({ withDivergences: 2, total: 4 });
+    });
+
+    it('should count every Identity Slice in the stream, whatever the filters', () => {
+      const facade = createReplayFacade();
+      facade.setFilters('workflow', {
+        identitySliceId: 'workflow/invoice-approval-synthetic/runtime',
+      });
+
+      expect(facade.visibleDivergences('workflow')?.length).toBe(1);
+      expect(facade.identitySliceCoverage('workflow')).toEqual({ withDivergences: 2, total: 4 });
+    });
+
+    it('should report no coverage while a stream is loading or unavailable', () => {
+      const slices = new Subject<readonly IdentitySlice[]>();
+      const facade = createFacade({
+        getIdentitySlices: ((stream: StreamKind) =>
+          stream === 'document' ? slices : EMPTY) as unknown as StreamObservationRepository['getIdentitySlices'],
+        getObservations: (() => of([])) as StreamObservationRepository['getObservations'],
+      });
+
+      expect(facade.identitySliceCoverage('document')).toBeNull();
+      expect(facade.identitySliceCoverage('workflow')).toBeNull();
+    });
+
+    it('should report zero of the stream slices when none has a Divergence', () => {
+      const facade = createFacade({
+        getIdentitySlices: (() => of([testDocumentSlice])) as StreamObservationRepository['getIdentitySlices'],
+        getObservations: (() =>
+          of([documentObservation('doc-0', at(0))])) as StreamObservationRepository['getObservations'],
+      });
+
+      expect(facade.identitySliceCoverage('document')).toEqual({ withDivergences: 0, total: 1 });
+    });
+  });
+
   describe('source-agnostic computation', () => {
     it('should compute Divergences only from repository slices and observations', () => {
       const calls: string[] = [];

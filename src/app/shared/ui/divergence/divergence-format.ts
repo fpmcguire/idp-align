@@ -6,6 +6,7 @@ import {
   DivergenceDimension,
 } from '../../../domain/divergence-dimension';
 import { EvidenceContext } from '../../../domain/evidence';
+import { WorkflowInstanceState } from '../../../domain/observation';
 import { ObservedBaseline } from '../../../domain/observed-baseline';
 
 // Display formatting for Divergence records. These helpers only turn values the STEP-03 domain
@@ -45,6 +46,19 @@ export const STATUS_DESCRIPTIONS: Readonly<Record<DivergenceStatus, string>> = {
 export function dimensionLabel(dimension: DivergenceDimension): string {
   return DIVERGENCE_DIMENSIONS[dimension].label;
 }
+
+/** Names the observed value an Evidence item was compared on, such as "Response time (compared value)". */
+export function comparedValueLabel(dimension: DivergenceDimension): string {
+  return `${dimensionLabel(dimension)} (compared value)`;
+}
+
+/** Workflow instance states as the source names them. Shown as recorded, not interpreted. */
+export const INSTANCE_STATE_LABELS: Readonly<Record<WorkflowInstanceState, string>> = {
+  completed: 'Completed',
+  running: 'Running',
+  failed: 'Failed',
+  stopped: 'Stopped',
+};
 
 /** Whole minutes as "2 d 3 h", "22 h 49 min", or "12 min". */
 export function formatDuration(ms: number): string {
@@ -197,7 +211,7 @@ export function evidenceContextFields(context: EvidenceContext): DisplayField[] 
     case 'runtime':
       return [
         { label: 'Workflow instance', value: context.instanceId },
-        { label: 'Instance state', value: context.state },
+        { label: 'Instance state', value: INSTANCE_STATE_LABELS[context.state] },
       ];
   }
 }

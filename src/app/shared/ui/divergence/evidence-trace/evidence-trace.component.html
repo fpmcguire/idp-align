@@ -16,7 +16,7 @@
         </div>
         <dl class="item-fields">
           <div class="item-field">
-            <dt>Compared value</dt>
+            <dt data-testid="evidence-value-label">{{ valueLabel() }}</dt>
             <dd data-testid="evidence-value">{{ item.value }}</dd>
           </div>
           @if (item.distance !== null) {

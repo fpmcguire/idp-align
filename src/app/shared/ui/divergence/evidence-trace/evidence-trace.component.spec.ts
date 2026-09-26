@@ -1,5 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { amountDivergence, workflowDivergences } from '../../../../../testing/divergence-builders';
+import {
+  amountDivergence,
+  taskOutcomeDivergence,
+  vendorRepresentationDivergence,
+  workflowDivergences,
+} from '../../../../../testing/divergence-builders';
 import { Divergence } from '../../../../domain/divergence';
 import { EvidenceTraceComponent } from './evidence-trace.component';
 
@@ -42,6 +47,7 @@ describe('EvidenceTraceComponent', () => {
     const [first] = render(amountDivergence()).items;
 
     expect(field(first, 'evidence-time')).toBe('2 Sep 2026, 12:00 UTC');
+    expect(field(first, 'evidence-value-label')).toBe('Amount (compared value)');
     expect(field(first, 'evidence-value')).toBe('1,500.00');
     expect(field(first, 'evidence-distance')).toBe('+500.00');
     expect(field(first, 'evidence-baseline-indicator')).toBe('Outside Observed Baseline');
@@ -73,8 +79,25 @@ describe('EvidenceTraceComponent', () => {
     ]);
     expect(contextFields(runtimeItem)).toEqual([
       'Workflow instance wf-c0',
-      'Instance state completed',
+      'Instance state Completed',
     ]);
+    expect(field(taskItem, 'evidence-value-label')).toBe('Task duration (compared value)');
+    expect(field(runtimeItem, 'evidence-value-label')).toBe('Workflow runtime (compared value)');
+    expect(field(runtimeItem, 'evidence-value')).toBe('5 h 20 min');
     expect(taskItem.textContent).not.toMatch(/caus|because|due to|led to|attribut|root/i);
+  });
+
+  it('should label categorical document and workflow values by their dimension', () => {
+    const [vendorItem] = render(vendorRepresentationDivergence()).items;
+    const [outcomeItem] = render(taskOutcomeDivergence()).items;
+
+    expect(field(vendorItem, 'evidence-value-label')).toBe('Vendor representation (compared value)');
+    expect(field(outcomeItem, 'evidence-value-label')).toBe(
+      'Decision or route outcome (compared value)',
+    );
+    expect(field(outcomeItem, 'evidence-value')).toBe('Error exit: Test error exit (synthetic)');
+    expect(outcomeItem.querySelector('[data-testid="evidence-distance"]')).toBeNull();
+    expect(contextFields(outcomeItem)).toContain('Error exit Test error exit (synthetic)');
+    expect(outcomeItem.textContent).not.toMatch(/caus|because|due to|attribut|root|failure|violation/i);
   });
 });

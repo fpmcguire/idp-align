@@ -1,15 +1,18 @@
 import { CLAIM_GUARDRAIL_PATTERNS } from '../../../../testing/claim-guardrail-patterns';
 import {
   amountDivergence,
+  taskOutcomeDivergence,
   vendorRepresentationDivergence,
   workflowDivergences,
 } from '../../../../testing/divergence-builders';
 import { DIVERGENCE_STATUSES } from '../../../domain/divergence';
 import {
+  INSTANCE_STATE_LABELS,
   STATUS_DESCRIPTIONS,
   STATUS_LABELS,
   baselineMethodText,
   baselineSummaryText,
+  comparedValueLabel,
   evidenceContextFields,
   formatCategoricalValue,
   formatDimensionValue,
@@ -118,8 +121,84 @@ describe('Divergence display formatting', () => {
       ]);
       expect(evidenceContextFields(runtime.evidence.items[0].context)).toEqual([
         { label: 'Workflow instance', value: 'wf-c0' },
-        { label: 'Instance state', value: 'completed' },
+        { label: 'Instance state', value: 'Completed' },
       ]);
+    });
+
+    it('should show workflow instance states as the source names them', () => {
+      expect(INSTANCE_STATE_LABELS).toEqual({
+        completed: 'Completed',
+        running: 'Running',
+        failed: 'Failed',
+        stopped: 'Stopped',
+      });
+    });
+
+    it('should list a workflow error exit as observed context without a decision agent', () => {
+      const [item] = taskOutcomeDivergence().evidence.items;
+
+      expect(evidenceContextFields(item.context)).toEqual([
+        { label: 'Workflow instance', value: 'task-c0' },
+        { label: 'Step', value: 'Approval' },
+        { label: 'Error exit', value: 'Test error exit (synthetic)' },
+      ]);
+    });
+  });
+
+  describe('compared value label', () => {
+    it('should name the dimension each Evidence value was compared on, in both streams', () => {
+      expect(comparedValueLabel('amount-value')).toBe('Amount (compared value)');
+      expect(comparedValueLabel('vendor-representation')).toBe(
+        'Vendor representation (compared value)',
+      );
+      expect(comparedValueLabel('task-duration')).toBe('Task duration (compared value)');
+      expect(comparedValueLabel('response-time')).toBe('Response time (compared value)');
+      expect(comparedValueLabel('task-outcome')).toBe('Decision or route outcome (compared value)');
+      expect(comparedValueLabel('workflow-runtime')).toBe('Workflow runtime (compared value)');
+    });
+
+    it('should not present the compared value as a target', () => {
+      for (const dimension of [
+        'amount-value',
+        'vendor-representation',
+        'task-duration',
+        'response-time',
+        'task-outcome',
+        'workflow-runtime',
+      ] as const) {
+        expect(comparedValueLabel(dimension)).not.toMatch(/target|expected|intended|required/i);
+      }
+    });
+  });
+
+  describe('workflow categorical Divergence text (spec-only; replay data has none)', () => {
+    const divergence = taskOutcomeDivergence();
+
+    it('should summarize the observed error exit and the reference decision', () => {
+      expect(observedSummaryText(divergence)).toBe(
+        'Error exit: Test error exit (synthetic) in 100% of 3 observations',
+      );
+      expect(baselineSummaryText(divergence.baseline)).toBe(
+        'Decision: Approve in 100% of reference observations',
+      );
+      expect(magnitudeText(divergence)).toBe(
+        'Error exit: Test error exit (synthetic) seen in 0% of reference observations',
+      );
+    });
+
+    it('should keep workflow categorical text within the claim guardrails', () => {
+      const text = [
+        observedSummaryText(divergence),
+        observedDetailText(divergence),
+        baselineSummaryText(divergence.baseline),
+        magnitudeText(divergence),
+        baselineMethodText(divergence.baseline),
+      ].join(' ');
+
+      for (const pattern of Object.values(CLAIM_GUARDRAIL_PATTERNS)) {
+        expect(text).not.toMatch(pattern);
+      }
+      expect(text).not.toMatch(/caus|because|due to|attribut|root/i);
     });
   });
 

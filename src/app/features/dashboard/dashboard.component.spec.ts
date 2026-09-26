@@ -219,7 +219,10 @@ describe('DashboardComponent', () => {
       expect(el.querySelector('[data-testid="stream-source-note"]')?.textContent).toContain(
         'DocuWare Workflow Analytics API'
       );
-      expect(el.querySelector('[data-testid="filter-bar"]')?.textContent).toContain('workflow step / route');
+      expect(el.querySelector('[data-testid="filter-bar"]')?.textContent).toContain(
+        'Identity Slice (workflow step / runtime)'
+      );
+      expect(el.querySelector('[data-testid="filter-bar"]')?.textContent).not.toContain('route');
     });
 
     it('should render enabled filter and sort controls with repository Identity Slices', () => {
@@ -324,7 +327,7 @@ describe('DashboardComponent', () => {
       choose('filter-identity-slice', 'Invoice approval (synthetic) · Workflow runtime');
 
       expect(cardSummary().length).toBe(1);
-      expect(kpiValues()).toEqual(['3', '3', '0', '—']);
+      expect(kpiValues()).toEqual(['3', '3', '0', '2 of 4', '—']);
       expect(normalize(el.querySelector('[data-testid="kpi-scope-note"]')?.textContent)).toBe(
         'Counts include every Divergence in this stream. Filters do not change them.'
       );
@@ -481,13 +484,19 @@ describe('DashboardComponent', () => {
   });
 
   describe('summary KPIs', () => {
-    it('should show total, ongoing, resolved, and trend regions', () => {
+    it('should show total, ongoing, resolved, Identity Slice, and trend regions', () => {
       const labels = Array.from(el.querySelectorAll('.kpi-label')).map(l => l.textContent?.trim());
-      expect(labels).toEqual(['Total Divergences', 'Ongoing', 'Resolved', 'Trend']);
+      expect(labels).toEqual([
+        'Total Divergences',
+        'Ongoing',
+        'Resolved',
+        'Identity Slices with Divergences',
+        'Trend',
+      ]);
     });
 
     it('should count the document stream Divergences', () => {
-      expect(kpiValues()).toEqual(['1', '1', '0', '—']);
+      expect(kpiValues()).toEqual(['1', '1', '0', '1 of 6', '—']);
       expect(el.querySelector('[data-testid="kpi-card-document-total"]')?.textContent).toContain(
         'Across vendor / document type Identity Slices'
       );
@@ -496,7 +505,7 @@ describe('DashboardComponent', () => {
     it('should count the workflow stream Divergences after switching', () => {
       switchTo('workflow');
 
-      expect(kpiValues()).toEqual(['3', '3', '0', '—']);
+      expect(kpiValues()).toEqual(['3', '3', '0', '2 of 4', '—']);
       expect(el.querySelector('[data-testid="kpi-card-workflow-total"]')?.textContent).toContain(
         'Across workflow step and runtime Identity Slices'
       );
@@ -513,7 +522,10 @@ describe('DashboardComponent', () => {
       const trend = el.querySelector('[data-testid="kpi-card-document-trend"]');
 
       expect(trend?.textContent).not.toMatch(/\d/);
-      expect(trend?.textContent).toContain('Trend analysis is added in a later Step');
+      expect(normalize(trend?.textContent)).toContain(
+        "Not charted here. Divergence Analysis charts a selected Divergence's Evidence over time."
+      );
+      expect(trend?.textContent).not.toMatch(/later Step/);
       expect(el.querySelector('canvas, svg')).toBeNull();
     });
   });
@@ -702,6 +714,115 @@ describe('DashboardComponent', () => {
     });
   });
 
+  describe('workflow stream parity (STEP-07)', () => {
+    beforeEach(() => switchTo('workflow'));
+
+    it('should show Identity Slice coverage within each stream, without comparing streams', () => {
+      const workflowKpi = el.querySelector('[data-testid="kpi-card-workflow-identity-slices"]');
+
+      expect(childText(workflowKpi)).toBe(
+        'Identity Slices with Divergences 2 of 4 Workflow steps and Workflow runtime in this stream'
+      );
+      expect(workflowKpi?.textContent).not.toMatch(/document|vendor|decision agent|route/i);
+
+      switchTo('document');
+      const documentKpi = el.querySelector('[data-testid="kpi-card-document-identity-slices"]');
+
+      expect(childText(documentKpi)).toBe(
+        'Identity Slices with Divergences 1 of 6 Vendor / document type Identity Slices in this stream'
+      );
+      expect(documentKpi?.textContent).not.toMatch(/workflow/i);
+    });
+
+    it('should keep KPI copy free of severity, risk, or cross-stream comparison', () => {
+      const text = spacedText(el.querySelector('[data-testid="kpi-section"]'));
+
+      expect(text).not.toMatch(SEVERITY_RISK_PATTERN);
+      expect(text).not.toMatch(/compar|than|align|reconcil|correlat|both streams|Document stream/i);
+    });
+
+    it('should narrow the workflow list by status', () => {
+      choose('filter-status', 'Ongoing');
+
+      expect(cardSummary().length).toBe(3);
+      expect(resultSummary()).toBe('Showing 3 of 3 Divergences');
+    });
+
+    it('should keep onset order for equal workflow Identity Slice and status sort keys', () => {
+      choose('sort-select', 'Identity Slice (A–Z)');
+
+      expect(cardSummary().map(([slice, dimension]) => [slice, dimension])).toEqual([
+        ['Invoice approval (synthetic) · Approval', 'Task duration'],
+        ['Invoice approval (synthetic) · Approval', 'Response time'],
+        ['Invoice approval (synthetic) · Workflow runtime', 'Workflow runtime'],
+      ]);
+
+      choose('sort-select', 'Status (lifecycle order)');
+
+      expect(cardSummary().map(([, dimension]) => dimension)).toEqual([
+        'Task duration',
+        'Response time',
+        'Workflow runtime',
+      ]);
+    });
+
+    it('should not change the document stream filters or sort', () => {
+      choose('filter-identity-slice', 'Invoice approval (synthetic) · Approval');
+      choose('sort-select', 'Dimension (A–Z)');
+      switchTo('document');
+
+      expect(selectedLabel('filter-identity-slice')).toBe('All Identity Slices');
+      expect(selectedLabel('sort-select')).toBe('Onset (earliest first)');
+      expect(cardSummary().length).toBe(1);
+    });
+
+    it('should render the Workflow runtime detail with durations and source instance states', () => {
+      cards()[2].click();
+      fixture.detectChanges();
+
+      expect(normalize(detail()?.querySelector('[data-testid="detail-dimension"]')?.textContent)).toBe(
+        'Dimension: Workflow runtime'
+      );
+      for (const label of ['Onset', 'Latest observed', 'Duration', 'Observed', 'Observed Baseline', 'Magnitude']) {
+        expect(detailStat(label)).not.toBe('');
+      }
+      expect(detailStat('Observed')).toMatch(/^Mean \d+ (d|h) \d+ (h|min) across 6 observations$/);
+      expect(evidenceItems().length).toBe(6);
+      for (const item of evidenceItems()) {
+        expect(normalize(item.querySelector('[data-testid="evidence-value-label"]')?.textContent)).toBe(
+          'Workflow runtime (compared value)'
+        );
+        const context = Array.from(item.querySelectorAll('[data-testid="evidence-context-field"]'));
+        expect(childText(context.at(-1))).toBe('Instance state Completed');
+      }
+    });
+
+    it('should label each workflow Evidence value by its dimension', () => {
+      const labels = () =>
+        evidenceItems().map(i =>
+          normalize(i.querySelector('[data-testid="evidence-value-label"]')?.textContent)
+        );
+
+      expect(new Set(labels())).toEqual(new Set(['Task duration (compared value)']));
+
+      cards()[1].click();
+      fixture.detectChanges();
+
+      expect(new Set(labels())).toEqual(new Set(['Response time (compared value)']));
+      expect(evidenceItems()[0].textContent).toContain('Decision agent');
+    });
+
+    it('should label document Evidence values by their dimension', () => {
+      switchTo('document');
+
+      expect(
+        evidenceItems().map(i =>
+          normalize(i.querySelector('[data-testid="evidence-value-label"]')?.textContent)
+        )
+      ).toEqual(Array(4).fill('Amount (compared value)'));
+    });
+  });
+
   describe('replay source line', () => {
     it('should state neutral document replay source facts', () => {
       expect(normalize(replaySource()?.textContent)).toBe(
@@ -856,7 +977,7 @@ describe('DashboardComponent with a non-replay repository', () => {
     expect(normalize(el.querySelector('[data-testid="detail-empty"]')?.textContent)).toBe(
       'No Divergence to show.'
     );
-    expect(kpiValues(el)).toEqual(['0', '0', '0', '—']);
+    expect(kpiValues(el)).toEqual(['0', '0', '0', '0 of 1', '—']);
   });
 
   it('should keep the tab panel focusable when it has no focusable content', () => {
@@ -884,7 +1005,7 @@ describe('DashboardComponent with a non-replay repository', () => {
     );
     expect(el.querySelector('[data-testid="empty-state"]')).toBeNull();
     expect(el.querySelector('[data-testid="detail-empty"]')).toBeTruthy();
-    expect(kpiValues(el)).toEqual(['—', '—', '—', '—']);
+    expect(kpiValues(el)).toEqual(['—', '—', '—', '—', '—']);
     expect(el.querySelector('[data-testid="kpi-scope-note"]')).toBeNull();
   });
 
@@ -919,7 +1040,7 @@ describe('DashboardComponent with a non-replay repository', () => {
     });
 
     it('should show pending KPIs and disabled controls while loading', () => {
-      expect(kpiValues(el)).toEqual(['—', '—', '—', '—']);
+      expect(kpiValues(el)).toEqual(['—', '—', '—', '—', '—']);
       expect(byTestId(el, 'kpi-card-document-total')?.textContent).toContain('Divergence data is loading');
       el.querySelectorAll<HTMLSelectElement>('.filter-select').forEach(s => expect(s.disabled).toBe(true));
       expect(byTestId<HTMLButtonElement>(el, 'clear-filters')?.disabled).toBe(true);
@@ -1315,6 +1436,57 @@ describe('DashboardComponent Divergence Analysis (STEP-06)', () => {
         expect(text).not.toMatch(pattern);
       }
     }
+  });
+
+  it('should keep analysis copy within CAV Level 1 wording for every workflow Divergence', () => {
+    switchTo('workflow');
+    for (const index of [0, 1, 2]) {
+      click(cards()[index]);
+      click(openButton());
+      const text = spacedText(byTestId('analysis-view'));
+
+      expect(analysis()?.dataset['divergenceId']).toBe(component.selectedDivergence()?.id);
+      for (const pattern of Object.values(DASHBOARD_GUARDRAIL_PATTERNS)) {
+        expect(text).not.toMatch(pattern);
+      }
+      click(backButton());
+    }
+  });
+
+  describe('workflow analysis (STEP-07)', () => {
+    beforeEach(() => switchTo('workflow'));
+
+    it('should open from the selected workflow Divergence and return focus on back', async () => {
+      click(cards()[2]);
+      click(openButton());
+      await settle();
+
+      expect(document.activeElement?.id).toBe('analysis-heading');
+      expect(normalize(byTestId('analysis-identity-slice')?.textContent)).toBe(
+        'Invoice approval (synthetic) · Workflow runtime'
+      );
+
+      click(backButton());
+      await settle();
+
+      expect(document.activeElement).toBe(openButton());
+      expect(cards()[2].getAttribute('aria-current')).toBe('true');
+    });
+
+    it('should chart Workflow runtime Evidence with a numeric summary and table', () => {
+      click(cards()[2]);
+      click(openButton());
+
+      expect(el.querySelector('canvas')?.getAttribute('aria-label')).toBe(
+        'Chart of Workflow runtime for Invoice approval (synthetic) · Workflow runtime: observed ' +
+          'Evidence values over time against the Observed Baseline mean and range'
+      );
+      expect(normalize(byTestId('analysis-chart-summary')?.textContent)).toMatch(
+        /^The chart plots 6 Evidence observations from 5 Sep 2026, 07:03 UTC to .+\. 6 are outside the Observed Baseline range of /
+      );
+      expect(el.querySelectorAll('[data-testid="analysis-table-row"]').length).toBe(6);
+      expect(charts.live()[0].configs[0].type).toBe('line');
+    });
   });
 
   describe('without an available Divergence', () => {

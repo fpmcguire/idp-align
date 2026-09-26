@@ -4,6 +4,7 @@ import {
 } from '../../../../testing/claim-guardrail-patterns';
 import {
   amountDivergence,
+  taskOutcomeDivergence,
   vendorRepresentationDivergence,
   workflowDivergences,
 } from '../../../../testing/divergence-builders';
@@ -116,6 +117,38 @@ describe('Divergence analysis view', () => {
         'A categorical Observed Baseline has no numeric range, so none is drawn.',
       );
     });
+
+    // Replay data has no categorical workflow Divergence, so this case is covered by specs only.
+    it('should compare reference and Evidence shares for a workflow task outcome', () => {
+      const divergence = taskOutcomeDivergence();
+
+      expect(toDivergenceChartModel(divergence)).toEqual({
+        kind: 'categorical',
+        dimension: 'task-outcome',
+        categories: [
+          {
+            value: 'decision:Approve',
+            label: 'Decision: Approve',
+            referenceShare: 1,
+            observedShare: 0,
+          },
+          {
+            value: 'error-exit:Test error exit (synthetic)',
+            label: 'Error exit: Test error exit (synthetic)',
+            referenceShare: 0,
+            observedShare: 1,
+          },
+        ],
+        minValueShare: 0.1,
+      });
+      expect(analysisTable(divergence).rows.map(r => [r.value, r.comparison, r.position])).toEqual(
+        Array(3).fill([
+          'Error exit: Test error exit (synthetic)',
+          '0%',
+          'Outside the Observed Baseline',
+        ]),
+      );
+    });
   });
 
   describe('dimension options', () => {
@@ -213,7 +246,12 @@ describe('Divergence analysis view', () => {
   });
 
   it('should keep all analysis copy within CAV Level 1 wording', () => {
-    const divergences = [amountDivergence(), vendorRepresentationDivergence(), ...workflowDivergences()];
+    const divergences = [
+      amountDivergence(),
+      vendorRepresentationDivergence(),
+      ...workflowDivergences(),
+      taskOutcomeDivergence(),
+    ];
     for (const divergence of divergences) {
       const copy = allCopy(divergence);
       for (const pattern of [...Object.values(CLAIM_GUARDRAIL_PATTERNS), SEVERITY_RISK_PATTERN]) {

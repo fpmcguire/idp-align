@@ -73,3 +73,18 @@ export function workflowDivergences(): readonly Divergence[] {
   ];
   return detect([testApprovalSlice, testRuntimeSlice], observations);
 }
+
+/**
+ * One categorical workflow `task-outcome` Divergence: three Approval tasks that left through an
+ * error exit after reference tasks that all ended with the "Approve" decision. Test data only;
+ * replay data has no categorical workflow Divergence.
+ */
+export function taskOutcomeDivergence(): Divergence {
+  const observations = [
+    ...REFERENCE_AMOUNTS.map((_, i) => taskObservation(`task-${i}`, at(i))),
+    ...CANDIDATE_DAYS.slice(0, 3).map((day, i) =>
+      taskObservation(`task-c${i}`, at(day), { errorExit: 'Test error exit (synthetic)' }),
+    ),
+  ];
+  return detect([testApprovalSlice], observations).find(d => d.dimension === 'task-outcome')!;
+}

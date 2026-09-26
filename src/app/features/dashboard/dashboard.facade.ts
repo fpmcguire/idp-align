@@ -50,6 +50,12 @@ export interface DivergenceCounts {
   readonly resolved: number;
 }
 
+/** How many of a stream's Identity Slices have at least one Divergence, within that stream only. */
+export interface IdentitySliceCoverage {
+  readonly withDivergences: number;
+  readonly total: number;
+}
+
 /**
  * The Divergence to show in a stream's detail view. `hiddenByFilters` is true when the chosen
  * Divergence exists but the current filters hide it; the detail then shows no Divergence.
@@ -203,6 +209,19 @@ export class DashboardFacade {
       total: divergences.length,
       ongoing: divergences.filter(d => d.status === 'ongoing').length,
       resolved: divergences.filter(d => d.status === 'resolved').length,
+    };
+  }
+
+  /**
+   * Identity Slices in the stream with at least one Divergence, out of all the stream's Identity
+   * Slices, whatever the filters; null while unavailable. It counts existing records only.
+   */
+  identitySliceCoverage(stream: StreamKind): IdentitySliceCoverage | null {
+    const state = this.states[stream]();
+    if (state.status !== 'ready') return null;
+    return {
+      withDivergences: new Set(state.divergences.map(d => d.identitySlice.id)).size,
+      total: state.identitySlices.length,
     };
   }
 

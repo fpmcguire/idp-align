@@ -2,6 +2,7 @@ import { Component, computed, input } from '@angular/core';
 import { DivergenceDimension } from '../../../../domain/divergence-dimension';
 import { Evidence } from '../../../../domain/evidence';
 import {
+  comparedValueLabel,
   evidenceContextFields,
   formatDimensionValue,
   formatSignedDifference,
@@ -21,6 +22,8 @@ import {
 export class EvidenceTraceComponent {
   readonly evidence = input.required<Evidence>();
   readonly dimension = input.required<DivergenceDimension>();
+
+  readonly valueLabel = computed(() => comparedValueLabel(this.dimension()));
 
   readonly items = computed(() => {
     const dimension = this.dimension();

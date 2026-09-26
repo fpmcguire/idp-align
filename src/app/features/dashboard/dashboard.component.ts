@@ -32,10 +32,12 @@ interface StreamConfig {
   sourceNote: string;
   identitySliceLabel: string;
   kpiScopeNote: string;
+  /** Names the Identity Slices counted by the Identity Slice KPI, within this stream only. */
+  identitySliceKpiNote: string;
 }
 
 interface KpiView {
-  metric: 'total' | 'ongoing' | 'resolved' | 'trend';
+  metric: 'total' | 'ongoing' | 'resolved' | 'identity-slices' | 'trend';
   label: string;
   value: string;
   note: string;
@@ -65,14 +67,16 @@ const STREAMS: readonly StreamConfig[] = [
       'Observes document index-field behavior. Replay data is synthetic and modeled on public DocuWare Platform REST API documentation.',
     identitySliceLabel: 'Identity Slice (vendor / document type)',
     kpiScopeNote: 'Across vendor / document type Identity Slices',
+    identitySliceKpiNote: 'Vendor / document type Identity Slices in this stream',
   },
   {
     kind: 'workflow',
     label: 'Workflow stream',
     sourceNote:
       'Observes workflow execution behavior. Replay data is synthetic and modeled on public DocuWare Workflow Analytics API documentation.',
-    identitySliceLabel: 'Identity Slice (workflow step / route)',
+    identitySliceLabel: 'Identity Slice (workflow step / runtime)',
     kpiScopeNote: 'Across workflow step and runtime Identity Slices',
+    identitySliceKpiNote: 'Workflow steps and Workflow runtime in this stream',
   },
 ];
 
@@ -205,6 +209,7 @@ export class DashboardComponent {
 
   kpis = computed((): KpiView[] => {
     const counts = this.facade.counts(this.activeStream());
+    const coverage = this.facade.identitySliceCoverage(this.activeStream());
     const pending =
       this.listState() === 'loading'
         ? 'Divergence data is loading'
@@ -229,7 +234,18 @@ export class DashboardComponent {
         value: count(counts?.resolved),
         note: counts ? 'Finding lifecycle status' : pending,
       },
-      { metric: 'trend', label: 'Trend', value: '—', note: 'Trend analysis is added in a later Step' },
+      {
+        metric: 'identity-slices',
+        label: 'Identity Slices with Divergences',
+        value: coverage ? `${coverage.withDivergences} of ${coverage.total}` : '—',
+        note: coverage ? this.activeConfig().identitySliceKpiNote : pending,
+      },
+      {
+        metric: 'trend',
+        label: 'Trend',
+        value: '—',
+        note: "Not charted here. Divergence Analysis charts a selected Divergence's Evidence over time.",
+      },
     ];
   });
 
