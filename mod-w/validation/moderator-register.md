@@ -1863,6 +1863,44 @@ The QA-026 accessibility rework is closed. QA-027 remains a non-blocking process
 - QA-024 remains a known duration-display limitation carried from STEP-04.
 - STEP-06 Chart.js analysis remains planned and is not included in this acceptance.
 
+### A-048 - STEP-06 Step Approval Before Development Team Briefing
+
+**Status:** Approved  
+**Date:** 2026-09-26  
+**Moderator:** Frank McGuire  
+**Role approved:** Tech Lead  
+**Gate:** Step approval before Development Team briefing  
+**Step:** `mod-w/step-06.md`  
+**Next authorized action:** Development Team may be briefed on STEP-06 and may prepare an implementation plan. Development Team may not write code until the Moderator approves that implementation plan in the Moderator Register.
+
+#### Approved Artifacts
+
+- `mod-w/step-06.md` - STEP-06 Divergence Analysis Chart View definition
+- `mod-w/roadmap.md` - STEP-06 status updated to approved for Development Team planning
+- `mod-w/design/design-spec.md` - DS-015 and related analysis-view design intent
+- `mod-w/architecture.md` - D2, D3, D6, D7, D9, D11, and D13 boundaries
+- `mod-w/domain-language.md`
+- `mod-w/language-matrix.md`
+
+#### Approval Summary
+
+The Moderator approves `mod-w/step-06.md` as the active STEP-06 definition:
+
+**Divergence Analysis Chart View**
+
+STEP-06 is approved for Development Team briefing and implementation planning. The Step may implement a bundled Chart.js analysis surface for the selected Divergence, including data-backed metric switching, truthful numeric and categorical representations, baseline and Evidence context, accessible non-canvas summaries, and responsive behavior.
+
+#### Conditions
+
+- Development Team must implement only the approved STEP-06 scope.
+- The implementation plan must explicitly choose and justify the routed or in-page analysis-view pattern before code changes.
+- Chart.js and `chartjs-plugin-annotation` must be bundled dependencies; CDN or runtime third-party script loading is not authorized.
+- Metric options and chart data must derive from existing selected-stream Divergence, Observed Baseline, and Evidence data. No chart-only mock data or direct replay-fixture imports are authorized.
+- Numeric and categorical Divergences must be represented truthfully; categorical data must not receive a fabricated numeric confidence band.
+- Existing baseline and sustained Divergence logic, fixtures, repository boundaries, STEP-05 interactions, and responsive behavior must remain unchanged except for approved presentation wiring.
+- No CAV Level 2+, Level 3+, Attribution, business judgment, severity/risk, alert/anomaly, live DocuWare, credentials, backend/proxy, About, or user-action workflow scope is authorized.
+- The Development Team must obtain implementation-plan approval before writing code. Tech Lead review is required before QA acceptance.
+
 ---
 
 MOD-W v5.0.1
