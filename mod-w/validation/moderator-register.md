@@ -2392,4 +2392,49 @@ The Moderator approves the Development Team implementation plan in `mod-w/step-0
 
 This entry does not accept the Tech Lead's implementation review, accept QA, record Product Owner sign-off, update roadmap completion status, or complete STEP-08. The required sequence remains implementation, Tech Lead review and Moderator acceptance, QA, Product Owner review of About/reference copy and research references, then a separately requested Moderator final gate.
 
+### A-063 - STEP-08 Tech Lead Review Acceptance
+
+- **Status:** Accepted - Pass for QA
+- **Date:** 2026-09-26
+- **Moderator:** Frank McGuire
+- **Role accepted:** Tech Lead
+- **Gate:** Tech Lead implementation review acceptance before QA
+- **Step:** `mod-w/step-08.md`
+- **Tech Lead verdict:** Pass for QA; no Must Fix or Could Fix Later findings
+- **Next authorized action:** QA may begin independent STEP-08 review against the accepted scope and evidence below.
+
+#### Accepted Artifacts And Evidence
+
+- A-060 STEP-08 Step approval
+- A-062 STEP-08 Development Team implementation-plan approval
+- `mod-w/step-08.md`
+- `mod-w/step-08-implementation-plan.md`
+- `review.md` - Tech Lead Review - STEP-08, verdict "Pass for QA"
+- Implementation commits: `3095e05` (plan and review), `ae01eda` (references and current-state docs), and `64bd924` (IDP-Align E2E coverage)
+- Tech Lead reports Node.js v26.0.0 verification: lint passed; build passed after outside-sandbox rerun for known Angular/esbuild `spawn EPERM`; unit/component tests passed (30 files, 500 tests); Playwright E2E passed (42 Chromium tests); `git diff --check` passed.
+
+#### Acceptance Summary
+
+The Moderator accepts the Tech Lead implementation review. The reviewed implementation is within A-062: Playwright starter coverage is replaced with local IDP-Align E2E tests served from the production build; PO-1 About links use safe external-link attributes; the R10 research/reference artifact records consulted sources and unverified candidates omitted; the README current-state update is bounded to the approved scope; `src/testing` helpers are confined to tests/E2E; and no connector work is included.
+
+The review confirms preservation of CAV Level 1 boundaries, QA-028/QA-029 as accepted non-blocking notes, and categorical workflow behavior as spec-covered only. It reports no changes to fixtures, detector/domain logic, packages, backend, live access, user actions, or cross-stream reconciliation.
+
+#### QA Handoff
+
+QA is authorized to review STEP-08 against A-060, A-062, `mod-w/step-08.md`, `mod-w/step-08-implementation-plan.md`, `review.md`, commits `3095e05`, `ae01eda`, and `64bd924`, and the verification evidence reported in `review.md`.
+
+QA should pay particular attention to:
+
+- E2E runs against local IDP-Align and fully replaces the Playwright starter behavior.
+- About PO-1 API references, their safe external-link attributes, and the scoped current-state copy.
+- `mod-w/docs/research-references.md`: source relevance, consulted-source accuracy, and omission/reporting of unverifiable candidates.
+- CAV Level 1 claim guardrails across UI, docs, README, and E2E, including factual `Instance state` handling.
+- No fixture, detector, domain, package, backend, connector, live-access, user-action, Attribution, or cross-stream reconciliation changes.
+- QA-028/QA-029 remain accepted non-blocking notes; categorical workflow behavior remains spec-covered only.
+- Non-blocking verification note: a commit-range `git diff --check b389389..64bd924` flags trailing spaces on two Markdown metadata lines in `review.md`. They appear to be Markdown hard-break formatting; determine whether they are intentional or should be cleaned up. This does not block QA.
+
+#### Gate Boundary
+
+This entry accepts only the Tech Lead implementation review and authorizes QA to begin. It is not QA acceptance, Product Owner approval, roadmap completion, or the STEP-08 final Moderator gate. Product Owner review of the About/reference copy and `mod-w/docs/research-references.md` remains required after QA and before the final Moderator gate.
+
 MOD-W v5.0.1
