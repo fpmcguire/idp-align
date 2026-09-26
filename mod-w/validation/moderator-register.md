@@ -2324,4 +2324,72 @@ STEP-07 passes its final Moderator gate and is complete. Roadmap advancement is 
 
 This entry authorizes briefing and implementation planning only. It is not implementation-plan approval, Tech Lead review acceptance, QA acceptance, Product Owner final sign-off, or STEP-08 completion. Those gates and STEP-specific verification evidence remain required before a future final Moderator gate. It resolves A-058 findings M-STEP08-01 and M-STEP08-02; remaining A-058 requirements apply to their respective later gates.
 
+### A-061 - STEP-08 Development Team Implementation Plan Decision
+
+- **Status:** Not approved - required review artifacts unavailable
+- **Date:** 2026-09-26
+- **Moderator:** Frank McGuire
+- **Gate:** Implementation-plan approval before Development Team writes code or documentation
+- **Step:** `mod-w/step-08.md`
+- **Reported Tech Lead verdict:** Pass for Moderator implementation-plan approval, with conditions
+- **Next authorized action:** Submit the Development Team implementation plan and Tech Lead review as accessible project artifacts for Moderator review. No STEP-08 implementation is authorized.
+
+#### Decision Basis
+
+The requested Development Team implementation plan is not present in the workspace, and no STEP-08 Tech Lead review artifact is available. The current `review.md` contains the STEP-07 review only. The reported Tech Lead verdict is noted, but without the plan and review evidence the Moderator cannot verify the proposed work against A-060 or approve its implementation. This is a documentation/evidence blocker, not a finding that the unseen plan's technical approach is defective.
+
+#### Required Review Conditions
+
+On resubmission, verify that the implementation plan explicitly incorporates all A-060 conditions and the requested STEP-08 decisions:
+
+- Approve a zero-dependency static `dist` server for Playwright E2E; treat Chromium-only E2E as the gate, with cross-engine runs optional.
+- Keep the README update within STEP-08 R10/R11 scope to correct stale STEP-01-era public-facing status claims.
+- Correct the QA-031 assumption: current browser replay data does not render `Instance state: Failed`; it is only an accepted factual source-state label if present. Do not require it to render.
+- Cite only research/reference sources actually fetched or read during implementation; list omitted unverified sources rather than guessing.
+- Restrict `src/testing` guardrail imports to test/E2E code; never import them in production code.
+- Do not authorize connector work; it is outside STEP-08 scope.
+- Require Product Owner review of About/reference copy and the research/reference artifact after QA and before the final Moderator gate.
+- Preserve CAV Level 1 boundaries, QA-028/QA-029 as accepted non-blocking notes, and categorical workflow behavior as spec-covered only. No new behavior/data or fixture changes, detector/baseline changes, live access, user workflows, cross-stream reconciliation, Attribution, or Level 2+ claims are authorized.
+
+No approval is granted by this entry. Development Team may not write or modify STEP-08 implementation code or documentation until the complete plan and Tech Lead review are reviewed and a separate Moderator implementation-plan approval is recorded. This is not Tech Lead review acceptance, QA acceptance, Product Owner sign-off, or STEP-08 final acceptance.
+
+### A-062 - STEP-08 Development Team Implementation Plan Approval
+
+- **Status:** Approved with conditions
+- **Date:** 2026-09-26
+- **Moderator:** Frank McGuire
+- **Role approved:** Development Team
+- **Gate:** Implementation-plan approval before implementation
+- **Step:** `mod-w/step-08.md`
+- **Tech Lead verdict:** Pass for Moderator implementation-plan approval, with conditions
+- **Next authorized action:** Development Team may implement only the approved plan and conditions below, run the planned verification, and hand off the diff and evidence to the Tech Lead for implementation review. QA must not begin until the Moderator accepts that Tech Lead review.
+
+#### Approved Artifacts
+
+- `mod-w/step-08.md`, approved under A-060
+- `mod-w/step-08-implementation-plan.md`, reviewed for this gate
+- `review.md` - Tech Lead Review - STEP-08 Implementation Plan, verdict "Pass for Moderator implementation-plan approval, with conditions"
+- A-060 STEP-08 Step approval
+- A-061 prior non-approval and resubmission conditions; TL-PLAN-01 is closed in the reviewed plan review
+
+#### Approval Conditions
+
+- The zero-dependency static server for the production `dist/idp-align/browser` output is approved for Playwright E2E. The server must remain local to the test run and serve the built application with route fallback as planned.
+- Chromium-only E2E is approved as the STEP-08 gate. Cross-engine runs may be supplied as optional evidence and are not required for acceptance.
+- The README update described in section 8 of the implementation plan is approved within STEP-08 R10/R11 scope, limited to correcting stale STEP-01-era public-facing status claims and documenting the E2E command without expanding CAV claims.
+- The research/reference artifact may cite only sources actually fetched and read during implementation. Omit unverifiable candidates and report them in the handoff; do not guess URLs, source contents, or prior research provenance.
+- Imports from `src/testing` are permitted only in test and E2E code. No production code may import testing helpers.
+- Connector work is explicitly excluded and is not authorized or relevant to STEP-08.
+- Product Owner review of the updated About/reference copy and `mod-w/docs/research-references.md` is required after QA and before the final Moderator gate.
+- Correct the QA-031 assumption as in the reviewed plan: current browser-visible Workflow runtime Evidence shows `Instance state: Completed`; `Failed` is only an accepted factual source-state label if present. E2E must not require it to render. Synthetic helper controls may test the contextual allow/reject behavior without changing replay data.
+- Preserve CAV Level 1 boundaries. No new CAV behavior, fixture/data changes, detector/domain/baseline changes, live access, user actions, cross-stream reconciliation, Attribution, or Level 2+ claims are authorized.
+- QA-028 and QA-029 remain accepted non-blocking carry-forward notes. No categorical workflow fixture or browser-coverage changes are authorized; categorical behavior remains spec-covered only.
+- No package/dependency, backend/proxy, non-replay adapter, credentials/OAuth, lifecycle semantics, or chart-library changes are included. Any newly identified need outside the approved plan must stop and return for separate Moderator approval.
+
+#### Decision And Gate Boundary
+
+The Moderator approves the Development Team implementation plan in `mod-w/step-08-implementation-plan.md` with the conditions above. Development Team may now implement only that approved plan, execute its verification, and hand off to the Tech Lead.
+
+This entry does not accept the Tech Lead's implementation review, accept QA, record Product Owner sign-off, update roadmap completion status, or complete STEP-08. The required sequence remains implementation, Tech Lead review and Moderator acceptance, QA, Product Owner review of About/reference copy and research references, then a separately requested Moderator final gate.
+
 MOD-W v5.0.1

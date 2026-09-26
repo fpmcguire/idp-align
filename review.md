@@ -1,9 +1,9 @@
-# Tech Lead Review - STEP-07
+# Tech Lead Review - STEP-08
 
-**Step:** STEP-07 - Workflow Stream Parity And Cross-Stream Consistency  
+**Step:** STEP-08 - Quality Gate Completion And Documentation  
 **Review date:** 2026-09-26  
 **Reviewer:** Codex, acting as Tech Lead  
-**Implementation package reviewed:** Current uncommitted Development Team STEP-07 implementation after A-054 implementation-plan approval  
+**Implementation package reviewed:** Current uncommitted Development Team STEP-08 implementation after A-062 implementation-plan approval  
 **Verdict:** Pass for QA
 
 ---
@@ -18,19 +18,23 @@ No Must Fix or Could Fix Later findings.
 
 `mod-w/validation/moderator-register.md` contains the required approvals before this review:
 
-- A-053 approves `mod-w/step-07.md` as the active STEP-07 definition before Development Team briefing.
-- A-054 approves the Development Team implementation plan, explicitly selecting KPI Option C and authorizing implementation with Tech Lead conditions.
+- A-060 approves `mod-w/step-08.md` for Development Team briefing and implementation planning.
+- A-061 records the prior non-approval because the plan and Tech Lead plan review were not workspace artifacts.
+- A-062 approves `mod-w/step-08-implementation-plan.md` and authorizes implementation within its conditions.
 
-The implementation matches A-054's approved decisions:
+The implementation matches A-062:
 
-- A fifth shared KPI, "Identity Slices with Divergences", is added for both streams.
-- The KPI counts within the active stream only and does not compare Document and Workflow streams.
-- The KPI uses existing facade/domain data and does not count decision agents or routes.
-- Workflow filter copy now reflects the actual workflow Identity Slice set: workflow step / runtime.
-- Evidence values are labeled by Dimension, and workflow runtime state values are formatted as source state names.
-- The categorical workflow case is test-only and does not alter replay fixtures or browser-visible data.
+- Playwright starter coverage is replaced by local IDP-Align E2E coverage.
+- E2E uses a zero-dependency static server for the production `dist/idp-align/browser` output.
+- Chromium-only E2E is used as the gate.
+- PO-1 is addressed with About links to the public DocuWare Platform REST API and Workflow Analytics API documentation.
+- A durable `mod-w/docs/research-references.md` artifact was added.
+- README stale STEP-01-era public-facing status claims were corrected within the approved R10/R11 documentation scope.
+- QA-031 is handled correctly: current browser-visible runtime Evidence renders `Instance state: Completed`; `Failed` is allowed only as factual source-state context if present and is not required to render.
+- QA-028 and QA-029 remain accepted non-blocking notes.
+- Categorical workflow behavior remains spec-covered only.
 
-The implementation remains within STEP-07 scope. It does not change domain detection, baseline derivation, thresholds, reference windows, replay fixtures, repositories/adapters, About files, routes, package/chart dependencies, live integration, backend/proxy code, user action workflows, or lifecycle status semantics.
+The implementation remains within STEP-08 scope. It does not change replay fixtures, domain logic, detectors, thresholds, reference windows, baseline semantics, Evidence construction, lifecycle status semantics, dashboard/shared UI production code, packages, chart libraries, backend/proxy code, live access, credentials, OAuth, non-replay adapters, user actions, or CAV Level 2+ behavior.
 
 ---
 
@@ -38,40 +42,30 @@ The implementation remains within STEP-07 scope. It does not change domain detec
 
 Architecture alignment is met:
 
-- D1/D2: The dashboard continues to use one shared stream view and presentational shared Divergence UI components.
-- D3/D6: Workflow cards, detail, Observed Baseline, Evidence Trace, and analysis surfaces continue to consume existing Divergence records and Evidence.
-- D9: Runtime copy remains within CAV Level 1 terminology and avoids Level 2+, Level 3+, Attribution, alert/anomaly, severity/risk, violation, defect, non-conformance, and business-judgment claims.
-- D11: Focused unit/component coverage was added for workflow KPI parity, filters, sorting, detail/Evidence formatting, analysis behavior, categorical spec coverage, and guardrail copy.
-- D13: Dashboard and shared UI code do not import replay fixtures directly; the new KPI is computed from facade state populated through the repository boundary.
+- D10: Research/reference documentation stays in a MOD-W documentation artifact rather than runtime code.
+- D11: STEP-08 adds committed E2E coverage for dashboard behavior and preserves the unit/component quality gate.
+- D12: The routed About view now reflects implemented current state and includes public API references without implying endorsement, private access, confidential information, production readiness, or a DocuWare defect/gap claim.
+- D13: Dashboard/shared UI production code remains behind the existing facade/repository boundary and does not import replay fixtures directly.
 
-Domain-language alignment is met. The implementation uses Observed Baseline, Divergence, Evidence, Identity Slice, Dimension, magnitude, onset, duration, and lifecycle status consistently. Workflow decision agent, route/error, response time, task duration, runtime, and instance state remain factual Evidence context and are not presented as cause or Attribution.
-
----
-
-## Design And Reference Implementation
-
-The relevant STEP-07 design intent is satisfied within approved production constraints:
-
-- DS-003/DS-010: Workflow summary KPIs now include a data-backed Identity Slice coverage card while retaining the shared KPI pattern.
-- DS-008: Workflow filter copy is aligned with actual workflow step/runtime slices.
-- DS-005/DS-006/DS-007/DS-014: Workflow detail, Observed Baseline context, and Evidence Trace formatting are clearer and remain reconstructable.
-- DS-015: Existing workflow analysis behavior is preserved, including Workflow Approval metric switching and Workflow runtime chart coverage.
-
-Reference implementation disposition is honored: the design intent of equal first-class Document and Workflow streams is adopted through Angular signals, typed view models/configuration, shared presentational components, and tests rather than copied prototype code.
+Domain-language alignment is met. UI, E2E, README, and documentation changes keep CAV Level 1 wording, use Observed Baseline and Divergence consistently, and avoid treating workflow Evidence context as Attribution or root cause.
 
 ---
 
-## Review Notes
+## E2E And Documentation Coverage
 
-The "Identity Slices with Divergences" KPI intentionally ignores active filters, matching the existing KPI scope note: "Counts include every Divergence in this stream. Filters do not change them." This is acceptable under A-054 because it is within-stream coverage, not cross-stream comparison.
+The committed Playwright suite now exercises IDP-Align behavior rather than `playwright.dev`:
 
-The Trend KPI remains a non-charted dashboard summary region, but its note now points to the implemented selected-Divergence analysis surface instead of a stale later-Step statement.
+- `dashboard-document.spec.ts` covers Document stream load, KPIs, selection, detail, Observed Baseline, and Evidence.
+- `dashboard-workflow.spec.ts` covers Workflow stream KPIs, detail/Evidence context, runtime instance state, and stream independence.
+- `stream-tabs-a11y.spec.ts` covers tab roles, roving tabindex, arrow/Home/End behavior, and panel wiring.
+- `filters-sorting.spec.ts` covers filters, sorting, hidden selection, filtered-empty, clear filters, per-stream filter/sort state, and unfiltered KPI counts.
+- `divergence-analysis.spec.ts` covers analysis open/back, focus, chart rendering, Workflow Approval metric switching, and stream-switch closure.
+- `responsive.spec.ts` covers 1280px, 1279px, and 375px layouts and page-level horizontal overflow.
+- `about.spec.ts` covers About navigation, public API reference links, safe external-link attributes, and removal of stale STEP-01-era copy.
+- `claim-guardrails.spec.ts` covers rendered CAV Level 1 guardrails across About and both streams, including analysis views and contextual `Instance state` source-state handling.
+- `documentation.spec.ts` covers the durable `mod-w/docs/research-references.md` artifact.
 
-Replay data still exposes no categorical workflow Divergence in the browser. The new `taskOutcomeDivergence()` builder is limited to tests and provides workflow categorical coverage without changing fixtures. QA should preserve the categorical browser-coverage limitation.
-
-QA-028 uneven duration tick formatting and QA-029 potential keyboard access for a future horizontally scrolling chart table remain accepted carry-forward notes. STEP-07 does not route either item for rework.
-
-The Development Team reports a stale About sentence separately. About files remain untouched, as required by STEP-07 and A-054.
+The plan-approved limitation remains honest: loading/unavailable/retry and categorical workflow behavior are still component/spec-covered because current replay data cannot render them in the browser.
 
 ---
 
@@ -79,11 +73,14 @@ The Development Team reports a stale About sentence separately. About files rema
 
 Static review found:
 
-- No `src/app/features/dashboard` or `src/app/shared/ui/divergence` production import of `data/replay` or fixture files.
-- No live-call usage (`HttpClient`, `fetch`, or `XMLHttpRequest`) in the changed production surfaces.
-- No CDN/runtime third-party script-loading strings in the changed production surfaces.
-- No diff in `package.json`, `package-lock.json`, `angular.json`, `src/app/domain`, `src/app/data`, or `src/app/features/about`.
-- Runtime guardrail grep over dashboard/shared Divergence production code found no new forbidden CAV Level 2+, Attribution, severity/risk, alert/anomaly, violation, defect, non-conformance, correlation, or reconciliation wording.
+- No `playwright.dev` references or external navigation dependencies in `e2e/`.
+- E2E external URLs are limited to About/reference link assertions.
+- No production file imports `src/testing`.
+- No direct replay-fixture imports in `src/app/features` or `src/app/shared`.
+- No diff under `src/app/domain`, `src/app/data`, `src/app/shared`, `src/app/features/dashboard`, `package.json`, `package-lock.json`, or `angular.json`.
+- `git diff --check` passes.
+
+The working tree has a mixed staged/unstaged state from prior role work, but the reviewed content is present in the working tree. The Development Team did not edit `qa.md` or roadmap completion status.
 
 ---
 
@@ -94,32 +91,47 @@ Verification run under Node.js v26.0.0:
 - `fnm exec --using=v26.0.0 node --version` - `v26.0.0`.
 - `fnm exec --using=v26.0.0 npm.cmd run lint` - Pass.
 - `fnm exec --using=v26.0.0 npm.cmd run build` - Pass after outside-sandbox rerun for known Angular/esbuild `spawn EPERM`.
-- `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` - Pass after outside-sandbox rerun for known Angular/esbuild `spawn EPERM`: 30 files, 496 tests.
+- `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` - Pass after outside-sandbox rerun for known Angular/esbuild `spawn EPERM`: 30 files, 500 tests.
+- `fnm exec --using=v26.0.0 npm.cmd run test:e2e` - Pass: 42 tests, Chromium, 53.4 seconds.
+- `git diff --check` - Pass.
 
 Build output:
 
-- Initial total: 266.65 kB raw / 76.42 kB estimated transfer.
+- Initial total: 266.65 kB raw / 76.41 kB estimated transfer.
 - Lazy `dashboard-component`: 251.42 kB raw / 70.30 kB estimated transfer.
-- Lazy `about-component`: 10.41 kB raw / 3.06 kB estimated transfer.
+- Lazy `about-component`: 11.24 kB raw / 3.22 kB estimated transfer.
 
-Development Team reports scratchpad browser evidence with 73/73 checks passing, covering KPIs, cards, detail and Evidence in both streams, Workflow Approval metric switching, Workflow runtime chart behavior, keyboard/focus flows, filter-hidden and clear-filters handling, analysis closing on stream switch, wording probes, no external requests, no console errors, and responsive layouts at 1440px, 1280px, 1279px, 768px, and 375px.
+The E2E guarded page fixture fails tests on external network requests, console errors, or page errors. The reviewed run passed with no such failures.
+
+---
+
+## Review Notes
+
+The README update touches two stale lines outside the old "Current Step" block: "dashboard foundation" and "two planned streams." This is acceptable under A-062 because the README update was approved to correct stale STEP-01-era public-facing status claims and document E2E without expanding CAV claims.
+
+The research/reference artifact omits unverifiable or unfetched candidates, including the ACM survey page that returned 403, NannyML, and the DocuWare developer portal. This matches A-062's requirement not to guess or cite sources not actually fetched/read.
+
+`documentation.spec.ts` intentionally scans the "How it informed IDP-Align scope" cells as IDP-Align claim copy and does not scan "Limits" cells where adjacent tools' own terms are quoted for contrast. This is acceptable because the artifact explicitly frames adjacent tooling as prior art and not IDP-Align behavior.
+
+The `NO_COLOR` / `FORCE_COLOR` warnings in the Playwright run are tool/environment warnings, not app console errors. The guarded page fixture would fail on browser console errors.
 
 ---
 
 ## QA Handoff Status
 
-STEP-07 is ready for QA review after Moderator accepts this Tech Lead review.
+STEP-08 is ready for QA review after Moderator accepts this Tech Lead review.
 
 QA should pay special attention to:
 
-- the new Identity Slice KPI wording and values in both streams;
-- workflow-specific card/detail/Evidence formatting, especially Dimension-specific compared-value labels and runtime instance-state labels;
-- workflow filters, stable sorting, hidden-selection behavior, loading/unavailable states, tab accessibility, and 1279px/1280px responsive behavior;
-- workflow analysis open/back behavior, Workflow Approval metric switching, Workflow runtime chart coverage, and chart lifecycle preservation;
-- categorical workflow coverage through specs only, because replay browser data still exposes numeric workflow Divergences only;
-- no direct replay-fixture imports, fixture/detector changes, About changes, live DocuWare calls, package/chart changes, user actions, cross-stream reconciliation/comparison/correlation, Attribution, Level 2+ claims, alert/anomaly wording, severity/risk claims, or business-judgment language.
+- `npm run test:e2e` exercising local IDP-Align behavior and not the Playwright starter site;
+- About PO-1 references, safe external-link attributes, and current-state copy;
+- `mod-w/docs/research-references.md` source relevance, public-source boundaries, omitted-source handling, and claim guardrails;
+- E2E guard behavior for external requests and console/page errors;
+- CAV Level 1 wording across About, README, docs, dashboard, and E2E assertions;
+- no regression of STEP-05 through STEP-07 dashboard behavior;
+- preservation of QA-028, QA-029, and categorical workflow spec-only coverage.
 
-Approval needed before QA may proceed: Moderator acceptance of this Tech Lead review in `mod-w/validation/moderator-register.md`, authorizing QA to review STEP-07 against A-053, A-054, `mod-w/step-07.md`, this `review.md`, and the verification evidence.
+Approval needed before QA may proceed: Moderator acceptance of this Tech Lead review in `mod-w/validation/moderator-register.md`, authorizing QA to review STEP-08 against A-060, A-062, `mod-w/step-08.md`, `mod-w/step-08-implementation-plan.md`, this `review.md`, and the verification evidence.
 
 ---
 
