@@ -21,22 +21,22 @@ This Step is a parity and consistency pass. It should verify and close gaps wher
 
 ## Related Design IDs
 
-| Design ID | Design element | Design intent to preserve | Product requirement |
-| --- | --- | --- | --- |
-| DS-001 | Dashboard home layout | Keep the shared dashboard shell equally usable for Document and Workflow streams. | R6 |
-| DS-002 | Stream selector tabs | Preserve accessible switching between independent streams. | R6 |
-| DS-003 | Summary KPI cards | Ensure workflow KPI labels and counts are workflow-specific without diverging from shared summary patterns. | R6 |
-| DS-004 | Divergence card | Use shared Divergence card behavior with workflow-specific Identity Slice and Dimension copy. | R5, R6 |
-| DS-005 | Divergence detail pane | Present full workflow Divergence context with the same explainability quality as document detail. | R5, R6 |
-| DS-006 | Baseline reference panel | Show workflow Observed Baseline reference windows and sample context without implying intended targets. | R4, R5 |
-| DS-007 | Evidence trace | Render workflow task counts, routes, timing metrics, decision agents, and error behavior as Evidence context. | R5 |
-| DS-008 | Filter/sort bar | Ensure filters and sorting operate coherently for workflow Identity Slices, statuses, dimensions, and times. | R6 |
-| DS-010 | Workflow stream summary metrics | Preserve workflow-specific summary intent for steps/routes, decision agents, and workflow dimensions. | R3, R4, R6 |
-| DS-011 | Empty state | Keep no-Divergence and filtered-empty workflow states truthful. | R6 |
-| DS-012 | Loading state | Preserve source-neutral loading/unavailable workflow states. | R6 |
-| DS-013 | Status badges | Keep lifecycle status semantics consistent across streams. | R5, R6 |
-| DS-014 | Evidence detail row | Ensure workflow Evidence rows are reconstructable and readable. | R5 |
-| DS-015 | Divergence Analysis Chart.js detailed view | Ensure workflow analysis uses the same production analysis surface and metric switching semantics as document analysis. | R5, R6 |
+| Design ID | Design element                             | Design intent to preserve                                                                                               | Product requirement |
+| --------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| DS-001    | Dashboard home layout                      | Keep the shared dashboard shell equally usable for Document and Workflow streams.                                       | R6                  |
+| DS-002    | Stream selector tabs                       | Preserve accessible switching between independent streams.                                                              | R6                  |
+| DS-003    | Summary KPI cards                          | Ensure workflow KPI labels and counts are workflow-specific without diverging from shared summary patterns.             | R6                  |
+| DS-004    | Divergence card                            | Use shared Divergence card behavior with workflow-specific Identity Slice and Dimension copy.                           | R5, R6              |
+| DS-005    | Divergence detail pane                     | Present full workflow Divergence context with the same explainability quality as document detail.                       | R5, R6              |
+| DS-006    | Baseline reference panel                   | Show workflow Observed Baseline reference windows and sample context without implying intended targets.                 | R4, R5              |
+| DS-007    | Evidence trace                             | Render workflow task counts, routes, timing metrics, decision agents, and error behavior as Evidence context.           | R5                  |
+| DS-008    | Filter/sort bar                            | Ensure filters and sorting operate coherently for workflow Identity Slices, statuses, dimensions, and times.            | R6                  |
+| DS-010    | Workflow stream summary metrics            | Preserve workflow-specific summary intent for steps/routes, decision agents, and workflow dimensions.                   | R3, R4, R6          |
+| DS-011    | Empty state                                | Keep no-Divergence and filtered-empty workflow states truthful.                                                         | R6                  |
+| DS-012    | Loading state                              | Preserve source-neutral loading/unavailable workflow states.                                                            | R6                  |
+| DS-013    | Status badges                              | Keep lifecycle status semantics consistent across streams.                                                              | R5, R6              |
+| DS-014    | Evidence detail row                        | Ensure workflow Evidence rows are reconstructable and readable.                                                         | R5                  |
+| DS-015    | Divergence Analysis Chart.js detailed view | Ensure workflow analysis uses the same production analysis surface and metric switching semantics as document analysis. | R5, R6              |
 
 DS-009 remains document-stream summary context and should not be changed unless needed for a shared parity test. No new design surface is expected.
 
@@ -232,8 +232,8 @@ Rejected prototype assumptions:
 
 ## Change Notes
 
-| Date | Change | Reason |
-| --- | --- | --- |
+| Date       | Change                   | Reason                                                                                                   |
+| ---------- | ------------------------ | -------------------------------------------------------------------------------------------------------- |
 | 2026-09-26 | Initial STEP-07 authored | Begin workflow stream parity and cross-stream consistency planning after STEP-06 final acceptance A-052. |
 
 ---
