@@ -124,6 +124,17 @@ describe('AboutComponent', () => {
       expect(link?.rel).toContain('noreferrer');
     });
 
+    it('should link to the IDP-Align project repository from a project note', () => {
+      const note = section('project-repository-note');
+      const link = el.querySelector<HTMLAnchorElement>('[data-testid="idp-align-repo-link"]');
+      expect(note).toContain('Project source');
+      expect(link?.textContent).toContain('idp-align repository');
+      expect(link?.href).toBe('https://github.com/fpmcguire/idp-align.git');
+      expect(link?.target).toBe('_blank');
+      expect(link?.rel).toContain('noopener');
+      expect(link?.rel).toContain('noreferrer');
+    });
+
     it('should link the public DocuWare API documentation in a References section (PO-1)', () => {
       const references = el.querySelector('[data-testid="about-references"]')!;
       expect(text(references.querySelector('h2'))).toBe('References');
@@ -142,13 +153,23 @@ describe('AboutComponent', () => {
 
     it('should open every external link safely', () => {
       const external = Array.from(el.querySelectorAll<HTMLAnchorElement>('a[href^="http"]'));
-      expect(external.length).toBe(3);
+      expect(external.length).toBe(5);
       for (const link of external) {
         expect(link.href).toMatch(/^https:\/\//);
         expect(link.target).toBe('_blank');
         expect(link.rel).toContain('noopener');
         expect(link.rel).toContain('noreferrer');
       }
+    });
+
+    it('should render the author footer', () => {
+      const link = el.querySelector<HTMLAnchorElement>('[data-testid="author-link"]');
+      expect(section('author-footer')).toBe('Author: Frank McGuire');
+      expect(link?.textContent).toContain('Frank McGuire');
+      expect(link?.href).toBe('https://github.com/fpmcguire');
+      expect(link?.target).toBe('_blank');
+      expect(link?.rel).toContain('noopener');
+      expect(link?.rel).toContain('noreferrer');
     });
 
     it('should state that reference links imply no DocuWare review or endorsement', () => {

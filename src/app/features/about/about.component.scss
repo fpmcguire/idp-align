@@ -39,6 +39,13 @@ section {
   padding: var(--space-md);
 }
 
+.project-note {
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  padding: var(--space-sm) var(--space-md);
+}
+
 .flow {
   background: var(--color-bg-surface);
   border-radius: var(--radius-sm);
@@ -96,6 +103,14 @@ a {
     outline-offset: 3px;
     border-radius: var(--radius-sm);
   }
+}
+
+.author-footer {
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption);
+  margin-top: var(--space-xl);
+  padding-top: var(--space-md);
 }
 
 @media (max-width: 768px) {
