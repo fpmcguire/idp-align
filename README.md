@@ -232,7 +232,7 @@ final MOD-W completion artifacts.
 
 Live runtime:
 
-- <https://www.frank-mcguire.com/idg-align>
+- <https://www.frank-mcguire.com/idp-align>
 
 ## Known Limits And Non-Goals
 

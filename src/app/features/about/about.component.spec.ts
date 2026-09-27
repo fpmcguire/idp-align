@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DEFAULT_DETECTION_CONFIG } from '../../domain/divergence-detection';
 import { AboutComponent } from './about.component';
 
 // Boundary statements (non-goals, disclaimers) are marked with [data-boundary]. Overclaim checks
@@ -88,11 +89,63 @@ describe('AboutComponent', () => {
       const dashboard = section('about-dashboard');
       expect(dashboard).toContain('Document stream');
       expect(dashboard).toContain('Workflow stream');
-      expect(dashboard).toMatch(/sustained Divergence detection over synthetic replay data/);
-      for (const feature of ['Observed Baselines', 'filters and sorting', 'Evidence Trace', 'Divergence Analysis chart']) {
+      for (const term of ['Identity Slices', 'Observed Baseline', 'Dimension', 'Divergence', 'Evidence', 'Source Reference']) {
+        expect(dashboard).toContain(term);
+      }
+      for (const feature of ['filters and sorting', 'Evidence Trace', 'Divergence Analysis chart']) {
         expect(dashboard).toContain(feature);
       }
       expect(dashboard).toContain('Both streams share the same presentational components and are observed independently.');
+    });
+
+    it('should present the sections in the approved order', () => {
+      const order = Array.from(el.querySelectorAll('article > section')).map(s => s.getAttribute('data-testid'));
+      expect(order).toEqual([
+        'about-problem',
+        'about-dashboard',
+        'about-detection',
+        'about-why-docuware',
+        'about-cav',
+        'about-architecture',
+        'about-path-to-production',
+        'about-quality',
+        'about-mod-w',
+        'about-project-context',
+        'about-scope',
+        'about-references',
+      ]);
+      expect(el.querySelector('[data-testid="about-why-docuware"] [data-testid="about-api-research"]')).toBeTruthy();
+    });
+
+    it('should explain the problem as sustained change in observed behavior', () => {
+      const problem = section('about-problem');
+      expect(problem).toContain('drift without anyone noticing');
+      expect(problem).toContain('is that difference sustained?');
+    });
+
+    it('should state detection defaults that match DEFAULT_DETECTION_CONFIG', () => {
+      const rows = Array.from(el.querySelectorAll('[data-testid="detection-rules"] tbody tr')).map(row =>
+        Array.from(row.querySelectorAll('td')).map(text)
+      );
+      const config = DEFAULT_DETECTION_CONFIG;
+      expect(rows.map(([rule, value]) => [rule, value])).toEqual([
+        ['Reference window', `${config.referenceWindowDays} days`],
+        ['Minimum sample', `${config.minReferenceSampleSize} observations`],
+        ['Numeric range', `mean ± ${config.rangeStandardDeviations} standard deviations`],
+        ['Categorical rule', `≥ ${config.minValueShare * 100}% share`],
+        ['Sustained', `${config.minConsecutiveObservations} consecutive`],
+      ]);
+      expect(rows[2][2]).toContain(`±${config.minRangeRelativeHalfWidth * 100}% of the mean`);
+    });
+
+    it('should relate the approach to AI-assisted extraction without claiming a product gap', () => {
+      expect(section('ai-hub-relevance')).toContain('AI-assisted extraction');
+      expect(section('about-why-docuware')).toContain('does not claim that DocuWare has a product defect or gap');
+    });
+
+    it('should list the path to production and quality checks', () => {
+      expect(el.querySelectorAll('[data-testid="about-path-to-production"] ol li').length).toBe(4);
+      expect(section('about-quality')).toMatch(/lint, a production build, a Vitest unit suite and a Playwright end-to-end suite/);
     });
 
     it('should describe the current state without STEP-01-era planned or later-Step wording', () => {
@@ -150,7 +203,7 @@ describe('AboutComponent', () => {
 
     it('should open every external link safely', () => {
       const external = Array.from(el.querySelectorAll<HTMLAnchorElement>('a[href^="http"]'));
-      expect(external.length).toBe(5);
+      expect(external.length).toBe(6);
       for (const link of external) {
         expect(link.href).toMatch(/^https:\/\//);
         expect(link.target).toBe('_blank');
@@ -172,14 +225,15 @@ describe('AboutComponent', () => {
     it('should state that reference links imply no DocuWare review or endorsement', () => {
       const boundary = el.querySelector('[data-testid="about-references"] [data-boundary]');
       expect(text(boundary)).toBe(
-        'These are public documentation pages; linking to them does not imply DocuWare review or endorsement.'
+        'These are public documentation pages. Linking to them does not imply DocuWare review or endorsement.'
       );
     });
 
-    it('should render the CAV reference as one sentence without a space before the period', () => {
+    it('should render the CAV reference without a space before the period', () => {
       expect(section('cav-reference')).toBe(
-        'Canonical CAV terminology comes from the Continuous Alignment Verification repository.'
+        'It targets Continuous Alignment Verification (CAV) Level 1: Observed-State Divergence. Canonical CAV terminology comes from the Continuous Alignment Verification repository. For both streams the model is the same:'
       );
+      expect(section('about-cav')).toContain('IDP-Align reports what changed, not why.');
     });
 
     it('should place the CAV reference in the CAV Level 1 section, before the model list', () => {
@@ -193,8 +247,8 @@ describe('AboutComponent', () => {
 
     it('should explain the CAV surfacing boundary', () => {
       const boundary = section('surfacing-boundary');
-      expect(boundary).toContain('Divergence is evidence of change');
-      expect(boundary).toContain('not a judgment of failure, defect, or non-conformance');
+      expect(boundary).toContain('A Divergence is evidence of change');
+      expect(boundary).toContain('not a judgment of failure, defect or non-conformance');
       expect(boundary).toContain('surfaces Evidence for interpretation');
       expect(boundary).toContain(
         'does not decide what the behavior should have been, or whether it violates business intent.'
@@ -204,9 +258,12 @@ describe('AboutComponent', () => {
     it('should explain the architecture and repository/adapter boundary', () => {
       const arch = section('about-architecture');
       expect(arch).toContain('feature-sliced');
-      expect(arch).toContain('repository/adapter boundary');
+      expect(arch).toContain('repository and adapter boundary');
       expect(section('architecture-flow')).toMatch(/repository interface.*replay adapter.*BFF\/API/s);
       expect(arch).toMatch(/without rewriting the dashboard/);
+      for (const point of ['Repository boundary:', 'Mappers:', 'Pure domain layer:', 'Deterministic replay data:']) {
+        expect(arch).toContain(point);
+      }
     });
 
     it('should link the shortened Architecture section to the Architecture page', () => {
@@ -216,13 +273,21 @@ describe('AboutComponent', () => {
       expect(link?.getAttribute('href')).toBe('/architecture');
       expect(link?.target).toBe('');
       expect(section('architecture-page-link-note')).toBe('See Architecture for the full explanation.');
-      expect(el.querySelector('[data-testid="about-architecture"] ul')).toBeNull();
     });
 
     it('should describe MOD-W and the current-version assessment', () => {
       const modW = section('about-mod-w');
       expect(modW).toContain('Moderated AI Development Workflow');
       expect(modW).toMatch(/assessment of the current MOD-W version/);
+    });
+
+    it('should link to the MOD-W repository', () => {
+      const link = el.querySelector<HTMLAnchorElement>('[data-testid="about-mod-w"] [data-testid="mod-w-repo-link"]');
+      expect(text(link)).toBe('MOD-W (Moderated AI Development Workflow)');
+      expect(link?.href).toBe('https://github.com/fpmcguire/mod-w');
+      expect(link?.target).toBe('_blank');
+      expect(link?.rel).toContain('noopener');
+      expect(link?.rel).toContain('noreferrer');
     });
   });
 
@@ -246,7 +311,8 @@ describe('AboutComponent', () => {
       expect(boundaries).toMatch(/product defect or gap/);
       expect(boundaries).toMatch(/does not implement CAV Levels 2–6/);
       expect(boundaries).toMatch(/does not implement Attribution/);
-      expect(boundaries).toMatch(/not a judgment of failure, defect, or non-conformance/);
+      expect(boundaries).toMatch(/not a judgment of failure, defect or non-conformance/);
+      expect(boundaries).toMatch(/shown as Evidence, not as a cause/);
       expect(boundaries).toMatch(/not a formal certification/);
     });
   });

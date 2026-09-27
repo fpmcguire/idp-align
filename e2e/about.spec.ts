@@ -31,10 +31,10 @@ test.describe('About', () => {
       await expect(link).toHaveAttribute('href', href);
     }
 
-    // Every external link on the page: IDP-Align repository, CAV repository, the two DocuWare
-    // references, and the author profile. Links are not followed.
+    // Every external link on the page: IDP-Align repository, CAV repository, MOD-W repository, the
+    // two DocuWare references, and the author profile. Links are not followed.
     const external = page.locator('a[href^="http"]');
-    await expect(external).toHaveCount(5);
+    await expect(external).toHaveCount(6);
     for (const link of await external.all()) {
       await expect(link).toHaveAttribute('target', '_blank');
       await expect(link).toHaveAttribute('rel', /\bnoopener\b/);
@@ -44,6 +44,7 @@ test.describe('About', () => {
       'href',
       'https://github.com/fpmcguire/continuous-alignment-verification'
     );
+    await expect(page.getByTestId('mod-w-repo-link')).toHaveAttribute('href', 'https://github.com/fpmcguire/mod-w');
   });
 
   test('describes the current implementation without STEP-01-era wording', async ({ page }) => {
@@ -52,7 +53,8 @@ test.describe('About', () => {
     for (const stale of ['STEP-01', 'later Step', '(planned)', 'will be modeled', 'reserved regions']) {
       await expect(article).not.toContainText(stale);
     }
-    await expect(page.getByTestId('about-dashboard')).toContainText('sustained Divergence detection over synthetic replay data');
+    await expect(page.getByTestId('about-dashboard')).toContainText('The dashboard observes two independent streams');
+    await expect(page.getByTestId('detection-rules')).toBeVisible();
     await expect(page.getByTestId('about-architecture').getByTestId('architecture-page-link')).toHaveAttribute(
       'href',
       '/architecture'

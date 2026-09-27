@@ -2,8 +2,8 @@
   <article class="about-content">
     <h1>About IDP-Align</h1>
     <p class="lead">
-      A one-page project brief for reviewers: what IDP-Align is, why it exists, how it is built,
-      and what it intentionally does not do.
+      A prototype that watches DocuWare-style document and workflow streams and flags sustained changes
+      in observed behavior, with the Evidence behind each one.
     </p>
     <p class="project-note" data-testid="project-repository-note">
       Project source:
@@ -13,116 +13,186 @@
         rel="noopener noreferrer"
         data-testid="idp-align-repo-link"
         >idp-align repository</a
-      >.
+      >
     </p>
 
-    <section data-testid="about-project-context">
-      <h2>Project Context</h2>
+    <section data-testid="about-problem">
+      <h2>The Problem</h2>
       <p>
-        IDP-Align v1 is a personal research and demo project by Frank McGuire, built in preparation
-        for a DocuWare Software Engineer interview on September 28, 2026. Building a working dashboard
-        against a publicly documented domain is a more concrete way to learn that domain than reading
-        product material alone.
+        Document and workflow processes can drift without anyone noticing. A vendor changes its invoice
+        format and amounts start landing in a different range. A workflow step that used to take minutes
+        starts taking hours. A currency that was never seen before starts appearing. Each single record
+        looks plausible, so nothing raises an alarm. The change only becomes visible as a pattern over
+        time.
       </p>
-      <p class="independence-notice" data-boundary data-testid="independence-notice">
-        IDP-Align is an independent personal project. It is not affiliated with, reviewed by, or
-        endorsed by DocuWare. It is based only on public information and does not use private DocuWare
-        systems, customer data, or confidential interview information.
+      <p>
+        IDP-Align asks one narrow question: is recent behavior for this vendor, document type or workflow
+        step different from how it has behaved before, and is that difference sustained?
+      </p>
+    </section>
+
+    <section data-testid="about-dashboard">
+      <h2>What IDP-Align Does</h2>
+      <p>The dashboard observes two independent streams:</p>
+      <ul>
+        <li>
+          <strong>Document stream:</strong> extracted index-field behavior, such as vendor
+          representation, amount and currency, and dates, per Identity Slice such as vendor and document
+          type.
+        </li>
+        <li>
+          <strong>Workflow stream:</strong> workflow execution behavior, such as task duration, routing,
+          response time and error routes, per Identity Slice such as workflow step or route.
+        </li>
+      </ul>
+      <p>For each stream, IDP-Align:</p>
+      <ol>
+        <li>groups observations into <strong>Identity Slices</strong></li>
+        <li>
+          derives an <strong>Observed Baseline</strong> for each slice and Dimension from historical
+          observations
+        </li>
+        <li>surfaces a <strong>Divergence</strong> when recent observations stay outside that baseline</li>
+        <li>
+          keeps the <strong>Evidence</strong> for each Divergence: the observations, their values compared
+          with the baseline, and a Source Reference back to the replay record
+        </li>
+      </ol>
+      <p>
+        The dashboard shows summary metrics, filters and sorting, a Divergence list and detail, an
+        Evidence Trace, and a Divergence Analysis chart. Both streams share the same presentational
+        components and are observed independently.
+      </p>
+    </section>
+
+    <section data-testid="about-detection">
+      <h2>How Detection Works</h2>
+      <p>
+        The detection rules are deliberately simple and explainable. Every parameter is recorded on the
+        Observed Baselines and Divergences it shapes, so any result can be audited.
+      </p>
+      <div class="table-scroll">
+        <table data-testid="detection-rules">
+          <thead>
+            <tr>
+              <th scope="col">Rule</th>
+              <th scope="col">Default</th>
+              <th scope="col">Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Reference window</td>
+              <td class="value">28 days</td>
+              <td>History used to derive the Observed Baseline</td>
+            </tr>
+            <tr>
+              <td>Minimum sample</td>
+              <td class="value">4 observations</td>
+              <td>No baseline is derived from fewer observations</td>
+            </tr>
+            <tr>
+              <td>Numeric range</td>
+              <td class="value">mean ± 3 standard deviations</td>
+              <td>Never narrower than ±5% of the mean, so very stable series don't flag tiny changes</td>
+            </tr>
+            <tr>
+              <td>Categorical rule</td>
+              <td class="value">≥ 10% share</td>
+              <td>
+                A value is within the baseline if it appeared in at least 10% of reference observations
+              </td>
+            </tr>
+            <tr>
+              <td>Sustained</td>
+              <td class="value">3 consecutive</td>
+              <td>
+                Any observation within the baseline ends the run, so one-off outliers never become
+                Divergences
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        IDP-Align uses statistics instead of machine learning on purpose. They need no training data,
+        every result can be explained in one sentence, and the rules can be tuned once real data is
+        available.
       </p>
     </section>
 
     <section data-testid="about-why-docuware">
       <h2>Why DocuWare</h2>
       <p>
-        DocuWare works in document processing and workflow automation: capturing and indexing business
-        documents, routing them through approval workflows, and applying AI-assisted processing through
-        its AI Hub. Those two surfaces — extracted document data and workflow execution — are a natural
-        fit for observing how system behavior changes over time.
+        DocuWare works in document processing and workflow automation. It captures and indexes business
+        documents, routes them through approval workflows, and applies AI-assisted processing through its
+        AI Hub. Its two main surfaces, extracted document data and workflow execution, are a natural fit
+        for observing how system behavior changes over time. The Purchase-to-Pay and invoice-processing
+        use case gives realistic scenarios for both streams.
       </p>
-      <p>
-        The Purchase-to-Pay / invoice-processing use case provides realistic scenario framing for both
-        streams.
+      <p data-testid="ai-hub-relevance">
+        The same approach could apply to AI-assisted extraction. Extraction output is itself a stream of
+        observations, so sustained changes per vendor or document type, such as amounts moving out of
+        range or new currencies appearing, could be surfaced early, with the Evidence pointing to the
+        exact documents to inspect.
       </p>
       <p data-boundary>
         The project does not claim that DocuWare has a product defect or gap in these areas. It is an
         outside learning exercise in applying an observation model to this domain.
       </p>
-    </section>
 
-    <section data-testid="about-api-research">
-      <h2>DocuWare API Research Intent</h2>
-      <p>Two public DocuWare APIs shape the research and demo direction:</p>
-      <ul>
-        <li>
-          <strong>DocuWare Platform REST API</strong> — document and index-field data, which informs the
-          Document stream.
-        </li>
-        <li>
-          <strong>Workflow Analytics API</strong> — workflow execution data such as task duration,
-          routing, and decision outcomes, which informs the Workflow stream.
-        </li>
-      </ul>
-      <p>
-        Replay data is modeled on these publicly documented API shapes. If sandbox access becomes
-        available, live calls would go through a thin server-side adapter so that credentials never
-        reside in the browser.
-      </p>
-      <p data-boundary>IDP-Align does not currently connect to any DocuWare system.</p>
-    </section>
-
-    <section data-testid="about-dashboard">
-      <h2>Dashboard</h2>
-      <p>The dashboard presents two independent streams:</p>
-      <ul>
-        <li>
-          <strong>Document stream:</strong> observes extracted index-field behavior — vendor
-          representation, amount and currency, dates — per Identity Slice such as vendor and document
-          type.
-        </li>
-        <li>
-          <strong>Workflow stream:</strong> observes workflow execution behavior — task duration,
-          routing, response time, and error routes — per Identity Slice such as workflow step or route.
-        </li>
-      </ul>
-      <p>
-        The dashboard runs sustained Divergence detection over synthetic replay data. For each stream it
-        calculates Observed Baselines and shows summary metrics, filters and sorting, a Divergence list
-        and detail, an Evidence Trace, and a Divergence Analysis chart. Both streams share the same
-        presentational components and are observed independently.
-      </p>
+      <section data-testid="about-api-research">
+        <h3>DocuWare API Research</h3>
+        <p>Two public DocuWare APIs shape the replay data:</p>
+        <ul>
+          <li>
+            <strong>DocuWare Platform REST API:</strong> document and index-field data, which informs the
+            Document stream.
+          </li>
+          <li>
+            <strong>Workflow Analytics API:</strong> workflow execution data such as task duration,
+            routing and decision outcomes, which informs the Workflow stream.
+          </li>
+        </ul>
+        <p>
+          Replay data is modeled on these publicly documented API shapes. If sandbox access becomes
+          available, live calls would go through a thin server-side adapter so that credentials never
+          reside in the browser.
+        </p>
+        <p data-boundary><strong>IDP-Align does not currently connect to any DocuWare system.</strong></p>
+      </section>
     </section>
 
     <section data-testid="about-cav">
       <h2>CAV Level 1 Scope</h2>
+      <p class="cav-summary">IDP-Align reports <em>what</em> changed, not <em>why</em>.</p>
       <p data-testid="cav-reference">
-        Canonical CAV terminology comes from the
+        It targets Continuous Alignment Verification (CAV) Level 1: Observed-State Divergence. Canonical
+        CAV terminology comes from the
         <a
           href="https://github.com/fpmcguire/continuous-alignment-verification"
           target="_blank"
           rel="noopener noreferrer"
           data-testid="cav-repo-link"
           >Continuous Alignment Verification repository</a
-        >.
-      </p>
-      <p>
-        IDP-Align targets <strong>Continuous Alignment Verification (CAV) Level 1 — Observed-State
-        Divergence</strong>. For both streams the model is the same:
+        >. For both streams the model is the same:
       </p>
       <ul>
         <li>Observed Truth built from continuous or replayed observations</li>
         <li>Identity Slices that group observations into meaningful cohorts</li>
         <li>Observed Baselines derived from historical behavior</li>
         <li>Divergence surfaced only when a departure from the Observed Baseline is sustained</li>
-        <li>Evidence persisted so every Divergence finding is explainable</li>
+        <li>Evidence kept so every Divergence is explainable</li>
       </ul>
       <p data-boundary>
-        IDP-Align does not implement CAV Levels 2–6, and it does not implement Attribution (root-cause
-        lineage). Showing two streams side by side is not a claim of cross-stream alignment analysis.
+        IDP-Align does not implement CAV Levels 2–6, and it does not implement Attribution. Workflow
+        context such as decision agent, route or instance state is shown as Evidence, not as a cause.
+        Showing two streams side by side is not a claim of cross-stream alignment analysis.
       </p>
       <p data-boundary data-testid="surfacing-boundary">
-        Divergence is evidence of change, not a judgment of failure, defect, or non-conformance.
-        IDP-Align detects sustained Divergence and surfaces Evidence for interpretation; it does not
-        decide what the behavior should have been, or whether it violates business intent.
+        A Divergence is evidence of change, not a judgment of failure, defect or non-conformance.
+        IDP-Align surfaces Evidence for interpretation. It does not decide what the behavior should have
+        been, or whether it violates business intent.
       </p>
     </section>
 
@@ -130,45 +200,111 @@
       <h2>Architecture</h2>
       <p>
         IDP-Align is a feature-sliced, layered Angular application built with standalone components and
-        signals. Business and domain code are separated from data sources by a repository/adapter
-        boundary:
+        signals. Domain code is separated from data sources by a repository and adapter boundary:
       </p>
       <p class="flow" data-testid="architecture-flow">
         UI components → feature facade → domain logic → repository interface → replay adapter | BFF/API
         adapter | future database-backed adapter
       </p>
-      <p>
-        Because the dashboard depends only on repository interfaces, replay data can later be replaced by
-        a live BFF/API adapter or a future database-backed source without rewriting the dashboard.
-      </p>
+      <ul>
+        <li>
+          <strong>Repository boundary:</strong> the dashboard depends only on repository interfaces, so
+          replay data can later be replaced by a live BFF/API adapter or a database-backed source without
+          rewriting the dashboard.
+        </li>
+        <li>
+          <strong>Mappers:</strong> DocuWare-shaped records are translated into project-owned domain
+          types. API shapes never reach the UI.
+        </li>
+        <li>
+          <strong>Pure domain layer:</strong> Observed Baselines and Divergence detection are plain
+          TypeScript with no Angular dependency.
+        </li>
+        <li>
+          <strong>Deterministic replay data:</strong> the same synthetic observations are used on every
+          run, so the demo, tests and QA evidence stay reproducible.
+        </li>
+      </ul>
       <p data-testid="architecture-page-link-note">
-        See <a href="/architecture" data-testid="architecture-page-link">Architecture</a> for the
-        full explanation.
+        See <a href="/architecture" data-testid="architecture-page-link">Architecture</a> for the full
+        explanation.
+      </p>
+    </section>
+
+    <section data-testid="about-path-to-production">
+      <h2>Path to Production</h2>
+      <ol>
+        <li>
+          Add a server-side adapter behind the existing repository boundary, with credentials kept out of
+          the browser.
+        </li>
+        <li>
+          Run against real, anonymized data and tune the reference window, range and sustained rules.
+        </li>
+        <li>
+          Let users mark Divergences as expected or relevant, and use that feedback to reduce noise.
+        </li>
+        <li>
+          Consider linking the document and workflow streams only after the rules for joining them are
+          agreed.
+        </li>
+      </ol>
+    </section>
+
+    <section data-testid="about-quality">
+      <h2>Quality</h2>
+      <p>
+        Every step passes lint, a production build, a Vitest unit suite and a Playwright end-to-end
+        suite. The tests cover the domain, mapping, repository, facade and UI layers.
       </p>
     </section>
 
     <section data-testid="about-mod-w">
       <h2>MOD-W Workflow</h2>
       <p>
-        IDP-Align is a MOD-W (Moderated AI Development Workflow) project. Work moves through Product
-        Definition, Design, and Architecture Definition, then small implementation Steps. Each Step is
-        reviewed by a Tech Lead, checked by QA, and approved by a Moderator before the next begins.
+        IDP-Align is a
+        <a
+          href="https://github.com/fpmcguire/mod-w"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-testid="mod-w-repo-link"
+          >MOD-W (Moderated AI Development Workflow)</a
+        >
+        project, built with AI coding agents under explicit governance. Work moves through Product
+        Definition, Design and Architecture Definition, then small implementation Steps. Each Step is
+        reviewed by a Tech Lead, checked by QA, and approved by a Moderator before the next one begins.
       </p>
       <p>
-        The build also serves as a practical assessment of the current MOD-W version in a realistic,
-        time-boxed project.
+        This governance keeps scope, terminology and claims under control, which matters for a tool whose
+        value depends on not over-claiming. The build also served as a practical assessment of the
+        current MOD-W version in a realistic, time-boxed project.
       </p>
       <p data-boundary>It is not a formal certification or benchmark of MOD-W.</p>
+    </section>
+
+    <section data-testid="about-project-context">
+      <h2>Project Context</h2>
+      <p>
+        IDP-Align is a personal research and demo project by Frank McGuire, built in preparation for a
+        DocuWare Software Engineer interview on September 28, 2026. Building a working dashboard against a
+        publicly documented domain is a more concrete way to learn that domain than reading product
+        material alone.
+      </p>
+      <p class="independence-notice" data-boundary data-testid="independence-notice">
+        IDP-Align is an independent personal project. It is not affiliated with, reviewed by, or endorsed
+        by DocuWare. It is based only on public information and does not use private DocuWare systems,
+        customer data, or confidential interview information.
+      </p>
     </section>
 
     <section data-testid="about-scope">
       <h2>Scope Boundaries &amp; Non-Goals</h2>
       <ul data-boundary>
         <li>Not production software, and not a multi-tenant SaaS product.</li>
-        <li>Not a DocuWare product, and not a reimplementation of DocuWare APIs, OCR, or workflow engine.</li>
+        <li>Not a DocuWare product, and not a reimplementation of DocuWare APIs, OCR or the workflow engine.</li>
         <li>Not a general-purpose IDP or workflow-orchestration engine.</li>
-        <li>Not a claim of market novelty; drift detection and data observability have mature prior art.</li>
-        <li>No real customer data; replay data is synthetic and modeled on public API documentation.</li>
+        <li>Not a claim of market novelty. Drift detection and data observability have mature prior art.</li>
+        <li>No real customer data. Replay data is synthetic and modeled on public API documentation.</li>
       </ul>
     </section>
 
@@ -195,7 +331,7 @@
         </li>
       </ul>
       <p data-boundary>
-        These are public documentation pages; linking to them does not imply DocuWare review or
+        These are public documentation pages. Linking to them does not imply DocuWare review or
         endorsement.
       </p>
     </section>

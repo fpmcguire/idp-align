@@ -3198,4 +3198,27 @@ The Moderator approves completion of STEP-09 and STEP-10.
 
 This entry completes STEP-09 and STEP-10. It does not approve a next Step or any roadmap change beyond recording these completions.
 
+### A-085 - About Page Content Update - Moderator Process Override
+
+- **Status:** Complete
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire
+- **Gate:** Moderator override of the Step process
+- **Source content:** `mod-w/docs/about-page-content.md` (Moderator-approved, verbatim)
+- **Next authorized action:** None. The Moderator accepted the About page and instructed the commit on 2026-09-28.
+
+#### Decision
+
+The Moderator directed the Development Team to update the About page with the approved content without a separate Step, Product Owner definition, Tech Lead review or QA pass.
+
+#### Implementation
+
+- `src/app/features/about/about.component.html` and `.scss`: new sections (The Problem, How Detection Works, Path to Production, Quality), revised existing sections, MOD-W repository link.
+- `src/app/features/about/about.component.spec.ts` and `e2e/about.spec.ts`: updated for the new copy; the detection table is checked against `DEFAULT_DETECTION_CONFIG`.
+- Verification: lint pass, build pass (existing QA-STEP10-001 budget warning only), 587 unit tests pass, 55 E2E tests pass.
+
+#### Override Boundary
+
+This override applies only to the About page content update. It does not approve a next Step or change any other process gate.
+
 MOD-W v5.0.1
