@@ -3,7 +3,9 @@
     "allow": [
       "PowerShell(fnm env | Out-String | Invoke-Expression; fnm use v26.0.0 | Out-Null; node -v; npm run build 2>&1 | Select-Object -Last 25)",
       "PowerShell(fnm env | Out-String | Invoke-Expression; fnm use v26.0.0 | Out-Null; npm test -- --watch=false 2>&1 | Select-String -Pattern \"✓|×|FAIL|Error|Test Files|Tests |expected\" | Select-Object -First 80)",
-      "PowerShell($f = \"src/app/features/about/about.component.html\"; $orig = Get-Content $f -Raw; try { \\($orig -replace 'A one-page project brief for reviewers:', 'A production-ready, DocuWare-endorsed brief that implements Level 2:'\\) | Set-Content $f -Encoding utf8 -NoNewline; fnm env | Out-String | Invoke-Expression; fnm use v26.0.0 | Out-Null; npm test -- --watch=false 2>&1 | Select-String -Pattern \"×|Tests \" } finally { $orig | Set-Content $f -Encoding utf8 -NoNewline }; git diff --stat -- $f)"
+      "PowerShell($f = \"src/app/features/about/about.component.html\"; $orig = Get-Content $f -Raw; try { \\($orig -replace 'A one-page project brief for reviewers:', 'A production-ready, DocuWare-endorsed brief that implements Level 2:'\\) | Set-Content $f -Encoding utf8 -NoNewline; fnm env | Out-String | Invoke-Expression; fnm use v26.0.0 | Out-Null; npm test -- --watch=false 2>&1 | Select-String -Pattern \"×|Tests \" } finally { $orig | Set-Content $f -Encoding utf8 -NoNewline }; git diff --stat -- $f)",
+      "PowerShell(git add mod-w/product.md mod-w/validation/moderator-register.md)",
+      "PowerShell(git add .claude/settings.json)"
     ]
   },
   "project": "idp-align",
