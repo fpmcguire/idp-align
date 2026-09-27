@@ -1,7 +1,7 @@
 # PRODUCT - IDP-Align
 
 **Project:** IDP-Align  
-**Version:** 1.3  
+**Version:** 1.4  
 **Date:** 2026-09-24  
 **Owner:** Frank McGuire  
 **Status:** Product Definition  
@@ -122,6 +122,7 @@ Stable R-IDs are required for traceability.
 | R11 | Automated unit and E2E coverage for baseline/divergence logic and dashboard behavior, consistent with MOD-W quality gates                                                                                | Should have |
 | R12 | Persist enough evidence to reconstruct a divergence finding from its source observations and baseline context                                                                                            | Should have |
 | R13 | Provide a routed About / Project Context view that names DocuWare as the v1 research/demo domain for the September 28, 2026 interview, explains project intent, dashboard UI, architecture, MOD-W workflow, CAV Level 1 scope, DocuWare API research intent, and project boundaries without endorsement, private-access, confidential-information, or certification claims | Must have |
+| R14 | Provide a permanent routed Architecture view, reachable from top navigation (Dashboard / About / Architecture), explaining how IDP-Align works: principal data flow; separation of observation sources, domain mapping, CAV Level 1 detection, and presentation; CAV Level 1 claim boundaries; Identity Slices with independent Observed Baselines; population-specific Divergence; the distinction among surfaced Divergence, No surfaced Divergence, and No Observed Baseline; implemented versus synthetic capability; the source-independent repository/adapter boundary; the relationship among canonical CAV, IDP-Align, and observation sources; public research provenance for the Producer x Document Type pattern; and clearly labeled future research directions. The view must contain no interview, interviewer, or employer-directed framing; must present public case studies only as research provenance, never as customers, datasets, requirements, or evidence of the synthetic Divergences; must not describe No surfaced Divergence as normal, stable, healthy, correct, or aligned, or equate it with No Observed Baseline; must not imply live or production integration; and must not make DocuWare a dependency of CAV or of IDP-Align's core architecture. It is a product surface, not exhaustive developer documentation. | Should have |
 
 ## Key User Scenarios
 
@@ -283,3 +284,4 @@ Development documentation should cite the specific public sources used for:
 | 2026-09-24 | 1.3     | Clarified the CAV surfacing boundary: divergence detection is computational, while IDP-Align's product responsibility is to surface sustained change with reconstructable evidence rather than judge the change as bad, defective, non-conformant, or contrary to business intent. Added corresponding requirement, acceptance, risk, scenario, and domain-language guardrails. No implementation scope change. |
 | 2026-09-27 | 1.3.x   | Corrected Angular version references from v21 to v22 to match the implemented and verified application stack. No product scope change. |
 | 2026-09-27 | 1.3.x   | Product Owner clarified Population-Specific Divergence as an extension of existing document-stream CAV Level 1 scope: producer/document-type populations may establish independent Observed Baselines, with Supplier Invoice Population Divergence as a synthetic named scenario. No new top-level requirement or CAV level claim added. |
+| 2026-09-27 | 1.4     | Product Owner admitted a permanent Architecture view as new requirement R14 (approved by Moderator under A-078). Content baseline is the reviewed Architecture-page copy with two corrections: Sport Auto Plus wording limited to authority-specific traffic-notice variation, and "Production DocuWare integration" removed from the not-implemented list in favor of the source-independent extension-point framing. No change to detection, Observed Baseline semantics, sustained-Divergence criteria, or CAV level claims. |

@@ -2950,4 +2950,32 @@ This entry accepts only the STEP-09 QA review and finding dispositions. It is no
 
 This entry preserves the required gate sequence. It is not Product Owner review, roadmap completion, STEP-09 completion, or final Moderator acceptance.
 
+### A-078 - Architecture Page Admitted As R14; Tech Lead Authorized To Draft STEP-10
+
+- **Status:** Approved
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire (ad hoc Moderator)
+- **Gate:** Product decision - new requirement admission
+- **Decision:** The Moderator approves the Product Owner's finding and recommendations. A permanent routed Architecture view is admitted to PRODUCT as new requirement R14 (`mod-w/product.md` v1.4). Navigation becomes Dashboard / About / Architecture.
+- **Next authorized action:** Tech Lead drafts `mod-w/step-10.md` and the corresponding `mod-w/architecture.md` decision (D14) and R14 mapping for Moderator approval.
+
+#### Product Owner Findings Approved
+
+- The Architecture view is a new requirement (R14), not an extension of R13. R13 and D12 frame About around the September 28, 2026 interview; R14 is a permanent surface with no interview, interviewer, or employer-directed framing.
+- The reviewed Architecture-page copy is the content baseline. Its claims were checked against `product.md`, `domain-language.md`, `architecture.md`, `docs/research-references.md` §4a, and STEP-09 implementation (synthetic supplier slices and the No surfaced Divergence / No Observed Baseline states exist in code).
+- Required copy corrections:
+  1. Sport Auto Plus wording is limited to authority-specific traffic-notice variation, as supported by `research-references.md` §4a.
+  2. "Production DocuWare integration" is removed from the not-implemented list; live sources appear only through the source-independent extension-point framing, stated as not a claim of current integration.
+- Public DocuWare case studies (Giebeler-Feuerschutz, Piening Personal, Sport Auto Plus) are appropriate on the permanent surface, placed low on the page, as research provenance for the Producer x Document Type Identity Slice pattern only.
+
+#### Boundaries
+
+- No change to Divergence detection, Observed Baseline semantics, sustained-Divergence criteria, fixtures, or Dashboard behavior.
+- No new CAV primitives and no Level 2+ or Attribution claims.
+- The page describes STEP-09 behavior. STEP-09's final Moderator gate remains deferred under A-077; STEP-10 implementation should not begin before the STEP-09 final gate is recorded, unless the Moderator decides otherwise.
+
+#### Gate Boundary
+
+This entry admits R14 and authorizes Tech Lead Step drafting only. It is not Step approval, implementation-plan approval, or Development Team implementation authorization.
+
 MOD-W v5.0.1
