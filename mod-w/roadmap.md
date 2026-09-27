@@ -25,6 +25,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | STEP-06 | Divergence Analysis Chart View                        | R5, R6, R11      | Claude Code | Complete (A-052)                | Implemented bundled Chart.js analysis view with metric switching over selected Divergence evidence; categorical browser coverage remains spec-only because replay data is numeric-only.                                      |
 | STEP-07 | Workflow Stream Parity And Cross-Stream Consistency   | R3, R4, R6, R9   | Claude Code | Complete (A-059)                | Workflow parity accepted with notes; categorical workflow behavior remains spec-covered only, and QA-028/QA-029 remain non-blocking carry-forward notes.                                                                     |
 | STEP-08 | Quality Gate Completion And Documentation             | R10, R11         | Claude Code | Complete (A-066)                | Local IDP-Align E2E, R10 research references, About/README current-state copy, and CAV Level 1 claim guardrails accepted with QA notes; categorical workflow remains spec-covered only.                                      |
+| STEP-09 | Population-Specific Divergence Scenario               | R1, R2, R5, R6, R8, R9, R11, R12 | Claude Code | Draft - pending Moderator approval | Draft bounded Step for Supplier Invoice Population Divergence after A-069/A-070; no implementation authorized until Step and implementation-plan approvals are recorded.                                                     |
 
 ---
 
@@ -94,6 +95,14 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 
 **Output:** Passing build/tests/E2E, research/reference docs updated, final Tech Lead review and QA readiness.
 
+### STEP-09 - Population-Specific Divergence Scenario
+
+**Goal:** Add a synthetic, demo-worthy Supplier Invoice Population Divergence scenario showing that multiple Supplier x Invoice Identity Slices can establish independent Observed Baselines, with one supplier population surfacing sustained Divergence while peer populations do not surface the same Divergence.
+
+**Requirements:** R1, R2, R5, R6, R8, R9, R11, R12
+
+**Output:** Pending Moderator approval. Expected output is bounded replay data, tests, and dashboard verification for Population-Specific Divergence while preserving CAV Level 1 boundaries, synthetic data, existing replay behavior, and repository/facade architecture.
+
 ---
 
 ## Coverage Check
@@ -101,17 +110,17 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | Requirement | Steps                                       | Status                                                                                                                       |
 | ----------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | R1          | STEP-02                                     | Complete (A-028)                                                                                                             |
-| R2          | STEP-03                                     | Complete (A-033)                                                                                                             |
+| R2          | STEP-03, STEP-09                            | STEP-03 complete (A-033); STEP-09 draft would extend document-stream scenario coverage if approved.                          |
 | R3          | STEP-02, STEP-07                            | STEP-02 foundation and STEP-07 workflow parity complete (A-059)                                                              |
 | R4          | STEP-03, STEP-07                            | STEP-03 domain logic complete (A-033); STEP-07 workflow parity complete (A-059)                                              |
-| R5          | STEP-03, STEP-04, STEP-06                   | STEP-03 domain/evidence records complete (A-033); STEP-04 Divergence UI complete (A-039); STEP-06 analysis complete (A-052)  |
-| R6          | STEP-01, STEP-04, STEP-05, STEP-06, STEP-07 | STEP-05 dashboard interactions complete (A-047); STEP-06 analysis complete (A-052); STEP-07 workflow parity complete (A-059) |
+| R5          | STEP-03, STEP-04, STEP-06, STEP-09          | STEP-03 domain/evidence records complete (A-033); STEP-04 Divergence UI complete (A-039); STEP-06 analysis complete (A-052); STEP-09 draft would add scenario-specific evidence coverage if approved. |
+| R6          | STEP-01, STEP-04, STEP-05, STEP-06, STEP-07, STEP-09 | STEP-05 dashboard interactions complete (A-047); STEP-06 analysis complete (A-052); STEP-07 workflow parity complete (A-059); STEP-09 draft would update document scenario presentation if approved. |
 | R7          | Future Step                                 | Deferred until live access/proxy work is explicitly activated.                                                               |
-| R8          | STEP-02                                     | Complete (A-028)                                                                                                             |
-| R9          | STEP-01, STEP-02, STEP-07                   | STEP-01, STEP-02, and STEP-07 complete (A-059)                                                                               |
+| R8          | STEP-02, STEP-09                            | Complete (A-028); STEP-09 draft would add approved synthetic replay scenario if approved.                                    |
+| R9          | STEP-01, STEP-02, STEP-07, STEP-09          | STEP-01, STEP-02, and STEP-07 complete (A-059); STEP-09 draft preserves approved Population-Specific Divergence language if approved. |
 | R10         | STEP-01, STEP-08                            | Complete (STEP-01; STEP-08 A-066)                                                                                            |
-| R11         | STEP-03, STEP-05, STEP-06, STEP-08          | Complete (STEP-03, STEP-05, STEP-06, and STEP-08 A-066)                                                                      |
-| R12         | STEP-03, STEP-04                            | STEP-03 evidence-carrying records complete (A-033); STEP-04 Evidence Trace UI complete (A-039)                               |
+| R11         | STEP-03, STEP-05, STEP-06, STEP-08, STEP-09 | Complete (STEP-03, STEP-05, STEP-06, and STEP-08 A-066); STEP-09 draft includes scenario unit/component/E2E coverage if approved. |
+| R12         | STEP-03, STEP-04, STEP-09                   | STEP-03 evidence-carrying records complete (A-033); STEP-04 Evidence Trace UI complete (A-039); STEP-09 draft would verify reconstructable scenario evidence if approved. |
 | R13         | STEP-01                                     | Complete (A-016) - DocuWare-specific v1 interview research/demo framing.                                                     |
 
 ---
@@ -141,6 +150,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | 2026-09-26 | Updated STEP-07 status after A-053 approval.                                            | Moderator approved STEP-07 for Development Team briefing/planning only; implementation plan approval remains required before code.                                 |
 | 2026-09-26 | Set STEP-07 to Complete.                                                                | Final Moderator gate A-059 after Tech Lead review, QA acceptance, Product Owner approval, and acceptance of non-blocking notes.                                    |
 | 2026-09-26 | Set STEP-08 to Complete.                                                                | Final Moderator gate A-066 after Tech Lead review acceptance, QA acceptance with notes, Product Owner approval, and finding dispositions.                          |
+| 2026-09-27 | Added STEP-09 draft pending Moderator approval.                                         | A-069/A-070 authorize Tech Lead to draft a bounded Population-Specific Divergence implementation Step using Supplier Invoice Population Divergence as the initial scenario. |
 
 ---
 

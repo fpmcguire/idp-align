@@ -2647,4 +2647,44 @@ These examples support the approved product framing from A-069 while preserving 
 - This approval does not authorize implementation work, fixture changes, UI changes, detector/domain logic changes, or any CAV claim beyond Level 1.
 - New feature work must proceed through normal MOD-W planning, Step approval, implementation-plan approval, Tech Lead review, QA, and final Moderator gates.
 
+### A-071 - STEP-09 Tech Lead Step Draft Approval
+
+- **Status:** Approved - Step draft for Development Team briefing and implementation planning only
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire
+- **Role approved:** Tech Lead
+- **Gate:** Step approval before Development Team briefing
+- **Step:** `mod-w/step-09.md`
+- **Next authorized action:** Development Team may be briefed on STEP-09 and may prepare an implementation plan. No STEP-09 code, fixture, test, or documentation implementation is authorized until the Moderator separately approves the Development Team implementation plan.
+
+#### Approved Artifacts
+
+- `mod-w/step-09.md`
+- `mod-w/roadmap.md` STEP-09 draft entry and coverage notes
+
+#### Approval Summary
+
+The Moderator approves the Tech Lead's bounded STEP-09 draft for Population-Specific Divergence.
+
+STEP-09 is approved as the next active implementation Step for Development Team briefing and implementation planning only:
+
+**Population-Specific Divergence Scenario**
+
+Initial scenario:
+
+**Supplier Invoice Population Divergence**
+
+The Step is bounded to a synthetic, demo-worthy document replay scenario that uses multiple fictional `Supplier x Invoice` Identity Slices, preserves existing replay behavior, exercises existing CAV Level 1 detection, and surfaces one population-specific Divergence with reconstructable Evidence while peer populations do not surface the same Divergence.
+
+#### Conditions
+
+- Development Team must implement only the approved STEP-09 scope.
+- Development Team must wait for Moderator approval of its implementation plan before writing code, changing fixtures, updating tests, or editing documentation.
+- Scenario data must remain synthetic and must not use actual DocuWare customer identities or customer data.
+- The feature remains CAV Level 1 only and must not infer cause, correctness, failure, risk, business intent, producer blame, remediation, Attribution, or cross-stream causality.
+- UI language must not claim aggregate document-stream stability unless such stability is calculated and supported by the domain model.
+- Existing accepted replay behavior must be preserved or explicitly accounted for in the approved implementation plan.
+- `Producer x Document Type` remains an approved Identity Slice pattern, not a new mandatory primitive.
+- Tech Lead review is required before QA acceptance.
+
 MOD-W v5.0.1
