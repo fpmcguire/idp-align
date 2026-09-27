@@ -88,11 +88,12 @@ describe('ReplayStreamObservationRepository', () => {
     }
   });
 
-  it('should serve the document fixture as 38 observations across 6 Identity Slices', async () => {
+  // STEP-09 appended 20 Delta and Epsilon invoice records; the observation window is unchanged.
+  it('should serve the document fixture as 58 observations across 8 Identity Slices', async () => {
     const info = await firstValueFrom(repository.getSourceInfo('document'));
 
-    expect(info.observationCount).toBe(38);
-    expect(info.identitySliceCount).toBe(6);
+    expect(info.observationCount).toBe(58);
+    expect(info.identitySliceCount).toBe(8);
     expect(info.observationWindow).toEqual({
       from: '2026-08-03T15:00:00.000Z',
       to: '2026-09-11T15:00:00.000Z',

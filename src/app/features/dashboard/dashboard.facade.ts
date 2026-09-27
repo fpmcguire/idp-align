@@ -18,6 +18,10 @@ import { IdentitySlice } from '../../domain/identity-slice';
 import { observationWindowOf } from '../../domain/observation';
 import { StreamKind } from '../../domain/stream';
 import {
+  IdentitySliceStateView,
+  PopulationSummaryView,
+} from '../../shared/ui/identity-slice-states/identity-slice-states.model';
+import {
   DEFAULT_FILTERS,
   DEFAULT_SORT,
   DivergenceFilters,
@@ -25,6 +29,7 @@ import {
   applyDivergenceFilters,
   sortDivergences,
 } from './dashboard-filters';
+import { toIdentitySliceStates, toPopulationSummaries } from './identity-slice-states';
 
 export type StreamSourceInfoByStream = Partial<Record<StreamKind, StreamSourceInfo>>;
 
@@ -40,6 +45,8 @@ export type StreamDataState =
       /** In onset order. */
       readonly divergences: readonly Divergence[];
       readonly identitySlices: readonly IdentitySlice[];
+      /** Detector output per Identity Slice, grouped by population. */
+      readonly identitySliceStates: readonly IdentitySliceStateView[];
       /** Latest observation in the stream; time ranges are measured back from it. */
       readonly latestObservedAt: string | null;
     };
@@ -225,6 +232,24 @@ export class DashboardFacade {
     };
   }
 
+  /**
+   * Detector output for each of a stream's Identity Slices, whatever the filters; null while
+   * unavailable. Each Identity Slice is described on its own, never the stream as a whole.
+   */
+  identitySliceStates(stream: StreamKind): readonly IdentitySliceStateView[] | null {
+    const state = this.states[stream]();
+    return state.status === 'ready' ? state.identitySliceStates : null;
+  }
+
+  /**
+   * Per population (document type or workflow), how many Identity Slices were observed and how
+   * many surfaced a Divergence, whatever the filters; null while unavailable.
+   */
+  populationSummaries(stream: StreamKind): PopulationSummaryView[] | null {
+    const states = this.identitySliceStates(stream);
+    return states ? toPopulationSummaries(states) : null;
+  }
+
   private loadState(stream: StreamKind): Signal<StreamDataState> {
     return toSignal(
       this.reload[stream].pipe(
@@ -241,12 +266,16 @@ export class DashboardFacade {
       slices: this.repository.getIdentitySlices(stream),
       observations: this.repository.getObservations(stream),
     }).pipe(
-      map(({ slices, observations }): StreamDataState => ({
-        status: 'ready',
-        divergences: orderByOnset(detectStreamDivergences(slices, observations).divergences),
-        identitySlices: slices,
-        latestObservedAt: observationWindowOf(observations)?.to ?? null,
-      })),
+      map(({ slices, observations }): StreamDataState => {
+        const result = detectStreamDivergences(slices, observations);
+        return {
+          status: 'ready',
+          divergences: orderByOnset(result.divergences),
+          identitySlices: slices,
+          identitySliceStates: toIdentitySliceStates(slices, observations, result),
+          latestObservedAt: observationWindowOf(observations)?.to ?? null,
+        };
+      }),
       defaultIfEmpty(UNAVAILABLE),
       catchError(() => of(UNAVAILABLE)),
     );

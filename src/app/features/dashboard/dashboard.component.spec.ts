@@ -236,6 +236,8 @@ describe('DashboardComponent', () => {
         'Alpha Office Supplies (synthetic) · Invoice',
         'Beta Freight Services (synthetic) · Credit note',
         'Beta Freight Services (synthetic) · Invoice',
+        'Delta Packaging Supplies (synthetic) · Invoice',
+        'Epsilon Print Services (synthetic) · Invoice',
         'Gamma Facilities Care (synthetic) · Credit note',
         'Gamma Facilities Care (synthetic) · Invoice',
       ]);
@@ -496,7 +498,7 @@ describe('DashboardComponent', () => {
     });
 
     it('should count the document stream Divergences', () => {
-      expect(kpiValues()).toEqual(['1', '1', '0', '1 of 6', '—']);
+      expect(kpiValues()).toEqual(['1', '1', '0', '1 of 8', '—']);
       expect(el.querySelector('[data-testid="kpi-card-document-total"]')?.textContent).toContain(
         'Across vendor / document type Identity Slices'
       );
@@ -729,7 +731,7 @@ describe('DashboardComponent', () => {
       const documentKpi = el.querySelector('[data-testid="kpi-card-document-identity-slices"]');
 
       expect(childText(documentKpi)).toBe(
-        'Identity Slices with Divergences 1 of 6 Vendor / document type Identity Slices in this stream'
+        'Identity Slices with Divergences 1 of 8 Vendor / document type Identity Slices in this stream'
       );
       expect(documentKpi?.textContent).not.toMatch(/workflow/i);
     });
@@ -823,10 +825,100 @@ describe('DashboardComponent', () => {
     });
   });
 
+  describe('Supplier Invoice Population Divergence (STEP-09)', () => {
+    const summaries = () =>
+      Array.from(el.querySelectorAll('[data-testid="population-summary"]')).map(l =>
+        normalize(l.textContent),
+      );
+    const sliceStates = () =>
+      Array.from(el.querySelectorAll('[data-testid="slice-state-row"]')).map(row => [
+        normalize(row.querySelector('[data-testid="slice-state-label"]')?.textContent),
+        normalize(row.querySelector('[data-testid="slice-state-value"]')?.textContent),
+      ]);
+    const sliceStatesSection = () => el.querySelector('[data-testid="identity-slice-states"]');
+
+    it('should summarize the document populations factually', () => {
+      expect(summaries()).toEqual([
+        'Invoice: 5 Identity Slices observed / 1 with surfaced Divergence',
+        'Credit note: 3 Identity Slices observed / 0 with surfaced Divergence',
+      ]);
+    });
+
+    it('should list each document Identity Slice state', () => {
+      expect(sliceStates()).toEqual([
+        ['Alpha Office Supplies (synthetic) · Invoice', '1 surfaced Divergence'],
+        ['Beta Freight Services (synthetic) · Invoice', 'No surfaced Divergence'],
+        ['Delta Packaging Supplies (synthetic) · Invoice', 'No surfaced Divergence'],
+        ['Epsilon Print Services (synthetic) · Invoice', 'No surfaced Divergence'],
+        ['Gamma Facilities Care (synthetic) · Invoice', 'No surfaced Divergence'],
+        ['Alpha Office Supplies (synthetic) · Credit note', 'No Observed Baseline'],
+        ['Beta Freight Services (synthetic) · Credit note', 'No Observed Baseline'],
+        ['Gamma Facilities Care (synthetic) · Credit note', 'No Observed Baseline'],
+      ]);
+    });
+
+    it('should show the surfaced Divergence only for the Alpha invoice population', () => {
+      expect(cardSummary()).toEqual([
+        ['Alpha Office Supplies (synthetic) · Invoice', 'Amount', 'Ongoing'],
+      ]);
+      expect(normalize(el.querySelector('[data-testid="detail-identity-slice"]')?.textContent)).toBe(
+        'Alpha Office Supplies (synthetic) · Invoice',
+      );
+    });
+
+    for (const peer of [
+      'Beta Freight Services (synthetic) · Invoice',
+      'Delta Packaging Supplies (synthetic) · Invoice',
+      'Epsilon Print Services (synthetic) · Invoice',
+      'Gamma Facilities Care (synthetic) · Invoice',
+    ]) {
+      it(`should show no Divergence when filtered to the peer ${peer}`, () => {
+        choose('filter-identity-slice', peer);
+
+        expect(cards().length).toBe(0);
+        expect(el.querySelector('[data-testid="filtered-empty-state"]')).toBeTruthy();
+        expect(el.querySelector('[data-testid="divergence-detail"]')).toBeNull();
+        expect(summaries()[0]).toBe('Invoice: 5 Identity Slices observed / 1 with surfaced Divergence');
+      });
+    }
+
+    it('should show the Alpha Divergence with its Evidence when filtered to Alpha invoices', () => {
+      choose('filter-identity-slice', 'Alpha Office Supplies (synthetic) · Invoice');
+
+      expect(resultSummary()).toBe('Showing 1 of 1 Divergence');
+      expect(evidenceItems().length).toBe(4);
+    });
+
+    it('should use the same generic presentation in the workflow stream', () => {
+      switchTo('workflow');
+
+      expect(summaries()).toEqual([
+        'Invoice approval (synthetic): 4 Identity Slices observed / 2 with surfaced Divergence',
+      ]);
+      expect(sliceStates().length).toBe(4);
+      expect(sliceStatesSection()?.textContent).not.toMatch(/Invoice:|Credit note|vendor/i);
+    });
+
+    it('should not claim stability, correctness, or judgment for any population', () => {
+      for (const stream of ['document', 'workflow'] as const) {
+        switchTo(stream);
+        const text =
+          spacedText(el.querySelector('[data-testid="population-summaries"]')) +
+          ' ' +
+          spacedText(sliceStatesSection());
+
+        expect(text).not.toMatch(/\bstab(le|ility)|\bnormal|healthy|\bcorrect|incorrect/i);
+        for (const pattern of Object.values(DASHBOARD_GUARDRAIL_PATTERNS)) {
+          expect(text).not.toMatch(pattern);
+        }
+      }
+    });
+  });
+
   describe('replay source line', () => {
     it('should state neutral document replay source facts', () => {
       expect(normalize(replaySource()?.textContent)).toBe(
-        'Replay source: 38 synthetic document observations across 6 Identity Slices, ' +
+        'Replay source: 58 synthetic document observations across 8 Identity Slices, ' +
           '3 Aug–11 Sep 2026 (UTC).'
       );
     });
@@ -1240,6 +1332,23 @@ describe('DashboardComponent Divergence Analysis (STEP-06)', () => {
     component = fixture.componentInstance;
     el = fixture.nativeElement;
     fixture.detectChanges();
+  });
+
+  // STEP-09: the surfaced Supplier x Invoice Divergence opens in the analysis; a peer does not.
+  it('should analyze the Alpha invoice Divergence and show nothing for a peer supplier', () => {
+    chooseIdentitySlice('Alpha Office Supplies (synthetic) · Invoice');
+    click(openButton());
+
+    expect(normalize(byTestId('analysis-identity-slice')?.textContent)).toBe(
+      'Alpha Office Supplies (synthetic) · Invoice',
+    );
+    expect(el.querySelectorAll('[data-testid="analysis-table-row"]').length).toBe(4);
+    expect(byTestId('identity-slice-states')).toBeTruthy();
+
+    chooseIdentitySlice('Delta Packaging Supplies (synthetic) · Invoice');
+
+    expect(byTestId('analysis-empty')).toBeTruthy();
+    expect(analysis()).toBeNull();
   });
 
   describe('entry and return', () => {

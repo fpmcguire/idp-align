@@ -19,7 +19,7 @@ test.describe('Document stream', () => {
     await expect(value('total')).toHaveText('1');
     await expect(value('ongoing')).toHaveText('1');
     await expect(value('resolved')).toHaveText('0');
-    await expect(value('identity-slices')).toHaveText('1 of 6');
+    await expect(value('identity-slices')).toHaveText('1 of 8');
     await expect(value('trend')).toHaveText('—');
     await expect(page.getByTestId('kpi-card-document-trend')).toContainText('Not charted here');
     await expect(kpis.locator('[data-testid^="kpi-card-document-"]')).toHaveCount(5);

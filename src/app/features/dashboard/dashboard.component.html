@@ -68,6 +68,9 @@
         Counts include every Divergence in this stream. Filters do not change them.
       </p>
     }
+    @if (populationSummaries(); as summaries) {
+      <app-population-summary [summaries]="summaries" />
+    }
 
     <div class="filter-bar" data-testid="filter-bar">
       <label class="filter-field">
@@ -283,6 +286,10 @@
           }
         </section>
       </div>
+    }
+
+    @if (identitySliceStates(); as states) {
+      <app-identity-slice-states [states]="states" />
     }
   </div>
 </div>

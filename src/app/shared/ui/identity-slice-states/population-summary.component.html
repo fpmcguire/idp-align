@@ -1,0 +1,7 @@
+@if (lines().length > 0) {
+  <ul class="population-summaries" aria-label="Identity Slices per population" data-testid="population-summaries">
+    @for (line of lines(); track line.population) {
+      <li class="population-summary" data-testid="population-summary">{{ line.text }}</li>
+    }
+  </ul>
+}

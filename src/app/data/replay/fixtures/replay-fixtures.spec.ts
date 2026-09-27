@@ -13,6 +13,8 @@ import { WORKFLOW_REPLAY_FIXTURE } from './workflow-replay.fixture';
 const FIXTURES = [DOCUMENT_REPLAY_FIXTURE, WORKFLOW_REPLAY_FIXTURE];
 const SYNTHETIC_INSTANCE_ID = /^00000000-0000-4000-8000-\d{12}$/;
 const DAY_MS = 86_400_000;
+/** Customers named in mod-w/docs/research-references.md; research motivation only, never replay data. */
+const CASE_STUDY_CUSTOMER_NAMES = /giebeler|feuerschutz|piening|sport ?auto/i;
 
 describe('replay fixtures', () => {
   for (const fixture of FIXTURES) {
@@ -46,6 +48,10 @@ describe('replay fixtures', () => {
         expect(serialized).not.toMatch(CLAIM_GUARDRAIL_PATTERNS.nonCanonicalFindingNames);
       });
 
+      it('should not name any customer from the research case studies', () => {
+        expect(serialized).not.toMatch(CASE_STUDY_CUSTOMER_NAMES);
+      });
+
       it('should not label any replay data as a Divergence, Observed Baseline, or expected output', () => {
         expect(serialized).not.toMatch(/divergen|baseline|expected/i);
       });
@@ -65,6 +71,33 @@ describe('replay fixtures', () => {
       for (const vendor of item('COMPANY')) {
         expect(vendor).toMatch(/\(synthetic\)$/);
       }
+    });
+
+    // STEP-09: Supplier Invoice Population Divergence stays synthetic (A-070, A-072).
+    it('should hold 58 records with five fictional invoice suppliers, IDs 1001 to 1058 in order', () => {
+      expect(records.map(r => r.Id)).toEqual(records.map((_, i) => 1001 + i));
+      expect(records.length).toBe(58);
+
+      const invoiceSuppliers = new Set(
+        records
+          .filter(r => r.Fields.find(f => f.FieldName === 'DOCUMENT_TYPE')?.Item === 'Invoice')
+          .map(r => r.Fields.find(f => f.FieldName === 'COMPANY')?.Item),
+      );
+      expect([...invoiceSuppliers].sort()).toEqual([
+        'Alpha Office Supplies (synthetic)',
+        'Beta Freight Services (synthetic)',
+        'Delta Packaging Supplies (synthetic)',
+        'Epsilon Print Services (synthetic)',
+        'Gamma Facilities Care (synthetic)',
+      ]);
+    });
+
+    it('should append the STEP-09 peer suppliers after the accepted records', () => {
+      const vendorOf = (r: (typeof records)[number]) => r.Fields.find(f => f.FieldName === 'COMPANY')?.Item;
+      const peers = /^(Delta|Epsilon) /;
+
+      expect(records.slice(0, 38).some(r => peers.test(String(vendorOf(r))))).toBe(false);
+      expect(records.slice(38).every(r => peers.test(String(vendorOf(r))))).toBe(true);
     });
 
     it('should use the documented FieldName and Item pair on every index field', () => {

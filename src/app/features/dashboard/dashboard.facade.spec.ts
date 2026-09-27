@@ -100,7 +100,7 @@ describe('DashboardFacade', () => {
     it('should count Identity Slices with Divergences within each stream', () => {
       const facade = createReplayFacade();
 
-      expect(facade.identitySliceCoverage('document')).toEqual({ withDivergences: 1, total: 6 });
+      expect(facade.identitySliceCoverage('document')).toEqual({ withDivergences: 1, total: 8 });
       // Approval (two Divergences) and Workflow runtime, out of three steps plus Workflow runtime.
       expect(facade.identitySliceCoverage('workflow')).toEqual({ withDivergences: 2, total: 4 });
     });
@@ -135,6 +135,85 @@ describe('DashboardFacade', () => {
       });
 
       expect(facade.identitySliceCoverage('document')).toEqual({ withDivergences: 0, total: 1 });
+    });
+  });
+
+  describe('population summaries and Identity Slice states (STEP-09)', () => {
+    const stateOf = (facade: DashboardFacade, label: string) =>
+      facade.identitySliceStates('document')?.find(s => s.label === label);
+
+    it('should summarize each document population by Identity Slices observed and surfaced', () => {
+      const facade = createReplayFacade();
+
+      expect(facade.populationSummaries('document')).toEqual([
+        { population: 'Invoice', identitySliceCount: 5, withSurfacedDivergence: 1 },
+        { population: 'Credit note', identitySliceCount: 3, withSurfacedDivergence: 0 },
+      ]);
+    });
+
+    it('should summarize the workflow stream by workflow with the same generic grouping', () => {
+      const facade = createReplayFacade();
+
+      expect(facade.populationSummaries('workflow')).toEqual([
+        { population: 'Invoice approval (synthetic)', identitySliceCount: 4, withSurfacedDivergence: 2 },
+      ]);
+    });
+
+    it('should list every document Identity Slice state, invoices first, then by label', () => {
+      const facade = createReplayFacade();
+
+      expect(facade.identitySliceStates('document')?.map(s => [s.label, s.state])).toEqual([
+        ['Alpha Office Supplies (synthetic) · Invoice', 'surfaced-divergence'],
+        ['Beta Freight Services (synthetic) · Invoice', 'no-surfaced-divergence'],
+        ['Delta Packaging Supplies (synthetic) · Invoice', 'no-surfaced-divergence'],
+        ['Epsilon Print Services (synthetic) · Invoice', 'no-surfaced-divergence'],
+        ['Gamma Facilities Care (synthetic) · Invoice', 'no-surfaced-divergence'],
+        ['Alpha Office Supplies (synthetic) · Credit note', 'no-observed-baseline'],
+        ['Beta Freight Services (synthetic) · Credit note', 'no-observed-baseline'],
+        ['Gamma Facilities Care (synthetic) · Credit note', 'no-observed-baseline'],
+      ]);
+    });
+
+    it('should count reference and compared observations per Identity Slice as the detector splits them', () => {
+      const facade = createReplayFacade();
+
+      expect(stateOf(facade, 'Alpha Office Supplies (synthetic) · Invoice')).toMatchObject({
+        observationCount: 12,
+        referenceObservationCount: 8,
+        comparedObservationCount: 4,
+        observedBaselineCount: 4,
+        dimensionCount: 4,
+        divergenceCount: 1,
+      });
+      expect(stateOf(facade, 'Delta Packaging Supplies (synthetic) · Invoice')).toMatchObject({
+        observationCount: 10,
+        referenceObservationCount: 6,
+        comparedObservationCount: 4,
+        observedBaselineCount: 4,
+        divergenceCount: 0,
+      });
+      expect(stateOf(facade, 'Beta Freight Services (synthetic) · Credit note')).toMatchObject({
+        observedBaselineCount: 0,
+        divergenceCount: 0,
+      });
+    });
+
+    it('should keep population summaries and states whatever the filters', () => {
+      const facade = createReplayFacade();
+      facade.setFilters('document', {
+        identitySliceId: 'document/delta-packaging-supplies-synthetic/invoice',
+      });
+
+      expect(facade.visibleDivergences('document')).toEqual([]);
+      expect(facade.populationSummaries('document')?.[0].withSurfacedDivergence).toBe(1);
+      expect(facade.identitySliceStates('document')?.length).toBe(8);
+    });
+
+    it('should report no summaries or states while a stream is loading or unavailable', () => {
+      const facade = createFacade({});
+
+      expect(facade.populationSummaries('document')).toBeNull();
+      expect(facade.identitySliceStates('workflow')).toBeNull();
     });
   });
 
@@ -276,6 +355,7 @@ describe('DashboardFacade', () => {
         status: 'ready',
         divergences: [],
         identitySlices: [],
+        identitySliceStates: [],
         latestObservedAt: null,
       });
     });
@@ -291,7 +371,7 @@ describe('DashboardFacade', () => {
       const facade = createReplayFacade();
       const state = facade.streamState('document');
 
-      expect(state.status === 'ready' && state.identitySlices.length).toBe(6);
+      expect(state.status === 'ready' && state.identitySlices.length).toBe(8);
       expect(state.status === 'ready' && state.latestObservedAt).toBe('2026-09-11T15:00:00.000Z');
     });
 

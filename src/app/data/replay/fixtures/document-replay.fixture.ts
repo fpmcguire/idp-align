@@ -8,6 +8,8 @@ import { ReplayFixture } from '../replay-fixture';
 const ALPHA = 'Alpha Office Supplies (synthetic)';
 const BETA = 'Beta Freight Services (synthetic)';
 const GAMMA = 'Gamma Facilities Care (synthetic)';
+const DELTA = 'Delta Packaging Supplies (synthetic)';
+const EPSILON = 'Epsilon Print Services (synthetic)';
 const INVOICE = 'Invoice';
 const CREDIT_NOTE = 'Credit note';
 
@@ -58,6 +60,28 @@ const SEEDS: readonly DocumentSeed[] = [
   [BETA, CREDIT_NOTE, 158.1, 'USD', '2026-09-10'],
   [ALPHA, CREDIT_NOTE, 112.4, 'EUR', '2026-09-11'],
   [BETA, INVOICE, 4529.0, 'USD', '2026-09-11'],
+  // Two more supplier invoice populations, appended so earlier record IDs keep their values.
+  // Together with Alpha, Beta, and Gamma they give five Supplier x Invoice Identity Slices.
+  [DELTA, INVOICE, 2140.0, 'EUR', '2026-08-04'],
+  [DELTA, INVOICE, 2215.5, 'EUR', '2026-08-11'],
+  [DELTA, INVOICE, 2180.3, 'EUR', '2026-08-14'],
+  [DELTA, INVOICE, 2105.8, 'EUR', '2026-08-18'],
+  [DELTA, INVOICE, 2236.0, 'EUR', '2026-08-25'],
+  [DELTA, INVOICE, 2162.4, 'EUR', '2026-08-28'],
+  [DELTA, INVOICE, 2194.7, 'EUR', '2026-09-01'],
+  [DELTA, INVOICE, 2128.9, 'EUR', '2026-09-04'],
+  [DELTA, INVOICE, 2221.2, 'EUR', '2026-09-08'],
+  [DELTA, INVOICE, 2157.6, 'EUR', '2026-09-11'],
+  [EPSILON, INVOICE, 548.2, 'EUR', '2026-08-06'],
+  [EPSILON, INVOICE, 531.9, 'EUR', '2026-08-10'],
+  [EPSILON, INVOICE, 556.4, 'EUR', '2026-08-13'],
+  [EPSILON, INVOICE, 540.0, 'EUR', '2026-08-20'],
+  [EPSILON, INVOICE, 527.5, 'EUR', '2026-08-24'],
+  [EPSILON, INVOICE, 552.8, 'EUR', '2026-08-27'],
+  [EPSILON, INVOICE, 544.1, 'EUR', '2026-08-31'],
+  [EPSILON, INVOICE, 536.7, 'EUR', '2026-09-03'],
+  [EPSILON, INVOICE, 549.9, 'EUR', '2026-09-07'],
+  [EPSILON, INVOICE, 533.2, 'EUR', '2026-09-10'],
 ];
 
 const FIRST_DOCUMENT_ID = 1001;
@@ -87,7 +111,7 @@ export const DOCUMENT_REPLAY_FIXTURE: ReplayFixture<readonly DocuWareDocumentRec
   metadata: {
     fixtureId: 'document-replay-v1',
     streamKind: 'document',
-    description: 'Synthetic invoice and credit note index-field records for three synthetic vendors.',
+    description: 'Synthetic invoice and credit note index-field records for five synthetic suppliers.',
     synthetic: true,
     shapedFrom: [
       {

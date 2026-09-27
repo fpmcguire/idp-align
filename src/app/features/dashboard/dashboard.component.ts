@@ -18,6 +18,8 @@ import { DivergenceAnalysisComponent } from '../../shared/ui/divergence/divergen
 import { DivergenceCardComponent } from '../../shared/ui/divergence/divergence-card/divergence-card.component';
 import { DivergenceDetailComponent } from '../../shared/ui/divergence/divergence-detail/divergence-detail.component';
 import { STATUS_LABELS, formatUtcDate } from '../../shared/ui/divergence/divergence-format';
+import { IdentitySliceStatesComponent } from '../../shared/ui/identity-slice-states/identity-slice-states.component';
+import { PopulationSummaryComponent } from '../../shared/ui/identity-slice-states/population-summary.component';
 import {
   DivergenceSortKey,
   TimeRangePreset,
@@ -98,7 +100,13 @@ const selectValue = (event: Event) => (event.target as HTMLSelectElement).value;
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [DivergenceCardComponent, DivergenceDetailComponent, DivergenceAnalysisComponent],
+  imports: [
+    DivergenceCardComponent,
+    DivergenceDetailComponent,
+    DivergenceAnalysisComponent,
+    IdentitySliceStatesComponent,
+    PopulationSummaryComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss', './dashboard-analysis.scss'],
   providers: [DashboardFacade],
@@ -248,6 +256,12 @@ export class DashboardComponent {
       },
     ];
   });
+
+  /** Detector output for each of the active stream's Identity Slices; null while unavailable. */
+  identitySliceStates = computed(() => this.facade.identitySliceStates(this.activeStream()));
+
+  /** Identity Slices observed per population, and how many surfaced a Divergence. */
+  populationSummaries = computed(() => this.facade.populationSummaries(this.activeStream()));
 
   /**
    * Whether the Divergence Analysis replaces the list and detail in the stream panel. It follows

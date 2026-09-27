@@ -1,0 +1,16 @@
+:host {
+  display: block;
+}
+
+.population-summaries {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-lg);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.population-summary {
+  font-weight: var(--font-weight-medium);
+}

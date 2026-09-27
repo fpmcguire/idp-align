@@ -1,6 +1,10 @@
 import { firstValueFrom } from 'rxjs';
 import { CLAIM_GUARDRAIL_PATTERNS } from '../../../testing/claim-guardrail-patterns';
-import { detectStreamDivergences } from '../../domain/divergence-detection';
+import {
+  DEFAULT_DETECTION_CONFIG,
+  detectStreamDivergences,
+} from '../../domain/divergence-detection';
+import { isWithinObservedBaseline } from '../../domain/observed-baseline';
 import { StreamKind } from '../../domain/stream';
 import { StreamObservationRepository } from '../stream-observation.repository';
 import { ReplayStreamObservationRepository } from './replay-stream-observation.repository';
@@ -9,6 +13,17 @@ import { ReplayStreamObservationRepository } from './replay-stream-observation.r
 // same path later dashboard Steps will use. Fixture files are not imported here.
 
 const repository: StreamObservationRepository = new ReplayStreamObservationRepository();
+
+const ALPHA_INVOICE = 'document/alpha-office-supplies-synthetic/invoice';
+const DELTA_INVOICE = 'document/delta-packaging-supplies-synthetic/invoice';
+const EPSILON_INVOICE = 'document/epsilon-print-services-synthetic/invoice';
+const INVOICE_SLICE_IDS = [
+  ALPHA_INVOICE,
+  'document/beta-freight-services-synthetic/invoice',
+  DELTA_INVOICE,
+  EPSILON_INVOICE,
+  'document/gamma-facilities-care-synthetic/invoice',
+];
 
 async function detect(stream: StreamKind) {
   const slices = await firstValueFrom(repository.getIdentitySlices(stream));
@@ -54,12 +69,98 @@ describe('Divergence detection over replay data', () => {
       const { baselines } = await detect('document');
       const sliceIds = [...new Set(baselines.map(b => b.identitySliceId))];
 
-      expect(sliceIds.sort()).toEqual([
-        'document/alpha-office-supplies-synthetic/invoice',
-        'document/beta-freight-services-synthetic/invoice',
-        'document/gamma-facilities-care-synthetic/invoice',
-      ]);
-      expect(baselines.length).toBe(12);
+      expect(sliceIds.sort()).toEqual(INVOICE_SLICE_IDS);
+      expect(baselines.length).toBe(20);
+    });
+
+    // STEP-09: Supplier Invoice Population Divergence. Five fictional Supplier x Invoice Identity
+    // Slices each derive their own Observed Baselines; only Alpha surfaces a sustained Divergence.
+    describe('Supplier Invoice Population Divergence (STEP-09)', () => {
+      const PEER_SLICE_IDS = INVOICE_SLICE_IDS.filter(id => id !== ALPHA_INVOICE);
+
+      it('should observe five Supplier x Invoice Identity Slices', async () => {
+        const slices = await firstValueFrom(repository.getIdentitySlices('document'));
+        const invoices = slices.filter(s => s.streamKind === 'document' && s.documentType === 'Invoice');
+
+        expect(invoices.map(s => s.id).sort()).toEqual(INVOICE_SLICE_IDS);
+      });
+
+      it('should derive an amount Observed Baseline for each supplier from its own observations', async () => {
+        const { baselines } = await detect('document');
+        const observations = await firstValueFrom(repository.getObservations('document'));
+        const amount = INVOICE_SLICE_IDS.map(id =>
+          baselines.find(b => b.identitySliceId === id && b.dimension === 'amount-value'),
+        );
+
+        for (const baseline of amount) {
+          expect(baseline).toBeDefined();
+          for (const observationId of baseline!.referenceObservationIds) {
+            expect(observations.find(o => o.id === observationId)?.identitySliceId).toBe(
+              baseline!.identitySliceId,
+            );
+          }
+        }
+        const means = amount.map(b => (b?.valueKind === 'numeric' ? Math.round(b.summary.mean) : null));
+        expect(new Set(means).size).toBe(INVOICE_SLICE_IDS.length);
+      });
+
+      it('should surface exactly one invoice-population Divergence, for Alpha only', async () => {
+        const { divergences } = await detect('document');
+        const invoiceDivergences = divergences.filter(d => INVOICE_SLICE_IDS.includes(d.identitySlice.id));
+
+        expect(invoiceDivergences.map(d => [d.identitySlice.id, d.dimension])).toEqual([
+          [ALPHA_INVOICE, 'amount-value'],
+        ]);
+        expect(divergences.length).toBe(1);
+      });
+
+      it('should not surface the same Divergence for peer supplier populations', async () => {
+        const { baselines, divergences } = await detect('document');
+        const observations = await firstValueFrom(repository.getObservations('document'));
+
+        for (const sliceId of PEER_SLICE_IDS) {
+          expect(divergences.some(d => d.identitySlice.id === sliceId)).toBe(false);
+          const baseline = baselines.find(
+            b => b.identitySliceId === sliceId && b.dimension === 'amount-value',
+          );
+          const compared = observations.filter(
+            o => o.identitySliceId === sliceId && o.observedAt >= '2026-08-31T00:00:00.000Z',
+          );
+          expect(compared.length).toBeGreaterThan(0);
+          for (const observation of compared) {
+            expect(isWithinObservedBaseline(baseline!, observation.amount.value)).toBe(true);
+          }
+        }
+      });
+
+      it('should give the new peer populations enough compared observations to meet the sustained criteria', async () => {
+        const observations = await firstValueFrom(repository.getObservations('document'));
+
+        for (const sliceId of [DELTA_INVOICE, EPSILON_INVOICE]) {
+          const compared = observations.filter(
+            o => o.identitySliceId === sliceId && o.observedAt >= '2026-08-31T00:00:00.000Z',
+          );
+          expect(compared.length).toBeGreaterThanOrEqual(
+            DEFAULT_DETECTION_CONFIG.minConsecutiveObservations,
+          );
+        }
+      });
+
+      it('should reconstruct the Alpha Divergence Evidence from source observations and its baseline', async () => {
+        const { divergences } = await detect('document');
+        const observations = await firstValueFrom(repository.getObservations('document'));
+        const [alpha] = divergences;
+
+        expect(alpha.evidence.baselineId).toBe(alpha.baseline.id);
+        for (const item of alpha.evidence.items) {
+          const source = observations.find(o => o.id === item.observationId);
+          expect(source?.identitySliceId).toBe(ALPHA_INVOICE);
+          expect(item.sources).toEqual(source?.sources);
+          expect(item.value).toBe(source?.amount.value);
+          expect(item.withinBaseline).toBe(false);
+        }
+        expect(alpha.baseline.referenceObservationIds.every(id => id.startsWith('document/10'))).toBe(true);
+      });
     });
   });
 

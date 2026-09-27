@@ -1,0 +1,34 @@
+<section class="slice-states" aria-labelledby="slice-states-heading" data-testid="identity-slice-states">
+  <h3 id="slice-states-heading" class="slice-states-heading">Identity Slice states</h3>
+  <p class="slice-states-note" data-testid="slice-states-note">
+    Each Identity Slice is compared only with its own Observed Baselines. Observations after the
+    reference window are compared; a state describes one Identity Slice, not the stream as a whole.
+  </p>
+  <div class="table-scroll">
+    <table class="slice-states-table">
+      <caption>Detector output per Identity Slice</caption>
+      <thead>
+        <tr>
+          <th scope="col">Identity Slice</th>
+          <th scope="col">Reference observations</th>
+          <th scope="col">Compared observations</th>
+          <th scope="col">Observed Baselines</th>
+          <th scope="col">State</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (state of states(); track state.identitySliceId) {
+          <tr data-testid="slice-state-row" [attr.data-state]="state.state">
+            <th scope="row" data-testid="slice-state-label">{{ state.label }}</th>
+            <td data-testid="slice-state-reference">{{ state.referenceObservationCount }}</td>
+            <td data-testid="slice-state-compared">{{ state.comparedObservationCount }}</td>
+            <td data-testid="slice-state-baselines">{{ baselineLabel(state) }}</td>
+            <td data-testid="slice-state-value">
+              <span class="slice-state" [attr.data-state]="state.state">{{ stateLabel(state) }}</span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -2727,4 +2727,67 @@ Development Team implementation plan for STEP-09, as submitted in the plan-only 
 - Existing accepted replay behavior must be preserved or explicitly accounted for in the Development Team handoff and Tech Lead review.
 - Tech Lead review is required before QA begins.
 
+### A-073 - STEP-09 Tech Lead Review Acceptance For QA
+
+- **Status:** Accepted with conditions - QA may begin
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire
+- **Role accepted:** Tech Lead
+- **Gate:** Tech Lead implementation review acceptance before QA
+- **Step:** `mod-w/step-09.md`
+- **Tech Lead verdict:** Hold for Moderator decision before QA; Moderator accepts the implementation package for QA review with the E2E finding disposition below.
+- **Next authorized action:** Commit the accepted STEP-09 implementation package and Tech Lead review. QA may begin independent STEP-09 review after this commit. QA must not treat STEP-09 as complete; final gate remains separate.
+
+#### Accepted Artifacts And Evidence
+
+- `mod-w/step-09.md`
+- A-071 STEP-09 Step approval
+- A-072 STEP-09 Development Team implementation-plan approval
+- `review.md` - Tech Lead Review - STEP-09
+- Current STEP-09 implementation package in the working tree, including document replay fixture additions, population summary and Identity Slice state UI, focused unit/component/E2E tests, and related test updates
+- Development Team reported verification under Node.js v26.0.0:
+  - lint passed
+  - build passed
+  - unit/component tests passed: 33 files, 541 tests
+  - E2E reported 44 passed and 2 failed
+- Tech Lead spot check: `git diff --check` passed
+
+#### Acceptance Summary
+
+The Moderator accepts the Tech Lead review and the STEP-09 implementation package for QA review. The implementation is within A-072 Option A: it preserves the existing Alpha Office Supplies amount Divergence, appends fictional synthetic supplier invoice peer populations, keeps the existing reference-window and detector semantics, adds factual population-summary and Identity Slice state presentation, and does not change README, About, roadmap completion status, detector code, thresholds, dimensions, workflow replay behavior, backend/proxy code, dependencies, or chart libraries.
+
+The implementation remains CAV Level 1 only and does not authorize cause, correctness, failure, risk, business intent, producer blame, remediation, Attribution, cross-stream causality, aggregate-stability, CAV Level 2+, or Declared Intention claims.
+
+#### E2E Finding Disposition
+
+The Moderator accepts TL-STEP09-001 as a QA-review condition rather than a blocker to starting QA.
+
+The reported E2E failures are recorded as pre-existing or non-STEP-09 candidates for QA verification:
+
+- `about.spec.ts:22` expects 3 external links but finds 5 after earlier About-page link changes.
+- `documentation.spec.ts:89` flags the word "official" in the Sport Auto Plus research-reference row as an endorsement-pattern match.
+
+QA must independently verify whether these failures are outside STEP-09 scope and recommend disposition. This acceptance does not waive the final STEP-09 quality gate. The final Moderator gate must separately decide whether the E2E failures require rework, a separate cleanup approval, or explicit acceptance.
+
+#### QA Handoff
+
+QA is authorized to review STEP-09 against A-071, A-072, `mod-w/step-09.md`, `review.md`, the Development Team handoff, and the committed implementation package.
+
+QA should pay particular attention to:
+
+- exactly one surfaced document Divergence;
+- five fictional Supplier x Invoice Identity Slices;
+- no real customer names or customer data in replay fixtures;
+- preservation of existing Alpha Evidence IDs and accepted replay behavior;
+- population-summary and Identity Slice state wording;
+- Evidence Trace and Divergence Analysis for Alpha;
+- peer supplier filters showing no Divergence;
+- absence of unsupported aggregate-stability, CAV Level 2+, Attribution, business judgment, severity/risk, alert/anomaly, root-cause, and case-study customer claims;
+- preservation of workflow behavior;
+- independent disposition of the two reported E2E failures.
+
+#### Gate Boundary
+
+This entry accepts the Tech Lead review and authorizes QA to begin. It is not QA acceptance, Product Owner review, roadmap completion, STEP-09 completion, or the final Moderator gate. Product Owner review remains required after QA and before the STEP-09 final Moderator gate under A-072.
+
 MOD-W v5.0.1

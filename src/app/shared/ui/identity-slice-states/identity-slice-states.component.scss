@@ -1,0 +1,62 @@
+:host {
+  display: block;
+}
+
+.slice-states {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.slice-states-heading {
+  margin: 0;
+  font-size: var(--font-size-heading);
+}
+
+.slice-states-note {
+  margin: 0;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.slice-states-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-caption);
+
+  caption {
+    text-align: left;
+    padding-bottom: var(--space-sm);
+    color: var(--color-text-secondary);
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: var(--space-xs) var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  thead th {
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+  }
+
+  tbody th {
+    font-weight: var(--font-weight-regular);
+  }
+}
+
+.slice-state {
+  white-space: nowrap;
+  color: var(--color-text-secondary);
+
+  &[data-state='surfaced-divergence'] {
+    color: var(--color-divergence-ongoing);
+    font-weight: var(--font-weight-medium);
+  }
+}
