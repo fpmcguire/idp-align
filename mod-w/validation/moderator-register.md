@@ -3015,3 +3015,100 @@ The Moderator explicitly overrides A-078's STEP-09 sequencing condition for STEP
 This entry is STEP-10 Step approval and a narrowly scoped sequencing override only. It is not implementation-plan approval, Tech Lead review acceptance, QA acceptance, or STEP-10 completion.
 
 MOD-W v5.0.1
+
+### A-080 - STEP-10 Development Team Implementation Plan Approval
+
+- **Status:** Approved with conditions
+- **Date:** 2026-09-27
+- **Moderator:** User, acting as ad hoc Moderator
+- **Role approved:** Development Team
+- **Gate:** Implementation-plan approval before implementation
+- **Step:** `mod-w/step-10.md`
+- **Plan:** `mod-w/step-10-implementation-plan.md`
+- **Next authorized action:** Development Team may implement only the approved plan and conditions below, then run the listed verification and hand off the implementation and evidence for Tech Lead review.
+
+#### Reviewed Artifacts
+
+- `mod-w/step-10.md`, approved under A-079
+- `mod-w/step-10-implementation-plan.md`, submitted by Development Team (Claude Code)
+- `mod-w/docs/architecture-page.txt`, Product Owner-reviewed baseline with A-078 corrections
+- `mod-w/product.md` R14, `mod-w/domain-language.md`, `mod-w/architecture.md` D14, and `mod-w/docs/research-references.md` section 4a
+- Current route, About page, replay mapper, dashboard detection path, and Identity Slice state helper
+
+#### Approval Decision
+
+The Moderator approves the Development Team implementation plan with the conditions below. The plan is bounded to a lazy `/architecture` route, a standalone explanatory component, top-navigation entry, the described About-page shortening, and focused component/E2E coverage. The plan introduces no new dependency and does not change detection or repository behavior.
+
+The Moderator approves the plan's copy-source dispositions: remove the non-canonical "violation" wording while retaining the failure boundary; describe the public case studies as published research provenance rather than customers; state detection in relation to per-slice Observed Baselines; omit Credit note Identity Slices while retaining the distinction between No Observed Baseline and No surfaced Divergence; use the exact A-078 Sport Auto Plus wording; and make no current live-integration claim.
+
+#### Conditions
+
+- Static supplier and slice-state content is approved only with the planned drift test. The test must use the current replay mapper, `detectStreamDivergences`, and `toIdentitySliceStates`; fixture imports remain test-only and presentation code must not import fixture data.
+- The About shorten-and-link change is approved only as described in the plan. Preserve all R13 project-context, DocuWare research/demo, CAV, MOD-W, and boundary obligations; adjust only assertions made obsolete by the removed layer list and add the Architecture link assertion.
+- Designer review is not required only while the page reuses About's visual language and uses semantic markup/CSS connectors as planned. Any novel visual pattern, diagram system, or interaction must stop for Moderator-directed Designer review before implementation.
+- The only conditional E2E guardrail-file addition is `e2e/claim-guardrails.spec.ts` if the existing test iterates over routes. No other files or behaviors outside the plan are authorized without separate Moderator approval.
+- Preserve all STEP-10 and A-079 scope boundaries, including no changes to detection, baselines, fixtures, repositories, Dashboard behavior, workflow behavior, live integration, credentials, or external calls. STEP-09's Product Owner review and final Moderator gate remain pending and are not waived by A-079 or this approval.
+- Run lint, build, unit/component tests, and E2E under Node.js v26.0.0 as listed. The handoff must identify changed files, copy-source disposition, static-content decision, About decision, unchanged boundaries, and command results.
+- After QA and before the STEP-10 final Moderator gate, obtain Product Owner review of the permanent Architecture-page copy, research provenance, and preservation of R13.
+- Tech Lead implementation review and Moderator acceptance remain required before QA begins. This entry does not accept implementation, QA, or the final STEP-10 gate.
+
+#### Gate Boundary
+
+This entry approves the implementation plan and authorizes implementation within its conditions. It is not Tech Lead implementation-review acceptance, QA acceptance, Product Owner sign-off, or STEP-10 completion.
+
+MOD-W v5.0.1
+
+### A-081 - STEP-10 Rework Approval, Scope Exceptions, And Tech Lead Re-Review Acceptance
+
+- **Status:** Accepted - QA may proceed
+- **Date:** 2026-09-27
+- **Moderator:** User, acting as ad hoc Moderator
+- **Role accepted:** Tech Lead
+- **Gate:** Tech Lead implementation re-review acceptance before QA
+- **Step:** `mod-w/step-10.md`
+- **Next authorized action:** QA may review STEP-10 against the current implementation package, `review.md`, A-079, A-080, and this entry.
+
+#### Accepted Artifacts And Evidence
+
+- `review.md` - Tech Lead Review - STEP-10, including `TL-STEP10-001`, `TL-STEP10-002`, `TL-STEP10-003`, and the re-review section for `TL-STEP10-002`
+- Architecture page implementation and rework:
+  - `src/app/features/architecture/architecture.component.html`
+  - `src/app/features/architecture/architecture.component.scss`
+  - `src/app/features/architecture/architecture.component.spec.ts`
+  - `e2e/architecture.spec.ts`
+- STEP-10 app-shell, routing, and About relationship changes already reviewed under the STEP-10 Tech Lead review
+
+#### Approval Decision
+
+The Moderator recognizes the Tech Lead findings and accepts the Development Team's flow-diagram rework.
+
+The current Architecture-page flow diagrams are approved as a bounded HTML/CSS implementation:
+
+- all three flows remain labelled semantic ordered lists;
+- no Chart.js, canvas, SVG-only diagram, Mermaid, CDN library, new dependency, image asset, or screenshot asset is introduced;
+- CAV terminology, flow copy, step order, and source-boundary meaning are preserved;
+- desktop and mobile layout checks are covered by E2E tests;
+- the Moderator reviewed the reworked page in the browser and approved the improved visual execution.
+
+#### Scope Exceptions Approved
+
+The Moderator approves the two scope exceptions identified by Tech Lead review:
+
+| Finding       | Approved exception                                                                                                                                                                                                                                                                |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TL-STEP10-001 | `e2e/about.spec.ts` may update its About Architecture-section expectation to assert the new `/architecture` link. This is approved because the About section was intentionally shortened under A-080, and the existing E2E assertion was stale after that approved About relationship change. |
+| TL-STEP10-003 | The first Architecture-page CAV mention may read `CAV (Continuous Alignment Verification)` and link to `https://github.com/fpmcguire/continuous-alignment-verification` with safe external-link attributes. The `.git` suffix is intentionally omitted for the web-facing URL.             |
+
+#### Conditions
+
+- STEP-10 remains bounded to the Architecture page, navigation, approved About relationship, and focused tests.
+- This approval does not authorize Chart.js/canvas flow diagrams, new dependencies, new diagram systems, live integrations, external calls, or changes to detection, fixtures, repositories, Dashboard behavior, workflow behavior, CAV semantics, research-provenance claims, or About R13 obligations.
+- The `architecture.component.scss` budget warning reported by the Development Team is accepted as non-blocking for QA because the build passes; QA may still note it if observed.
+- After QA and before the STEP-10 final Moderator gate, Product Owner review remains required for the permanent Architecture-page copy, research provenance, and preservation of R13, as required by A-080.
+- STEP-09 Product Owner review and final Moderator gate remain pending and are not completed by this STEP-10 acceptance.
+
+#### Gate Boundary
+
+This entry accepts the STEP-10 Tech Lead re-review and authorizes QA to begin. It is not QA acceptance, Product Owner sign-off, or the final STEP-10 Moderator gate.
+
+MOD-W v5.0.1

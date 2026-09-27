@@ -1,315 +1,191 @@
-# Tech Lead Review - STEP-09
+# Tech Lead Review - STEP-10
 
-**Step:** STEP-09 - Population-Specific Divergence Scenario
+**Step:** STEP-10 - Architecture Page
 **Review date:** 2026-09-27
-**Reviewer:** Codex, acting as Tech Lead  
-**Implementation package reviewed:** Current uncommitted Development Team STEP-09 implementation after A-072 implementation-plan approval
-**Verdict:** Hold for Moderator decision before QA
+**Reviewer:** Codex, acting as Tech Lead
+**Implementation package reviewed:** Current uncommitted Development Team STEP-10 implementation after A-080 implementation-plan approval
+**Verdict:** Accepted for QA under A-081
 
 ---
 
 ## Findings
 
-### Must Fix / Gate Decision
+### Must Fix / Process Gate
 
-**TL-STEP09-001 - Required E2E gate is red before QA can begin.**
-`mod-w/step-09.md` requires `npm run test:e2e` to pass, and A-072 did not waive that gate. The Development Team reports 44 E2E tests passed and 2 failed. The reported failures are outside STEP-09 scope and reproduce on clean `HEAD`, but they still mean the accepted quality gate is not green:
+**TL-STEP10-001 - Outside-plan E2E test change lacks the required recorded approval.**
+`e2e/about.spec.ts:56` was changed to replace the prior About architecture-copy assertion with an Architecture-link assertion. The Development Team handoff states this file was outside the approved plan and was approved during the session, but A-080 does not list `e2e/about.spec.ts` as an approved affected file, and `mod-w/validation/moderator-register.md` does not yet contain the separate approval record for that exception.
 
-- `about.spec.ts:22` expects 3 external links but finds 5 after an earlier About-page link change.
-- `documentation.spec.ts:89` flags "official" in the Sport Auto Plus research-reference row as an endorsement-pattern match.
+This is a MOD-W process blocker, not an implementation-behavior blocker. Per the project review rules, missing Moderator approval for scope outside the active Step/plan must be recorded as blocking rather than accepted silently.
 
-I do not recommend changing STEP-09 implementation code for this finding. Moderator should either authorize a narrow pre-QA cleanup/override for the two pre-existing E2E failures, or hold QA until a separately approved fix makes `npm run test:e2e` pass.
+Required resolution before QA:
 
-### Could Fix Later
+- record a Moderator approval entry authorizing the `e2e/about.spec.ts` update for STEP-10, including why it is allowed despite being outside the approved plan; or
+- revert or reroute that assertion change through an approved STEP-10 implementation-plan update.
 
-**TL-STEP09-002 - Compared-observation counting duplicates detector boundary knowledge.**
-`src/app/features/dashboard/identity-slice-states.ts` calculates compared observations as observations at or after `referenceWindow.to`, mirroring the current detector split. This is intentionally done without changing detector code and is covered by tests, so it is acceptable for STEP-09. A later cleanup could expose the split from domain output or a shared helper to reduce future drift.
+**Disposition after A-081:** Resolved. A-081 records Moderator approval for the `e2e/about.spec.ts` scope exception.
+
+### Must Fix / Visual Execution
+
+**TL-STEP10-002 - Moderator rejects the current flowchart visual execution.**
+The Moderator reviewed the implemented Architecture page in the browser and does not accept the current flowchart treatment. The existing vertical stacked boxes technically satisfy the semantic HTML/CSS constraint, but the visual result is not acceptable for the permanent R14 Architecture product surface.
+
+Required Development Team rework:
+
+- rework the Architecture page flow diagrams using bounded HTML/CSS only;
+- keep the underlying semantic structure accessible, preferably preserving ordered-list semantics or equivalent labelled step groups;
+- preserve the existing copy, step order, CAV terminology, and source-boundary meaning unless a separate copy change is approved;
+- improve visual presentation beyond plain full-width stacked boxes, with clearer grouping, connector treatment, spacing, and responsive behavior;
+- support desktop and mobile layouts without text overlap or horizontal page overflow;
+- update component and E2E tests only as needed to preserve semantic/accessible-flow coverage.
+
+Constraints:
+
+- Do not use Chart.js for the flow diagrams under the current approval, because Chart.js renders to canvas and A-080/STEP-10 prohibit canvas diagrams.
+- Do not add SVG-only diagrams, Mermaid, CDN libraries, new dependencies, image assets, or screenshot assets.
+- Do not change detection, fixtures, repositories, Dashboard behavior, workflow behavior, CAV semantics, research-provenance claims, or About R13 obligations.
+- If the Development Team wants a novel diagram system beyond bounded HTML/CSS styling, stop and request Moderator-directed Designer review or a revised implementation-plan approval.
+
+**Disposition after rework:** Resolved. See "Re-Review - TL-STEP10-002 Flow Diagram Rework" below.
+
+### Must Fix / Process Gate
+
+**TL-STEP10-003 - Moderator-directed CAV repository link change lacks the required recorded approval.**
+`src/app/features/architecture/architecture.component.html:8` changes the first page-level CAV mention to `CAV (Continuous Alignment Verification)` and links it to the CAV repository. This is a reasonable product-copy improvement, and the implementation uses safe external-link attributes, but the Development Team handoff identifies it as a Moderator-directed change outside the approved A-080 plan.
+
+Required resolution before QA:
+
+- record a Moderator approval entry authorizing the CAV expansion/link change, including the corrected spelling and web URL without the `.git` suffix; or
+- revert/reroute the copy change through an approved STEP-10 implementation-plan update.
+
+**Disposition after A-081:** Resolved. A-081 records Moderator approval for the CAV expansion/link scope exception.
 
 ---
 
 ## Scope And Approval Check
 
-Required approvals are present:
+Required STEP-10 process approvals are otherwise present:
 
-- A-069 approves the Product/domain-language update for Population-Specific Divergence.
-- A-070 approves the research-evidence update.
-- A-071 approves STEP-09 for Development Team briefing and planning.
-- A-072 approves the Development Team implementation plan with conditions.
+- A-078 admits R14 and authorizes Tech Lead drafting.
+- A-079 approves STEP-10 for Development Team briefing and planning and records the STEP-10-only sequencing override while STEP-09 remains incomplete.
+- A-080 approves the Development Team implementation plan with conditions.
+- A-081 accepts the Tech Lead re-review, approves the Dev Team flow-diagram rework, approves the two scope exceptions, and authorizes QA to begin.
 
-The implementation follows A-072 Option A:
+The reviewed implementation follows the approved A-080 plan in the core app surface:
 
-- Existing Alpha Office Supplies invoice Divergence is preserved.
-- New records are appended after existing document fixture IDs.
-- New suppliers are fictional and synthetic.
-- The current Aug-Sep cadence is preserved.
-- README, About, roadmap, register, QA, detector code, thresholds, reference-window semantics, dimensions, mappers, workflow replay, packages, backend/proxy, and chart libraries are unchanged.
+- `/architecture` is added as a lazy route before the wildcard route.
+- The Architecture component is standalone and uses separate `.ts`, `.html`, and `.scss` files.
+- App-shell navigation now reads Dashboard | About | Architecture using the existing active-link pattern.
+- About is shortened and linked to `/architecture` while preserving the surrounding R13 project-context sections.
+- The page is explanatory only and does not import fixtures or run detection in production code.
+- No detector, baseline, fixture, repository, Dashboard, workflow, dependency, README, or research-reference change was found in the implementation package.
 
-The work remains CAV Level 1. I found no new root-cause, risk, failure, correctness, Declared Intention, Attribution, remediation, or cross-stream causality claim in the reviewed implementation.
+`mod-w/roadmap.md`, `mod-w/step-10.md`, and `mod-w/validation/moderator-register.md` are modified in the working tree for A-080/status recording. I treated those as Moderator/approval artifacts rather than Development Team implementation behavior.
 
 ---
 
 ## Implementation Review
 
-The fixture change is aligned with STEP-09:
+The Architecture page aligns with R14 and D14:
 
-- Document replay now has five Supplier x Invoice Identity Slices: Alpha, Beta, Gamma, Delta, and Epsilon.
-- Delta and Epsilon are fictional synthetic peers.
-- Existing records `1001` through `1038` are unchanged.
-- Alpha Evidence remains `1024`, `1027`, `1030`, and `1035`.
-- Tests assert exactly one document Divergence, on Alpha amount-value.
-- Peer suppliers do not surface the same Divergence.
+- It contains no interview, interviewer, employer-directed, or interview-date framing.
+- It explains source data, mapping, CAV domain logic, repository/adapter separation, and presentation as separate responsibilities.
+- It keeps live sources as a source-independent extension point and explicitly says this is not a claim that live integration currently exists.
+- It presents public DocuWare case studies as research provenance only, with the required Sport Auto Plus wording.
+- External case-study links use `target="_blank"` and `rel="noopener noreferrer"`.
+- `Producer x Document Type` is framed as an IDP Identity Slice pattern, not a CAV primitive.
 
-The dashboard implementation is within architecture:
+The CAV Level 1 boundary is preserved:
 
-- Dashboard still reads through the facade/repository path.
-- Shared UI components are presentational.
-- No replay fixture import was added to dashboard or shared UI production code.
-- Population summaries are factual slice counts, not aggregate stability conclusions.
-- Identity Slice state copy avoids "stable", "normal", "healthy", "correct", severity/risk, and claim-overreach wording.
+- The page distinguishes Surfaced Divergence, No surfaced Divergence, and No Observed Baseline.
+- No surfaced Divergence is not described as normal, stable, healthy, correct, or aligned.
+- The boundary copy avoids Level 2+, Attribution as implemented behavior, causality, correctness judgment, business significance, producer blame, remediation, and business-intent judgment.
 
-The slice-state UI may render for workflow too, which A-072 allowed if generic. The workflow summary uses workflow name grouping and does not introduce new workflow claims.
+The static supplier-state choice satisfies A-080:
+
+- Production component code contains only static explanatory rows exposed through a signal and a computed summary.
+- The component spec imports the fixture only in test code and derives expected rows through `mapDocumentReplay`, `detectStreamDivergences`, and `toIdentitySliceStates`.
+- Rendered row order matches the Dashboard-derived state helper and the handoff-described order.
+
+The visual and semantic implementation now stays within the Designer waiver and the Moderator's rework direction:
+
+- The page reuses About-like restrained page structure, dark surfaces, borders, and callout treatment.
+- Flow explanations use ordered lists with accessible labels and CSS connectors.
+- No images, SVG diagrams, canvas, Mermaid, CDN library, or new diagram dependency was introduced.
+- The flowchart styling was reworked under TL-STEP10-002 and accepted in Tech Lead re-review.
 
 ---
 
 ## Tests And Evidence
 
-Development Team reported:
+Initial Development Team verification under Node.js v26.0.0:
 
 - `npm run lint` - pass.
-- `npm run build` - pass.
-- `npm test -- --watch=false` - pass, 33 files / 541 tests.
-- `npm run test:e2e` - 44 passed, 2 failed.
+- `npm run build` - pass; Architecture page builds as its own lazy-loaded bundle.
+- `npm test -- --watch=false` - pass, 34 files / 580 tests.
+- `npm run test:e2e` - pass, 53 tests.
+
+Development Team rework verification under Node.js v26.0.0:
+
+- `npm run lint` - pass.
+- `npm run build` - pass, with `architecture.component.scss` style-budget warning at 4.47 kB against a 4 kB budget.
+- `npm test -- --watch=false` - pass, 581 tests.
+- `npm run test:e2e` - pass, 55 tests.
 
 Tech Lead spot checks:
 
-- `git diff --check` - pass.
-- Static review of changed fixture, facade, dashboard, shared UI components, unit specs, and E2E spec completed.
+- Static review of route, shell nav, About changes, Architecture component/template/styles/spec, Architecture E2E, and the TL-STEP10-002 rework completed.
+- `git diff --check` passed, with line-ending warnings only.
+- I did not rerun the full lint/build/unit/E2E suite during this review.
 
-I did not rerun the full lint/build/unit/E2E suite during this review. The E2E result is already reported red by Development Team and must be resolved or explicitly dispositioned before QA.
+---
+
+## Re-Review - TL-STEP10-002 Flow Diagram Rework
+
+**Re-review date:** 2026-09-27
+**Reviewer:** Codex, acting as Tech Lead
+**Rework reviewed:** Current uncommitted Development Team flow-diagram rework after Moderator rejection of the original visual execution
+**Verdict for TL-STEP10-002:** Accepted
+
+The rework is within the bounded HTML/CSS direction:
+
+- `src/app/features/architecture/architecture.component.html:33`, `:165`, and `:172` keep all three flows as labelled `<ol>` elements with unchanged accessible names.
+- `src/app/features/architecture/architecture.component.scss:121` implements the pipeline layout with CSS only.
+- `src/app/features/architecture/architecture.component.scss:108` marks `StreamObservationRepository` as the source-independent boundary with a dashed accent border.
+- `src/app/features/architecture/architecture.component.scss:161` switches the layout to a four-column desktop pipeline when there is enough container width, while the default layout remains a single-column mobile flow.
+- `e2e/architecture.spec.ts:135` adds desktop and mobile layout coverage for step count, ordering, non-overlap, and absence of horizontal overflow.
+
+The rework preserves STEP-10 boundaries:
+
+- No Chart.js, canvas, SVG-only diagram, Mermaid, CDN library, new dependency, image asset, or screenshot asset was introduced.
+- Flow copy, step order, CAV terminology, and source-boundary meaning are preserved.
+- No detection, fixture, repository, Dashboard, workflow, CAV-semantic, research-provenance, or About R13 behavior changed.
+- The Moderator reviewed the reworked page in browser and accepted the visual direction as substantially improved.
+
+Residual notes:
+
+- The first card of the principal flow's second row has no incoming arrow. The numbered cards carry the sequence, and the E2E layout check verifies order/non-overlap rather than proving a particular row shape. This is acceptable for STEP-10.
+- The stylesheet budget warning should be considered for cleanup, but because the build passes and no budget change is needed, it does not block QA.
 
 ---
 
 ## QA Handoff Status
 
-Not ready for QA until Moderator dispositions TL-STEP09-001.
+Ready for QA under A-081.
 
-If Moderator authorizes a narrow fix or override for the two pre-existing E2E failures, QA should review STEP-09 against:
+TL-STEP10-002 is accepted and needs no further Development Team rework unless the Moderator requests additional visual changes.
 
-- `mod-w/step-09.md`
-- A-071 and A-072
-- this `review.md`
-- the Development Team handoff
-- the current working tree implementation
+TL-STEP10-001 and TL-STEP10-003 are resolved by A-081. No further Development Team rework is required before QA on the reviewed package.
 
-QA should pay particular attention to:
+Approval record for QA:
 
-- exactly one surfaced document Divergence;
-- five fictional Supplier x Invoice Identity Slices;
-- no real customer names or customer data in replay fixtures;
-- population-summary and slice-state wording;
-- Evidence Trace and Divergence Analysis for Alpha;
-- peer supplier filters showing no Divergence;
-- no CAV Level 2+, Attribution, business judgment, aggregate-stability, severity/risk, alert/anomaly, or root-cause claims;
-- preservation of workflow behavior.
+- A-081 accepts this Tech Lead re-review and authorizes QA to begin.
 
-Approval record needed before QA may proceed: Moderator acceptance of this Tech Lead review plus either resolution or explicit disposition of TL-STEP09-001.
+After QA and before the STEP-10 final Moderator gate, A-080 still requires Product Owner review of:
+
+- the permanent Architecture-page copy;
+- research provenance;
+- preservation of R13 About obligations.
 
 ---
 
 MOD-W v5.0.1
-
----
-
-## QA Blocker Disposition - QA-STEP09-001
-
-**Assessment date:** 2026-09-27
-**Finding assessed:** `qa.md` QA-STEP09-001 - E2E gate is red.
-**Tech Lead recommendation:** Approve a separate, narrow cleanup outside STEP-09 implementation scope.
-
-### Scope Conclusion
-
-I confirm QA's scope conclusion.
-
-Both E2E failures are outside STEP-09 scope and pre-date implementation commit `538ae62`:
-
-- At `538ae62`, E2E reports 44 passed and 2 failed.
-- At parent commit `0d94e20`, E2E reports 40 passed and the same 2 failed.
-- STEP-09 added 4 E2E tests, and QA reports all 4 pass.
-- STEP-09 did not change `src/app/features/about/`, `mod-w/docs/research-references.md`, `e2e/about.spec.ts`, or `e2e/documentation.spec.ts`.
-
-The failures are still a final-acceptance blocker because STEP-09 requires `npm run test:e2e` to pass and A-073 did not waive that final quality gate.
-
-### Recommended Disposition
-
-Recommend option (a): a separate, narrow cleanup approved outside STEP-09 scope.
-
-I do not recommend explicit acceptance of the red E2E gate. Keeping known E2E failures would weaken the STEP-09 final gate and make later browser regressions harder to detect.
-
-### Cleanup Briefing For Development Team
-
-**Role:** Development Team
-
-**Task:** Perform a narrow E2E cleanup for QA-STEP09-001 only. Do not change STEP-09 implementation behavior.
-
-**Authority required before work starts:** Moderator must record an approval entry authorizing this cleanup before Development Team edits files.
-
-**Allowed files:**
-
-- `e2e/about.spec.ts`
-- `e2e/documentation.spec.ts`
-- `mod-w/docs/research-references.md`, only if the Moderator and Product Owner approve touching A-070 research-reference content
-
-**Forbidden files/areas:**
-
-- STEP-09 implementation files under `src/app/data/replay/fixtures/`, `src/app/features/dashboard/`, and `src/app/shared/ui/identity-slice-states/`
-- detector, baseline, divergence, dimensions, mappers, repositories, and workflow replay behavior
-- `src/app/features/about/about.component.html` and other About component files
-- `README.md`
-- `mod-w/roadmap.md`
-- `mod-w/step-09.md`
-- `qa.md`
-- `mod-w/validation/moderator-register.md`
-
-#### Failure 1 - About External Link Count
-
-`e2e/about.spec.ts` expects 3 external links but the About page now has 5 after an intentional prior content change.
-
-Required cleanup:
-
-- Update the stale count expectation to match the rendered external-link set, or make the expectation derive from the specific links asserted in the test plus the known repository/author links.
-- Preserve coverage that every external link on the About page has:
-  - `target="_blank"`
-  - `rel` containing `noopener`
-  - `rel` containing `noreferrer`
-- Do not remove safe-link checks.
-- Do not edit About component copy or links as part of this cleanup.
-
-#### Failure 2 - Documentation Guardrail False Positive
-
-`e2e/documentation.spec.ts` flags "official" in the Sport Auto Plus research-reference relevance cell: "Describes official notices for minor traffic offences..."
-
-Preferred cleanup:
-
-- Reword the `mod-w/docs/research-references.md` Sport Auto Plus relevance cell to avoid the word "official" while preserving the factual source meaning and A-070 research boundary.
-- Suggested direction: use wording such as "authority-issued notices for minor traffic offences..." or "traffic-offence notices and other violation documents..." if Product Owner accepts the wording.
-
-Reasoning:
-
-- Narrowing the endorsement pattern would weaken a useful guardrail across future documentation.
-- The false positive is caused by one non-essential word in A-070 research-reference content.
-- Rewording the cell is the smallest durable fix, but because it touches approved A-070 Product Owner research evidence, Moderator approval should include Product Owner input or explicitly record Product Owner approval for the wording.
-
-Alternative if Product Owner/Moderator reject content rewording:
-
-- Narrow the endorsement pattern so "official" is not treated as endorsement in all contexts, but only with DocuWare/approval/partnership context. This requires clear justification because it weakens a guardrail.
-
-#### Verification Required
-
-Run under Node.js v26.0.0:
-
-- `npm run lint`
-- `npm run build`
-- `npm test -- --watch=false`
-- `npm run test:e2e`
-
-Expected E2E result after cleanup:
-
-- `npm run test:e2e` passes with 46/46 tests.
-
-#### Development Team Handoff Required
-
-The handoff must list:
-
-- changed files;
-- exact fix for each E2E failure;
-- confirmation that no STEP-09 implementation file was changed;
-- verification command output;
-- any residual risk or question for Tech Lead review.
-
-### Moderator Approval Record Needed
-
-Before Development Team starts, Moderator should add a register entry authorizing a narrow QA-STEP09-001 E2E cleanup outside STEP-09 implementation scope.
-
-The approval should specify:
-
-- the allowed files;
-- whether Product Owner approves rewording the A-070 Sport Auto Plus research-reference relevance cell;
-- that no STEP-09 implementation behavior may change;
-- that successful cleanup returns to Tech Lead re-review before QA re-run.
-
-### Follow-Up Gates
-
-1. Moderator approval for the narrow cleanup.
-2. Development Team cleanup and handoff.
-3. Tech Lead re-review of the cleanup.
-4. QA re-run of `npm run test:e2e` and any necessary focused checks.
-5. Product Owner review of STEP-09 per A-072, including QA-STEP09-002 and QA-STEP09-003.
-6. Final Moderator gate for STEP-09.
-
----
-
-## Re-Review - QA-STEP09-001 Narrow E2E Cleanup (A-074)
-
-**Re-review date:** 2026-09-27
-**Reviewer:** Codex, acting as Tech Lead
-**Cleanup reviewed:** Current uncommitted Development Team cleanup after A-074 approval
-**Verdict:** Accepted for QA re-run
-
-### Scope Confirmation
-
-The cleanup is within A-074 scope.
-
-`git status` / `git diff --name-only` show only these files changed:
-
-- `e2e/about.spec.ts`
-- `mod-w/docs/research-references.md`
-
-No STEP-09 implementation files changed. I found no changes to fixtures, dashboard implementation, shared identity-slice-state UI, detector/baseline/divergence/dimension code, replay mappers/repositories, workflow replay, About component files, README, roadmap, `mod-w/step-09.md`, `qa.md`, or the Moderator Register.
-
-`src/testing/claim-guardrail-patterns.ts` was not changed, so the endorsement guardrail was not narrowed.
-
-### Fix Assessment
-
-**Failure 1 - About external-link count:** Accepted.
-
-- `e2e/about.spec.ts` updates the external-link count from 3 to 5.
-- The updated comment matches the current About page link set: IDP-Align repository, CAV repository, two DocuWare API references, and author profile.
-- The per-link loop remains in place and still asserts `target="_blank"` and `rel` containing `noopener` and `noreferrer` for every external link.
-- The CAV repository href assertion remains unchanged.
-- Residual risk: the count is still fixed, so a later intentional About link change will require another test update. This is acceptable for this narrow cleanup because deriving the count from a broader expected-link list would expand the change.
-
-**Failure 2 - Sport Auto Plus relevance wording:** Accepted.
-
-- `mod-w/docs/research-references.md` changes "official notices" to "authority-issued notices" in the Sport Auto Plus relevance cell.
-- The factual source meaning is preserved: the row still describes minor traffic-offence and other violation notices, state-authority-specific variations, and support for `Authority x Traffic Notice`.
-- The A-070 boundary remains intact: research motivation only, no claim that Sport Auto Plus experienced the simulated Divergence, and no customer data reproduced.
-- This follows the Product Owner-approved wording direction recorded in A-074.
-
-### Verification
-
-Verification run under Node.js v26.0.0:
-
-- `fnm exec --using=v26.0.0 npm.cmd run lint` - Pass. All files pass linting.
-- `fnm exec --using=v26.0.0 npm.cmd run build` - Initial sandbox run hit known Angular/esbuild `spawn EPERM`; outside-sandbox rerun passed.
-- `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` - Initial sandbox run hit known Angular/esbuild `spawn EPERM`; outside-sandbox rerun passed: 33 files, 541 tests.
-- `fnm exec --using=v26.0.0 npm.cmd run test:e2e` - Initial sandbox run hit `spawn EPERM`; outside-sandbox rerun passed: 46 tests.
-
-`git diff --check -- review.md` was clean before this section was added; run final diff checks before committing.
-
-### Findings
-
-No blocking findings.
-
-**TL-STEP09-CLEANUP-001 - Fixed About external-link count remains brittle.**
-Severity: Info. The fixed count is acceptable under the narrow A-074 cleanup, but future intentional About link additions/removals will need a test update. This does not block QA re-run.
-
-### Recommended Next Gate
-
-Moderator may accept this Tech Lead re-review and authorize QA to re-run the E2E gate for QA-STEP09-001.
-
-QA should verify at minimum:
-
-- `npm run test:e2e` passes at 46/46;
-- the About safe-link assertions still cover every external link;
-- the documentation guardrail no longer flags the Sport Auto Plus relevance row;
-- no STEP-09 implementation behavior changed.
