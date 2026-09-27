@@ -1,0 +1,303 @@
+<div class="architecture-container">
+  <article class="architecture-content">
+    <h1>Architecture</h1>
+
+    <section data-testid="architecture-how">
+      <h2>How IDP-Align works</h2>
+      <p class="lead">
+        IDP-Align is an Angular reference implementation of
+        <a
+          href="https://github.com/fpmcguire/continuous-alignment-verification"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-testid="cav-repo-link"
+          >CAV (Continuous Alignment Verification)</a
+        >
+        Level 1 for enterprise
+        document-processing and workflow observations.
+      </p>
+      <p>
+        Deterministic synthetic replay data is mapped into IDP-Align's domain model, where observations
+        are organized into meaningful Identity Slices. Historical observations establish Observed
+        Baselines for individual Dimensions. Recent observations are then evaluated against those
+        baselines, and sustained differences can surface as Divergence with reconstructable Evidence.
+      </p>
+      <p>
+        The Dashboard presents the results of this process. Divergences are produced by the domain
+        detection pipeline, not predetermined by the UI or replay fixtures.
+      </p>
+    </section>
+
+    <section data-testid="architecture-flow-section">
+      <h2>From observations to Evidence</h2>
+      <ol class="flow-steps flow-steps--pipeline flow-steps--numbered" aria-label="Principal data flow" data-testid="principal-flow">
+        <li>Synthetic IDP-shaped replay</li>
+        <li class="flow-boundary"><code>StreamObservation<wbr />Repository</code></li>
+        <li>Domain mapping</li>
+        <li>Identity Slices + Observations</li>
+        <li>CAV Level 1 detection against per-slice Observed Baselines</li>
+        <li>Divergences + Evidence</li>
+        <li>Dashboard + Divergence Analysis</li>
+      </ol>
+      <p>
+        The repository provides a source-independent boundary between observation sources and the
+        IDP-Align domain. Replay records are converted into project-owned domain concepts before
+        detection or presentation.
+      </p>
+      <p>
+        This keeps data acquisition, domain interpretation, Divergence detection, and presentation as
+        separate responsibilities.
+      </p>
+    </section>
+
+    <section data-testid="architecture-population">
+      <h2>Population-specific Divergence</h2>
+      <p>
+        A meaningful population can contain multiple Identity Slices, each with its own historical
+        behavior.
+      </p>
+      <p>
+        The current synthetic {{ population }} scenario demonstrates five Supplier x
+        {{ population }} Identity Slices:
+      </p>
+      <table class="slice-states" data-testid="supplier-slice-states">
+        <caption>
+          Synthetic Supplier x {{ population }} Identity Slices
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Identity Slice</th>
+            <th scope="col">State</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of supplierRows(); track row.supplier) {
+            <tr data-testid="supplier-slice-row">
+              <th scope="row" data-testid="supplier-slice-name">
+                {{ row.supplier }} · {{ population }}
+              </th>
+              <td data-testid="supplier-slice-state">{{ row.state }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <p class="summary" data-testid="supplier-slice-summary">{{ summary() }}</p>
+      <p>
+        Each Supplier x {{ population }} Identity Slice is evaluated against its own Observed Baseline.
+        Alpha is not considered divergent because its invoice amounts differ from those of Beta, Gamma,
+        Delta, or Epsilon. Its recent observations diverge from Alpha's own historical observed
+        behavior.
+      </p>
+      <p class="callout" data-boundary data-testid="no-baseline-distinction">
+        IDP-Align also distinguishes No surfaced Divergence from No Observed Baseline. Insufficient
+        observations to establish a baseline are not treated as evidence that an Identity Slice has no
+        Divergence.
+      </p>
+    </section>
+
+    <section data-testid="architecture-cav">
+      <h2>What CAV Level 1 establishes</h2>
+      <p>
+        IDP-Align surfaces sustained differences between recent observed behavior and historical
+        Observed Baselines.
+      </p>
+      <p>
+        A surfaced Divergence establishes that observed behavior changed under the configured detection
+        rules and provides Evidence supporting that finding.
+      </p>
+      <div class="callout" data-boundary data-testid="cav-boundary">
+        <p>It does not establish:</p>
+        <ul>
+          <li>root cause or Attribution;</li>
+          <li>correctness or incorrectness;</li>
+          <li>failure;</li>
+          <li>risk or business significance;</li>
+          <li>producer blame;</li>
+          <li>required remediation;</li>
+          <li>cross-stream causality.</li>
+        </ul>
+      </div>
+      <p>
+        CAV Level 1 surfaces observable differences and their Evidence. Interpretation remains outside
+        the detector's authority.
+      </p>
+    </section>
+
+    <section data-testid="architecture-implemented">
+      <h2>Implemented and synthetic</h2>
+      <p>
+        IDP-Align is a working reference implementation, but its current observation sources are
+        deliberately synthetic.
+      </p>
+      <h3>Implemented</h3>
+      <ul data-testid="implemented-list">
+        <li>Angular application</li>
+        <li>Document and Workflow domain mapping</li>
+        <li>Identity Slice construction</li>
+        <li>Observed Baseline derivation</li>
+        <li>CAV Level 1 Divergence detection</li>
+        <li>Population-specific Divergence</li>
+        <li>Evidence reconstruction</li>
+        <li>Divergence Analysis</li>
+        <li>Filtering and presentation state</li>
+        <li>Automated unit, component, and end-to-end tests</li>
+      </ul>
+      <h3>Synthetic or not currently implemented</h3>
+      <ul data-boundary data-testid="synthetic-list">
+        <li>Document replay observations</li>
+        <li>Workflow replay observations</li>
+        <li>Customer data</li>
+        <li>Live IDP connections</li>
+        <li>Authentication or external credentials</li>
+      </ul>
+      <p data-boundary>
+        The replay datasets are deterministic. They contain fictional entities and invented observations
+        so the same scenarios can be reproduced and verified without customer data or external systems.
+      </p>
+    </section>
+
+    <section data-testid="architecture-source-independent">
+      <h2>Source-independent by design</h2>
+      <p>
+        IDP-Align's domain does not depend directly on replay fixtures or a particular external API.
+      </p>
+      <h3>Today</h3>
+      <ol class="flow-steps flow-steps--pipeline" aria-label="Today's observation source flow" data-testid="today-flow">
+        <li>Synthetic replay</li>
+        <li>Replay adapter</li>
+        <li class="flow-boundary"><code>StreamObservation<wbr />Repository</code></li>
+        <li>IDP-Align domain</li>
+      </ol>
+      <h3>A possible future source</h3>
+      <ol class="flow-steps flow-steps--pipeline" aria-label="A possible future source flow" data-testid="future-flow">
+        <li>External IDP source</li>
+        <li>Source adapter</li>
+        <li class="flow-boundary"><code>StreamObservation<wbr />Repository</code></li>
+        <li>IDP-Align domain</li>
+      </ol>
+      <p class="callout" data-boundary data-testid="live-integration-boundary">
+        This is an architectural extension point, not a claim that live integration currently exists.
+      </p>
+      <p>
+        CAV defines the domain-independent alignment semantics. IDP-Align applies those semantics to the
+        IDP domain. Observation sources and vendor-specific integrations remain outside canonical CAV
+        semantics.
+      </p>
+    </section>
+
+    <section data-testid="architecture-research">
+      <h2>Research provenance</h2>
+      <p>
+        IDP-Align's synthetic scenarios are informed by public IDP documentation and published
+        real-world document-processing examples.
+      </p>
+      <p>
+        Current research includes public DocuWare documentation and published DocuWare case studies that
+        illustrate meaningful document populations:
+      </p>
+      <dl class="research-cases" data-testid="research-cases">
+        <dt>
+          <a
+            href="https://start.docuware.com/case-studies/Giebeler-Feuerschutz"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="research-giebeler"
+            >Giebeler-Feuerschutz</a
+          >
+          — Supplier x Invoice
+        </dt>
+        <dd>
+          Complex incoming supplier invoices provide real-world motivation for treating supplier invoice
+          populations as meaningful observation scopes.
+        </dd>
+        <dt>
+          <a
+            href="https://start.docuware.com/case-studies/piening"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="research-piening"
+            >Piening Personal</a
+          >
+          — Customer x Timesheet
+        </dt>
+        <dd>
+          Time-tracking documents originating from numerous customer systems and varied formats support
+          meaningful Customer x Timesheet populations.
+        </dd>
+        <dt>
+          <a
+            href="https://start.docuware.com/case-studies/sport-auto-plus"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="research-sport-auto-plus"
+            >Sport Auto Plus</a
+          >
+          — Authority x Traffic Notice
+        </dt>
+        <dd data-testid="research-sport-auto-plus-text">
+          Variation in authority-specific traffic-notice document structures motivates Authority x
+          Traffic Notice populations.
+        </dd>
+      </dl>
+      <p>Together, these examples support a generalized IDP Identity Slice pattern:</p>
+      <p class="pattern" data-testid="producer-pattern">Producer x Document Type</p>
+      <p>Examples include:</p>
+      <ul data-testid="pattern-examples">
+        <li>Supplier x Invoice</li>
+        <li>Customer x Timesheet</li>
+        <li>Authority x Traffic Notice</li>
+      </ul>
+      <p class="callout" data-boundary data-testid="research-boundary">
+        These public cases provide research evidence for generalized domain patterns. IDP-Align does not
+        reproduce customer data and does not claim that these organizations experienced the Divergences
+        demonstrated by its synthetic scenarios.
+      </p>
+    </section>
+
+    <section data-testid="architecture-future">
+      <h2>Future research</h2>
+      <p>
+        The current Document stream primarily observes document and index metadata such as amount,
+        currency, vendor representation, and document timing.
+      </p>
+      <p>
+        A future research question is whether more IDP-native operational evidence could provide useful
+        additional observation Dimensions, including:
+      </p>
+      <ul data-testid="future-dimensions">
+        <li>extraction confidence;</li>
+        <li>field presence;</li>
+        <li>extraction representation;</li>
+        <li>document or table structure;</li>
+        <li>validation or review behavior.</li>
+      </ul>
+      <p>
+        These would be IDP-domain observations mapped into CAV. They would not redefine canonical CAV
+        semantics.
+      </p>
+      <p class="callout" data-boundary data-testid="future-boundary">
+        These capabilities are research directions and are not currently implemented in IDP-Align.
+      </p>
+    </section>
+
+    <section data-testid="architecture-principle">
+      <h2>Architectural principle</h2>
+      <p>IDP-Align keeps three concerns deliberately separate:</p>
+      <ul>
+        <li>
+          CAV defines domain-independent semantics for Observed Truth, Identity Slices, Observed
+          Baselines, Divergence, and Evidence.
+        </li>
+        <li>IDP-Align applies those semantics to document-processing and workflow observations.</li>
+        <li>
+          Adapters and observation sources provide data to the IDP-Align domain without defining what
+          CAV means.
+        </li>
+      </ul>
+      <p>
+        This separation allows IDP-Align to explore increasingly realistic IDP observations while
+        keeping its evidence model and claim boundaries explicit.
+      </p>
+    </section>
+  </article>
+</div>

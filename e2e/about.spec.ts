@@ -53,7 +53,10 @@ test.describe('About', () => {
       await expect(article).not.toContainText(stale);
     }
     await expect(page.getByTestId('about-dashboard')).toContainText('sustained Divergence detection over synthetic replay data');
-    await expect(page.getByTestId('about-architecture')).toContainText('the only adapter implemented');
+    await expect(page.getByTestId('about-architecture').getByTestId('architecture-page-link')).toHaveAttribute(
+      'href',
+      '/architecture'
+    );
     await expect(page.getByTestId('independence-notice')).toContainText('not affiliated with, reviewed by, or endorsed by DocuWare');
   });
 });

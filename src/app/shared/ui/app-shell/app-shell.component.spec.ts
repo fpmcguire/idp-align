@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppShellComponent } from './app-shell.component';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AppShellComponent', () => {
@@ -8,7 +9,10 @@ describe('AppShellComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppShellComponent, RouterTestingModule],
+      imports: [
+        AppShellComponent,
+        RouterTestingModule.withRoutes([{ path: 'architecture', children: [] }]),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppShellComponent);
@@ -36,7 +40,18 @@ describe('AppShellComponent', () => {
 
   it('should have navigation links', () => {
     const navLinks = fixture.nativeElement.querySelectorAll('.nav-link');
-    expect(navLinks.length).toBe(2);
+    expect(navLinks.length).toBe(3);
+  });
+
+  it('should order navigation as Dashboard | About | Architecture', () => {
+    const navLinks = Array.from<HTMLAnchorElement>(fixture.nativeElement.querySelectorAll('.nav-link'));
+    expect(navLinks.map(link => link.textContent?.trim())).toEqual(['Dashboard', 'About', 'Architecture']);
+  });
+
+  it('should have Architecture link in navigation targeting /architecture', () => {
+    const architectureLink = fixture.nativeElement.querySelector('[data-testid="nav-architecture"]');
+    expect(architectureLink?.textContent).toContain('Architecture');
+    expect(architectureLink?.getAttribute('href')).toBe('/architecture');
   });
 
   it('should have Dashboard link in navigation', () => {
@@ -49,6 +64,17 @@ describe('AppShellComponent', () => {
     const aboutLink = fixture.nativeElement.querySelector('[data-testid="nav-about"]');
     expect(aboutLink).toBeTruthy();
     expect(aboutLink?.textContent).toContain('About');
+  });
+
+  it('should mark the Architecture link as the current page on /architecture', async () => {
+    await TestBed.inject(Router).navigateByUrl('/architecture');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const architectureLink = fixture.nativeElement.querySelector('[data-testid="nav-architecture"]');
+    const aboutLink = fixture.nativeElement.querySelector('[data-testid="nav-about"]');
+    expect(architectureLink?.getAttribute('aria-current')).toBe('page');
+    expect(architectureLink?.classList).toContain('active');
+    expect(aboutLink?.getAttribute('aria-current')).toBeNull();
   });
 
   it('should render router outlet', () => {

@@ -1,0 +1,275 @@
+.architecture-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+}
+
+.architecture-content {
+  container-type: inline-size;
+  color: var(--color-text-primary);
+  line-height: var(--line-height-relaxed);
+}
+
+h1 {
+  font-size: var(--font-size-display);
+  margin-bottom: var(--space-lg);
+  color: var(--color-text-primary);
+}
+
+h2 {
+  font-size: var(--font-size-heading);
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-md);
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-sm);
+}
+
+h3 {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-sm);
+  color: var(--color-text-secondary);
+}
+
+section {
+  margin-bottom: var(--space-lg);
+}
+
+.lead {
+  color: var(--color-text-secondary);
+}
+
+p {
+  margin-bottom: var(--space-md);
+  color: var(--color-text-primary);
+}
+
+// Boundary statements, as About's independence notice.
+.callout {
+  background: var(--color-bg-surface);
+  border-left: 3px solid var(--color-baseline);
+  border-radius: var(--radius-sm);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+
+  p,
+  ul {
+    margin-bottom: 0;
+  }
+
+  p + ul {
+    margin-top: var(--space-sm);
+  }
+}
+
+ul {
+  margin-left: var(--space-lg);
+  margin-bottom: var(--space-md);
+  list-style: none;
+  padding: 0;
+
+  li {
+    margin-bottom: var(--space-sm);
+    padding-left: var(--space-md);
+    position: relative;
+
+    &::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--color-divergence-ongoing);
+    }
+  }
+}
+
+// Flows are ordered lists; numbering, rails and arrows are decoration drawn by CSS only.
+// Step order is carried by the <ol>, so assistive tech reads the same sequence.
+.flow-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-md);
+  counter-reset: flow-step;
+
+  li {
+    counter-increment: flow-step;
+    position: relative;
+    background: var(--color-bg-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--font-size-caption);
+    line-height: 1.4;
+    color: var(--color-text-primary);
+    overflow-wrap: anywhere;
+  }
+
+  // The repository is the source-independent boundary; mark it in every flow.
+  .flow-boundary {
+    border-color: var(--color-baseline);
+    border-style: dashed;
+  }
+
+  code {
+    background: none;
+    padding: 0;
+    color: var(--color-baseline);
+  }
+}
+
+// Pipelines: vertical with arrows on narrow widths, horizontal pipeline when there is room.
+.flow-steps--pipeline {
+  display: grid;
+  gap: var(--space-lg);
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 3.5rem;
+    padding: var(--space-md) var(--space-lg);
+  }
+
+  li + li::before {
+    content: '↓';
+    position: absolute;
+    left: 50%;
+    top: calc(-1 * var(--space-lg));
+    transform: translateX(-50%);
+    line-height: var(--space-lg);
+    color: var(--color-text-secondary);
+  }
+
+  li:last-child {
+    font-weight: var(--font-weight-medium);
+  }
+}
+
+// Principal flow wraps across rows, so each step carries its number.
+.flow-steps--numbered li::after {
+  content: counter(flow-step);
+  position: absolute;
+  top: var(--space-xs, 4px);
+  left: var(--space-sm);
+  font-size: var(--font-size-caption);
+  line-height: 1;
+  color: var(--color-text-secondary);
+}
+
+@container (min-width: 600px) {
+  .flow-steps--pipeline {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch;
+
+    li {
+      min-height: 4rem;
+      padding: var(--space-md) var(--space-sm);
+    }
+
+    li + li::before {
+      content: '→';
+      top: 50%;
+      left: calc(-1 * var(--space-lg));
+      width: var(--space-lg);
+      text-align: center;
+      transform: translateY(-50%);
+    }
+  }
+
+  // A new row starts without an arrow; the step number carries the order.
+  .flow-steps--numbered li:nth-child(4n + 1)::before {
+    content: none;
+  }
+}
+
+.pattern {
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-family: 'Courier New', monospace;
+  font-size: var(--font-size-caption);
+  color: var(--color-baseline);
+}
+
+.slice-states {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--space-md);
+  font-size: var(--font-size-caption);
+
+  caption {
+    text-align: left;
+    color: var(--color-text-secondary);
+    padding-bottom: var(--space-sm);
+  }
+
+  th,
+  td {
+    text-align: left;
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  thead th {
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+  }
+
+  tbody th {
+    font-weight: normal;
+    color: var(--color-text-primary);
+  }
+}
+
+.summary {
+  color: var(--color-text-secondary);
+}
+
+.research-cases {
+  margin-bottom: var(--space-md);
+
+  dt {
+    font-weight: var(--font-weight-medium);
+    margin-top: var(--space-md);
+  }
+
+  dd {
+    margin: var(--space-xs, 4px) 0 0 var(--space-md);
+    color: var(--color-text-secondary);
+  }
+}
+
+code {
+  background: var(--color-bg-surface);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-family: 'Courier New', monospace;
+  font-size: var(--font-size-caption);
+  color: var(--color-baseline);
+}
+
+a {
+  color: var(--color-baseline);
+  text-underline-offset: 3px;
+
+  &:focus-visible {
+    outline: 2px solid var(--color-baseline);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+}
+
+@media (max-width: 768px) {
+  .architecture-container {
+    padding: var(--space-md);
+  }
+
+  h1 {
+    font-size: var(--font-size-heading);
+  }
+
+  h2 {
+    font-size: var(--font-size-body);
+  }
+}

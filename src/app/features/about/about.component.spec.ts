@@ -99,9 +99,6 @@ describe('AboutComponent', () => {
       for (const stale of [/STEP-01/, /later Steps?/i, /\(planned\)/i, /will be modeled/i, /reserved regions/i]) {
         expect(content).not.toMatch(stale);
       }
-      const arch = section('about-architecture');
-      expect(arch).toContain('Domain: pure functions for Observed Truth, Identity Slices, Observed Baselines, and sustained Divergence detection.');
-      expect(arch).toContain('Data: repository interfaces with a local replay adapter, the only adapter implemented.');
       expect(section('about-api-research')).toContain('Replay data is modeled on these publicly documented API shapes.');
     });
 
@@ -210,6 +207,16 @@ describe('AboutComponent', () => {
       expect(arch).toContain('repository/adapter boundary');
       expect(section('architecture-flow')).toMatch(/repository interface.*replay adapter.*BFF\/API/s);
       expect(arch).toMatch(/without rewriting the dashboard/);
+    });
+
+    it('should link the shortened Architecture section to the Architecture page', () => {
+      const link = el.querySelector<HTMLAnchorElement>(
+        '[data-testid="about-architecture"] [data-testid="architecture-page-link"]'
+      );
+      expect(link?.getAttribute('href')).toBe('/architecture');
+      expect(link?.target).toBe('');
+      expect(section('architecture-page-link-note')).toBe('See Architecture for the full explanation.');
+      expect(el.querySelector('[data-testid="about-architecture"] ul')).toBeNull();
     });
 
     it('should describe MOD-W and the current-version assessment', () => {

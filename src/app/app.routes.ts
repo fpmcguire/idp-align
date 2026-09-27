@@ -16,5 +16,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/about/about.component').then(m => m.AboutComponent),
   },
+  {
+    path: 'architecture',
+    loadComponent: () =>
+      import('./features/architecture/architecture.component').then(
+        m => m.ArchitectureComponent
+      ),
+  },
   { path: '**', redirectTo: 'dashboard' },
 ];

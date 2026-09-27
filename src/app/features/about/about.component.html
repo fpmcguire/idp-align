@@ -137,21 +137,13 @@
         UI components → feature facade → domain logic → repository interface → replay adapter | BFF/API
         adapter | future database-backed adapter
       </p>
-      <ul>
-        <li><strong>Features:</strong> the Dashboard and About routes.</li>
-        <li><strong>Shared UI:</strong> presentational components reused by both streams.</li>
-        <li>
-          <strong>Domain:</strong> pure functions for Observed Truth, Identity Slices, Observed Baselines,
-          and sustained Divergence detection.
-        </li>
-        <li>
-          <strong>Data:</strong> repository interfaces with a local replay adapter, the only adapter
-          implemented.
-        </li>
-      </ul>
       <p>
         Because the dashboard depends only on repository interfaces, replay data can later be replaced by
         a live BFF/API adapter or a future database-backed source without rewriting the dashboard.
+      </p>
+      <p data-testid="architecture-page-link-note">
+        See <a href="/architecture" data-testid="architecture-page-link">Architecture</a> for the
+        full explanation.
       </p>
     </section>
 
