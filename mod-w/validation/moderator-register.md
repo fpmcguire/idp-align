@@ -385,15 +385,15 @@ The Moderator approves `.claude/settings.json` separately from STEP-01. It is co
 
 #### QA Finding Dispositions
 
-| Finding        | Disposition                                                                                                                                                                                                                                                                 | Owner                            |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| QA-001         | Approved separately; see A-009.                                                                                                                                                                                                                                             | Closed                           |
+| Finding        | Disposition                                                                                                                                                                                                                                                                   | Owner                            |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| QA-001         | Approved separately; see A-009.                                                                                                                                                                                                                                               | Closed                           |
 | QA-002         | Option (b) chosen after the explanation in `qa.md`. Rework required: extend the About surfacing-boundary sentence to read "...it does not decide what the behavior should have been, or whether it violates business intent." and update the About test to assert the phrase. | Development Team                 |
-| QA-003         | Rework required: remove the stray space in "repository ." on the About page.                                                                                                                                                                                                | Development Team                 |
-| QA-004         | Rework required: browser tab title `IDP-Align` and an original project favicon. DocuWare or other third-party branding must not be used.                                                                                                                                    | Development Team                 |
-| QA-005         | Rework required: nav `aria-current` and `aria-label`, a single `h1` per route, and a focusable tab panel.                                                                                                                                                                   | Development Team                 |
-| QA-006         | Not actioned.                                                                                                                                                                                                                                                               | Open (low)                       |
-| QA-007, QA-008 | Informational; deferred to later Steps.                                                                                                                                                                                                                                     | Tech Lead (future Step planning) |
+| QA-003         | Rework required: remove the stray space in "repository ." on the About page.                                                                                                                                                                                                  | Development Team                 |
+| QA-004         | Rework required: browser tab title `IDP-Align` and an original project favicon. DocuWare or other third-party branding must not be used.                                                                                                                                      | Development Team                 |
+| QA-005         | Rework required: nav `aria-current` and `aria-label`, a single `h1` per route, and a focusable tab panel.                                                                                                                                                                     | Development Team                 |
+| QA-006         | Not actioned.                                                                                                                                                                                                                                                                 | Open (low)                       |
+| QA-007, QA-008 | Informational; deferred to later Steps.                                                                                                                                                                                                                                       | Tech Lead (future Step planning) |
 
 #### Process Record
 
@@ -707,13 +707,13 @@ Development Team STEP-02 plan (2026-09-24), with the Tech Lead dispositions belo
 
 #### Tech Lead Dispositions Adopted
 
-| Item                 | Disposition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Dimension            | Leave formal Dimension / `DivergenceDimension` out of STEP-02.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| Fixture behavior     | Include one neutral change in behavior per stream, in one Identity Slice each, not labeled as Divergence or expected output.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| Item                 | Disposition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Dimension            | Leave formal Dimension / `DivergenceDimension` out of STEP-02.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| Fixture behavior     | Include one neutral change in behavior per stream, in one Identity Slice each, not labeled as Divergence or expected output.                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | Dashboard (Option B) | Approved. Neutral replay source line with source facts only: replay source, observation count, Identity Slice count, date range, UTC. KPI cards stay "--", filters stay disabled, and list/detail placeholders stay intact. No Observed Baselines, Divergences, Evidence traces, rankings, severity, status, or "affected" language. Avoid "detected", "flagged", "changed", "issue", "anomaly", "alert", "violation", "bad", "defect", and "gap". Use "synthetic" and "replay" plainly. Browser code makes no live DocuWare calls, and credentials never live in browser code. |
-| QA-006 expansion     | Approved as planned. `src/testing/claim-guardrail-patterns.ts` holds constants only and is imported by tests only. The dashboard visible-copy guardrail scans rendered dashboard text only. Fixture tests cover fixture safety and reserved/finding terminology, not ordinary source-domain values such as `state: "Failed"`. The shell route target and About boundary-scan limitation stay out of STEP-02.                                                                                                                                                                   |
-| Naming               | `responseTimeMs` approved, with a fixture metadata or test note mapping it to `TaskReactionTimes`. `StreamSourceInfo` approved as a data-layer name. Existing "Identity Slice" copy is unchanged. No artifact updates needed before implementation.                                                                                                                                                                                                                                                                                                                            |
+| QA-006 expansion     | Approved as planned. `src/testing/claim-guardrail-patterns.ts` holds constants only and is imported by tests only. The dashboard visible-copy guardrail scans rendered dashboard text only. Fixture tests cover fixture safety and reserved/finding terminology, not ordinary source-domain values such as `state: "Failed"`. The shell route target and About boundary-scan limitation stay out of STEP-02.                                                                                                                                                                    |
+| Naming               | `responseTimeMs` approved, with a fixture metadata or test note mapping it to `TaskReactionTimes`. `StreamSourceInfo` approved as a data-layer name. Existing "Identity Slice" copy is unchanged. No artifact updates needed before implementation.                                                                                                                                                                                                                                                                                                                             |
 
 #### Conditions
 
@@ -1165,16 +1165,16 @@ Development Team STEP-03 plan (2026-09-25), with the Tech Lead conditions below:
 
 #### Tech Lead Conditions Adopted
 
-| Item               | Condition                                                                                                                                                                                                                                                  |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| QA-014             | Emit both Approval step and Workflow runtime Divergences when both independently meet sustained criteria. Do not link them, suppress one, or mark either as derived. Keep the no-Attribution explanation in comments and tests.                            |
-| Scope              | No production dashboard or facade changes. STEP-03 is pure domain logic plus tests; STEP-04 wires dashboard/facade consumption.                                                                                                                            |
+| Item               | Condition                                                                                                                                                                                                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| QA-014             | Emit both Approval step and Workflow runtime Divergences when both independently meet sustained criteria. Do not link them, suppress one, or mark either as derived. Keep the no-Attribution explanation in comments and tests.                              |
+| Scope              | No production dashboard or facade changes. STEP-03 is pure domain logic plus tests; STEP-04 wires dashboard/facade consumption.                                                                                                                              |
 | Detection defaults | 28-day reference window; minimum 4 reference observations; numeric range mean +/- max(3 sample standard deviations, 5% of absolute mean); categorical minimum reference share 0.1; sustained threshold 3 consecutive out-of-baseline candidate observations. |
-| `resolved` status  | The detector may set `resolved`. Comments and tests must make clear it is only a finding lifecycle state and does not imply remediation, Convergence, or business correctness.                                                                             |
-| Date behavior      | Date representation is unsupported by normalized observations. `document-date-lag` is the date-related dimension for STEP-03.                                                                                                                              |
-| `decisionAgent`    | Evidence context only; not a dimension and not Attribution.                                                                                                                                                                                                |
-| Amount / currency  | `amount-value` compares raw numeric values; `amount-currency` is a separate dimension. Tests must make the separation obvious.                                                                                                                             |
-| Credit notes       | Credit-note slices receive no baseline due to insufficient reference sample; this must be tested.                                                                                                                                                          |
+| `resolved` status  | The detector may set `resolved`. Comments and tests must make clear it is only a finding lifecycle state and does not imply remediation, Convergence, or business correctness.                                                                               |
+| Date behavior      | Date representation is unsupported by normalized observations. `document-date-lag` is the date-related dimension for STEP-03.                                                                                                                                |
+| `decisionAgent`    | Evidence context only; not a dimension and not Attribution.                                                                                                                                                                                                  |
+| Amount / currency  | `amount-value` compares raw numeric values; `amount-currency` is a separate dimension. Tests must make the separation obvious.                                                                                                                               |
+| Credit notes       | Credit-note slices receive no baseline due to insufficient reference sample; this must be tested.                                                                                                                                                            |
 
 #### Conditions
 
@@ -2918,13 +2918,13 @@ This entry accepts only the Tech Lead re-review of the QA-STEP09-001 cleanup and
 
 #### Finding Dispositions
 
-| Finding | Disposition |
-| --- | --- |
-| QA-STEP09-001 | Resolved. Both pre-existing E2E failures are fixed within A-074 scope. `CLAIM_GUARDRAIL_PATTERNS` was not narrowed, and STEP-09 behavior did not change. The STEP-09 E2E acceptance check is met. |
-| QA-STEP09-002 | Accepted as Medium claim-boundary wording note. Referred to Product Owner review. Not blocking on its own: no rendered text is false, and the per-Identity-Slice state is exact. Any wording change requires separate approval routed Tech Lead -> Development Team. |
-| QA-STEP09-003 | Accepted as Low demo-narrative note. Referred to Product Owner review. No change required; A-072 keeps existing records unchanged. |
-| QA-STEP09-004 | Accepted as Info. Agrees with the Tech Lead's TL-STEP09-002 "could fix later". No action for STEP-09. |
-| TL-STEP09-CLEANUP-001 | Remains accepted as Info under A-075. |
+| Finding               | Disposition                                                                                                                                                                                                                                                          |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| QA-STEP09-001         | Resolved. Both pre-existing E2E failures are fixed within A-074 scope. `CLAIM_GUARDRAIL_PATTERNS` was not narrowed, and STEP-09 behavior did not change. The STEP-09 E2E acceptance check is met.                                                                    |
+| QA-STEP09-002         | Accepted as Medium claim-boundary wording note. Referred to Product Owner review. Not blocking on its own: no rendered text is false, and the per-Identity-Slice state is exact. Any wording change requires separate approval routed Tech Lead -> Development Team. |
+| QA-STEP09-003         | Accepted as Low demo-narrative note. Referred to Product Owner review. No change required; A-072 keeps existing records unchanged.                                                                                                                                   |
+| QA-STEP09-004         | Accepted as Info. Agrees with the Tech Lead's TL-STEP09-002 "could fix later". No action for STEP-09.                                                                                                                                                                |
+| TL-STEP09-CLEANUP-001 | Remains accepted as Info under A-075.                                                                                                                                                                                                                                |
 
 #### Gate Boundary
 
@@ -2977,5 +2977,41 @@ This entry preserves the required gate sequence. It is not Product Owner review,
 #### Gate Boundary
 
 This entry admits R14 and authorizes Tech Lead Step drafting only. It is not Step approval, implementation-plan approval, or Development Team implementation authorization.
+
+MOD-W v5.0.1
+
+### A-079 - STEP-10 Approved For Development Team Briefing And Planning
+
+- **Status:** Approved for briefing and planning; implementation plan pending
+- **Date:** 2026-09-27
+- **Moderator:** User, acting as ad hoc Moderator
+- **Role approved:** Development Team
+- **Gate:** Step approval before Development Team briefing; scoped sequencing override
+- **Step:** `mod-w/step-10.md`
+- **Next authorized action:** Development Team may receive the STEP-10 briefing and submit an implementation plan. No STEP-10 code, test, or documentation changes are authorized until that plan is separately approved and recorded.
+
+#### Approved Artifacts
+
+- `mod-w/product.md` v1.4, R14
+- `mod-w/architecture.md`, D14 and R14 mapping
+- `mod-w/step-10.md`
+- `mod-w/docs/architecture-page.txt`, Product Owner-reviewed copy baseline with A-078 corrections
+
+#### Decision
+
+The Moderator approves STEP-10 for Development Team briefing and implementation planning. The reviewed Step scope preserves R13/About obligations, confines the new permanent Architecture surface to R14, and specifies tests and guardrails for CAV terminology, research provenance, safe external links, Identity Slice states, and the source-independent adapter boundary.
+
+The Moderator explicitly overrides A-078's STEP-09 sequencing condition for STEP-10 only: implementation may begin after a separate STEP-10 implementation-plan approval, without waiting for the STEP-09 final Moderator gate. This is justified by STEP-10's explanatory-only scope and explicit prohibition on changes to STEP-09 behavior, fixtures, Dashboard behavior, or domain architecture. QA accepted STEP-09 with notes under A-076 and its E2E gate passed, but its Product Owner review and final Moderator gate remain outstanding under A-077. This override does not accept those findings, complete STEP-09, or authorize roadmap advancement for STEP-09.
+
+#### Conditions
+
+- A separate Moderator approval of the Development Team implementation plan is required before any STEP-10 implementation changes.
+- STEP-10 must not modify detection behavior, Observed Baseline semantics, sustained-Divergence criteria, fixtures, repositories, Dashboard behavior, or workflow behavior.
+- QA-STEP09-002/003 Product Owner review and the STEP-09 final Moderator gate remain required for STEP-09 completion.
+- Tech Lead implementation review acceptance, QA acceptance, and a final Moderator gate remain required for STEP-10 completion. No STEP-10 implementation review is being accepted by this entry.
+
+#### Gate Boundary
+
+This entry is STEP-10 Step approval and a narrowly scoped sequencing override only. It is not implementation-plan approval, Tech Lead review acceptance, QA acceptance, or STEP-10 completion.
 
 MOD-W v5.0.1

@@ -34,6 +34,7 @@ The app must also include a routed About / Project Context view that explains th
 | R11 | D11 | Unit and E2E checks cover CAV logic and dashboard behavior by step. |
 | R12 | D6 | Evidence persistence is represented in replay data and divergence records. |
 | R13 | D12, D13 | Routed About / Project Context view explains project intent, DocuWare interview research/demo framing, UI, architecture, repository/adapter boundary, MOD-W, CAV Level 1 scope, and scope boundaries. |
+| R14 | D4, D9, D10, D13, D14 | Permanent Architecture view explains how IDP-Align works, including data flow, source/domain/presentation separation, CAV Level 1 boundaries, Identity Slice states, population-specific Divergence, implemented versus synthetic capability, public research provenance, and future research without interview framing or live-integration claims. |
 
 ---
 
@@ -187,6 +188,33 @@ The conventional pattern is a lightweight ports-and-adapters boundary inside a f
 
 This boundary makes mock-to-live migration an adapter change rather than a dashboard rewrite.
 
+### D14 - Routed Architecture Product Surface
+
+**Status:** Active
+**Related Requirements:** R9, R10, R13, R14
+
+Provide a permanent routed Architecture page as a product surface, separate from the interview-framed About view. It must be reachable from top navigation and explain how IDP-Align works without becoming exhaustive developer documentation.
+
+The page must describe:
+
+- the principal data flow from observation source shape through mapping, CAV Level 1 domain logic, repository/facade access, and presentation;
+- separation of source data, mapping, CAV domain, and presentation;
+- CAV Level 1 claim boundaries and the absence of Level 2+, Attribution, Declared Intention / Intent, Alignment Delta, Envelope, Breach, Drift Velocity, Convergence, causality, correctness, failure, risk, business significance, producer blame, and remediation claims;
+- Identity Slices with independent Observed Baselines;
+- population-specific Divergence, including STEP-09's synthetic Supplier x Invoice scenario;
+- the distinction among Surfaced Divergence, No surfaced Divergence, and No Observed Baseline;
+- implemented versus synthetic capability;
+- the source-independent repository/adapter boundary, including future live-source extension as an adapter possibility rather than a current integration claim;
+- the relationship among canonical CAV, IDP-Align, and observation sources;
+- public research provenance for the `Producer x Document Type` Identity Slice pattern;
+- clearly labeled future research.
+
+The Architecture page inherits the About page's visual language unless the Moderator requests Designer review for a new visual pattern. Diagrams must be accessible semantic markup, not image, canvas, CDN, or diagram-library dependencies.
+
+Public case studies may be linked only as research provenance for the `Producer x Document Type` Identity Slice pattern. They must not be presented as customers, datasets, product requirements, or evidence for synthetic Divergences. Sport Auto Plus wording must stay within the research record: authority-specific traffic-notice document-structure variation motivates `Authority x Traffic Notice`.
+
+The page must not contain interview, interviewer, employer-directed, or interview-date framing. About remains responsible for R13 project context; STEP-10 may shorten About's Architecture section to link to the permanent page only if R13 obligations remain intact.
+
 ---
 
 ## Decision Index
@@ -206,6 +234,7 @@ This boundary makes mock-to-live migration an adapter change rather than a dashb
 | D11 | Step-Level Quality Gates | Active | R11 |
 | D12 | Routed About View | Active | R6, R9, R10, R13 |
 | D13 | Repository And Adapter Boundary | Active | R1, R3, R7, R8, R13 |
+| D14 | Routed Architecture Product Surface | Active | R9, R10, R13, R14 |
 
 ---
 
@@ -248,6 +277,8 @@ Divergence lifecycle for MVP: `ongoing`, `reviewed`, `resolved`, `muted`. `revie
 - No Declared Intention or business-rule conformance engine in MVP.
 - No attribution/root-cause claim.
 - DocuWare references are allowed in bounded v1 research/demo context. Do not imply endorsement, private-system access, confidential interview details, production readiness, or a DocuWare product defect/gap claim.
+- The permanent Architecture page must not use interview, interviewer, employer-directed, or interview-date framing.
+- DocuWare and public case-study references on the Architecture page are research provenance and source-shape context only. They must not make DocuWare a dependency of CAV or IDP-Align's core architecture, and must not imply current live or production integration.
 - No direct import or copy of design-tool prototype code into production.
 - Design-spec is authoritative for approved user-facing design only; this file controls technical decomposition.
 
@@ -262,6 +293,7 @@ Divergence lifecycle for MVP: `ongoing`, `reviewed`, `resolved`, `muted`. `revie
 - Keep filters separate from selected Divergence state.
 - Keep stream-specific formatting in configuration/helpers, not duplicated components.
 - Use accessible native controls for tabs, buttons, filters, and panels.
+- Use accessible semantic markup for product-explanation diagrams and flows; do not add image, canvas, CDN, or diagram-library dependencies for Architecture page diagrams.
 - Use `data-testid` values from `design-spec.md` where applicable.
 - Use bundled dependencies for production; no CDN scripts.
 
@@ -291,6 +323,7 @@ Divergence lifecycle for MVP: `ongoing`, `reviewed`, `resolved`, `muted`. `revie
 | 2026-09-23 | Made repository/adapter boundary explicit | D13 | Moderator requested clear separation between business/domain code and mock, live, BFF, or future database data sources. |
 | 2026-09-23 | Clarified About placement and depth | D12 | Moderator approved one-page project brief in top navigation for STEP-01. |
 | 2026-09-24 | Updated About guardrails for DocuWare-specific v1 positioning | D12, D13 | Product Owner requested explicit DocuWare interview research/demo framing rather than hiding DocuWare references. |
+| 2026-09-27 | Added permanent Architecture page decision | D14 | Product Owner admitted R14 and Moderator authorized STEP-10 drafting under A-078. |
 
 ---
 
