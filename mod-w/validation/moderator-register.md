@@ -2687,4 +2687,44 @@ The Step is bounded to a synthetic, demo-worthy document replay scenario that us
 - `Producer x Document Type` remains an approved Identity Slice pattern, not a new mandatory primitive.
 - Tech Lead review is required before QA acceptance.
 
+### A-072 - STEP-09 Development Team Implementation Plan Approval
+
+- **Status:** Approved with conditions - Development Team implementation plan
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire
+- **Role approved:** Development Team
+- **Gate:** Implementation-plan approval before code, fixture, test, or documentation changes
+- **Step:** `mod-w/step-09.md`
+- **Next authorized action:** Development Team may implement STEP-09 only according to the approved implementation plan and conditions below, then hand off for Tech Lead review.
+
+#### Approved Plan
+
+Development Team implementation plan for STEP-09, as submitted in the plan-only handoff:
+
+1. Use Option A: extend the accepted document replay scenario with additional peer supplier invoice populations while preserving the existing Alpha Office Supplies amount Divergence.
+2. Add new fictional Supplier x Invoice peers at the end of the document fixture so existing record IDs and accepted Alpha Evidence remain unchanged.
+3. Keep the current shared reference window and Aug-Sep 2026 weekly cadence; do not force literal Apr/May/Jun dates.
+4. Add population summary and Identity Slice state presentation through the dashboard facade and presentational UI only.
+5. Keep the detector, thresholds, reference-window semantics, baseline semantics, dimensions, mappers, About component, and README unchanged unless a condition below states otherwise.
+6. Add or update focused fixture, repository, domain/replay detection, facade/component, guardrail, and E2E coverage for the scenario.
+7. Verify with lint, build, unit/component tests, and E2E under the approved Node.js version.
+
+#### Approval Conditions
+
+- Option A is approved; Option B is not approved.
+- STEP-09 should produce exactly one surfaced document Divergence for the invoice population demo unless a blocker is returned to the Moderator before implementation proceeds further.
+- The existing Alpha Office Supplies amount Divergence may remain the surfaced Divergence only if the implementation makes Population-Specific Divergence explicit by adding peer supplier invoice populations and factual population-summary UI.
+- Scenario data must remain synthetic and must not use actual DocuWare customer identities or customer data.
+- New supplier names must be fictional and must not use Giebeler-Feuerschutz, Piening Personal, Sport Auto Plus, or any real customer name.
+- The slice-state list may appear in both streams only if it stays generic; the document stream remains the STEP-09 demo focus.
+- No README change is approved for STEP-09.
+- No About component customer case-study material is approved.
+- The current Aug-Sep cadence is approved; literal Apr/May/Jun dates are not required and should not be introduced if doing so changes reference-window behavior.
+- Product Owner review is required after QA and before the STEP-09 final Moderator gate.
+- UI language must remain factual and must not claim aggregate document-stream stability unless such stability is calculated and supported by the domain model.
+- Do not introduce cause, correctness, failure, risk, business intent, producer blame, remediation, Attribution, cross-stream causality, CAV Level 2+, or Declared Intention claims.
+- Do not change detector algorithms, sustained-Divergence thresholds, reference-window semantics, baseline semantics, supported dimensions, mappers, workflow replay behavior, backend/proxy code, live access, package dependencies, or chart libraries unless separate Moderator approval is obtained first.
+- Existing accepted replay behavior must be preserved or explicitly accounted for in the Development Team handoff and Tech Lead review.
+- Tech Lead review is required before QA begins.
+
 MOD-W v5.0.1
