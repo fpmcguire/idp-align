@@ -2790,4 +2790,58 @@ QA should pay particular attention to:
 
 This entry accepts the Tech Lead review and authorizes QA to begin. It is not QA acceptance, Product Owner review, roadmap completion, STEP-09 completion, or the final Moderator gate. Product Owner review remains required after QA and before the STEP-09 final Moderator gate under A-072.
 
+### A-074 - QA-STEP09-001 Narrow E2E Cleanup Approval
+
+- **Status:** Approved - Narrow cleanup before STEP-09 final gate
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire
+- **Product Owner:** Frank McGuire
+- **Role approved:** Development Team
+- **Gate:** Cleanup approval after QA blocker and Tech Lead disposition
+- **Finding:** `QA-STEP09-001`
+- **Next authorized action:** Development Team may perform only the narrow E2E cleanup described below, then hand off for Tech Lead re-review. QA must re-run the E2E gate after Tech Lead re-review.
+
+#### Approved Scope
+
+The Moderator approves the Tech Lead's `review.md` section "QA Blocker Disposition - QA-STEP09-001" as the cleanup boundary.
+
+Approved cleanup goal:
+
+- Make `npm run test:e2e` pass cleanly, expected 46/46 tests, without changing STEP-09 product behavior.
+
+Approved files:
+
+- `e2e/about.spec.ts`
+- `e2e/documentation.spec.ts`
+- `mod-w/docs/research-references.md`, only for the Sport Auto Plus relevance-cell wording described below
+
+#### Product Owner Approval For A-070 Content
+
+The Product Owner approves narrowly rewording the A-070 Sport Auto Plus relevance cell in `mod-w/docs/research-references.md` to avoid the false-positive word "official" while preserving the factual research meaning, the authority/source-specific document-population support, and the synthetic-data/customer-claim boundary.
+
+Preferred wording direction:
+
+- "authority-issued notices for minor traffic offences..."
+- or "traffic-offence notices and other violation documents..."
+
+The limits cell and the A-070 claim boundary must remain intact.
+
+#### Conditions
+
+- Do not change STEP-09 implementation behavior.
+- Do not change document replay fixtures, dashboard behavior, identity-slice state behavior, detector/domain logic, replay mappers/repositories, workflow replay behavior, About component files, README, roadmap, `mod-w/step-09.md`, `qa.md`, or the Moderator Register.
+- For `e2e/about.spec.ts`, update the stale external-link expectation while preserving assertions that every external link has `target="_blank"` and `rel` containing both `noopener` and `noreferrer`.
+- Do not remove safe-link coverage.
+- Do not narrow `CLAIM_GUARDRAIL_PATTERNS` unless a separate Moderator approval is obtained first.
+- Run verification under Node.js v26.0.0:
+  - `npm run lint`
+  - `npm run build`
+  - `npm test -- --watch=false`
+  - `npm run test:e2e`
+- Development Team handoff must list changed files, explain the exact fix for each E2E failure, confirm that no STEP-09 implementation file changed, and provide verification output.
+
+#### Gate Boundary
+
+This entry authorizes only the QA-STEP09-001 cleanup. It is not QA acceptance, Product Owner review of STEP-09, roadmap completion, STEP-09 completion, or the final Moderator gate.
+
 MOD-W v5.0.1

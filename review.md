@@ -117,3 +117,131 @@ Approval record needed before QA may proceed: Moderator acceptance of this Tech 
 ---
 
 MOD-W v5.0.1
+
+---
+
+## QA Blocker Disposition - QA-STEP09-001
+
+**Assessment date:** 2026-09-27
+**Finding assessed:** `qa.md` QA-STEP09-001 - E2E gate is red.
+**Tech Lead recommendation:** Approve a separate, narrow cleanup outside STEP-09 implementation scope.
+
+### Scope Conclusion
+
+I confirm QA's scope conclusion.
+
+Both E2E failures are outside STEP-09 scope and pre-date implementation commit `538ae62`:
+
+- At `538ae62`, E2E reports 44 passed and 2 failed.
+- At parent commit `0d94e20`, E2E reports 40 passed and the same 2 failed.
+- STEP-09 added 4 E2E tests, and QA reports all 4 pass.
+- STEP-09 did not change `src/app/features/about/`, `mod-w/docs/research-references.md`, `e2e/about.spec.ts`, or `e2e/documentation.spec.ts`.
+
+The failures are still a final-acceptance blocker because STEP-09 requires `npm run test:e2e` to pass and A-073 did not waive that final quality gate.
+
+### Recommended Disposition
+
+Recommend option (a): a separate, narrow cleanup approved outside STEP-09 scope.
+
+I do not recommend explicit acceptance of the red E2E gate. Keeping known E2E failures would weaken the STEP-09 final gate and make later browser regressions harder to detect.
+
+### Cleanup Briefing For Development Team
+
+**Role:** Development Team
+
+**Task:** Perform a narrow E2E cleanup for QA-STEP09-001 only. Do not change STEP-09 implementation behavior.
+
+**Authority required before work starts:** Moderator must record an approval entry authorizing this cleanup before Development Team edits files.
+
+**Allowed files:**
+
+- `e2e/about.spec.ts`
+- `e2e/documentation.spec.ts`
+- `mod-w/docs/research-references.md`, only if the Moderator and Product Owner approve touching A-070 research-reference content
+
+**Forbidden files/areas:**
+
+- STEP-09 implementation files under `src/app/data/replay/fixtures/`, `src/app/features/dashboard/`, and `src/app/shared/ui/identity-slice-states/`
+- detector, baseline, divergence, dimensions, mappers, repositories, and workflow replay behavior
+- `src/app/features/about/about.component.html` and other About component files
+- `README.md`
+- `mod-w/roadmap.md`
+- `mod-w/step-09.md`
+- `qa.md`
+- `mod-w/validation/moderator-register.md`
+
+#### Failure 1 - About External Link Count
+
+`e2e/about.spec.ts` expects 3 external links but the About page now has 5 after an intentional prior content change.
+
+Required cleanup:
+
+- Update the stale count expectation to match the rendered external-link set, or make the expectation derive from the specific links asserted in the test plus the known repository/author links.
+- Preserve coverage that every external link on the About page has:
+  - `target="_blank"`
+  - `rel` containing `noopener`
+  - `rel` containing `noreferrer`
+- Do not remove safe-link checks.
+- Do not edit About component copy or links as part of this cleanup.
+
+#### Failure 2 - Documentation Guardrail False Positive
+
+`e2e/documentation.spec.ts` flags "official" in the Sport Auto Plus research-reference relevance cell: "Describes official notices for minor traffic offences..."
+
+Preferred cleanup:
+
+- Reword the `mod-w/docs/research-references.md` Sport Auto Plus relevance cell to avoid the word "official" while preserving the factual source meaning and A-070 research boundary.
+- Suggested direction: use wording such as "authority-issued notices for minor traffic offences..." or "traffic-offence notices and other violation documents..." if Product Owner accepts the wording.
+
+Reasoning:
+
+- Narrowing the endorsement pattern would weaken a useful guardrail across future documentation.
+- The false positive is caused by one non-essential word in A-070 research-reference content.
+- Rewording the cell is the smallest durable fix, but because it touches approved A-070 Product Owner research evidence, Moderator approval should include Product Owner input or explicitly record Product Owner approval for the wording.
+
+Alternative if Product Owner/Moderator reject content rewording:
+
+- Narrow the endorsement pattern so "official" is not treated as endorsement in all contexts, but only with DocuWare/approval/partnership context. This requires clear justification because it weakens a guardrail.
+
+#### Verification Required
+
+Run under Node.js v26.0.0:
+
+- `npm run lint`
+- `npm run build`
+- `npm test -- --watch=false`
+- `npm run test:e2e`
+
+Expected E2E result after cleanup:
+
+- `npm run test:e2e` passes with 46/46 tests.
+
+#### Development Team Handoff Required
+
+The handoff must list:
+
+- changed files;
+- exact fix for each E2E failure;
+- confirmation that no STEP-09 implementation file was changed;
+- verification command output;
+- any residual risk or question for Tech Lead review.
+
+### Moderator Approval Record Needed
+
+Before Development Team starts, Moderator should add a register entry authorizing a narrow QA-STEP09-001 E2E cleanup outside STEP-09 implementation scope.
+
+The approval should specify:
+
+- the allowed files;
+- whether Product Owner approves rewording the A-070 Sport Auto Plus research-reference relevance cell;
+- that no STEP-09 implementation behavior may change;
+- that successful cleanup returns to Tech Lead re-review before QA re-run.
+
+### Follow-Up Gates
+
+1. Moderator approval for the narrow cleanup.
+2. Development Team cleanup and handoff.
+3. Tech Lead re-review of the cleanup.
+4. QA re-run of `npm run test:e2e` and any necessary focused checks.
+5. Product Owner review of STEP-09 per A-072, including QA-STEP09-002 and QA-STEP09-003.
+6. Final Moderator gate for STEP-09.
