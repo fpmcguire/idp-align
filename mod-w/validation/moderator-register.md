@@ -388,7 +388,7 @@ The Moderator approves `.claude/settings.json` separately from STEP-01. It is co
 | Finding        | Disposition                                                                                                                                                                                                                                                                 | Owner                            |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
 | QA-001         | Approved separately; see A-009.                                                                                                                                                                                                                                             | Closed                           |
-| QA-002         | Option (b) chosen after the explanation in `qa.md`. Rework required: extend the About surfacing-boundary sentence to read "…it does not decide what the behavior should have been, or whether it violates business intent." and update the About test to assert the phrase. | Development Team                 |
+| QA-002         | Option (b) chosen after the explanation in `qa.md`. Rework required: extend the About surfacing-boundary sentence to read "...it does not decide what the behavior should have been, or whether it violates business intent." and update the About test to assert the phrase. | Development Team                 |
 | QA-003         | Rework required: remove the stray space in "repository ." on the About page.                                                                                                                                                                                                | Development Team                 |
 | QA-004         | Rework required: browser tab title `IDP-Align` and an original project favicon. DocuWare or other third-party branding must not be used.                                                                                                                                    | Development Team                 |
 | QA-005         | Rework required: nav `aria-current` and `aria-label`, a single `h1` per route, and a focusable tab panel.                                                                                                                                                                   | Development Team                 |
@@ -397,7 +397,7 @@ The Moderator approves `.claude/settings.json` separately from STEP-01. It is co
 
 #### Process Record
 
-The Moderator first instructed QA to implement QA-003, QA-004, and QA-005 directly. QA did so, which conflicted with the QA role constraint in `mod-w/prompts/qa.md` ("Do not modify implementation files") and skipped MOD-W Phase 3d → 3a. On the same day, before any commit, the Moderator directed that the QA changes be reverted and the findings routed through the Tech Lead to the Development Team. The implementation files are back at the Tech Lead-accepted state (`36b52aa`): build passes and 52/52 tests pass under Node v26.0.0. The reverted QA changes are not a reference implementation for the rework.
+The Moderator first instructed QA to implement QA-003, QA-004, and QA-005 directly. QA did so, which conflicted with the QA role constraint in `mod-w/prompts/qa.md` ("Do not modify implementation files") and skipped MOD-W Phase 3d -> 3a. On the same day, before any commit, the Moderator directed that the QA changes be reverted and the findings routed through the Tech Lead to the Development Team. The implementation files are back at the Tech Lead-accepted state (`36b52aa`): build passes and 52/52 tests pass under Node v26.0.0. The reverted QA changes are not a reference implementation for the rework.
 
 #### Conditions
 
@@ -421,7 +421,7 @@ The Moderator first instructed QA to implement QA-003, QA-004, and QA-005 direct
 
 Development Team rework plan for QA-002 through QA-005, as defined in `review.md` (Post-QA Rework) and A-010:
 
-1. QA-002: extend the About surfacing-boundary sentence with "…or whether it violates business intent." inside `[data-boundary]`, and assert the phrase in About tests.
+1. QA-002: extend the About surfacing-boundary sentence with "...or whether it violates business intent." inside `[data-boundary]`, and assert the phrase in About tests.
 2. QA-003: move the CAV repository sentence to the first paragraph of "CAV Level 1 Scope", before the Level 1 model lead-in and list; remove the stray space before the period; keep the canonical URL and `target`/`rel` attributes; test the rendered sentence and placement.
 3. QA-004: set the document title to `IDP-Align`; replace the Angular default `favicon.ico` with an original SVG project icon; no DocuWare or third-party branding.
 4. QA-005: add nav `aria-label`, `aria-current="page"` on the active link only, exactly one `h1` per routed view, a keyboard-focusable tab panel, and a visible 2px focus indicator; add tests for these semantics.
@@ -539,7 +539,7 @@ The Product Owner reviewed the rendered copy against `mod-w/product.md` v1.3 dir
 - All 17 STEP-01 acceptance checks are met.
 - About covers every required topic: project intent, DocuWare interview research/demo framing, DocuWare API research intent, dashboard UI, CAV Level 1, architecture, MOD-W workflow, and scope boundaries.
 - The surfacing-boundary copy denies failure, defect, non-conformance, and business-intent violation. Every overclaim (endorsement, private access, confidential information, production readiness, a defect or gap claim, certification) appears only inside a negated boundary statement.
-- The dashboard shows only placeholders ("—", "Pending replay data"), so it does not imply that replay data, Observed Baseline calculation, or sustained Divergence detection exist yet.
+- The dashboard shows only placeholders ("--", "Pending replay data"), so it does not imply that replay data, Observed Baseline calculation, or sustained Divergence detection exist yet.
 - The "Ongoing" KPI label matches the canonical Divergence status in `mod-w/domain-language.md`.
 - Product Goal 9 (present v1 as a bounded DocuWare interview research/demo artifact) is served.
 
@@ -711,7 +711,7 @@ Development Team STEP-02 plan (2026-09-24), with the Tech Lead dispositions belo
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Dimension            | Leave formal Dimension / `DivergenceDimension` out of STEP-02.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | Fixture behavior     | Include one neutral change in behavior per stream, in one Identity Slice each, not labeled as Divergence or expected output.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| Dashboard (Option B) | Approved. Neutral replay source line with source facts only: replay source, observation count, Identity Slice count, date range, UTC. KPI cards stay "—", filters stay disabled, and list/detail placeholders stay intact. No Observed Baselines, Divergences, Evidence traces, rankings, severity, status, or "affected" language. Avoid "detected", "flagged", "changed", "issue", "anomaly", "alert", "violation", "bad", "defect", and "gap". Use "synthetic" and "replay" plainly. Browser code makes no live DocuWare calls, and credentials never live in browser code. |
+| Dashboard (Option B) | Approved. Neutral replay source line with source facts only: replay source, observation count, Identity Slice count, date range, UTC. KPI cards stay "--", filters stay disabled, and list/detail placeholders stay intact. No Observed Baselines, Divergences, Evidence traces, rankings, severity, status, or "affected" language. Avoid "detected", "flagged", "changed", "issue", "anomaly", "alert", "violation", "bad", "defect", and "gap". Use "synthetic" and "replay" plainly. Browser code makes no live DocuWare calls, and credentials never live in browser code. |
 | QA-006 expansion     | Approved as planned. `src/testing/claim-guardrail-patterns.ts` holds constants only and is imported by tests only. The dashboard visible-copy guardrail scans rendered dashboard text only. Fixture tests cover fixture safety and reserved/finding terminology, not ordinary source-domain values such as `state: "Failed"`. The shell route target and About boundary-scan limitation stay out of STEP-02.                                                                                                                                                                   |
 | Naming               | `responseTimeMs` approved, with a fixture metadata or test note mapping it to `TaskReactionTimes`. `StreamSourceInfo` approved as a data-layer name. Existing "Identity Slice" copy is unchanged. No artifact updates needed before implementation.                                                                                                                                                                                                                                                                                                                            |
 
@@ -964,7 +964,7 @@ QA-012 to QA-017 are dispositioned below so the remaining demo-facing and proces
 
 #### Conditions
 
-- KPI values remain "—". No calculations, Observed Baseline logic, sustained Divergence detection, filters, Evidence Trace behavior, live DocuWare calls, credentials, or new capability.
+- KPI values remain "--". No calculations, Observed Baseline logic, sustained Divergence detection, filters, Evidence Trace behavior, live DocuWare calls, credentials, or new capability.
 - No About copy or About test changes (PO-1 excluded). QA-013 casing is not touched.
 - Verification uses Node.js v26.0.0: `npm run lint`, `npm run build`, `npm test -- --watch=false`.
 - After implementation, the Tech Lead re-reviews and a fresh QA session re-checks QA-012 before the STEP-02 final gate.
@@ -1025,7 +1025,7 @@ No About files, fixtures, calculations, Observed Baseline logic, sustained Diver
 
 #### Acceptance Summary
 
-The Moderator accepts the fresh QA re-check of QA-012. The KPI card note now reads "Pending Divergence detection", KPI values remain "—", and the stale "Pending replay data" copy is removed from source. Lint, build, and tests (12 files, 158 tests) passed under Node.js v26.0.0.
+The Moderator accepts the fresh QA re-check of QA-012. The KPI card note now reads "Pending Divergence detection", KPI values remain "--", and the stale "Pending replay data" copy is removed from source. Lint, build, and tests (12 files, 158 tests) passed under Node.js v26.0.0.
 
 #### Evidence
 
@@ -1169,7 +1169,7 @@ Development Team STEP-03 plan (2026-09-25), with the Tech Lead conditions below:
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | QA-014             | Emit both Approval step and Workflow runtime Divergences when both independently meet sustained criteria. Do not link them, suppress one, or mark either as derived. Keep the no-Attribution explanation in comments and tests.                            |
 | Scope              | No production dashboard or facade changes. STEP-03 is pure domain logic plus tests; STEP-04 wires dashboard/facade consumption.                                                                                                                            |
-| Detection defaults | 28-day reference window; minimum 4 reference observations; numeric range mean ± max(3 sample standard deviations, 5% of absolute mean); categorical minimum reference share 0.1; sustained threshold 3 consecutive out-of-baseline candidate observations. |
+| Detection defaults | 28-day reference window; minimum 4 reference observations; numeric range mean +/- max(3 sample standard deviations, 5% of absolute mean); categorical minimum reference share 0.1; sustained threshold 3 consecutive out-of-baseline candidate observations. |
 | `resolved` status  | The detector may set `resolved`. Comments and tests must make clear it is only a finding lifecycle state and does not imply remediation, Convergence, or business correctness.                                                                             |
 | Date behavior      | Date representation is unsupported by normalized observations. `document-date-lag` is the date-related dimension for STEP-03.                                                                                                                              |
 | `decisionAgent`    | Evidence context only; not a dimension and not Attribution.                                                                                                                                                                                                |
@@ -2310,7 +2310,7 @@ STEP-07 passes its final Moderator gate and is complete. Roadmap advancement is 
 - The stale About copy is approved only within the specific statements routed in this Step; it does not authorize a broader About rewrite.
 - QA-028 and QA-029 remain accepted non-blocking carry-forward notes unless a narrow change is explicitly proposed in the implementation plan and separately approved before implementation.
 - Categorical workflow behavior remains spec-covered only. Do not add categorical workflow fixtures or make the behavior browser-visible unless a separate Moderator approval authorizes that data scope.
-- Respect A-059: factual source-state text such as “Failed” under “Instance state” is not a failure/judgment claim. Guardrail checks must assess context rather than reject that source value indiscriminately.
+- Respect A-059: factual source-state text such as "Failed" under "Instance state" is not a failure/judgment claim. Guardrail checks must assess context rather than reject that source value indiscriminately.
 
 #### Moderator Resolutions Of Proposed Open Decisions
 
@@ -2896,5 +2896,58 @@ QA should verify:
 #### Gate Boundary
 
 This entry accepts only the Tech Lead re-review of the QA-STEP09-001 cleanup and authorizes QA re-review. It is not QA acceptance, Product Owner review, roadmap completion, STEP-09 completion, or the final Moderator gate.
+
+### A-076 - STEP-09 QA Acceptance And Finding Dispositions
+
+- **Status:** Accepted with notes
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire
+- **Role accepted:** QA
+- **Gate:** QA acceptance before Product Owner review and Moderator final gate
+- **Step:** `mod-w/step-09.md`
+- **QA verdict:** STEP-09 behavior Pass with notes; the only blocking acceptance check (QA-STEP09-001, `npm run test:e2e`) is resolved at `7f50a12`
+- **Next authorized action:** Commit `qa.md` and this entry. Product Owner review of STEP-09 per A-072, including QA-STEP09-002 and QA-STEP09-003; after that, request the STEP-09 final Moderator gate.
+
+#### Accepted Artifacts And Evidence
+
+- `qa.md` - QA Review - STEP-09, including section 7 "Re-Review - QA-STEP09-001 Narrow E2E Cleanup (A-074 / A-075)"
+- `review.md` - Tech Lead Review - STEP-09 (accepted under A-073) and the A-074 cleanup re-review (accepted under A-075)
+- A-071 Step approval, A-072 implementation-plan approval, A-073 Tech Lead review acceptance, A-074 cleanup approval, A-075 cleanup Tech Lead re-review acceptance
+- Implementation commit `538ae62`; cleanup commit `7f50a12`
+- QA reports Node.js v26.0.0 verification at `7f50a12`: lint and build passed; unit/component tests passed (33 files, 541 tests); E2E passed (46/46)
+
+#### Finding Dispositions
+
+| Finding | Disposition |
+| --- | --- |
+| QA-STEP09-001 | Resolved. Both pre-existing E2E failures are fixed within A-074 scope. `CLAIM_GUARDRAIL_PATTERNS` was not narrowed, and STEP-09 behavior did not change. The STEP-09 E2E acceptance check is met. |
+| QA-STEP09-002 | Accepted as Medium claim-boundary wording note. Referred to Product Owner review. Not blocking on its own: no rendered text is false, and the per-Identity-Slice state is exact. Any wording change requires separate approval routed Tech Lead -> Development Team. |
+| QA-STEP09-003 | Accepted as Low demo-narrative note. Referred to Product Owner review. No change required; A-072 keeps existing records unchanged. |
+| QA-STEP09-004 | Accepted as Info. Agrees with the Tech Lead's TL-STEP09-002 "could fix later". No action for STEP-09. |
+| TL-STEP09-CLEANUP-001 | Remains accepted as Info under A-075. |
+
+#### Gate Boundary
+
+This entry accepts only the STEP-09 QA review and finding dispositions. It is not Product Owner review, roadmap completion, STEP-09 completion, or the final Moderator gate.
+
+### A-077 - STEP-09 Final Gate Deferred Pending Product Owner Review
+
+- **Status:** Deferred - Process prerequisite not yet recorded
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire
+- **Gate:** Requested STEP-09 final Moderator gate
+- **Step:** `mod-w/step-09.md`
+- **Decision:** The Moderator accepts the QA final findings under A-076. The STEP-09 final gate is not recorded as complete because A-072 requires Product Owner review after QA and before the final Moderator gate, and no post-QA Product Owner review entry is present.
+- **Next authorized action:** Product Owner review of STEP-09, including QA-STEP09-002 and QA-STEP09-003. After that review is recorded, the Moderator may perform the STEP-09 final gate.
+
+#### Basis
+
+- A-072 explicitly requires Product Owner review after QA and before the STEP-09 final Moderator gate.
+- A-076 accepts the QA final findings and resolves QA-STEP09-001, but it expressly does not record Product Owner review, roadmap completion, STEP-09 completion, or the final Moderator gate.
+- QA-STEP09-002 and QA-STEP09-003 remain referred to Product Owner review.
+
+#### Gate Boundary
+
+This entry preserves the required gate sequence. It is not Product Owner review, roadmap completion, STEP-09 completion, or final Moderator acceptance.
 
 MOD-W v5.0.1
