@@ -245,3 +245,71 @@ The approval should specify:
 4. QA re-run of `npm run test:e2e` and any necessary focused checks.
 5. Product Owner review of STEP-09 per A-072, including QA-STEP09-002 and QA-STEP09-003.
 6. Final Moderator gate for STEP-09.
+
+---
+
+## Re-Review - QA-STEP09-001 Narrow E2E Cleanup (A-074)
+
+**Re-review date:** 2026-09-27
+**Reviewer:** Codex, acting as Tech Lead
+**Cleanup reviewed:** Current uncommitted Development Team cleanup after A-074 approval
+**Verdict:** Accepted for QA re-run
+
+### Scope Confirmation
+
+The cleanup is within A-074 scope.
+
+`git status` / `git diff --name-only` show only these files changed:
+
+- `e2e/about.spec.ts`
+- `mod-w/docs/research-references.md`
+
+No STEP-09 implementation files changed. I found no changes to fixtures, dashboard implementation, shared identity-slice-state UI, detector/baseline/divergence/dimension code, replay mappers/repositories, workflow replay, About component files, README, roadmap, `mod-w/step-09.md`, `qa.md`, or the Moderator Register.
+
+`src/testing/claim-guardrail-patterns.ts` was not changed, so the endorsement guardrail was not narrowed.
+
+### Fix Assessment
+
+**Failure 1 - About external-link count:** Accepted.
+
+- `e2e/about.spec.ts` updates the external-link count from 3 to 5.
+- The updated comment matches the current About page link set: IDP-Align repository, CAV repository, two DocuWare API references, and author profile.
+- The per-link loop remains in place and still asserts `target="_blank"` and `rel` containing `noopener` and `noreferrer` for every external link.
+- The CAV repository href assertion remains unchanged.
+- Residual risk: the count is still fixed, so a later intentional About link change will require another test update. This is acceptable for this narrow cleanup because deriving the count from a broader expected-link list would expand the change.
+
+**Failure 2 - Sport Auto Plus relevance wording:** Accepted.
+
+- `mod-w/docs/research-references.md` changes "official notices" to "authority-issued notices" in the Sport Auto Plus relevance cell.
+- The factual source meaning is preserved: the row still describes minor traffic-offence and other violation notices, state-authority-specific variations, and support for `Authority x Traffic Notice`.
+- The A-070 boundary remains intact: research motivation only, no claim that Sport Auto Plus experienced the simulated Divergence, and no customer data reproduced.
+- This follows the Product Owner-approved wording direction recorded in A-074.
+
+### Verification
+
+Verification run under Node.js v26.0.0:
+
+- `fnm exec --using=v26.0.0 npm.cmd run lint` - Pass. All files pass linting.
+- `fnm exec --using=v26.0.0 npm.cmd run build` - Initial sandbox run hit known Angular/esbuild `spawn EPERM`; outside-sandbox rerun passed.
+- `fnm exec --using=v26.0.0 npm.cmd test -- --watch=false` - Initial sandbox run hit known Angular/esbuild `spawn EPERM`; outside-sandbox rerun passed: 33 files, 541 tests.
+- `fnm exec --using=v26.0.0 npm.cmd run test:e2e` - Initial sandbox run hit `spawn EPERM`; outside-sandbox rerun passed: 46 tests.
+
+`git diff --check -- review.md` was clean before this section was added; run final diff checks before committing.
+
+### Findings
+
+No blocking findings.
+
+**TL-STEP09-CLEANUP-001 - Fixed About external-link count remains brittle.**
+Severity: Info. The fixed count is acceptable under the narrow A-074 cleanup, but future intentional About link additions/removals will need a test update. This does not block QA re-run.
+
+### Recommended Next Gate
+
+Moderator may accept this Tech Lead re-review and authorize QA to re-run the E2E gate for QA-STEP09-001.
+
+QA should verify at minimum:
+
+- `npm run test:e2e` passes at 46/46;
+- the About safe-link assertions still cover every external link;
+- the documentation guardrail no longer flags the Sport Auto Plus relevance row;
+- no STEP-09 implementation behavior changed.

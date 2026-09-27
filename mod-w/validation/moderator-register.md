@@ -2844,4 +2844,57 @@ The limits cell and the A-070 claim boundary must remain intact.
 
 This entry authorizes only the QA-STEP09-001 cleanup. It is not QA acceptance, Product Owner review of STEP-09, roadmap completion, STEP-09 completion, or the final Moderator gate.
 
+### A-075 - QA-STEP09-001 Cleanup Tech Lead Re-Review Acceptance
+
+- **Status:** Accepted - QA E2E re-run authorized
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire
+- **Role accepted:** Tech Lead
+- **Gate:** Cleanup Tech Lead re-review acceptance before QA re-run
+- **Finding:** `QA-STEP09-001`
+- **Next authorized action:** Commit the accepted narrow cleanup and Tech Lead re-review. QA may re-run the E2E gate for QA-STEP09-001 after this commit.
+
+#### Accepted Artifacts And Evidence
+
+- `review.md` section "Re-Review - QA-STEP09-001 Narrow E2E Cleanup (A-074)"
+- `e2e/about.spec.ts`
+- `mod-w/docs/research-references.md`
+
+#### Acceptance Summary
+
+The Moderator accepts the Tech Lead's re-review of the A-074 cleanup.
+
+The cleanup is within approved scope:
+
+- `e2e/about.spec.ts` updates the stale external-link count from 3 to 5 while preserving the safe-link assertions for every external link.
+- `mod-w/docs/research-references.md` rewords the Sport Auto Plus relevance cell from "official notices" to "authority-issued notices" while preserving the A-070 research meaning and claim boundary.
+- `CLAIM_GUARDRAIL_PATTERNS` was not narrowed.
+- No STEP-09 implementation behavior was changed.
+
+Tech Lead reports verification under Node.js v26.0.0:
+
+- lint passed
+- build passed after outside-sandbox rerun for known Angular/esbuild `spawn EPERM`
+- unit/component tests passed: 33 files, 541 tests
+- E2E passed after outside-sandbox rerun: 46 tests
+
+#### Finding Disposition
+
+- TL-STEP09-CLEANUP-001 is accepted as Info. The About external-link count remains fixed and may need future updates if About links intentionally change. This does not block the QA E2E re-run.
+
+#### QA Handoff
+
+QA is authorized to re-review QA-STEP09-001 against A-074, this entry, `review.md`, and the committed cleanup package.
+
+QA should verify:
+
+- `npm run test:e2e` passes with 46/46 tests;
+- About safe-link assertions still cover every external link;
+- the documentation guardrail no longer flags the Sport Auto Plus relevance row;
+- no STEP-09 implementation behavior changed.
+
+#### Gate Boundary
+
+This entry accepts only the Tech Lead re-review of the QA-STEP09-001 cleanup and authorizes QA re-review. It is not QA acceptance, Product Owner review, roadmap completion, STEP-09 completion, or the final Moderator gate.
+
 MOD-W v5.0.1

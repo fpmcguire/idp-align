@@ -31,9 +31,10 @@ test.describe('About', () => {
       await expect(link).toHaveAttribute('href', href);
     }
 
-    // Every external link on the page, including the CAV repository link. Links are not followed.
+    // Every external link on the page: IDP-Align repository, CAV repository, the two DocuWare
+    // references, and the author profile. Links are not followed.
     const external = page.locator('a[href^="http"]');
-    await expect(external).toHaveCount(3);
+    await expect(external).toHaveCount(5);
     for (const link of await external.all()) {
       await expect(link).toHaveAttribute('target', '_blank');
       await expect(link).toHaveAttribute('rel', /\bnoopener\b/);
