@@ -1,4 +1,4 @@
-# PRODUCT — IDP-Align
+# PRODUCT - IDP-Align
 
 **Project:** IDP-Align  
 **Version:** 1.3  
@@ -9,7 +9,7 @@
 
 ## Problem Statement
 
-IDP-Align is a domain-exploration, interview-preparation, and methodology-proof project. Its purpose is to apply Continuous Alignment Verification (CAV) to a domain outside those in which it has already been explored — industrial telemetry (MQTT-Align) and bioprocess monitoring (Bio-Align) — using a real, external, unfamiliar system: DocuWare's enterprise document-processing and workflow-automation domain.
+IDP-Align is a domain-exploration, interview-preparation, and methodology-proof project. Its purpose is to apply Continuous Alignment Verification (CAV) to a domain outside those in which it has already been explored - industrial telemetry (MQTT-Align) and bioprocess monitoring (Bio-Align) - using a real, external, unfamiliar system: DocuWare's enterprise document-processing and workflow-automation domain.
 
 For v1, IDP-Align should surface itself as a personal research and demo project for Frank McGuire's DocuWare Software Engineer interview scheduled for September 28, 2026. The app may name DocuWare and describe the public DocuWare API and workflow/document-processing domain as the research context. It must not imply DocuWare endorsement, access to private DocuWare systems, confidential interview information, production readiness, or a claim that DocuWare has a product gap or defect.
 
@@ -20,7 +20,7 @@ The project observes two distinct data surfaces exposed by DocuWare:
 
 IDP-Align does not reimplement document extraction or workflow orchestration. It acts as an external observer of their outputs and behavior.
 
-The project is intentionally scoped to **CAV Level 1 — Observed-State Divergence**. It continuously constructs Observed Truth, organizes observations into meaningful identity slices, establishes observed baselines from historical behavior, detects sustained divergence, and persists explainable evidence.
+The project is intentionally scoped to **CAV Level 1 - Observed-State Divergence**. It continuously constructs Observed Truth, organizes observations into meaningful identity slices, establishes observed baselines from historical behavior, detects sustained divergence, and persists explainable evidence.
 
 Two streams demonstrate the same canonical Level 1 pattern in different forms:
 
@@ -29,7 +29,7 @@ Two streams demonstrate the same canonical Level 1 pattern in different forms:
 
 The distinction between these streams is **not** "declared baseline vs. inferred baseline." Under canonical CAV v1.0, both are observed-state verification. An observed baseline may be selected from historical evidence or inferred continuously from it; neither is Declared Intention.
 
-Explicit business rules such as "currency must be EUR," "amount must be below a contractual threshold," or "this workflow step must complete within an agreed limit" are outside the Level 1 implementation. Such machine-readable expectations belong to a future **CAV Level 3 — Intent Registry** extension, with formal intent-vs-observed deltas and envelopes beginning at Level 4.
+Explicit business rules such as "currency must be EUR," "amount must be below a contractual threshold," or "this workflow step must complete within an agreed limit" are outside the Level 1 implementation. Such machine-readable expectations belong to a future **CAV Level 3 - Intent Registry** extension, with formal intent-vs-observed deltas and envelopes beginning at Level 4.
 
 The project is anchored in DocuWare's Purchase-to-Pay / invoice-processing use case as realistic scenario framing. It does not claim that DocuWare has failed to address these concerns or that IDP-Align identifies an unoccupied product niche.
 
@@ -37,7 +37,7 @@ The project is anchored in DocuWare's Purchase-to-Pay / invoice-processing use c
 
 ### Implemented target
 
-**CAV Level 1 — Observed-State Divergence**
+**CAV Level 1 - Observed-State Divergence**
 
 IDP-Align must demonstrate:
 
@@ -61,11 +61,11 @@ An Observed Baseline describes what has happened in observed history; it does no
 
 IDP-Align does not claim to implement:
 
-- **Level 2 — Multi-Dimensional Observed Alignment:** cross-environment or multi-source reconciliation beyond what is needed to present the two independent Level 1 streams;
-- **Level 3 — Intent Registry:** no machine-readable declared-intent registry;
-- **Level 4 — Formal Alignment Deltas + Envelopes:** no formal intent-vs-observed delta engine or declared-intent envelope DSL;
-- **Level 5 — Drift Velocity Modeling:** no formal derivative/velocity model over Level 4 alignment deltas;
-- **Level 6 — Convergence Enforcement:** no closed-loop remediation or enforcement.
+- **Level 2 - Multi-Dimensional Observed Alignment:** cross-environment or multi-source reconciliation beyond what is needed to present the two independent Level 1 streams;
+- **Level 3 - Intent Registry:** no machine-readable declared-intent registry;
+- **Level 4 - Formal Alignment Deltas + Envelopes:** no formal intent-vs-observed delta engine or declared-intent envelope DSL;
+- **Level 5 - Drift Velocity Modeling:** no formal derivative/velocity model over Level 4 alignment deltas;
+- **Level 6 - Convergence Enforcement:** no closed-loop remediation or enforcement.
 
 The dashboard may show magnitude, duration, trend, or distance from an **observed baseline** for explainability. Those measurements do not constitute the formal Level 4 Alignment Delta or Level 5 Drift Velocity defined by CAV.
 
@@ -81,7 +81,7 @@ These are scenario personas used to ground the exploration. They are not a claim
 
 ## Goals
 
-1. Demonstrate through a working implementation that canonical **CAV Level 1 — Observed-State Divergence** transfers coherently to enterprise document-processing and workflow-event data.
+1. Demonstrate through a working implementation that canonical **CAV Level 1 - Observed-State Divergence** transfers coherently to enterprise document-processing and workflow-event data.
 2. Construct Observed Truth from extracted document index-field observations and organize it into meaningful identity slices such as vendor and document type.
 3. Establish observed per-slice baselines from historical document behavior and surface sustained divergence from those baselines.
 4. Construct Observed Truth from Purchase-to-Pay workflow events and establish observed behavioral baselines for selected steps, routes, agents, and timing dimensions.
@@ -98,7 +98,7 @@ These are scenario personas used to ground the exploration. They are not a claim
 3. Not a production-grade multi-tenant SaaS product.
 4. Not a claim of market novelty or an unoccupied niche. Baseline comparison, drift detection, data observability, ML monitoring, and change-point detection all have mature prior art.
 5. Not a general business-process conformance-checking platform.
-6. Not an implementation of CAV Levels 2–6.
+6. Not an implementation of CAV Levels 2-6.
 7. Not an implementation of **CAV Attribution**. Attribution/root-cause lineage remains a separate proposed orthogonal capability and is not part of canonical CAV v1.0 or IDP-Align's committed scope.
 8. Not integrated with an existing Cavalieri Align codebase; IDP-Align is a new, standalone, publicly shareable reference implementation.
 9. Not a resume or cover-letter claim unless separately reviewed after the project is actually implemented.
@@ -109,8 +109,8 @@ Stable R-IDs are required for traceability.
 
 | ID  | Requirement                                                                                                                                                                                              | Priority    |
 | --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| R1  | Ingest or replay document index-field observations shaped from DocuWare Platform REST API schemas, including vendor, amount/currency, and date-related fields                                            | Must have   |
-| R2  | Build Observed Truth and an observed per-vendor/document-type baseline from historical document observations; detect sustained divergence from that observed baseline                                    | Must have   |
+| R1  | Ingest or replay document index-field observations shaped from DocuWare Platform REST API schemas, including producer/vendor, document type, amount/currency, and date-related fields                    | Must have   |
+| R2  | Build Observed Truth and observed document baselines by meaningful Identity Slice patterns, including vendor/document-type or producer/document-type populations; detect sustained divergence from those observed baselines | Must have   |
 | R3  | Ingest or replay workflow event observations shaped from the Workflow Analytics API, including task duration, decision agent, response time, error/route, and total runtime where available              | Must have   |
 | R4  | Build Observed Truth and observed behavioral baselines from historical workflow runs; detect sustained divergence by relevant identity slice such as step, route, or decision agent                      | Must have   |
 | R5  | Every detected sustained Divergence is surfaced with an explainable and reconstructable Evidence trace: identity slice, baseline reference/context, dimension, observed behavior/value, magnitude/distance, onset, duration, and supporting observations as applicable. The surfaced finding does not itself classify the behavior as failure, defect, non-conformance, or violation of business intent. | Must have   |
@@ -125,7 +125,7 @@ Stable R-IDs are required for traceability.
 
 ## Key User Scenarios
 
-### Scenario 1 — Document-stream divergence
+### Scenario 1 - Document-stream divergence
 
 Historical invoice observations for a vendor establish an observed pattern for selected index fields. New invoices begin producing a materially different vendor representation, currency/amount pattern, date representation, or other selected field behavior.
 
@@ -133,7 +133,15 @@ IDP-Align groups the observations by identity slice, distinguishes one-off varia
 
 The system does **not** claim the new value violates declared business intent unless such intent is separately introduced in a future Level 3/4 implementation.
 
-### Scenario 2 — Workflow-stream divergence
+#### Scenario 1a - Supplier Invoice Population Divergence
+
+As a named second document replay scenario, IDP-Align should demonstrate that several supplier invoice populations can be observed as independent Identity Slices. Each population establishes its own Observed Baseline from historical observations. One supplier invoice population may surface sustained Divergence while peer supplier invoice populations do not surface the same Divergence.
+
+This scenario is synthetic and must not use actual DocuWare customer identities. It demonstrates population-specific CAV Level 1 behavior without adding causal, correctness, failure, risk, business-intent, or cross-stream claims.
+
+The UI should make population-specific behavior explicit through factual slice-level presentation, such as "5 Identity Slices observed / 1 with surfaced Divergence", together with the individual Identity Slice states. The UI must not claim that an aggregate document stream is stable unless aggregate stability is calculated and supported by the domain model.
+
+### Scenario 2 - Workflow-stream divergence
 
 Historical Purchase-to-Pay workflow runs establish observed behavior for a selected step, route, or decision-agent slice.
 
@@ -141,13 +149,13 @@ Task duration, routing, response time, or error behavior begins to differ persis
 
 IDP-Align detects sustained Divergence and presents the affected identity slice, baseline context, onset, duration, magnitude/distance, and Evidence.
 
-### Scenario 3 — Cross-stream review without cross-stream CAV claim
+### Scenario 3 - Cross-stream review without cross-stream CAV claim
 
 An AI Model Quality Engineer opens the dashboard and reviews document-stream and workflow-stream divergence side by side.
 
 The two streams share canonical Level 1 concepts and reusable evidence/detail components, but IDP-Align does not claim that simply displaying both streams constitutes Level 2 multi-source reconciliation or Level 4 cross-stream intent alignment.
 
-### Scenario 4 — Future intent extension
+### Scenario 4 - Future intent extension
 
 A future version could introduce explicit business expectations as machine-readable Intent Artifacts. That would begin a Level 3 extension. Comparing those intent artifacts formally with observed state and evaluating tolerance envelopes would be Level 4.
 
@@ -162,7 +170,7 @@ This scenario documents the architectural direction only; it is not part of the 
 - [ ] Every surfaced divergence has reconstructable evidence.
 - [ ] No surfaced divergence is presented as inherently bad, defective, non-conformant, or in violation of business intent solely because it differs from an observed baseline.
 - [ ] UI and code use canonical CAV v1.0 terminology.
-- [ ] No feature or documentation claims CAV Level 2–6 capability without satisfying the canonical level definition.
+- [ ] No feature or documentation claims CAV Level 2-6 capability without satisfying the canonical level definition.
 - [ ] No Attribution capability is claimed as implemented.
 - [ ] Unit and E2E quality gates pass.
 - [ ] No unresolved critical risks.
@@ -176,14 +184,14 @@ This scenario documents the architectural direction only; it is not part of the 
 | -------------------------------------------------------------------------- | ----------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------ |
 | No timely live DocuWare Cloud/API access                                   | Live integration cannot be demonstrated                     | High        | Treat schema-accurate mock/replay data as the primary path from the start                        |
 | OAuth2/proxy work consumes the build window                                | Less time for the actual CAV demonstration                  | Medium      | Keep proxy thin; do not build general backend infrastructure                                     |
-| Two-stream scope is too broad                                              | Neither stream reaches convincing depth                     | Medium–High | Use the same Level 1 conceptual model for both; keep dimensions and identity slices narrow       |
-| Audience interprets the project as a proposed DocuWare product or critique | Undermines its purpose as learning/reference implementation | Low–Medium  | Frame it explicitly as domain exploration using public interfaces and realistic scenarios        |
+| Two-stream scope is too broad                                              | Neither stream reaches convincing depth                     | Medium-High | Use the same Level 1 conceptual model for both; keep dimensions and identity slices narrow       |
+| Audience interprets the project as a proposed DocuWare product or critique | Undermines its purpose as learning/reference implementation | Low-Medium  | Frame it explicitly as domain exploration using public interfaces and realistic scenarios        |
 | DocuWare interview/demo framing is mistaken for endorsement or private access | Creates reputational and accuracy risk | Medium | State that IDP-Align is a personal research/demo project based on public information and optional sandbox access only |
 | Synthetic data makes divergence feel contrived                             | Weakens credibility                                         | Medium      | Derive scenarios from documented Purchase-to-Pay shapes and plausible historical variation       |
 | Legacy CAV terminology leaks into code/docs                                | Level claims become internally inconsistent                 | Medium      | Treat CAV Manifesto v1.0 as canonical; reject "Level 1 declared / Level 2+ inferred" terminology |
 | Observed baseline is mistaken for business truth                           | System overstates what it knows                             | Medium      | UI and evidence detail explicitly label baselines as observed/historical, not intended/required  |
 | Surfaced divergence is interpreted as failure or bad data                  | Users may over-read evidence of sustained change as business judgment | Medium | Present Divergence as evidence of sustained change with baseline/context, magnitude/distance, duration/onset, and supporting observations; do not assign business correctness unless explicit Intent is available |
-| Attribution is accidentally implied by showing decision-agent context      | Scope creep / false capability claim                        | Low–Medium  | Treat agent/version fields as evidence context only; do not call them root-cause attribution     |
+| Attribution is accidentally implied by showing decision-agent context      | Scope creep / false capability claim                        | Low-Medium  | Treat agent/version fields as evidence context only; do not call them root-cause attribution     |
 
 ## Assumptions and Constraints
 
@@ -205,20 +213,20 @@ The CAV Manifesto v1.0 is the canonical source for CAV terminology and maturity 
 
 Use these terms consistently:
 
-- **Observed Truth** — evidence-backed representation of actual system behavior.
-- **Identity Slice** — meaningful cohort/scope used to compare behavior.
-- **Observed Baseline** — reference derived from historical or continuously inferred observed behavior.
-- **Divergence** — sustained, meaningful departure from an observed baseline or relevant observed comparison.
-- **Evidence** — persisted observations and relationships supporting a divergence finding.
-- **Surfacing** — making detected Divergence and supporting Evidence visible for interpretation without assigning business correctness, failure, defect, non-conformance, or causal meaning.
+- **Observed Truth** - evidence-backed representation of actual system behavior.
+- **Identity Slice** - meaningful cohort/scope used to compare behavior.
+- **Observed Baseline** - reference derived from historical or continuously inferred observed behavior.
+- **Divergence** - sustained, meaningful departure from an observed baseline or relevant observed comparison.
+- **Evidence** - persisted observations and relationships supporting a divergence finding.
+- **Surfacing** - making detected Divergence and supporting Evidence visible for interpretation without assigning business correctness, failure, defect, non-conformance, or causal meaning.
 
 Reserved for future CAV levels and **not** to be used as descriptions of current IDP-Align behavior:
 
-- **Declared Intention / Intent** — Level 3+.
-- **Alignment Delta** — Level 4+ formal intent-vs-observed difference.
-- **Envelope / Breach** — Level 4+ when tied to declared intent.
-- **Drift Velocity** — Level 5 formal rate of change of Alignment Delta.
-- **Convergence** — Level 6 corrective-action effectiveness.
+- **Declared Intention / Intent** - Level 3+.
+- **Alignment Delta** - Level 4+ formal intent-vs-observed difference.
+- **Envelope / Breach** - Level 4+ when tied to declared intent.
+- **Drift Velocity** - Level 5 formal rate of change of Alignment Delta.
+- **Convergence** - Level 6 corrective-action effectiveness.
 
 Avoid using generic words such as "alert" or "anomaly" as replacements for the canonical CAV term **Divergence** when describing CAV findings.
 
@@ -274,3 +282,4 @@ Development documentation should cite the specific public sources used for:
 | 2026-09-24 | 1.2     | Product Owner updated v1 positioning to explicitly surface IDP-Align as a DocuWare interview research/demo project for September 28, 2026, allowing bounded DocuWare references in project context and demo copy. |
 | 2026-09-24 | 1.3     | Clarified the CAV surfacing boundary: divergence detection is computational, while IDP-Align's product responsibility is to surface sustained change with reconstructable evidence rather than judge the change as bad, defective, non-conformant, or contrary to business intent. Added corresponding requirement, acceptance, risk, scenario, and domain-language guardrails. No implementation scope change. |
 | 2026-09-27 | 1.3.x   | Corrected Angular version references from v21 to v22 to match the implemented and verified application stack. No product scope change. |
+| 2026-09-27 | 1.3.x   | Product Owner clarified Population-Specific Divergence as an extension of existing document-stream CAV Level 1 scope: producer/document-type populations may establish independent Observed Baselines, with Supplier Invoice Population Divergence as a synthetic named scenario. No new top-level requirement or CAV level claim added. |

@@ -17,6 +17,7 @@ This file is authoritative for canonical product, architecture, code, and review
 | --- | --- | --- | --- | --- |
 | Observed Truth | Evidence-backed representation of what the system actually did. | `ObservedTruth` | Observed Truth | Truth, actuals without context |
 | Identity Slice | Meaningful cohort or scope used to compare behavior. | `IdentitySlice` | Identity slice | Segment, group, bucket unless generic UI copy |
+| Producer x Document Type | Approved example Identity Slice pattern for document populations, not a new mandatory domain primitive. Examples include `Supplier x Invoice`, `Customer x Timesheet`, and `Authority x Traffic Notice`. | Use existing `IdentitySlice` fields | Producer x Document Type when explaining the pattern | New primitive, required schema, causal source |
 | Observed Baseline | Reference derived from historical or continuously inferred observed behavior. | `ObservedBaseline` | Observed Baseline | Target, intended value, policy |
 | Divergence | Sustained, meaningful departure from an Observed Baseline or observed comparison. | `Divergence` | Divergence | Alert, anomaly, violation, breach |
 | Evidence | Persisted observations and relationships supporting a Divergence. | `Evidence`, `EvidenceTraceItem` | Evidence, Evidence trace | Proof without trace, log blob |
@@ -73,6 +74,7 @@ These terms are canonical CAV terms but are reserved for future levels and must 
 - Do not label Observed Baselines as intent, targets, policy, or requirements.
 - Do not call Divergences alerts, anomalies, violations, or breaches in code or user-facing copy.
 - Do not present a surfaced Divergence as inherently bad, defective, non-conformant, or contrary to business intent solely because it differs from an Observed Baseline.
+- Producer x Document Type is an approved Identity Slice pattern for document-stream populations; it must not be treated as a new mandatory primitive or as causal evidence.
 - If a field comes from a workflow event, it may be Evidence context; do not imply root-cause Attribution.
 - For v1, bounded DocuWare references are allowed in the About view, project-context copy, documentation, tests, and demo framing when they explain the research/demo domain and September 28, 2026 interview context.
 - Do not imply DocuWare endorsement, private DocuWare access, confidential interview content, production readiness, formal certification, or a DocuWare product defect/gap claim.

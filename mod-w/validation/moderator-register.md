@@ -2580,4 +2580,37 @@ This entry explicitly records that the changes occurred after STEP-08 completion
 - The cleanup must not imply DocuWare affiliation, sponsorship, endorsement, private access, production readiness, or a DocuWare product defect/gap claim.
 - New feature work after this cleanup must start with normal MOD-W planning, Step approval, implementation-plan approval, Tech Lead review, QA, and final Moderator gates as applicable.
 
+### A-069 - Population-Specific Divergence Product Update Approval
+
+- **Status:** Approved - Product/domain-language update
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire
+- **Product Owner:** Frank McGuire
+- **Gate:** Product Owner artifact update approval before Tech Lead step drafting
+- **Next authorized action:** Tech Lead may draft a bounded implementation Step for Population-Specific Divergence through the normal MOD-W process. No implementation work is authorized until the Step and implementation plan receive separate Moderator approvals.
+
+#### Approved Artifacts
+
+- `mod-w/product.md`
+- `mod-w/domain-language.md`
+
+#### Approval Summary
+
+The Moderator approves the Product Owner updates for Population-Specific Divergence.
+
+The approved PRODUCT change treats the capability as a clarification and extension of existing document-stream CAV Level 1 scope rather than a new top-level requirement. R1/R2 now explicitly support producer/document-type document populations as meaningful Identity Slice patterns. `Supplier Invoice Population Divergence` is added as a named synthetic document replay scenario.
+
+The approved domain-language change adds `Producer x Document Type` as an approved example Identity Slice pattern, with examples including `Supplier x Invoice`, `Customer x Timesheet`, and `Authority x Traffic Notice`. This is not a new mandatory domain primitive.
+
+#### Conditions
+
+- The existing accepted replay scenario must be preserved.
+- The initial scenario is `Supplier Invoice Population Divergence`.
+- Scenario data must remain synthetic and must not use actual DocuWare customer identities.
+- The feature remains CAV Level 1 only and must not infer cause, correctness, failure, risk, business intent, or cross-stream causality.
+- UI language may make population-specific behavior explicit through factual slice-level presentation, such as observed Identity Slice counts and individual slice states.
+- The UI must not claim aggregate document-stream stability unless such stability is calculated and supported by the domain model.
+- Formal MOD-W artifacts touched by this update must remain plain ASCII.
+- New feature work must proceed through normal MOD-W planning, Step approval, implementation-plan approval, Tech Lead review, QA, and final Moderator gates.
+
 MOD-W v5.0.1
