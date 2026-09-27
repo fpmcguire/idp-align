@@ -58,6 +58,30 @@ Each table lists the source, where it is, who publishes it, when it was consulte
 | Purchase-to-Pay Solutions | https://start.docuware.com/purchase-to-pay | DocuWare | 2026-09-26 | Describes requisitions, invoice capture, reconciliation of purchase orders, delivery notes, and invoices, and approval routing. This provided the realistic scenario framing for both streams: invoices as the Document stream subject and invoice approval as the Workflow stream subject. | Scenario framing only. IDP-Align does not implement purchasing, matching, or approval. |
 | What Is Invoice Processing? How It Works | https://start.docuware.com/process-incoming-invoices | DocuWare | 2026-09-26 | Describes the invoice steps: arrival, capture and extraction of vendor name and amount, verification, and approval routing. This informed the Document stream's vendor, amount, currency, and date fields and the Workflow stream's review, approval, and payment-release steps. | Scenario framing only. Replay vendors and values are synthetic. |
 
+### 4a. Population-Specific Document Patterns
+
+These sources are external research evidence for Population-Specific Divergence. They motivate the generalized Identity Slice pattern `Producer x Document Type`; they are not product requirements, and IDP-Align does not reproduce customer data.
+
+| Source | URL | Publisher | Accessed | How it informed IDP-Align scope | Limits of the claim |
+| --- | --- | --- | --- | --- | --- |
+| Case Study: Giebeler-Feuerschutz | https://start.docuware.com/case-studies/Giebeler-Feuerschutz | DocuWare | 2026-09-27 | Describes roughly 800 to 1,000 supplier invoices per month, invoices with many line items, supplier-specific peculiarities that can make automatic processing difficult, and supplier-specific AI training when a supplier's invoice causes problems. This directly supports `Supplier x Invoice` as a meaningful document population pattern. | Research motivation only. IDP-Align must not claim Giebeler-Feuerschutz experienced the sustained Divergence simulated by IDP-Align, and no customer data is reproduced. |
+| Case Study: Piening Personal | https://start.docuware.com/case-studies/piening | DocuWare | 2026-09-27 | Describes time-tracking data and documents produced by numerous customer systems with varied formats, including cases that required more in-depth AI training. This directly supports `Customer x Timesheet` as a meaningful document population pattern. | Research motivation only. IDP-Align must not claim Piening Personal experienced the sustained Divergence simulated by IDP-Align, and no customer data is reproduced. |
+| Case Study: Sport Auto Plus GmbH | https://start.docuware.com/case-studies/sport-auto-plus | DocuWare | 2026-09-27 | Describes official notices for minor traffic offences and other violations, including the absence of a single unified German notification form and state-authority-specific variations. This directly supports `Authority x Traffic Notice` as a meaningful document population pattern. | Research motivation only. IDP-Align must not claim Sport Auto Plus experienced the sustained Divergence simulated by IDP-Align, and no customer data is reproduced. |
+
+The supported pattern is:
+
+```text
+Supplier  x Invoice
+Customer  x Timesheet
+Authority x Traffic Notice
+
+         generalizes to
+
+Producer x Document Type
+```
+
+These sources establish that producer-specific document populations occur in real DocuWare IDP environments. They do not establish that any cited customer experienced the particular sustained Divergence that IDP-Align will simulate. The initial `Supplier Invoice Population Divergence` replay scenario remains entirely synthetic.
+
 ### 5. Adjacent ML Drift Monitoring, Data Observability, And Streaming Drift Detection
 
 These sources are prior art. They show that comparing current behavior with a reference and reporting sustained change is established practice. IDP-Align applies that idea to the CAV Level 1 model; it does not claim to improve on these tools.

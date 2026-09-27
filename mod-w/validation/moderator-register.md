@@ -2613,4 +2613,38 @@ The approved domain-language change adds `Producer x Document Type` as an approv
 - Formal MOD-W artifacts touched by this update must remain plain ASCII.
 - New feature work must proceed through normal MOD-W planning, Step approval, implementation-plan approval, Tech Lead review, QA, and final Moderator gates.
 
+### A-070 - Population-Specific Divergence Research Evidence Approval
+
+- **Status:** Approved - Product Owner research-evidence update
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire
+- **Product Owner:** Frank McGuire
+- **Gate:** Product Owner research-reference update approval
+- **Next authorized action:** Commit the approved research-reference update. Tech Lead may use the approved research evidence when drafting the bounded Population-Specific Divergence implementation Step through the normal MOD-W process.
+
+#### Approved Artifacts
+
+- `mod-w/docs/research-references.md`
+
+#### Approval Summary
+
+The Moderator approves the Product Owner's update adding external research evidence for Population-Specific Divergence.
+
+The approved update records three published DocuWare customer case studies as research motivation for the generalized Identity Slice pattern `Producer x Document Type`:
+
+- Giebeler-Feuerschutz supports `Supplier x Invoice`.
+- Piening Personal supports `Customer x Timesheet`.
+- Sport Auto Plus supports `Authority x Traffic Notice`.
+
+These examples support the approved product framing from A-069 while preserving the claim boundary that the replay scenario remains synthetic.
+
+#### Conditions
+
+- The cited case studies are research evidence only and are not product requirements.
+- IDP-Align must not reproduce customer data from the cited case studies.
+- IDP-Align must not claim that any cited customer experienced the sustained Divergence simulated by IDP-Align.
+- The initial `Supplier Invoice Population Divergence` replay scenario remains entirely synthetic.
+- This approval does not authorize implementation work, fixture changes, UI changes, detector/domain logic changes, or any CAV claim beyond Level 1.
+- New feature work must proceed through normal MOD-W planning, Step approval, implementation-plan approval, Tech Lead review, QA, and final Moderator gates.
+
 MOD-W v5.0.1
