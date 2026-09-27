@@ -9,9 +9,9 @@ documentation to explore how document metadata and workflow execution behavior
 can be modeled as observable streams, compared with historical Observed
 Baselines, and surfaced as Evidence-backed Divergences.
 
-IDP-Align is not affiliated with, reviewed by, or endorsed by DocuWare. It does
-not connect to a DocuWare tenant, use credentials, process customer data, or
-claim production readiness.
+IDP-Align is not affiliated with, reviewed by, sponsored by, or endorsed by
+DocuWare. It does not connect to a DocuWare tenant, use credentials, process
+customer data, or claim production readiness.
 
 ## Purpose And Goals
 
@@ -252,6 +252,11 @@ Categorical workflow behavior is covered by component/unit specs, but the
 current replay browser data exposes only numeric workflow Divergences. QA-028
 and QA-029 remain accepted carry-forward notes unless separately routed and
 approved.
+
+## License
+
+IDP-Align is licensed under the Apache License, Version 2.0. See
+[LICENSE](LICENSE).
 
 ## Development
 

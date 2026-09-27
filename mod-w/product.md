@@ -114,7 +114,7 @@ Stable R-IDs are required for traceability.
 | R3  | Ingest or replay workflow event observations shaped from the Workflow Analytics API, including task duration, decision agent, response time, error/route, and total runtime where available              | Must have   |
 | R4  | Build Observed Truth and observed behavioral baselines from historical workflow runs; detect sustained divergence by relevant identity slice such as step, route, or decision agent                      | Must have   |
 | R5  | Every detected sustained Divergence is surfaced with an explainable and reconstructable Evidence trace: identity slice, baseline reference/context, dimension, observed behavior/value, magnitude/distance, onset, duration, and supporting observations as applicable. The surfaced finding does not itself classify the behavior as failure, defect, non-conformance, or violation of business intent. | Must have   |
-| R6  | Angular v21, signals-only dashboard presenting the document and workflow streams as separate but consistently modeled Level 1 views                                                                      | Must have   |
+| R6  | Angular v22, signals-only dashboard presenting the document and workflow streams as separate but consistently modeled Level 1 views                                                                      | Must have   |
 | R7  | Thin backend/proxy service capable of brokering DocuWare OAuth2/API calls if live access becomes available; credentials never reside in the browser                                                      | Must have   |
 | R8  | Build primarily against realistic mock/replay data derived from documented DocuWare API shapes; live DocuWare Cloud access is an opportunistic upgrade, not a dependency                                 | Must have   |
 | R9  | Use canonical CAV v1.0 vocabulary: Observed Truth, Identity Slice, Observed Baseline, Divergence, Evidence; preserve standard MOD-W artifact structure and STEP-xx build trail                           | Should have |
@@ -193,7 +193,7 @@ IDP-Align v1 is allowed to identify DocuWare by name in the About / Project Cont
 
 The project follows a lightweight MOD-W v5 pass. PRODUCT is authoritative for product scope. Architecture Definition may be scaled down, while small implementation steps, build gates, annotated Git tags, testing, review, and Moderator sign-off remain part of the build discipline.
 
-The project is a standalone Angular v21 application using signals and modern Angular control flow.
+The project is a standalone Angular v22 application using signals and modern Angular control flow.
 
 Mock/replay data is the primary data source. Live DocuWare integration may replace or supplement it if access becomes available without jeopardizing the build.
 
@@ -273,3 +273,4 @@ Development documentation should cite the specific public sources used for:
 | 2026-09-20 | 1.1     | Reconciled PRODUCT with canonical CAV Manifesto v1.0: replaced obsolete "Level 1 declared / Level 2+ inferred" model with Level 1 Observed-State Divergence; separated Observed Baseline from Declared Intention; moved intent/delta concepts to Levels 3/4; added explicit Attribution boundary and claim guardrails |
 | 2026-09-24 | 1.2     | Product Owner updated v1 positioning to explicitly surface IDP-Align as a DocuWare interview research/demo project for September 28, 2026, allowing bounded DocuWare references in project context and demo copy. |
 | 2026-09-24 | 1.3     | Clarified the CAV surfacing boundary: divergence detection is computational, while IDP-Align's product responsibility is to surface sustained change with reconstructable evidence rather than judge the change as bad, defective, non-conformant, or contrary to business intent. Added corresponding requirement, acceptance, risk, scenario, and domain-language guardrails. No implementation scope change. |
+| 2026-09-27 | 1.3.x   | Corrected Angular version references from v21 to v22 to match the implemented and verified application stack. No product scope change. |

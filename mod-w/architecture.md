@@ -41,7 +41,7 @@ The app must also include a routed About / Project Context view that explains th
 
 | Layer | Technology | Version | Rationale |
 | --- | --- | --- | --- |
-| Frontend | Angular | 22.1.x currently installed | PRODUCT says Angular v21, but the repo is already initialized on Angular 22. Use the installed stack unless Moderator requests a downgrade. |
+| Frontend | Angular | 22.1.x | Matches the implemented and verified application stack. |
 | State | Angular signals | Angular-native | Matches PRODUCT signals-only dashboard requirement and avoids heavier state libraries. |
 | Templates | Modern Angular control flow | Installed Angular version | Use `@if`, `@for`, and signal reads consistently. |
 | Styling | SCSS | Angular project default | Centralize design tokens in global styles; component styles stay scoped. |

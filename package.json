@@ -1,6 +1,7 @@
 {
   "name": "idp-align",
   "version": "0.0.0",
+  "license": "Apache-2.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -14,7 +15,6 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:report": "playwright show-report"
   },
-  "private": true,
   "packageManager": "npm@11.12.1",
   "dependencies": {
     "@angular/common": "^22.1.0",

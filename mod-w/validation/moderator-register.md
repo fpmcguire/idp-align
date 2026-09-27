@@ -2551,4 +2551,33 @@ The accepted informational findings remain QA-033 through QA-036. QA-028/QA-029 
 
 The Moderator reaffirms A-066: STEP-08 passes the final Moderator gate and remains complete. The roadmap already records STEP-08, R10, and R11 as complete under A-066 and requires no further status change. This reaffirmation does not waive any accepted conditions or authorize scope beyond STEP-08.
 
+### A-068 - Post-Completion Public Repository Cleanup
+
+- **Status:** Approved - Documentation/publication cleanup
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire
+- **Product Owner:** Frank McGuire
+- **Gate:** Post-completion documentation/publication cleanup outside a formal implementation Step
+- **Next authorized action:** Commit the approved cleanup as a documentation/repository-publication change. New feature work must begin through a separately approved MOD-W Step.
+
+#### Approved Scope
+
+- Update `README.md` DocuWare disclaimer wording to include "sponsored by".
+- Add Apache License 2.0 repository licensing via `LICENSE`, `package.json`, `package-lock.json`, and README license notice.
+- Correct `mod-w/product.md` Angular version references from v21 to v22 to match the implemented and verified application stack.
+- Remove the stale Angular version-conflict rationale from `mod-w/architecture.md`.
+- Add the corresponding `mod-w/product.md` change-log note for the Angular version correction.
+
+#### Approval Summary
+
+The Moderator and Product Owner approve these changes as public-repository hygiene and post-completion documentation cleanup. The cleanup records the repository's public licensing posture, strengthens existing third-party affiliation disclaimers, and reconciles documentation with the already implemented Angular v22 stack.
+
+This entry explicitly records that the changes occurred after STEP-08 completion and outside a formal feature implementation Step.
+
+#### Conditions
+
+- No runtime behavior, application feature, CAV capability, replay data, detector/domain logic, UI workflow, test scope, dependency version, or production integration change is authorized by this entry.
+- The cleanup must not imply DocuWare affiliation, sponsorship, endorsement, private access, production readiness, or a DocuWare product defect/gap claim.
+- New feature work after this cleanup must start with normal MOD-W planning, Step approval, implementation-plan approval, Tech Lead review, QA, and final Moderator gates as applicable.
+
 MOD-W v5.0.1
