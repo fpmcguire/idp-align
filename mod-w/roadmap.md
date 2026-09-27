@@ -25,8 +25,8 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | STEP-06 | Divergence Analysis Chart View                        | R5, R6, R11                      | Claude Code | Complete (A-052)                                                              | Implemented bundled Chart.js analysis view with metric switching over selected Divergence evidence; categorical browser coverage remains spec-only because replay data is numeric-only.                                      |
 | STEP-07 | Workflow Stream Parity And Cross-Stream Consistency   | R3, R4, R6, R9                   | Claude Code | Complete (A-059)                                                              | Workflow parity accepted with notes; categorical workflow behavior remains spec-covered only, and QA-028/QA-029 remain non-blocking carry-forward notes.                                                                     |
 | STEP-08 | Quality Gate Completion And Documentation             | R10, R11                         | Claude Code | Complete (A-066)                                                              | Local IDP-Align E2E, R10 research references, About/README current-state copy, and CAV Level 1 claim guardrails accepted with QA notes; categorical workflow remains spec-covered only.                                      |
-| STEP-09 | Population-Specific Divergence Scenario               | R1, R2, R5, R6, R8, R9, R11, R12 | Claude Code | QA accepted with notes; pending Product Owner review and final Moderator gate | QA accepted under A-076; Product Owner review of QA-STEP09-002/003 and the final Moderator gate remain pending under A-077.                                                                                                  |
-| STEP-10 | Architecture Page                                     | R9, R10, R13, R14                | Claude Code | Implementation plan approved with conditions (A-080)                          | Development Team may implement only the A-080 plan; STEP-09 remains incomplete under its separate Product Owner and final Moderator gates.                                                                                   |
+| STEP-09 | Population-Specific Divergence Scenario               | R1, R2, R5, R6, R8, R9, R11, R12 | Claude Code | Complete (A-084)                                                              | Supplier Invoice Population Divergence scenario accepted with QA notes (A-076); Product Owner review approved (A-082, A-083 override); QA-STEP09-002 wording unchanged unless separately approved. |
+| STEP-10 | Architecture Page                                     | R9, R10, R13, R14                | Claude Code | Complete (A-084)                                                              | Permanent routed Architecture page accepted (A-081, QA Pass with notes, Product Owner A-082); QA-STEP10-001/002 carried forward as optional cleanup. |
 
 ---
 
@@ -102,7 +102,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 
 **Requirements:** R1, R2, R5, R6, R8, R9, R11, R12
 
-**Output:** QA accepted with notes under A-076. Product Owner review of QA-STEP09-002/003 and the final Moderator gate remain pending under A-077.
+**Output:** Complete (A-084). QA accepted with notes under A-076; Product Owner review approved under A-082 with the A-083 override.
 
 ### STEP-10 - Architecture Page
 
@@ -110,7 +110,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 
 **Requirements:** R9, R10, R13, R14
 
-**Output:** Approved for Development Team briefing and planning under A-079. A separate implementation-plan approval is required before code changes.
+**Output:** Complete (A-084). Tech Lead re-review accepted under A-081, QA Pass with notes, Product Owner review approved under A-082.
 
 ---
 
@@ -119,19 +119,19 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | Requirement | Steps                                                | Status                                                                                                                                                                                                |
 | ----------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | R1          | STEP-02                                              | Complete (A-028)                                                                                                                                                                                      |
-| R2          | STEP-03, STEP-09                                     | STEP-03 complete (A-033); STEP-09 draft would extend document-stream scenario coverage if approved.                                                                                                   |
+| R2          | STEP-03, STEP-09                                     | STEP-03 complete (A-033); STEP-09 population scenario complete (A-084).                                                                                                   |
 | R3          | STEP-02, STEP-07                                     | STEP-02 foundation and STEP-07 workflow parity complete (A-059)                                                                                                                                       |
 | R4          | STEP-03, STEP-07                                     | STEP-03 domain logic complete (A-033); STEP-07 workflow parity complete (A-059)                                                                                                                       |
-| R5          | STEP-03, STEP-04, STEP-06, STEP-09                   | STEP-03 domain/evidence records complete (A-033); STEP-04 Divergence UI complete (A-039); STEP-06 analysis complete (A-052); STEP-09 draft would add scenario-specific evidence coverage if approved. |
-| R6          | STEP-01, STEP-04, STEP-05, STEP-06, STEP-07, STEP-09 | STEP-05 dashboard interactions complete (A-047); STEP-06 analysis complete (A-052); STEP-07 workflow parity complete (A-059); STEP-09 draft would update document scenario presentation if approved.  |
+| R5          | STEP-03, STEP-04, STEP-06, STEP-09                   | STEP-03 domain/evidence records complete (A-033); STEP-04 Divergence UI complete (A-039); STEP-06 analysis complete (A-052); STEP-09 scenario evidence complete (A-084). |
+| R6          | STEP-01, STEP-04, STEP-05, STEP-06, STEP-07, STEP-09 | STEP-05 dashboard interactions complete (A-047); STEP-06 analysis complete (A-052); STEP-07 workflow parity complete (A-059); STEP-09 scenario presentation complete (A-084).  |
 | R7          | Future Step                                          | Deferred until live access/proxy work is explicitly activated.                                                                                                                                        |
-| R8          | STEP-02, STEP-09                                     | Complete (A-028); STEP-09 draft would add approved synthetic replay scenario if approved.                                                                                                             |
-| R9          | STEP-01, STEP-02, STEP-07, STEP-09                   | STEP-01, STEP-02, and STEP-07 complete (A-059); STEP-09 draft preserves approved Population-Specific Divergence language if approved.                                                                 |
-| R10         | STEP-01, STEP-08                                     | Complete (STEP-01; STEP-08 A-066)                                                                                                                                                                     |
-| R11         | STEP-03, STEP-05, STEP-06, STEP-08, STEP-09          | Complete (STEP-03, STEP-05, STEP-06, and STEP-08 A-066); STEP-09 draft includes scenario unit/component/E2E coverage if approved.                                                                     |
-| R12         | STEP-03, STEP-04, STEP-09                            | STEP-03 evidence-carrying records complete (A-033); STEP-04 Evidence Trace UI complete (A-039); STEP-09 draft would verify reconstructable scenario evidence if approved.                             |
-| R13         | STEP-01                                              | Complete (A-016) - DocuWare-specific v1 interview research/demo framing.                                                                                                                              |
-| R14         | STEP-10                                              | Implementation plan approved with conditions under A-080.                                                                                                                                             |
+| R8          | STEP-02, STEP-09                                     | Complete (A-028); STEP-09 synthetic replay scenario complete (A-084).                                                                                                             |
+| R9          | STEP-01, STEP-02, STEP-07, STEP-09, STEP-10          | STEP-01, STEP-02, and STEP-07 complete (A-059); STEP-09 Population-Specific Divergence language and STEP-10 Architecture-page CAV terminology complete (A-084).                                                                 |
+| R10         | STEP-01, STEP-08, STEP-10                            | Complete (STEP-01; STEP-08 A-066; STEP-10 research provenance A-084)                                                                                                                                                                     |
+| R11         | STEP-03, STEP-05, STEP-06, STEP-08, STEP-09          | Complete (STEP-03, STEP-05, STEP-06, and STEP-08 A-066); STEP-09 scenario unit/component/E2E coverage complete (A-084).                                                                     |
+| R12         | STEP-03, STEP-04, STEP-09                            | STEP-03 evidence-carrying records complete (A-033); STEP-04 Evidence Trace UI complete (A-039); STEP-09 reconstructable scenario evidence complete (A-084).                             |
+| R13         | STEP-01, STEP-10                                     | Complete (A-016) - DocuWare-specific v1 interview research/demo framing; R13 preserved on About after STEP-10 (A-082, A-084).                                                                                                                              |
+| R14         | STEP-10                                              | Complete (STEP-10 A-084).                                                                                                                                             |
 
 ---
 
@@ -163,6 +163,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | 2026-09-27 | Added STEP-09 draft pending Moderator approval.                                         | A-069/A-070 authorize Tech Lead to draft a bounded Population-Specific Divergence implementation Step using Supplier Invoice Population Divergence as the initial scenario.                  |
 | 2026-09-27 | Approved STEP-10 for briefing and planning under A-079.                                 | Scoped override permits STEP-10 implementation after plan approval without waiting for STEP-09's separate final gate; STEP-09 remains pending Product Owner review and Moderator completion. |
 | 2026-09-27 | Approved STEP-10 implementation plan with conditions under A-080.                       | Authorizes the bounded Architecture-page implementation; requires the approved fixture-drift path, preservation of R13, conditional Designer waiver, and Product Owner review after QA.      |
+| 2026-09-27 | Recorded STEP-09 and STEP-10 complete under A-084.                                      | Product Owner reviews approved under A-082 (STEP-09 artifact override A-083); final Moderator gate approved completion of both Steps. |
 
 ---
 

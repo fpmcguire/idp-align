@@ -3112,3 +3112,90 @@ The Moderator approves the two scope exceptions identified by Tech Lead review:
 This entry accepts the STEP-10 Tech Lead re-review and authorizes QA to begin. It is not QA acceptance, Product Owner sign-off, or the final STEP-10 Moderator gate.
 
 MOD-W v5.0.1
+
+### A-082 - STEP-09 And STEP-10 Product Owner Reviews Approved
+
+- **Status:** Approved - Final Moderator gates may proceed
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire
+- **Role accepted:** Product Owner
+- **Gate:** Product Owner review after QA and before the final Moderator gate, for STEP-09 (A-072, A-077) and STEP-10 (A-080, A-081)
+- **Steps:** `mod-w/step-09.md`, `mod-w/step-10.md`
+- **Next authorized action:** The Moderator may perform the STEP-09 final gate and the STEP-10 final gate.
+
+#### Approval Decision
+
+The Moderator approves the Product Owner reviews for STEP-09 and STEP-10.
+
+| Step    | Product Owner review                                                                                                                                                                                                                                                             | Verdict            |
+| ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| STEP-09 | Product Owner review of STEP-09, including QA-STEP09-002 and QA-STEP09-003, approved by Moderator instruction. No separate STEP-09 Product Owner review file is present in the repository; this entry records the Moderator's approval as given.                                  | Approved           |
+| STEP-10 | `mod-w/validation/step-10-product-owner-review.md`. Architecture copy: Accept with notes. Research provenance: Accept. R13 preservation on About: Accept with notes. No required copy changes. An independent Product Owner check of the same sources concurred with this review. | Accept with notes  |
+
+#### Finding Dispositions
+
+| Finding        | Disposition                                                                                                                                              |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| QA-STEP09-002  | Product Owner review complete under this approval. No wording change is authorized by this entry; any future change requires separate approval routed Tech Lead -> Development Team. |
+| QA-STEP09-003  | Product Owner review complete under this approval. No change required, consistent with A-076.                                                            |
+| QA-STEP10-001  | Architecture SCSS budget warning remains non-blocking, as already accepted in A-081.                                                                     |
+| QA-STEP10-002  | Plain About `href` to Architecture is acceptable for this release. It may be routed later as cleanup through Tech Lead -> Development Team.              |
+
+#### Gate Boundary
+
+This entry records Product Owner review approval for STEP-09 and STEP-10. It is not the final STEP-09 Moderator gate, the final STEP-10 Moderator gate, roadmap completion, or authorization for any code or copy change.
+
+MOD-W v5.0.1
+
+### A-083 - Moderator Override Of Missing STEP-09 Product Owner Review Artifact
+
+- **Status:** Approved - Override recorded
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire
+- **Gate:** Product Owner review evidence for STEP-09 (A-072, A-077, A-082)
+- **Step:** `mod-w/step-09.md`
+- **Next authorized action:** The Moderator may perform the STEP-09 final gate and the STEP-10 final gate.
+
+#### Override Decision
+
+The Moderator overrides the requirement for a written STEP-09 Product Owner review artifact. A-082 noted that no separate STEP-09 Product Owner review file is present in the repository. The Moderator accepts A-082's approval as sufficient Product Owner review evidence for STEP-09, including QA-STEP09-002 and QA-STEP09-003, without a separate review file.
+
+#### Conditions
+
+- This override applies only to the missing STEP-09 Product Owner review artifact. It does not waive Product Owner review for any other Step.
+- The QA-STEP09-002 and QA-STEP09-003 dispositions in A-082 stand. No wording or code change is authorized.
+
+#### Gate Boundary
+
+This entry records a process override only. It is not the final STEP-09 Moderator gate, the final STEP-10 Moderator gate, or roadmap completion.
+
+MOD-W v5.0.1
+
+### A-084 - STEP-09 And STEP-10 Final Moderator Gate - Complete
+
+- **Status:** Complete
+- **Date:** 2026-09-27
+- **Moderator:** Frank McGuire
+- **Gate:** Final Moderator gate
+- **Steps:** `mod-w/step-09.md`, `mod-w/step-10.md`
+- **Next authorized action:** Commit the STEP-09/STEP-10 gate records when the Moderator instructs. No further Step is authorized by this entry.
+
+#### Decision
+
+The Moderator approves completion of STEP-09 and STEP-10.
+
+| Step    | Gate evidence                                                                                              |
+| ------- | ---------------------------------------------------------------------------------------------------------- |
+| STEP-09 | A-071, A-072, A-073, A-074, A-075, A-076 (QA accepted), A-077, A-082 (Product Owner review), A-083 (override) |
+| STEP-10 | A-078, A-079, A-080, A-081 (Tech Lead accepted), `qa.md` (QA Pass with notes), A-082 (Product Owner review) |
+
+#### Carried Forward
+
+- QA-STEP10-001 (Architecture SCSS budget warning) and QA-STEP10-002 (plain About `href`) remain optional future cleanup, to be routed Tech Lead -> Development Team only under separate approval.
+- QA-STEP09-002 wording remains unchanged unless separately approved.
+
+#### Gate Boundary
+
+This entry completes STEP-09 and STEP-10. It does not approve a next Step or any roadmap change beyond recording these completions.
+
+MOD-W v5.0.1
