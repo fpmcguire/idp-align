@@ -59,9 +59,10 @@ Tech Lead recommendation: Designer review is not required before implementation 
 **Register:** `mod-w/validation/moderator-register.md`
 **Draft authorization:** A-078 admits R14 and authorizes Tech Lead drafting.
 **Step approval entry:** A-079.
-**Status:** Approved for Development Team briefing and implementation planning.
+**Implementation-plan approval entry:** A-080.
+**Status:** Approved for Development Team implementation under the plan and conditions in A-080.
 
-Development Team may be briefed and prepare an implementation plan. No STEP-10 code, test, or documentation implementation is authorized until the Moderator separately approves that plan. A-079 explicitly allows STEP-10 implementation to proceed after plan approval before the STEP-09 final gate; STEP-09's Product Owner review and final Moderator gate remain pending and are not waived or completed by this override.
+Development Team may implement only `mod-w/step-10-implementation-plan.md` as approved under A-080. A-079 allows STEP-10 implementation after plan approval before the STEP-09 final gate; STEP-09's Product Owner review and final Moderator gate remain pending and are not waived or completed by that override.
 
 ---
 
@@ -141,7 +142,7 @@ Development Team may be briefed and prepare an implementation plan. No STEP-10 c
 
 ### Source Conflict Resolution
 
-- A-078 authorizes drafting only; STEP-10 implementation must wait for Step approval and implementation-plan approval.
+- A-078 authorized drafting; A-079 approved STEP-10 for briefing/planning, and A-080 approves the implementation plan with conditions. Implementation is limited to the A-080 plan.
 - R14 is a new product requirement, not an extension of R13.
 - R13 keeps About interview/project-context obligations; R14 must be permanent and must not contain interview, interviewer, employer-directed, or interview-date framing.
 - Product and domain language supersede any copied content that uses forbidden terms or implies Level 2+, Attribution, causality, correctness, failure, risk, producer blame, remediation, or business significance.
@@ -213,7 +214,7 @@ Do not modify replay fixtures, detector/domain logic, repositories, dashboard co
 ## Acceptance Checks
 
 - [x] `mod-w/validation/moderator-register.md` contains the STEP-10 Step approval entry before Development Team briefing (A-079).
-- [ ] A separate Moderator implementation-plan approval is recorded before any STEP-10 code, test, or documentation changes are made.
+- [x] Moderator implementation-plan approval A-080 is recorded before STEP-10 code, test, or documentation implementation.
 - [x] STEP-09 final gate sequencing is explicitly overridden for STEP-10 only by A-079; STEP-09's own final gate remains pending.
 - [ ] The app exposes a lazy `/architecture` route implemented by a standalone Angular component.
 - [ ] The Architecture component uses separate `.ts`, `.html`, and `.scss` files.

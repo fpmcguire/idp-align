@@ -26,7 +26,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | STEP-07 | Workflow Stream Parity And Cross-Stream Consistency   | R3, R4, R6, R9                   | Claude Code | Complete (A-059)                                                              | Workflow parity accepted with notes; categorical workflow behavior remains spec-covered only, and QA-028/QA-029 remain non-blocking carry-forward notes.                                                                     |
 | STEP-08 | Quality Gate Completion And Documentation             | R10, R11                         | Claude Code | Complete (A-066)                                                              | Local IDP-Align E2E, R10 research references, About/README current-state copy, and CAV Level 1 claim guardrails accepted with QA notes; categorical workflow remains spec-covered only.                                      |
 | STEP-09 | Population-Specific Divergence Scenario               | R1, R2, R5, R6, R8, R9, R11, R12 | Claude Code | QA accepted with notes; pending Product Owner review and final Moderator gate | QA accepted under A-076; Product Owner review of QA-STEP09-002/003 and the final Moderator gate remain pending under A-077.                                                                                                  |
-| STEP-10 | Architecture Page                                     | R9, R10, R13, R14                | Claude Code | Approved for Development Team briefing and planning (A-079)                   | Implementation-plan approval remains required; A-079 records a STEP-10-only sequencing override. STEP-09 itself remains incomplete.                                                                                          |
+| STEP-10 | Architecture Page                                     | R9, R10, R13, R14                | Claude Code | Implementation plan approved with conditions (A-080)                          | Development Team may implement only the A-080 plan; STEP-09 remains incomplete under its separate Product Owner and final Moderator gates.                                                                                   |
 
 ---
 
@@ -131,7 +131,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | R11         | STEP-03, STEP-05, STEP-06, STEP-08, STEP-09          | Complete (STEP-03, STEP-05, STEP-06, and STEP-08 A-066); STEP-09 draft includes scenario unit/component/E2E coverage if approved.                                                                     |
 | R12         | STEP-03, STEP-04, STEP-09                            | STEP-03 evidence-carrying records complete (A-033); STEP-04 Evidence Trace UI complete (A-039); STEP-09 draft would verify reconstructable scenario evidence if approved.                             |
 | R13         | STEP-01                                              | Complete (A-016) - DocuWare-specific v1 interview research/demo framing.                                                                                                                              |
-| R14         | STEP-10                                              | Approved for STEP-10; implementation-plan approval remains required.                                                                                                                                  |
+| R14         | STEP-10                                              | Implementation plan approved with conditions under A-080.                                                                                                                                             |
 
 ---
 
@@ -162,6 +162,7 @@ Build IDP-Align in small, reviewable Steps that first establish the Angular dash
 | 2026-09-26 | Set STEP-08 to Complete.                                                                | Final Moderator gate A-066 after Tech Lead review acceptance, QA acceptance with notes, Product Owner approval, and finding dispositions.                                                    |
 | 2026-09-27 | Added STEP-09 draft pending Moderator approval.                                         | A-069/A-070 authorize Tech Lead to draft a bounded Population-Specific Divergence implementation Step using Supplier Invoice Population Divergence as the initial scenario.                  |
 | 2026-09-27 | Approved STEP-10 for briefing and planning under A-079.                                 | Scoped override permits STEP-10 implementation after plan approval without waiting for STEP-09's separate final gate; STEP-09 remains pending Product Owner review and Moderator completion. |
+| 2026-09-27 | Approved STEP-10 implementation plan with conditions under A-080.                       | Authorizes the bounded Architecture-page implementation; requires the approved fixture-drift path, preservation of R13, conditional Designer waiver, and Product Owner review after QA.      |
 
 ---
 
